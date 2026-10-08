@@ -292,6 +292,7 @@ input[type=text],select,textarea{font:15px var(--f-body);color:var(--cream);back
 @media (max-width:620px){nav.toc{border-radius:14px}nav.toc button{padding:8px 10px;font-size:13px}nav.toc button span{display:none}nav.toc button[aria-current="page"] span{display:inline}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 .propose input,.propose textarea,.propose select{width:100%;margin-bottom:10px}.propose textarea{min-height:120px}
+.hint.warn{color:var(--vacant,#e9c76b);margin:-4px 0 10px}
 .vote .vrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%}.vote .vland{min-width:170px;font-weight:600;color:var(--gold,#f0b030)}
 </style>
 </head><body>
@@ -398,7 +399,12 @@ function effStatus(b){if(expired(b)&&b.status!=='veto'){const t=tally(b);return 
 function timeLeft(iso){const ms=Date.parse(iso)-Date.now();if(!(ms>0))return '';const h=Math.floor(ms/3600000),m=Math.floor(ms%3600000/60000);return (h?h+' год ':'')+m+' хв';}
 function fmtDT(iso){const d=new Date(iso);return pad2(d.getDate())+'.'+pad2(d.getMonth()+1)+' о '+pad2(d.getHours())+':'+pad2(d.getMinutes());}
 function parlSec(){return state.sections.find(x=>x.kind==='parliament');}
-function myLands(){const p=parlSec();if(!p||!AUTH.email)return [];const m=p.repEmails||{};return Object.entries(m).filter(([l,em])=>String(em||'').trim().toLowerCase()===AUTH.email).map(e=>e[0]);}
+// who may vote: only lands whose Otaman post is filled by the same person the email was entered for
+function seatState(r,p){const e=String((p.repEmails||{})[r.land]||'').trim().toLowerCase();const was=(p.repHolder||{})[r.land];
+  if(!r.name)return{e,ok:false,why:e?'vac':''};if(e&&was&&was!==r.name)return{e,ok:false,why:'changed',was};return{e,ok:!!e,why:''};}
+function voterMap(){const p=parlSec();const m={};if(!p)return m;landLeaders().forEach(r=>{const st=seatState(r,p);if(st.ok)m[r.land]=st.e;});return m;}
+window.APP_VOTERMAP=voterMap;
+function myLands(){if(!AUTH.email)return [];return Object.entries(voterMap()).filter(([l,em])=>em===AUTH.email).map(e=>e[0]);}
 function myLand(){return myLands().join(', ');}
 const CH={for:['За','f'],against:['Проти','a'],abstain:['Утримався','z']};
 const BST={review:['⏳','На розгляді'],passed:['✓','Прийнято'],rejected:['✕','Відхилено'],veto:['⛔','Ветовано Гетьманом']};
@@ -442,7 +448,7 @@ function parlHtml(s,si){
   // representatives = territory leaders taken from the lands tabs
   h+=`<div class="block"><h3>Представники Земель <small>Крайові Отамани з вкладки «Землі УД»</small></h3>`;
   h+='<div class="reps">'+reps.map(r=>{const v=!String(r.name||'').trim();return `<div class="rep${v?' vac':''}"><span class="t">${esc(r.land)}</span><span class="h">${v?'Вакантно':esc(r.name)}</span>${r.post&&!/Крайовий Отаман/.test(r.post)?`<span class="t">${esc(r.post)}</span>`:''}</div>`}).join('')+'</div>';
-  if(editing){const m=parlSec().repEmails||{};h+='<div class="elabel">Google-пошти представників (для голосування)</div>'+reps.map((r,ri)=>`<div class="erow pt"><span>${esc(r.land)}${r.name?' · '+esc(r.name):''}</span><input type="text" id="re-${ri}" data-a="re" data-s="${si}" data-l="${esc(r.land)}" value="${esc(m[r.land]||'')}" placeholder="пошта@gmail.com"><span></span></div>`).join('')+'<p class="hint">Ім\'я представника береться з Крайового Отамана на вкладці «Землі УД». Пошта потрібна, щоб він міг голосувати.</p>';}
+  if(editing){const m=parlSec().repEmails||{};h+='<div class="elabel">Google-пошти представників (для голосування)</div>'+reps.map((r,ri)=>`<div class="erow pt"><span>${esc(r.land)}${r.name?' · '+esc(r.name):''}</span><input type="text" id="re-${ri}" data-a="re" data-s="${si}" data-l="${esc(r.land)}" value="${esc(m[r.land]||'')}" placeholder="пошта@gmail.com"><span></span></div>${(()=>{const st=seatState(r,parlSec());return st.why==='vac'?'<p class="hint warn">⚠ Посада вакантна, тож ця пошта не голосує. Коли буде новий Отаман, впишіть його пошту.</p>':st.why==='changed'?`<p class="hint warn">⚠ Пошту вписали для «${esc(st.was)}», а Отаман тепер «${esc(r.name)}». Пошта не діє, поки ви не впишете її заново (можна ту саму).</p>`:'';})()}`).join('')+'<p class="hint">Ім\'я представника береться з Крайового Отамана на вкладці «Землі УД». Пошта потрібна, щоб він міг голосувати.</p>';}
   h+='</div></div>';
   return h;
 }
@@ -576,7 +582,7 @@ app.addEventListener('input',e=>{
   const sec=state.sections[+t.dataset.s];
   if(a==='lt'){sec.leaders[+t.dataset.p].title=t.value;return;}
   if(a==='pch'){sec.chair=t.value;return;}
-  if(a==='re'){(sec.repEmails=sec.repEmails||{})[t.dataset.l]=t.value.trim();return;}
+  if(a==='re'){const land=t.dataset.l;(sec.repEmails=sec.repEmails||{})[land]=t.value.trim();const r=landLeaders().find(x=>x.land===land);(sec.repHolder=sec.repHolder||{})[land]=r?r.name:'';return;}
   if(['bn','bd','bt','ba','bx','vw'].includes(a)){const k={bn:'no',bd:'date',bt:'title',ba:'author',bx:'text',vw:'who'}[a];sec.bills[+t.dataset.p][k]=t.value;return;}
   if(['vf','va','vz'].includes(a)){const k={vf:'vfor',va:'vagainst',vz:'vabstain'}[a];sec.bills[+t.dataset.p][k]=t.value.replace(/[^0-9]/g,'');return;}
   if(a==='rl'){sec.reps[+t.dataset.p].land=t.value;return;}
@@ -713,7 +719,8 @@ async function finalizeExpired(){
   busy=false;render();
 }
 setInterval(()=>{if(editing)return;const ae=document.activeElement;if(ae&&ae.id&&ae.id.startsWith('np-'))return;render();finalizeExpired();},60000);
-window.APP={votes(v){VOTES=v||{};votesLoaded=true;render();finalizeExpired();},props(l){PROPS=l||[];render();},load(s){const p=s.sections.find(x=>x.kind==='parliament');if(p)(p.bills||[]).forEach((b,i)=>{if(!b.id)b.id='b'+i+'x'+Date.now().toString(36);});state=s;saved=JSON.stringify(s);msg='';render();},fail(t){msg=t;msgErr=true;render();},auth(a){AUTH=a;if(!a.admin)editing=false;render();finalizeExpired();}};
+window.APP={votes(v){VOTES=v||{};votesLoaded=true;render();finalizeExpired();},props(l){PROPS=l||[];render();},load(s){const p=s.sections.find(x=>x.kind==='parliament');if(p)(p.bills||[]).forEach((b,i)=>{if(!b.id)b.id='b'+i+'x'+Date.now().toString(36);});state=s;
+  if(p&&p.repEmails&&!p.repHolder){p.repHolder={};landLeaders().forEach(r=>{if(String(p.repEmails[r.land]||'').trim()&&r.name)p.repHolder[r.land]=r.name;});}saved=JSON.stringify(s);msg='';render();},fail(t){msg=t;msgErr=true;render();},auth(a){AUTH=a;if(!a.admin)editing=false;render();finalizeExpired();}};
 if(window.APP_READY)window.APP_READY();
 })();
 </script>
@@ -773,8 +780,7 @@ async function save(state){
   // voting: who may vote, and which ballots are open
   const parl = copy.sections.find(x => x.kind === "parliament");
   if (parl) {
-    const map = {};
-    Object.entries(parl.repEmails || {}).forEach(([l, e]) => { e = String(e||"").trim().toLowerCase(); if (e) map[l] = e; });
+    const map = window.APP_VOTERMAP ? window.APP_VOTERMAP() : {};
     const emails = Object.values(map).map(e => String(e||"").trim().toLowerCase()).filter(Boolean);
     const batch = writeBatch(db);
     batch.set(doc(db, "site", "voters"), { emails, map });
