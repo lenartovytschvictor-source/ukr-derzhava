@@ -291,6 +291,7 @@ input[type=text],select,textarea{font:15px var(--f-body);color:var(--cream);back
 .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 @media (max-width:620px){nav.toc{border-radius:14px}nav.toc button{padding:8px 10px;font-size:13px}nav.toc button span{display:none}nav.toc button[aria-current="page"] span{display:inline}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.vote .vrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%}.vote .vland{min-width:170px;font-weight:600;color:var(--gold,#f0b030)}
 </style>
 </head><body>
 <div class="wrap" id="app"><p class="status">Завантаження…</p></div>
@@ -388,7 +389,8 @@ function landLeaders(){
 const NAV_ICONS={"ud": "<path d=\"M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14\"/>", "army": "<path d=\"M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z\"/>", "econ": "<ellipse cx=\"12\" cy=\"6\" rx=\"7\" ry=\"3\"/><path d=\"M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6\"/>", "parl": "<path d=\"M3 21h18M4 10h16M12 3 3 8h18l-9-5ZM6 10v8m4-8v8m4-8v8m4-8v8\"/>", "const": "<path d=\"M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm2 5h6M9 12h6M9 16h4\"/>"};
 let VOTES={};
 function parlSec(){return state.sections.find(x=>x.kind==='parliament');}
-function myLand(){const p=parlSec();if(!p||!AUTH.email)return '';const m=p.repEmails||{};const e=Object.entries(m).find(([l,em])=>String(em||'').trim().toLowerCase()===AUTH.email);return e?e[0]:'';}
+function myLands(){const p=parlSec();if(!p||!AUTH.email)return [];const m=p.repEmails||{};return Object.entries(m).filter(([l,em])=>String(em||'').trim().toLowerCase()===AUTH.email).map(e=>e[0]);}
+function myLand(){return myLands().join(', ');}
 const CH={for:['За','f'],against:['Проти','a'],abstain:['Утримався','z']};
 const BST={review:['⏳','На розгляді'],passed:['✓','Прийнято'],rejected:['✕','Відхилено'],veto:['⛔','Ветовано Гетьманом']};
 function parlHtml(s,si){
@@ -410,11 +412,11 @@ function parlHtml(s,si){
   } else if(!bills.length){
     h+='<p class="empty">Законопроєктів ще немає. Щоб внести перший, натисніть «Редагувати», а потім «+ Законопроєкт».</p>';
   } else {
-    const lead={};reps.forEach(r=>lead[r.land]=r.name);const me=myLand();
+    const lead={};reps.forEach(r=>lead[r.land]=r.name);const me=myLands();
     h+=bills.slice().reverse().map(b=>{const vs=(b.id&&VOTES[b.id])||[];let f=+b.vfor||0,a=+b.vagainst||0,z=+b.vabstain||0;
       if(vs.length){f=vs.filter(v=>v.choice==='for').length;a=vs.filter(v=>v.choice==='against').length;z=vs.filter(v=>v.choice==='abstain').length;}
-      const t=f+a+z;const st=BST[b.status]||BST.review;const mine=vs.find(v=>v.email===AUTH.email);
-      const voteUi=b.voting?`<div class="vote"><span class="live">Голосування триває</span>${me?Object.keys(CH).map(k=>`<button class="small ${CH[k][1]}${mine&&mine.choice===k?' on':''}" data-a="vote" data-b="${esc(b.id)}" data-c="${k}" ${busy?'disabled':''}>${CH[k][0]}</button>`).join('')+(mine?'<span class="hint">ваш голос враховано, можна змінити</span>':''):(AUTH.email?'<span class="hint">Голосують лише Представники Земель</span>':'<span class="hint">Представники Земель: увійдіть через Google, щоб проголосувати</span>')}</div>`:'';
+      const t=f+a+z;const st=BST[b.status]||BST.review;
+      const voteUi=b.voting?`<div class="vote"><span class="live">Голосування триває</span>${me.length?me.map(land=>{const mine=vs.find(v=>v.land===land);return `<div class="vrow">${me.length>1?`<span class="vland">${esc(land)}</span>`:''}${Object.keys(CH).map(k=>`<button class="small ${CH[k][1]}${mine&&mine.choice===k?' on':''}" data-a="vote" data-b="${esc(b.id)}" data-c="${k}" data-l="${esc(land)}" ${busy?'disabled':''}>${CH[k][0]}</button>`).join('')}${mine?'<span class="hint">голос враховано, можна змінити</span>':''}</div>`}).join(''):(AUTH.email?'<span class="hint">Голосують лише Представники Земель</span>':'<span class="hint">Представники Земель: увійдіть через Google, щоб проголосувати</span>')}</div>`:'';
       const who=vs.length?`<div class="votes-who">${vs.map(v=>`<span>${esc(v.land)}${lead[v.land]?' ('+esc(lead[v.land])+')':''}: <b>${CH[v.choice]?CH[v.choice][0]:'—'}</b></span>`).join('')}</div>`:'';
       return `<article class="bill"><div class="bh"><span class="bt">${b.no?esc(b.no)+'. ':''}${esc(b.title||'Без назви')}</span><span class="pill ${esc(b.status||'review')}">${st[0]} ${st[1]}</span></div><div class="bm">${[b.date&&esc(b.date),b.author&&'Вніс: '+esc(b.author),b.article&&'Внесено в Конституцію: '+esc(b.article)].filter(Boolean).join(' · ')}</div>${t?`<div class="vbar" role="img" aria-label="За ${f}, проти ${a}, утрималися ${z}">${f?`<i class="f" style="width:${f/t*100}%"></i>`:''}${a?`<i class="a" style="width:${a/t*100}%"></i>`:''}${z?`<i class="z" style="width:${z/t*100}%"></i>`:''}</div><div class="vleg"><span>За: <b>${f}</b></span><span>Проти: <b>${a}</b></span><span>Утрималися: <b>${z}</b></span></div>`:''}${voteUi}${who}${b.who&&!vs.length?`<div class="bm">${esc(b.who)}</div>`:''}${b.text?`<details><summary>Текст законопроєкту</summary><p>${esc(b.text)}</p></details>`:''}</article>`}).join('');
   }
@@ -607,7 +609,7 @@ app.addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;const a=b.dataset.a;
   const s=b.dataset.s!=null?state.sections[+b.dataset.s]:null;const li=+b.dataset.l;const l=s&&s.lands&&s.lands[li];
   msg='';msgErr=false;
-  if(a==='vote'){const land=myLand();if(!land)return;busy=true;render();window.FB.vote(b.dataset.b,b.dataset.c,land).then(()=>window.FB.loadVotes()).then(v=>{VOTES=v;busy=false;msg='Голос збережено';msgErr=false;render();}).catch(err=>{busy=false;msg=err&&err.code==='permission-denied'?'Голос не прийнято: голосування закрите або ви не Представник':'Не вдалося проголосувати';msgErr=true;render();});return;}
+  if(a==='vote'){const land=b.dataset.l;if(!myLands().includes(land))return;busy=true;render();window.FB.vote(b.dataset.b,b.dataset.c,land).then(()=>window.FB.loadVotes()).then(v=>{VOTES=v;busy=false;msg='Голос збережено';msgErr=false;render();}).catch(err=>{busy=false;msg=err&&err.code==='permission-denied'?'Голос не прийнято: голосування закрите або ви не Представник':'Не вдалося проголосувати';msgErr=true;render();});return;}
   if(a==='login'){window.FB.login().catch(err=>{msg='Не вдалося увійти: '+(err&&err.code||'');msgErr=true;render();});return;}
   if(a==='logout'){editing=false;state=JSON.parse(saved);window.FB.logout();return;}
   if(a==='tab'){active=b.dataset.id;try{history.replaceState(null,'','#'+active);}catch(_){}render();window.scrollTo(0,0);return;}
@@ -728,7 +730,8 @@ async function save(state){
   // voting: who may vote, and which ballots are open
   const parl = copy.sections.find(x => x.kind === "parliament");
   if (parl) {
-    const map = parl.repEmails || {};
+    const map = {};
+    Object.entries(parl.repEmails || {}).forEach(([l, e]) => { e = String(e||"").trim().toLowerCase(); if (e) map[l] = e; });
     const emails = Object.values(map).map(e => String(e||"").trim().toLowerCase()).filter(Boolean);
     const batch = writeBatch(db);
     batch.set(doc(db, "site", "voters"), { emails, map });
@@ -743,13 +746,13 @@ async function loadVotes(){
   for (const b of (parl && parl.bills) || []) {
     if (!b.id) continue;
     const snap = await getDocs(collection(db, "ballots", b.id, "votes"));
-    out[b.id] = []; snap.forEach(d => out[b.id].push({ email: d.id, ...d.data() }));
+    out[b.id] = []; snap.forEach(d => out[b.id].push({ land: d.id, ...d.data() }));
   }
   return out;
 }
 async function vote(billId, choice, land){
   const email = (auth.currentUser.email || "").toLowerCase();
-  await setDoc(doc(db, "ballots", billId, "votes", email), { choice, land, at: serverTimestamp() });
+  await setDoc(doc(db, "ballots", billId, "votes", land), { choice, land, email, at: serverTimestamp() });
 }
 window.FB = {
   save, loadVotes, vote,
