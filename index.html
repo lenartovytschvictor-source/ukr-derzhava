@@ -334,11 +334,14 @@ details.bill.arch>summary .bt::before{content:'▸ ';color:var(--gold,#f0b030)}d
 .mv{font-weight:700;white-space:nowrap}.mv.in{color:var(--ok,#79d17a)}.mv.out{color:var(--danger,#ef6a5a)}
 .tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
 .tag.ok{color:var(--ok,#79d17a);border-color:rgba(121,209,122,.4)}.tag.warn{color:var(--vacant,#e9c76b);border-color:rgba(233,199,107,.45)}
+.invgrid .inv.neg .h{color:var(--danger,#ef6a5a)}
+.details-x{}
+.startbal{margin:6px 0 12px}.startbal summary{cursor:pointer;color:var(--gold-hi,#ffd77a);font-weight:600;margin-bottom:8px}
 .invgrid .inv .d.ok{color:var(--ok,#79d17a)}
 table.jour td{vertical-align:top}
 @media (max-width:560px){.treasury .trmeta{justify-items:start}
 table.jour thead{display:none}table.jour,table.jour tbody{display:block;width:100%!important;min-width:0!important}table.jour tr{width:100%;box-sizing:border-box}
-table.jour tr{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"w w" "q t" "c c";gap:4px 10px;padding:10px 4px;border-bottom:1px solid var(--line)}
+table.jour tr{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"w w" "q q" "c c";gap:4px 10px;padding:10px 4px;border-bottom:1px solid var(--line)}
 table.jour td{border:0!important;padding:0!important;background:none!important}
 table.jour td:nth-child(1){grid-area:w;font-size:12px;color:var(--muted)}table.jour td:nth-child(1) .hint{display:inline;margin-left:6px}
 table.jour td:nth-child(2){grid-area:q}table.jour td:nth-child(3){grid-area:c;text-align:left!important}table.jour td:nth-child(4){grid-area:t}}
@@ -389,9 +392,8 @@ function editLand(l,si,li,n,kind){
 const fmt=n=>Number(n||0).toLocaleString('uk-UA');
 const pad2=n=>String(n).padStart(2,'0');
 const INV_DEFAULT=['Срібло','Золото','Вугілля','Руда','Нафта','Піхотне оснащення','Додаткове оснащення','Артилерія','Дрони','Танки','Літаки','Кораблі'];
-const BOOKMARKLET='javascript:(()=>{const L=[...document.querySelectorAll(\'body *\')].find(e=>e.children.length===0&&/^\\s*(inventory|інвентар|инвентарь)\\s*$/i.test(e.textContent));if(!L){alert(\'Не знайшов блок Inventory. Відкрийте сторінку своєї країни в грі.\');return;}const lv=el=>[...el.querySelectorAll(\'*\')].filter(e=>e.children.length===0&&/\\d/.test(e.textContent)&&/^[\\s\\d.,\\u00a0\\u202f]+$/.test(e.textContent));let c=L;while(c.parentElement&&lv(c).length<5)c=c.parentElement;const n=lv(c).map(e=>e.textContent.replace(/\\D/g,\'\'));window.open(\'https://lenartovytschvictor-source.github.io/ukr-derzhava/#inv=\'+n.join(\',\'),\'_blank\');})()';
 let INV_IN=null;
-try{const m=/^#inv=([\d,]+)$/.exec(location.hash);if(m)INV_IN=m[1].split(',').filter(x=>x!=='').map(Number);}catch(_){}
+
 function invItems(tr){if(!tr.items)tr.items=INV_DEFAULT.map(n=>({name:n,qty:''}));return tr.items;}
 function nowStamp(){const d=new Date();return pad2(d.getDate())+'.'+pad2(d.getMonth()+1)+'.'+String(d.getFullYear()).slice(2)+' о '+pad2(d.getHours())+':'+pad2(d.getMinutes());}
 let active=null;
@@ -577,7 +579,7 @@ function movements(s){const out=[];const tr=s.treasury||{};
   (s.weeks||[]).forEach((w,wi)=>(s.members||[]).forEach((m,mi)=>{if(!(w.done||[])[mi])return;const txt=(w.got&&w.got[mi])||m.needs;out.push({kind:'week',at:(w.at||[])[mi]||null,date:w.label,who:m.name||'Вакантно',what:'Тижневий внесок',items:parseNeeds(txt)});}));
   (s.patronList||[]).forEach(p=>(p.items||[]).forEach(it=>{if(+it.qty)out.push({kind:'patron',at:it.at||null,date:it.date||'',who:p.name,what:'Пожертва',items:[{res:it.res,qty:+it.qty}]});}));
   (s.expenses||[]).forEach(e=>{if(+e.amount)out.push({kind:'expense',at:e.at||null,date:e.date,who:e.by,what:e.what||'Витрата',items:[{res:e.unit||'Срібло',qty:-(+e.amount)}]});});
-  out.forEach(o=>{o.counted=!!o.at&&(!tr.baseAt||o.at>tr.baseAt);o.items.forEach(i=>{i.canon=canonRes(s,i.res);});});
+  out.forEach(o=>{o.counted=true;o.items.forEach(i=>{i.canon=canonRes(s,i.res);});});
   return out;}
 function treasuryNow(s){const items=invItems(s.treasury=s.treasury||{});const cur={},delta={};items.forEach(it=>{cur[it.name]=+it.qty||0;});
   movements(s).forEach(o=>{if(!o.counted)return;o.items.forEach(i=>{if(i.canon&&i.canon in cur){cur[i.canon]+=i.qty;delta[i.canon]=(delta[i.canon]||0)+i.qty;}});});
@@ -597,31 +599,28 @@ function econHtml(s,si){
   const mv=movements(s);
   // ===== treasury
   if(editing){
-    h+=`<div class="block"><h3>Казна держави <small>${tr.checked?'остання звірка '+esc(tr.checked):''}</small></h3>
-      <p class="hint">Тут поточні цифри казни: остання звірка плюс внески й пожертви та мінус витрати, записані після неї. Якщо виправите будь-яке число, це стане новою звіркою, і всі попередні записи вважатимуться вже врахованими.</p>
-      <div class="invedit">${items.map((it,ii)=>`<div class="erow inv"><input type="text" id="in-${ii}" data-a="in" data-s="${si}" data-p="${ii}" value="${esc(it.name)}" placeholder="Назва"><input type="text" inputmode="numeric" id="iq-${ii}" data-a="iq" data-s="${si}" data-p="${ii}" value="${esc(RECON_DONE?it.qty:(String(it.qty).trim()===''&&!delta[it.name]?'':String(cur[it.name])))}" placeholder="Кількість"><button class="small danger" data-a="idel" data-s="${si}" data-p="${ii}">✕</button></div>`).join('')}</div><div class="landtools"><button class="small" data-a="iadd" data-s="${si}">+ Ресурс</button></div>
-      <input type="text" id="tl" data-a="tl" data-s="${si}" value="${esc(tr.link)}" placeholder="Посилання на казну в грі">
-      <div class="bmbox"><b>Кнопка «Казна → сайт»</b><p class="hint">Перетягніть цю кнопку мишкою на панель закладок браузера (один раз). Потім відкрийте свою країну в грі й натисніть закладку: відкриється сайт із цифрами з гри, лишиться натиснути «Оновити казну».</p><a class="bm" href="${esc(BOOKMARKLET)}" onclick="event.preventDefault();alert('Цю кнопку треба перетягнути на панель закладок, а натискати вже на сторінці гри.')">⇢ Казна на сайт</a></div></div>`;
+    h+=`<div class="block"><h3>Казна держави <small>рахується сама з внесків, пожертв і витрат</small></h3>
+      <details class="startbal"${items.some(it=>+it.qty)?' open':''}><summary>Стартовий залишок (необов’язково)</summary><p class="hint">Якщо в казні вже щось лежало до того, як почали вести записи на сайті, впишіть це сюди. Усе інше казна порахує сама.</p>
+      <div class="invedit">${items.map((it,ii)=>`<div class="erow inv"><input type="text" id="in-${ii}" data-a="in" data-s="${si}" data-p="${ii}" value="${esc(it.name)}" placeholder="Назва"><input type="text" inputmode="numeric" id="iq-${ii}" data-a="iq" data-s="${si}" data-p="${ii}" value="${esc(+it.qty?it.qty:'')}" placeholder="0"><button class="small danger" data-a="idel" data-s="${si}" data-p="${ii}">✕</button></div>`).join('')}</div><div class="landtools"><button class="small" data-a="iadd" data-s="${si}">+ Ресурс</button></div></details>
+      <input type="text" id="tl" data-a="tl" data-s="${si}" value="${esc(tr.link)}" placeholder="Посилання на казну в грі"></div>`;
   } else {
-    if(INV_IN){h+=`<div class="block invin"><h3>Цифри казни з гри <small>порівняно з тим, що мало бути за записами сайту</small></h3><div class="invgrid">${INV_IN.map((v,i)=>{const it=items[i];const exp=it?cur[it.name]:null;const d=exp==null?null:v-exp;return `<div class="inv"><span class="t">${esc(it?it.name:'Ресурс '+(i+1))}</span><span class="h">${fmt(v)}</span>${d?`<span class="d ${d>0?'up':'down'}">${d>0?'+':''}${fmt(d)} від очікуваного</span>`:(exp!=null?'<span class="d ok">✓ збігається</span>':'')}</div>`}).join('')}</div><div class="landtools">${AUTH.admin?`<button class="primary small" data-a="invapply" ${busy?'disabled':''}>Оновити казну</button>`:`<span class="hint">${AUTH.email?'Оновити казну може лише адмін':'Увійдіть як адмін, щоб оновити казну'}</span>`}<button class="ghost small" data-a="invcancel">Скасувати</button></div></div>`;}
-    const shownItems=items.filter(it=>String(it.qty).trim()!==''||delta[it.name]);
+    const shownItems=items.filter(it=>cur[it.name]);
     let total=0,unpriced=0;shownItems.forEach(it=>{const v=silverOf(s,it.name,cur[it.name]);if(v===null){if(cur[it.name])unpriced++;}else total+=v;});
-    const since=tr.baseAt?'з '+esc(tr.checked||fmtDT(tr.baseAt)):'';
-    h+=`<div class="block treasury"><div class="trhead"><div><span class="k">Казна держави</span><span class="v">${shownItems.length?fmt(cur[items[0].name]||0):'—'}<small> ${shownItems.length?esc(String(items[0].name).toLowerCase()):''}</small></span><span class="s">${shownItems.length?`усе разом ≈ <b>${fmt(total)}</b> срібла за ринковими цінами${unpriced?` (без ${unpriced} ресурс${unpriced>1?'ів':'у'} без ціни)`:''}`:'Казну ще не звіряли з грою'}</span></div><div class="trmeta">${tr.checked?`<span>Звірено з грою: <b>${esc(tr.checked)}</b></span>`:''}${link}</div></div>
-      ${shownItems.length?`<div class="invgrid">${shownItems.map(it=>{const d=delta[it.name]||0;return `<div class="inv${cur[it.name]?'':' zero'}"><span class="t">${esc(it.name)}</span><span class="h">${fmt(cur[it.name])}</span>${d?`<span class="d ${d>0?'up':'down'}" title="зміни за записами сайту після звірки">${d>0?'+':''}${fmt(d)} ${since}</span>`:''}</div>`}).join('')}</div>`:''}</div>`;
+    h+=`<div class="block treasury"><div class="trhead"><div><span class="k">Казна держави</span><span class="v">${fmt(cur[items[0].name]||0)}<small> ${esc(resWord(s,items[0].name))}</small></span><span class="s">${shownItems.length>1?`усе разом ≈ <b>${fmt(total)}</b> срібла за ринковими цінами${unpriced?` (без ${unpriced} ресурс${unpriced>1?'ів':'у'} без ціни)`:''}`:'внески + пожертви − витрати'}</span></div><div class="trmeta"><span>Рахується з внесків, пожертв і витрат</span>${link}</div></div>
+      ${shownItems.length?`<div class="invgrid">${shownItems.map(it=>`<div class="inv${cur[it.name]>0?'':' neg'}"><span class="t">${esc(it.name)}</span><span class="h">${fmt(cur[it.name])}</span></div>`).join('')}</div>`:''}</div>`;
     // KPIs: this week, patrons, expenses
     const n=currentWeek(s.weeks);const paid=n?(n.done||[]).filter(Boolean).length:0;
     const wkSilver=n?mem.reduce((a,m,mi)=>(n.done||[])[mi]?a+parseNeeds((n.got&&n.got[mi])||m.needs).reduce((x,i)=>x+(silverOf(s,i.res,i.qty)||0),0):a,0):0;
     const patTot=(s.patronList||[]).reduce((a,p)=>a+(p.items||[]).reduce((x,it)=>x+(itemSilver(s,it)||0),0),0);
     const exTot=(s.expenses||[]).reduce((a,e)=>a+(silverOf(s,e.unit||'Срібло',+e.amount||0)||0),0);
-    h+=`<div class="ecotop"><div class="kpi in"><span class="k">Внески цього тижня</span><span class="v">${paid} з ${mem.length}</span><span class="s">${n?esc(n.label)+' · ':''}≈ ${fmt(wkSilver)} срібла</span></div><div class="kpi in"><span class="k">Від меценатів</span><span class="v">+${fmt(patTot)}</span><span class="s">срібла загалом</span></div><div class="kpi out"><span class="k">Витрати</span><span class="v">−${fmt(exTot)}</span><span class="s">срібла загалом</span></div></div>`;
+    h+=`<div class="ecotop"><div class="kpi in"><span class="k">Внески цього тижня</span><span class="v">${paid} з ${mem.length}</span><span class="s">${n?esc(n.label)+' · ':''}≈ ${fmt(wkSilver)} срібла</span></div><div class="kpi in"><span class="k">Від меценатів</span><span class="v">${patTot?"+":""}${fmt(patTot)}</span><span class="s">срібла загалом</span></div><div class="kpi out"><span class="k">Витрати</span><span class="v">${exTot?"−":""}${fmt(exTot)}</span><span class="s">срібла загалом</span></div></div>`;
     // journal
     const kinds={all:'Усе',week:'Внески',patron:'Меценати',expense:'Витрати'};
     const ord=mv.map((o,i)=>({o,i})).sort((a,b)=>(b.o.at||'').localeCompare(a.o.at||'')||b.i-a.i).map(x=>x.o);
     const fl=ord.filter(o=>JOUR_F==='all'||o.kind===JOUR_F);const lim=JOUR_ALL?fl:fl.slice(0,12);
     const icon={week:'📅',patron:'🎁',expense:'💸'};
     h+=`<div class="block"><h3>Рух казни <small>усі надходження й витрати</small></h3><div class="afilter">${Object.entries(kinds).map(([k,l])=>`<button class="small${JOUR_F===k?' primary':''}" data-a="jf" data-k="${k}">${l}</button>`).join('')}</div>`;
-    h+=fl.length?`<div class="tblwrap" style="border:0;background:transparent"><table class="exp jour"><thead><tr><th>Коли</th><th>Що</th><th class="num">Зміна</th><th>У казні</th></tr></thead><tbody>${lim.map(o=>`<tr><td>${o.at?esc(fmtDT(o.at)):esc(o.date||'раніше')}${o.at&&o.kind==='week'?`<div class="hint">тиждень ${esc(o.date)}</div>`:''}</td><td>${icon[o.kind]} <b>${esc(o.who||'—')}</b><div class="hint">${esc(o.what)}</div></td><td class="num">${moneyCell(s,o.items)}</td><td>${o.items.some(i=>!i.canon)?'<span class="tag warn">⚠ ресурсу немає в казні</span>':o.counted?'<span class="tag ok">✓ враховано</span>':'<span class="tag">до звірки</span>'}</td></tr>`).join('')}</tbody></table></div>${fl.length>lim.length?`<div><button class="small" data-a="jall">Показати все (${fl.length})</button></div>`:''}<p class="hint">«До звірки» означає, що запис був зроблений раніше, ніж казну востаннє звірили з грою, тож він уже входить у цифри казни.</p>`:'<p class="empty">Записів ще немає.</p>';
+    h+=fl.length?`<div class="tblwrap" style="border:0;background:transparent"><table class="exp jour"><thead><tr><th>Коли</th><th>Що</th><th class="num">Зміна</th></tr></thead><tbody>${lim.map(o=>`<tr><td>${o.at?esc(fmtDT(o.at)):esc(o.date||'раніше')}${o.at&&o.kind==='week'?`<div class="hint">тиждень ${esc(o.date)}</div>`:''}</td><td>${icon[o.kind]} <b>${esc(o.who||'—')}</b><div class="hint">${esc(o.what)}</div></td><td class="num">${moneyCell(s,o.items)}${o.items.some(i=>!i.canon)?'<div><span class="tag warn">⚠ такого ресурсу немає в казні</span></div>':''}</td></tr>`).join('')}</tbody></table></div>${fl.length>lim.length?`<div><button class="small" data-a="jall">Показати все (${fl.length})</button></div>`:''}`:'<p class="empty">Записів ще немає.</p>';
     h+='</div>';
   }
   // ===== weekly contributions
@@ -770,7 +769,7 @@ app.addEventListener('input',e=>{
   if(a==='mq'){sec.members[+t.dataset.p].needs=t.value;return;}
   if(a==='wl'){sec.weeks[+t.dataset.w].label=t.value;return;}
   if(a==='in'){sec.treasury.items[+t.dataset.p].name=t.value;return;}
-  if(a==='iq'){if(!RECON_DONE){reconcile(sec);RECON_DONE=true;}sec.treasury.items[+t.dataset.p].qty=t.value.replace(/\D/g,'');return;}
+  if(a==='iq'){sec.treasury.items[+t.dataset.p].qty=t.value.replace(/\D/g,'');return;}
   if(a==='tb'){(sec.treasury=sec.treasury||{}).balance=t.value;return;}
   if(a==='tc'){(sec.treasury=sec.treasury||{}).checked=t.value;return;}
   if(a==='tl'){(sec.treasury=sec.treasury||{}).link=t.value.trim();return;}
