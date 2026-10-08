@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Українська Держава</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;600;700&family=Lora:ital,wght@0,600;0,700;1,500&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Rubik:wght@400;500;600;700&display=swap">
 <style>*{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <style id="page-style">
 /* Layout: one column registry; each land is a row — current flag, name + offices, then the flag history strip */
@@ -179,6 +179,119 @@ select{font:15px var(--f-body);color:var(--cream);background:#120b05;border:1px 
 }
 @media (prefers-reduced-motion:no-preference){.land{transition:border-color .15s}.land:hover{border-color:var(--gold-soft)}}
 </style>
+<style id="theme">
+/* Game-UI theme layer: warm dark command-room, gold leaf accents, Unbounded display + Rubik body */
+:root{
+  --bg:#0d0905; --bg2:#160f08; --panel:#1f150b; --panel2:#2a1d10; --line:rgba(242,181,68,.16); --line2:rgba(242,181,68,.32);
+  --gold:#f2b544; --gold-hi:#ffdc8a; --gold-soft:#c99a45; --cream:#f7ecd6; --muted:#a8916d;
+  --vacant:#e9c76b; --danger:#ef6a5a; --ok:#79d17a; --veto:#c9a7f0;
+  --f-display:"Unbounded","Rubik",system-ui,sans-serif; --f-body:"Rubik","Segoe UI",system-ui,sans-serif;
+  --r:14px; --shadow:0 18px 40px -22px rgba(0,0,0,.9),0 2px 0 rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+html{background:var(--bg)}
+body{background:
+  radial-gradient(1200px 520px at 50% -180px,rgba(242,181,68,.16),transparent 70%),
+  radial-gradient(900px 600px at 100% 30%,rgba(120,60,10,.12),transparent 70%),
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+  var(--bg);
+  background-attachment:fixed;color:var(--cream);font:15px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1140px;padding-inline:20px;padding-block:22px 80px}
+/* header */
+header.top{border:0;padding:18px 0 22px;position:relative;align-items:center}
+header.top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold) 20%,var(--gold) 80%,transparent);opacity:.55}
+header.top .eyebrow{font:600 11px var(--f-body);letter-spacing:.28em;text-transform:uppercase;color:var(--gold-soft);display:flex;align-items:center;gap:10px;margin-bottom:8px}
+header.top .eyebrow i{display:inline-block;width:22px;height:14px;border-radius:2px;background:linear-gradient(#0057b7 50%,#ffd500 50%);box-shadow:0 0 0 1px rgba(255,255,255,.12)}
+header.top h1{font:800 clamp(30px,5vw,52px)/1.02 var(--f-display);letter-spacing:-.01em;background:linear-gradient(180deg,var(--gold-hi),var(--gold) 55%,#c98a1c);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 14px rgba(242,181,68,.18))}
+header.top .meta{color:var(--muted);font-size:13px;margin-top:8px}
+/* buttons */
+button{font:600 14px var(--f-body);color:var(--cream);background:linear-gradient(180deg,#2f2112,#22170c);border:1px solid var(--line2);border-radius:10px;padding:9px 16px;transition:transform .12s,border-color .15s,box-shadow .15s,background .15s}
+button:hover{border-color:var(--gold);box-shadow:0 0 0 3px rgba(242,181,68,.08)}
+button:active{transform:translateY(1px)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.primary{background:linear-gradient(180deg,#ffd27a,#f2b544 45%,#d9921d);color:#2a1606;border-color:#ffd98f;box-shadow:0 6px 22px -8px rgba(242,181,68,.7),inset 0 1px 0 rgba(255,255,255,.5)}
+button.ghost{background:transparent}
+button.small{padding:5px 11px;font-size:12px;border-radius:8px}
+button.danger{color:var(--danger);border-color:rgba(239,106,90,.35);background:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+/* nav */
+nav.toc{top:0;margin-top:18px;padding:6px;gap:4px;background:rgba(22,15,8,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+nav.toc button{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid transparent;border-radius:11px;padding:9px 14px;color:var(--muted);font-weight:600}
+nav.toc button svg{width:17px;height:17px;flex:none}
+nav.toc button:hover{color:var(--cream);background:rgba(242,181,68,.06);box-shadow:none}
+nav.toc button[aria-current="page"]{color:#2a1606;background:linear-gradient(180deg,#ffd27a,#f2b544 50%,#dc9a26);border-color:#ffd98f;box-shadow:0 6px 18px -8px rgba(242,181,68,.8)}
+/* sections */
+section.sec{margin-top:34px;scroll-margin-top:90px}
+section.sec>h2{font:700 clamp(19px,2.4vw,24px)/1.2 var(--f-display);color:var(--cream);letter-spacing:.01em;text-transform:none;gap:14px;align-items:center}
+section.sec>h2::before{content:"";width:6px;height:26px;border-radius:3px;background:linear-gradient(var(--gold-hi),var(--gold));box-shadow:0 0 14px rgba(242,181,68,.55)}
+section.sec>h2 small{font:500 13px var(--f-body);color:var(--muted);letter-spacing:.02em}
+/* panels */
+.land,.block,.kpi,.bill,.tblwrap,.cons article.doc,.patrons{background:linear-gradient(180deg,rgba(46,32,17,.92),rgba(27,18,10,.95));border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,220,150,.05)}
+.land{padding:16px;gap:20px;transition:transform .18s,border-color .18s,box-shadow .18s}
+@media (hover:hover){.land:hover{transform:translateY(-2px);border-color:var(--line2);box-shadow:0 22px 44px -24px rgba(0,0,0,.95),0 0 0 1px rgba(242,181,68,.08)}}
+.flagbox img{border-radius:8px;box-shadow:0 0 0 1px rgba(255,220,150,.22),0 10px 22px -10px rgba(0,0,0,.9)}
+.land.unit .flagbox img{box-shadow:none}
+.name{font:700 19px/1.25 var(--f-display);letter-spacing:-.005em}
+.post{background:rgba(255,220,150,.035);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:7px 13px}
+.post .t{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.post .h{font-weight:600;font-size:15px}
+.post.vac{border-left-color:var(--vacant);border-left-style:dashed;background:rgba(233,199,107,.05)}
+.leaders .post{border-left-width:4px;padding:10px 18px}
+.leaders .post .h{font:700 17px var(--f-display)}
+.hist img{border-radius:4px;box-shadow:0 0 0 1px rgba(255,220,150,.18)}
+.members .m{background:rgba(255,220,150,.05);border-color:var(--line)}
+/* kpis */
+.ecotop{gap:14px}
+.kpi{padding:16px 18px;position:relative;overflow:hidden}
+.kpi::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(rgba(242,181,68,.16),transparent 70%)}
+.kpi .k{font-size:11px;letter-spacing:.14em}
+.kpi .v{font:700 26px/1.15 var(--f-display);background:linear-gradient(180deg,var(--gold-hi),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.block{padding:18px}
+.block h3,.patrons h3{font:700 18px var(--f-display);color:var(--cream)}
+.block h3 small{font-size:13px}
+/* tables */
+.tblwrap{background:linear-gradient(180deg,rgba(46,32,17,.92),rgba(27,18,10,.95))}
+table.bud thead th{background:rgba(255,220,150,.04);font-weight:600}
+table.bud th.wk{font:600 14px var(--f-display);color:var(--gold)}
+table.bud th,table.bud td,table.exp th,table.exp td{border-bottom-color:var(--line)}
+table.bud tbody tr:hover,table.exp tbody tr:hover{background:rgba(255,220,150,.03)}
+.st{font-weight:600}
+.prices .pc{background:rgba(255,220,150,.035);border-color:var(--line);border-radius:10px}
+.prices .pp{color:var(--ok)}
+/* inputs */
+input[type=text],select,textarea{font:15px var(--f-body);color:var(--cream);background:rgba(8,5,2,.6);border:1px solid var(--line2);border-radius:9px;padding:8px 10px}
+.artedit{border:1px dashed var(--line2);border-radius:12px;background:rgba(255,220,150,.02)}
+.elabel{color:var(--gold-soft);letter-spacing:.12em}
+/* parliament */
+.pill{border-radius:999px;font-weight:600;background:rgba(255,220,150,.04)}
+.pill.veto{color:var(--veto)}
+.bill{padding:16px 18px}
+.bill .bt{font:700 17px/1.3 var(--f-display)}
+.vbar{height:10px;background:rgba(255,220,150,.06)}
+.vbar .f{background:linear-gradient(90deg,#4fae58,#79d17a)}.vbar .a{background:linear-gradient(90deg,#c84a3c,#ef6a5a)}.vbar .z{background:#8a7a63}
+.rep{background:rgba(255,220,150,.035);border-color:var(--line);border-radius:10px}
+.vote{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.vote button{min-width:110px}
+.vote button.on.f{background:linear-gradient(180deg,#8be08c,#4fae58);color:#0d2a0f;border-color:#a7eba8}
+.vote button.on.a{background:linear-gradient(180deg,#ff8e80,#d4503f);color:#2b0905;border-color:#ffb3a8}
+.vote button.on.z{background:linear-gradient(180deg,#d6c3a1,#a08d6c);color:#221a0e;border-color:#e5d6bb}
+.votes-who{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px;font-size:13px}
+.votes-who span{background:rgba(255,220,150,.035);border:1px solid var(--line);border-radius:8px;padding:5px 10px}
+.votes-who b{font-weight:600}
+.live{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--ok);letter-spacing:.06em;text-transform:uppercase}
+.live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 rgba(121,209,122,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(121,209,122,0)}100%{box-shadow:0 0 0 0 rgba(121,209,122,0)}}
+/* constitution */
+.cons article.doc{padding:clamp(20px,4vw,44px)}
+.doc h3{font:700 20px var(--f-display);color:var(--gold)}
+.doc h4{font:600 16px var(--f-body);color:var(--cream)}
+.doc .pre{font-family:var(--f-body);font-style:italic;color:#e9dcc2}
+.cons aside button{color:var(--muted)}
+/* footer */
+.foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media (max-width:620px){nav.toc{border-radius:14px}nav.toc button{padding:8px 10px;font-size:13px}nav.toc button span{display:none}nav.toc button[aria-current="page"] span{display:inline}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
 </head><body>
 <div class="wrap" id="app"><p class="status">Завантаження…</p></div>
 <script>
@@ -272,6 +385,11 @@ function landLeaders(){
   }));
   return out;
 }
+const NAV_ICONS={"ud": "<path d=\"M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14\"/>", "army": "<path d=\"M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z\"/>", "econ": "<ellipse cx=\"12\" cy=\"6\" rx=\"7\" ry=\"3\"/><path d=\"M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6\"/>", "parl": "<path d=\"M3 21h18M4 10h16M12 3 3 8h18l-9-5ZM6 10v8m4-8v8m4-8v8m4-8v8\"/>", "const": "<path d=\"M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm2 5h6M9 12h6M9 16h4\"/>"};
+let VOTES={};
+function parlSec(){return state.sections.find(x=>x.kind==='parliament');}
+function myLand(){const p=parlSec();if(!p||!AUTH.email)return '';const m=p.repEmails||{};const e=Object.entries(m).find(([l,em])=>String(em||'').trim().toLowerCase()===AUTH.email);return e?e[0]:'';}
+const CH={for:['За','f'],against:['Проти','a'],abstain:['Утримався','z']};
 const BST={review:['⏳','На розгляді'],passed:['✓','Прийнято'],rejected:['✕','Відхилено'],veto:['⛔','Ветовано Гетьманом']};
 function parlHtml(s,si){
   const bills=s.bills||[];const reps=landLeaders();
@@ -288,18 +406,23 @@ function parlHtml(s,si){
   const chapters=(state.sections.find(x=>x.kind==='doc')||{doc:{chapters:[]}}).doc.chapters;
   if(editing){
     h+=bills.map((b,bi)=>`<div class="artedit"><div class="erow bill3"><input type="text" id="bn-${bi}" data-a="bn" data-s="${si}" data-p="${bi}" value="${esc(b.no)}" placeholder="№"><input type="text" id="bd-${bi}" data-a="bd" data-s="${si}" data-p="${bi}" value="${esc(b.date)}" placeholder="Дата"><select id="bs-${bi}" data-a="bs" data-s="${si}" data-p="${bi}">${Object.keys(BST).map(k=>`<option value="${k}"${k===b.status?' selected':''}>${BST[k][1]}</option>`).join('')}</select></div><input type="text" id="bt-${bi}" data-a="bt" data-s="${si}" data-p="${bi}" value="${esc(b.title)}" placeholder="Назва законопроєкту"><input type="text" id="ba-${bi}" data-a="ba" data-s="${si}" data-p="${bi}" value="${esc(b.author)}" placeholder="Автор / хто вніс"><textarea id="bx-${bi}" data-a="bx" data-s="${si}" data-p="${bi}" placeholder="Текст законопроєкту. Кожен пункт з нового рядка.">${esc(b.text)}</textarea><div class="erow bill3"><input type="text" inputmode="numeric" id="vf-${bi}" data-a="vf" data-s="${si}" data-p="${bi}" value="${esc(b.vfor)}" placeholder="За"><input type="text" inputmode="numeric" id="va-${bi}" data-a="va" data-s="${si}" data-p="${bi}" value="${esc(b.vagainst)}" placeholder="Проти"><input type="text" inputmode="numeric" id="vz-${bi}" data-a="vz" data-s="${si}" data-p="${bi}" value="${esc(b.vabstain)}" placeholder="Утрималися"></div><input type="text" id="vw-${bi}" data-a="vw" data-s="${si}" data-p="${bi}" value="${esc(b.who)}" placeholder="Хто як голосував (необов'язково), напр. За: Хмара, Нікс; Проти: Mark">
-      <div class="landtools">${b.article?`<span class="hint">Внесено в Конституцію як ${esc(b.article)}</span>`:(b.status==='passed'?`<select id="bc-${bi}" data-a="bc" data-s="${si}" data-p="${bi}" style="width:auto">${chapters.map((c,ci)=>`<option value="${ci}"${ci===(b.chapter??chapters.length-1)?' selected':''}>${esc(c.title)}</option>`).join('')}</select><button class="small" data-a="b2c" data-s="${si}" data-p="${bi}">Додати в Конституцію новою статтею</button>`:'<span class="hint">Коли статус «Прийнято», закон можна одразу додати в Конституцію</span>')}<button class="small danger" data-a="bdel" data-s="${si}" data-p="${bi}">Видалити</button></div></div>`).join('')+`<div><button class="small" data-a="badd" data-s="${si}">+ Законопроєкт</button></div>`;
+      <div class="landtools">${b.article?`<span class="hint">Внесено в Конституцію як ${esc(b.article)}</span>`:(b.status==='passed'?`<select id="bc-${bi}" data-a="bc" data-s="${si}" data-p="${bi}" style="width:auto">${chapters.map((c,ci)=>`<option value="${ci}"${ci===(b.chapter??chapters.length-1)?' selected':''}>${esc(c.title)}</option>`).join('')}</select><button class="small" data-a="b2c" data-s="${si}" data-p="${bi}">Додати в Конституцію новою статтею</button>`:'<span class="hint">Коли статус «Прийнято», закон можна одразу додати в Конституцію</span>')}<button class="small${b.voting?' primary':''}" data-a="bvote" data-s="${si}" data-p="${bi}">${b.voting?'Закрити голосування':'Відкрити голосування'}</button><button class="small danger" data-a="bdel" data-s="${si}" data-p="${bi}">Видалити</button></div></div>`).join('')+`<div><button class="small" data-a="badd" data-s="${si}">+ Законопроєкт</button></div>`;
   } else if(!bills.length){
     h+='<p class="empty">Законопроєктів ще немає. Щоб внести перший, натисніть «Редагувати», а потім «+ Законопроєкт».</p>';
   } else {
-    h+=bills.slice().reverse().map(b=>{const f=+b.vfor||0,a=+b.vagainst||0,z=+b.vabstain||0,t=f+a+z;const st=BST[b.status]||BST.review;
-      return `<article class="bill"><div class="bh"><span class="bt">${b.no?esc(b.no)+'. ':''}${esc(b.title||'Без назви')}</span><span class="pill ${esc(b.status||'review')}">${st[0]} ${st[1]}</span></div><div class="bm">${[b.date&&esc(b.date),b.author&&'Вніс: '+esc(b.author),b.article&&'Внесено в Конституцію: '+esc(b.article)].filter(Boolean).join(' · ')}</div>${t?`<div class="vbar" role="img" aria-label="За ${f}, проти ${a}, утрималися ${z}">${f?`<i class="f" style="width:${f/t*100}%"></i>`:''}${a?`<i class="a" style="width:${a/t*100}%"></i>`:''}${z?`<i class="z" style="width:${z/t*100}%"></i>`:''}</div><div class="vleg"><span>За: <b>${f}</b></span><span>Проти: <b>${a}</b></span><span>Утрималися: <b>${z}</b></span></div>`:''}${b.who?`<div class="bm">${esc(b.who)}</div>`:''}${b.text?`<details><summary>Текст законопроєкту</summary><p>${esc(b.text)}</p></details>`:''}</article>`}).join('');
+    const lead={};reps.forEach(r=>lead[r.land]=r.name);const me=myLand();
+    h+=bills.slice().reverse().map(b=>{const vs=(b.id&&VOTES[b.id])||[];let f=+b.vfor||0,a=+b.vagainst||0,z=+b.vabstain||0;
+      if(vs.length){f=vs.filter(v=>v.choice==='for').length;a=vs.filter(v=>v.choice==='against').length;z=vs.filter(v=>v.choice==='abstain').length;}
+      const t=f+a+z;const st=BST[b.status]||BST.review;const mine=vs.find(v=>v.email===AUTH.email);
+      const voteUi=b.voting?`<div class="vote"><span class="live">Голосування триває</span>${me?Object.keys(CH).map(k=>`<button class="small ${CH[k][1]}${mine&&mine.choice===k?' on':''}" data-a="vote" data-b="${esc(b.id)}" data-c="${k}" ${busy?'disabled':''}>${CH[k][0]}</button>`).join('')+(mine?'<span class="hint">ваш голос враховано, можна змінити</span>':''):(AUTH.email?'<span class="hint">Голосують лише Представники Земель</span>':'<span class="hint">Представники Земель: увійдіть через Google, щоб проголосувати</span>')}</div>`:'';
+      const who=vs.length?`<div class="votes-who">${vs.map(v=>`<span>${esc(v.land)}${lead[v.land]?' ('+esc(lead[v.land])+')':''}: <b>${CH[v.choice]?CH[v.choice][0]:'—'}</b></span>`).join('')}</div>`:'';
+      return `<article class="bill"><div class="bh"><span class="bt">${b.no?esc(b.no)+'. ':''}${esc(b.title||'Без назви')}</span><span class="pill ${esc(b.status||'review')}">${st[0]} ${st[1]}</span></div><div class="bm">${[b.date&&esc(b.date),b.author&&'Вніс: '+esc(b.author),b.article&&'Внесено в Конституцію: '+esc(b.article)].filter(Boolean).join(' · ')}</div>${t?`<div class="vbar" role="img" aria-label="За ${f}, проти ${a}, утрималися ${z}">${f?`<i class="f" style="width:${f/t*100}%"></i>`:''}${a?`<i class="a" style="width:${a/t*100}%"></i>`:''}${z?`<i class="z" style="width:${z/t*100}%"></i>`:''}</div><div class="vleg"><span>За: <b>${f}</b></span><span>Проти: <b>${a}</b></span><span>Утрималися: <b>${z}</b></span></div>`:''}${voteUi}${who}${b.who&&!vs.length?`<div class="bm">${esc(b.who)}</div>`:''}${b.text?`<details><summary>Текст законопроєкту</summary><p>${esc(b.text)}</p></details>`:''}</article>`}).join('');
   }
   h+='</div>';
   // representatives = territory leaders taken from the lands tabs
   h+=`<div class="block"><h3>Представники Земель <small>Крайові Отамани з вкладки «Землі УД»</small></h3>`;
   h+='<div class="reps">'+reps.map(r=>{const v=!String(r.name||'').trim();return `<div class="rep${v?' vac':''}"><span class="t">${esc(r.land)}</span><span class="h">${v?'Вакантно':esc(r.name)}</span>${r.post&&!/Крайовий Отаман/.test(r.post)?`<span class="t">${esc(r.post)}</span>`:''}</div>`}).join('')+'</div>';
-  if(editing)h+='<p class="hint">Щоб змінити представника, змініть Крайового Отамана відповідної землі на вкладці «Землі УД».</p>';
+  if(editing){const m=parlSec().repEmails||{};h+='<div class="elabel">Google-пошти представників (для голосування)</div>'+reps.map((r,ri)=>`<div class="erow pt"><span>${esc(r.land)}${r.name?' · '+esc(r.name):''}</span><input type="text" id="re-${ri}" data-a="re" data-s="${si}" data-l="${esc(r.land)}" value="${esc(m[r.land]||'')}" placeholder="пошта@gmail.com"><span></span></div>`).join('')+'<p class="hint">Ім\'я представника береться з Крайового Отамана на вкладці «Землі УД». Пошта потрібна, щоб він міг голосувати.</p>';}
   h+='</div></div>';
   return h;
 }
@@ -382,11 +505,11 @@ function render(){
   let bar='';
   if(editing) bar=`<button class="primary" data-a="save" ${busy?'disabled':''}>Зберегти</button><button class="ghost" data-a="cancel">Скасувати</button>`;
   else if(AUTH.admin) bar=`<button data-a="edit">Редагувати</button><button class="ghost small" data-a="logout" title="${esc(AUTH.email)}">Вийти</button>`;
-  else if(AUTH.email) bar=`<span class="status">${esc(AUTH.email)} не адмін</span><button class="ghost small" data-a="logout">Вийти</button>`;
-  else if(AUTH.ready) bar=`<button class="ghost small" data-a="login">Увійти для редагування</button>`;
+  else if(AUTH.email) bar=`<span class="status">${esc(AUTH.email)}${myLand()?' · Представник: '+esc(myLand()):''}</span><button class="ghost small" data-a="logout">Вийти</button>`;
+  else if(AUTH.ready) bar=`<button class="small" data-a="login">Увійти через Google</button>`;
   const status=msg?`<span class="status${msgErr?' err':''}">${esc(msg)}</span>`:(editing&&dirty?'<span class="status">Є незбережені зміни</span>':'');
-  let html=`<header class="top"><div><h1>Українська Держава</h1><div class="meta">Землі, військо, економіка, Палата Земель і Конституція · оновлено ${esc(state.updated)}</div></div><div class="bar">${status}${bar}</div></header>`;
-  html+='<nav class="toc" aria-label="Розділи">'+state.sections.filter(s=>!s.tab).map(s=>`<button data-a="tab" data-id="${esc(s.id)}" ${s.id===active?'aria-current="page"':''}>${esc(s.nav||s.title)}</button>`).join('')+'</nav>';
+  let html=`<header class="top"><div><div class="eyebrow"><i></i>DragPolit · Державний реєстр</div><h1>Українська Держава</h1><div class="meta">Землі, військо, економіка, Палата Земель і Конституція · оновлено ${esc(state.updated)}</div></div><div class="bar">${status}${bar}</div></header>`;
+  html+='<nav class="toc" aria-label="Розділи">'+state.sections.filter(s=>!s.tab).map(s=>`<button data-a="tab" data-id="${esc(s.id)}" ${s.id===active?'aria-current="page"':''}>${NAV_ICONS[s.id]?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${NAV_ICONS[s.id]}</svg>`:''}<span>${esc(s.nav||s.title)}</span></button>`).join('')+'</nav>';
   state.sections.forEach((s,si)=>{
     if((s.tab||s.id)!==active)return;
     html+=`<section class="sec" id="${esc(s.id)}"><h2>${esc(s.title)}${s.note?`<small>${esc(s.note)}</small>`:''}</h2>`;
@@ -402,6 +525,7 @@ function render(){
     if(editing) html+=`<div><button data-a="ladd" data-s="${si}">${s.kind==='units'?'+ Додати курінь':'+ Додати землю'}</button></div>`;
     html+='</div></section>';
   });
+  html+='<footer class="foot"><span>Українська Держава · DragPolit</span><span>Дані оновлюються адміністрацією</span></footer>';
   app.innerHTML=html;
 }
 function pickImage(cb,png){
@@ -431,6 +555,7 @@ app.addEventListener('input',e=>{
   const sec=state.sections[+t.dataset.s];
   if(a==='lt'){sec.leaders[+t.dataset.p].title=t.value;return;}
   if(a==='pch'){sec.chair=t.value;return;}
+  if(a==='re'){(sec.repEmails=sec.repEmails||{})[t.dataset.l]=t.value.trim();return;}
   if(['bn','bd','bt','ba','bx','vw'].includes(a)){const k={bn:'no',bd:'date',bt:'title',ba:'author',bx:'text',vw:'who'}[a];sec.bills[+t.dataset.p][k]=t.value;return;}
   if(['vf','va','vz'].includes(a)){const k={vf:'vfor',va:'vagainst',vz:'vabstain'}[a];sec.bills[+t.dataset.p][k]=t.value.replace(/[^0-9]/g,'');return;}
   if(a==='rl'){sec.reps[+t.dataset.p].land=t.value;return;}
@@ -482,6 +607,7 @@ app.addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;const a=b.dataset.a;
   const s=b.dataset.s!=null?state.sections[+b.dataset.s]:null;const li=+b.dataset.l;const l=s&&s.lands&&s.lands[li];
   msg='';msgErr=false;
+  if(a==='vote'){const land=myLand();if(!land)return;busy=true;render();window.FB.vote(b.dataset.b,b.dataset.c,land).then(()=>window.FB.loadVotes()).then(v=>{VOTES=v;busy=false;msg='Голос збережено';msgErr=false;render();}).catch(err=>{busy=false;msg=err&&err.code==='permission-denied'?'Голос не прийнято: голосування закрите або ви не Представник':'Не вдалося проголосувати';msgErr=true;render();});return;}
   if(a==='login'){window.FB.login().catch(err=>{msg='Не вдалося увійти: '+(err&&err.code||'');msgErr=true;render();});return;}
   if(a==='logout'){editing=false;state=JSON.parse(saved);window.FB.logout();return;}
   if(a==='tab'){active=b.dataset.id;try{history.replaceState(null,'','#'+active);}catch(_){}render();window.scrollTo(0,0);return;}
@@ -501,7 +627,8 @@ app.addEventListener('click',async e=>{
   else if(a==='exdel'){s.expenses.splice(+b.dataset.p,1);}
   else if(a==='pradd'){(s.prices=s.prices||[]).push({name:'',price:''});}
   else if(a==='prdel'){s.prices.splice(+b.dataset.p,1);}
-  else if(a==='badd'){const bl=(s.bills=s.bills||[]);bl.push({no:'№'+(bl.length+1),date:today(),title:'',author:'',text:'',status:'review',vfor:'',vagainst:'',vabstain:'',who:''});}
+  else if(a==='badd'){const bl=(s.bills=s.bills||[]);bl.push({id:'b'+Date.now().toString(36),voting:false,no:'№'+(bl.length+1),date:today(),title:'',author:'',text:'',status:'review',vfor:'',vagainst:'',vabstain:'',who:''});}
+  else if(a==='bvote'){const bb=s.bills[+b.dataset.p];if(!bb.id)bb.id='b'+Date.now().toString(36);bb.voting=!bb.voting;msg=bb.voting?'Голосування відкриється після збереження':'Голосування закриється після збереження';}
   else if(a==='bdel'){if(b.dataset.confirm==='1'){s.bills.splice(+b.dataset.p,1);}else{b.dataset.confirm='1';b.textContent='Точно видалити?';return;}}
   else if(a==='radd'){(s.reps=s.reps||[]).push({land:'',name:''});}
   else if(a==='rdel'){s.reps.splice(+b.dataset.p,1);}
@@ -540,7 +667,8 @@ app.addEventListener('click',async e=>{
   render();
 });
 render();
-window.APP={load(s){state=s;saved=JSON.stringify(s);msg='';render();},fail(t){msg=t;msgErr=true;render();},auth(a){AUTH=a;if(!a.admin)editing=false;render();}};
+window.APP_STATE=()=>state;
+window.APP={votes(v){VOTES=v||{};render();},load(s){const p=s.sections.find(x=>x.kind==='parliament');if(p)(p.bills||[]).forEach((b,i)=>{if(!b.id)b.id='b'+i+'x'+Date.now().toString(36);});state=s;saved=JSON.stringify(s);msg='';render();},fail(t){msg=t;msgErr=true;render();},auth(a){AUTH=a;if(!a.admin)editing=false;render();}};
 if(window.APP_READY)window.APP_READY();
 })();
 </script>
@@ -558,7 +686,7 @@ const firebaseConfig = {
 };
 // ========================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const fbApp = initializeApp(firebaseConfig);
@@ -597,9 +725,34 @@ async function save(state){
     f.img = "img:" + id;
   }
   await setDoc(doc(db, "site", "state"), { json: JSON.stringify(copy), updatedBy: auth.currentUser.email, updatedAt: new Date().toISOString() });
+  // voting: who may vote, and which ballots are open
+  const parl = copy.sections.find(x => x.kind === "parliament");
+  if (parl) {
+    const map = parl.repEmails || {};
+    const emails = Object.values(map).map(e => String(e||"").trim().toLowerCase()).filter(Boolean);
+    const batch = writeBatch(db);
+    batch.set(doc(db, "site", "voters"), { emails, map });
+    (parl.bills || []).forEach(b => { if (b.id) batch.set(doc(db, "ballots", b.id), { open: !!b.voting, title: b.title || "" }); });
+    await batch.commit();
+  }
+}
+async function loadVotes(){
+  const st = window.APP_STATE ? window.APP_STATE() : null;
+  const out = {};
+  const parl = st && st.sections.find(x => x.kind === "parliament");
+  for (const b of (parl && parl.bills) || []) {
+    if (!b.id) continue;
+    const snap = await getDocs(collection(db, "ballots", b.id, "votes"));
+    out[b.id] = []; snap.forEach(d => out[b.id].push({ email: d.id, ...d.data() }));
+  }
+  return out;
+}
+async function vote(billId, choice, land){
+  const email = (auth.currentUser.email || "").toLowerCase();
+  await setDoc(doc(db, "ballots", billId, "votes", email), { choice, land, at: serverTimestamp() });
 }
 window.FB = {
-  save,
+  save, loadVotes, vote,
   login: () => signInWithPopup(auth, new GoogleAuthProvider()),
   logout: () => signOut(auth),
 };
@@ -608,7 +761,7 @@ function start(){
     const email = u ? (u.email||"").toLowerCase() : "";
     window.APP.auth({ ready:true, email, admin: !!email && ADMINS.map(a=>a.toLowerCase()).includes(email) });
   });
-  loadAll().then(s => window.APP.load(s)).catch(e => { console.error(e); window.APP.fail("Не вдалося завантажити дані: " + (e.code || e.message)); });
+  loadAll().then(s => { window.APP.load(s); return loadVotes(); }).then(v => window.APP.votes(v)).catch(e => { console.error(e); window.APP.fail("Не вдалося завантажити дані: " + (e.code || e.message)); });
 }
 if (window.APP) start(); else window.APP_READY = start;
 </script>
