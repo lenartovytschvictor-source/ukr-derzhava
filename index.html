@@ -292,6 +292,7 @@ input[type=text],select,textarea{font:15px var(--f-body);color:var(--cream);back
 @media (max-width:620px){nav.toc{border-radius:14px}nav.toc button{padding:8px 10px;font-size:13px}nav.toc button span{display:none}nav.toc button[aria-current="page"] span{display:inline}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 .propose input,.propose textarea,.propose select{width:100%;margin-bottom:10px}.propose textarea{min-height:120px}
+.rep .o{font-size:12.5px;color:var(--muted);margin-top:3px}.rep .o b{color:var(--text,#f3e6c8);font-weight:600}.rep .o.vac b{color:var(--vacant,#e9c76b)}
 .hint.warn{color:var(--vacant,#e9c76b);margin:-4px 0 10px}
 .vote .vrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%}.vote .vland{min-width:170px;font-weight:600;color:var(--gold,#f0b030)}
 </style>
@@ -377,14 +378,19 @@ function patronTotals(s){
   (s.donations||[]).forEach(d=>{const n=String(d.name||'').trim()||'Без імені';if(!(n in idx)){idx[n]=out.length;out.push({name:n,v:0});}out[idx[n]].v+=donValue(s,d);});
   return out;
 }
+const num0=t=>{const m=/^(\d+)/.exec(String(t||'').trim());return m?+m[1]:0;};
 function landLeaders(){
   const out=[];
   state.sections.filter(x=>!x.kind&&x.lands).forEach(sec=>sec.lands.forEach(l=>{
     const name=(l.flags[l.flags.length-1]||{}).name||'';
     const posts=l.posts||[];
-    const p=posts.find(p=>/^1-й Крайовий Отаман/i.test(p.title))||posts.find(p=>/Отаман|Старшина|Намісник|Писар/i.test(p.title))||posts[0]||{title:'',holder:''};
+    // Крайові Отамани йдуть по черзі (1-й, 2-й, 3-й…): чинний — той, у кого найбільший номер
+    const num=q=>{const m=/^(\d+)\s*-?\s*[йя]?\s*Крайов/i.exec(String(q.title||'').trim());return m?+m[1]:0;};
+    const ota=posts.filter(q=>num(q)>0).sort((a,b)=>num(b)-num(a));
+    const p=ota[0]||posts.find(p=>/Отаман|Старшина|Намісник|Писар/i.test(p.title))||posts[0]||{title:'',holder:''};
     const h=String(p.holder||'').trim();
-    out.push({land:name,name:h==='0'?'':h,post:p.title});
+    const prev=ota.length>1?String(ota[1].holder||'').trim():'';
+    out.push({land:name,name:h==='0'?'':h,post:p.title,prev:prev==='0'?'':prev});
   }));
   return out;
 }
@@ -447,7 +453,7 @@ function parlHtml(s,si){
   h+='</div>';
   // representatives = territory leaders taken from the lands tabs
   h+=`<div class="block"><h3>Представники Земель <small>Крайові Отамани з вкладки «Землі УД»</small></h3>`;
-  h+='<div class="reps">'+reps.map(r=>{const v=!String(r.name||'').trim();return `<div class="rep${v?' vac':''}"><span class="t">${esc(r.land)}</span><span class="h">${v?'Вакантно':esc(r.name)}</span>${r.post&&!/Крайовий Отаман/.test(r.post)?`<span class="t">${esc(r.post)}</span>`:''}</div>`}).join('')+'</div>';
+  h+='<div class="reps">'+reps.map(r=>{const v=!String(r.name||'').trim();return `<div class="rep${v?' vac':''}"><span class="t">${esc(r.land)}</span><span class="h">${v?'Вакантно':esc(r.name)}</span>${r.post&&!/Крайовий Отаман/.test(r.post)?`<span class="t">${esc(r.post)}</span>`:''}${r.post&&num0(r.post)>1?`<span class="o">${esc(r.post)}${r.prev?' · раніше: '+esc(r.prev):''}</span>`:''}</div>`}).join('')+'</div>';
   if(editing){const m=parlSec().repEmails||{};h+='<div class="elabel">Google-пошти представників (для голосування)</div>'+reps.map((r,ri)=>`<div class="erow pt"><span>${esc(r.land)}${r.name?' · '+esc(r.name):''}</span><input type="text" id="re-${ri}" data-a="re" data-s="${si}" data-l="${esc(r.land)}" value="${esc(m[r.land]||'')}" placeholder="пошта@gmail.com"><span></span></div>${(()=>{const st=seatState(r,parlSec());return st.why==='vac'?'<p class="hint warn">⚠ Посада вакантна, тож ця пошта не голосує. Коли буде новий Отаман, впишіть його пошту.</p>':st.why==='changed'?`<p class="hint warn">⚠ Пошту вписали для «${esc(st.was)}», а Отаман тепер «${esc(r.name)}». Пошта не діє, поки ви не впишете її заново (можна ту саму).</p>`:'';})()}`).join('')+'<p class="hint">Ім\'я представника береться з Крайового Отамана на вкладці «Землі УД». Пошта потрібна, щоб він міг голосувати.</p>';}
   h+='</div></div>';
   return h;
