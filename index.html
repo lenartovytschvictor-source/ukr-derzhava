@@ -692,7 +692,11 @@ function constHtml(s,si){
   return h+'</article></div>';
 }
 function nextArticleNo(d){let mx=0;d.chapters.forEach(c=>c.articles.forEach(a=>{const m=/^Стаття\s+(\d+)/.exec(a.title);if(m)mx=Math.max(mx,+m[1]);}));return mx+1;}
-function render(){
+function render(){const ae=document.activeElement;const fid=ae&&ae.id&&app.contains(ae)?ae.id:null;let s0=null,s1=null;try{s0=ae.selectionStart;s1=ae.selectionEnd;}catch(_){}
+  renderInner();
+  if(fid){const el=document.getElementById(fid);if(el&&el!==document.activeElement){el.focus({preventScroll:true});try{if(s0!=null)el.setSelectionRange(s0,s1);}catch(_){}}}
+}
+function renderInner(){
   if(!state.sections.length){app.innerHTML='<p class="status">'+esc(msg||'Завантаження…')+'</p>';return;}
   if(!state.sections.some(s=>s.id===active&&!s.tab)){const g=state.sections.find(s=>s.id===active);active=g&&g.tab?g.tab:state.sections[0].id;}
   const dirty=JSON.stringify(state)!==saved;
@@ -878,7 +882,7 @@ app.addEventListener('click',async e=>{
   else if(a==='patadd'){s.patrons.push({name:'',amount:''});}
   else if(a==='patdel'){s.patrons.splice(+b.dataset.p,1);}
   else if(a==='edit'){editing=true;RECON_DONE=false;}
-  else if(a==='cancel'){state=JSON.parse(saved);editing=false;RECON_DONE=false;}
+  else if(a==='cancel'){if(REMOTE){state=REMOTE;saved=JSON.stringify(REMOTE);REMOTE=null;}else state=JSON.parse(saved);editing=false;RECON_DONE=false;}
   else if(a==='padd'){l.posts.push({title:s.kind==='units'?'Сотник':'1-й Крайовий Отаман',holder:''});}
   else if(a==='ldradd'){s.leaders.push({title:'',holder:''});}
   else if(a==='ldrdel'){s.leaders.splice(+b.dataset.p,1);}
@@ -892,7 +896,7 @@ app.addEventListener('click',async e=>{
   else if(a==='save'){
     if(!AUTH.admin)return;busy=true;msg='Зберігаю…';render();
     const d=new Date();state.updated=String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+d.getFullYear();
-    try{await window.FB.save(state);saved=JSON.stringify(state);busy=false;editing=false;RECON_DONE=false;msg='Збережено';}
+    try{await window.FB.save(state);saved=JSON.stringify(state);busy=false;editing=false;RECON_DONE=false;REMOTE=null;msg='Збережено';}
     catch(err){busy=false;const c=err&&err.code;
       if(c==='permission-denied'){msg='Немає прав на збереження. Увійдіть акаунтом адміна.';msgErr=true;}
       else if(c==='not_writer'||c==='not_granted'||c==='consent_required'||c==='capability_disabled'){readOnly=true;editing=false;state=JSON.parse(saved);msg='У вас лише перегляд, зберігати зміни не можна';msgErr=true;}
@@ -920,8 +924,13 @@ async function finalizeExpired(){
   busy=false;render();
 }
 async function refreshLive(){if(!window.FB||busy||editing||document.visibilityState!=='visible')return;try{PROPS=await window.FB.loadProposals();VOTES=await window.FB.loadVotes();}catch(_){}}
-setInterval(async()=>{if(editing)return;await refreshLive();const ae=document.activeElement;if(ae&&ae.id&&ae.id.startsWith('np-'))return;render();finalizeExpired();},60000);
-window.APP={votes(v){VOTES=v||{};votesLoaded=true;render();finalizeExpired();},props(l){PROPS=l||[];render();},load(s){const p=s.sections.find(x=>x.kind==='parliament');if(p)(p.bills||[]).forEach((b,i)=>{if(!b.id)b.id='b'+i+'x'+Date.now().toString(36);});state=s;
+setInterval(async()=>{if(editing)return;const ae=document.activeElement;if(ae&&ae.id&&ae.id.startsWith('np-'))return;render();finalizeExpired();},60000);
+let REMOTE=null;
+window.APP={remote(s){const p=s.sections.find(x=>x.kind==='parliament');const es=s.sections.find(x=>x.kind==='economy');if(es)freezePrices(es);
+    const js=JSON.stringify(s);if(js===saved)return;
+    if(editing||busy){REMOTE=s;msg='Хтось щойно змінив дані на сайті. Після збереження або скасування ви побачите свіжу версію.';msgErr=false;render();return;}
+    state=s;saved=js;render();},
+  votes(v){VOTES=v||{};votesLoaded=true;render();finalizeExpired();},props(l){PROPS=l||[];render();},load(s){const p=s.sections.find(x=>x.kind==='parliament');if(p)(p.bills||[]).forEach((b,i)=>{if(!b.id)b.id='b'+i+'x'+Date.now().toString(36);});state=s;
   if(p&&p.repEmails&&!p.repHolder){p.repHolder={};landLeaders().forEach(r=>{if(String(p.repEmails[r.land]||'').trim()&&r.name)p.repHolder[r.land]=r.name;});}{const es=s.sections.find(x=>x.kind==='economy');if(es)freezePrices(es);}saved=JSON.stringify(s);msg='';if(INV_IN){const es=s.sections.find(x=>x.kind==='economy');if(es)active=es.tab||es.id;}render();},fail(t){msg=t;msgErr=true;render();},auth(a){AUTH=a;if(!a.admin)editing=false;render();finalizeExpired();}};
 if(window.APP_READY)window.APP_READY();
 })();
@@ -940,7 +949,7 @@ const firebaseConfig = {
 };
 // ========================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, collectionGroup, getDocs, writeBatch, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const fbApp = initializeApp(firebaseConfig);
@@ -963,11 +972,35 @@ async function loadAll(){
     const seed = await (await fetch("seed.json", {cache:"no-store"})).json();
     return seed;
   }
-  const state = JSON.parse(snap.data().json);
-  const imgs = {};
-  (await getDocs(collection(db, "images"))).forEach(d => { imgs[d.id] = d.data().data; known.add(d.id); });
-  walkImages(state, f => { if (f.img && f.img.startsWith("img:")) f.img = imgs[f.img.slice(4)] || ""; });
+  (await getDocs(collection(db, "images"))).forEach(d => { IMGS[d.id] = d.data().data; known.add(d.id); });
+  return hydrate(snap.data().json);
+}
+const IMGS = {};
+async function hydrate(json){
+  const state = JSON.parse(json);
+  const refs = []; walkImages(state, f => { if (f.img && f.img.startsWith("img:")) refs.push(f); });
+  for (const f of refs) {
+    const id = f.img.slice(4);
+    if (!(id in IMGS)) { try { const d = await getDoc(doc(db, "images", id)); IMGS[id] = d.exists() ? d.data().data : ""; known.add(id); } catch (_) { IMGS[id] = ""; } }
+    f.img = IMGS[id] || "";
+  }
   return state;
+}
+// live updates: new bills, votes and edits appear without reloading the page
+function propsFrom(snap){ const out = []; snap.forEach(d => { const v = d.data(); out.push({ id: d.id, ...v, at: v.at && v.at.toMillis ? v.at.toMillis() : null }); }); out.sort((a, b) => (a.at || 0) - (b.at || 0)); return out; }
+function watch(){
+  onSnapshot(collection(db, "proposals"), snap => window.APP.props(propsFrom(snap)), e => console.warn(e));
+  onSnapshot(collectionGroup(db, "votes"), snap => {
+    const out = {};
+    snap.forEach(d => { const bid = d.ref.parent.parent && d.ref.parent.parent.id; if (!bid) return; (out[bid] = out[bid] || []).push({ land: d.id, ...d.data() }); });
+    window.APP.votes(out);
+  }, e => console.warn(e));
+  let first = true;
+  onSnapshot(doc(db, "site", "state"), async snap => {
+    if (first) { first = false; return; }
+    if (!snap.exists() || snap.metadata.hasPendingWrites) return;
+    try { window.APP.remote(await hydrate(snap.data().json)); } catch (e) { console.warn(e); }
+  }, e => console.warn(e));
 }
 async function save(state){
   const copy = JSON.parse(JSON.stringify(state));
@@ -1028,7 +1061,7 @@ function start(){
     const email = u ? (u.email||"").toLowerCase() : "";
     window.APP.auth({ ready:true, email, admin: !!email && ADMINS.map(a=>a.toLowerCase()).includes(email) });
   });
-  loadAll().then(s => { window.APP.load(s); return loadProposals().then(l => window.APP.props(l)).catch(e => console.warn(e)); }).then(() => loadVotes()).then(v => window.APP.votes(v)).catch(e => { console.error(e); window.APP.fail("Не вдалося завантажити дані: " + (e.code || e.message)); });
+  loadAll().then(s => { window.APP.load(s); return loadProposals().then(l => window.APP.props(l)).catch(e => console.warn(e)); }).then(() => loadVotes()).then(v => { window.APP.votes(v); watch(); }).catch(e => { console.error(e); window.APP.fail("Не вдалося завантажити дані: " + (e.code || e.message)); });
 }
 if (window.APP) start(); else window.APP_READY = start;
 </script>
