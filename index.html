@@ -201,6 +201,15 @@ body{background:
 header.top{border:0;padding:18px 0 22px;position:relative;align-items:center}
 header.top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold) 20%,var(--gold) 80%,transparent);opacity:.55}
 header.top .eyebrow{font:600 11px var(--f-body);letter-spacing:.28em;text-transform:uppercase;color:var(--gold-soft);display:flex;align-items:center;gap:10px;margin-bottom:8px}
+header.top .eyebrow a{color:var(--gold-hi,#ffd77a);text-decoration:none;border-bottom:1px solid rgba(240,176,48,.45);padding-bottom:1px;transition:color .15s,border-color .15s}
+header.top .eyebrow a:hover{color:#fff;border-color:#fff}header.top .eyebrow a span{font-size:10px;margin-left:3px;letter-spacing:0}
+header.top .eyebrow .sep{opacity:.5}
+header.top .hl{max-width:760px}
+header.top .lead{color:var(--muted);font-size:14.5px;line-height:1.55;margin:10px 0 0;max-width:62ch}
+header.top .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+header.top .chip{display:inline-flex;align-items:baseline;gap:6px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,220,150,.04);font-size:12.5px;color:var(--muted)}
+header.top .chip b{color:var(--gold-hi,#ffd77a);font-weight:700;font-size:13.5px}
+header.top .bar{align-self:flex-start;margin-top:4px}
 header.top .eyebrow i{display:inline-block;width:22px;height:14px;border-radius:2px;background:linear-gradient(#0057b7 50%,#ffd500 50%);box-shadow:0 0 0 1px rgba(255,255,255,.12)}
 header.top h1{font:800 clamp(30px,5vw,52px)/1.02 var(--f-display);letter-spacing:-.01em;background:linear-gradient(180deg,var(--gold-hi),var(--gold) 55%,#c98a1c);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 14px rgba(242,181,68,.18))}
 header.top .meta{color:var(--muted);font-size:13px;margin-top:8px}
@@ -257,7 +266,7 @@ table.bud th,table.bud td,table.exp th,table.exp td{border-bottom-color:var(--li
 table.bud tbody tr:hover,table.exp tbody tr:hover{background:rgba(255,220,150,.03)}
 .st{font-weight:600}
 .prices .pc{background:rgba(255,220,150,.035);border-color:var(--line);border-radius:10px}
-.prices .pp{color:var(--ok)}
+.prices .pp{color:var(--ok);white-space:nowrap}.prices .pc{min-width:0}.prices .pn{min-width:0;overflow-wrap:anywhere}
 /* inputs */
 input[type=text],select,textarea{font:15px var(--f-body);color:var(--cream);background:rgba(8,5,2,.6);border:1px solid var(--line2);border-radius:9px;padding:8px 10px}
 .artedit{border:1px dashed var(--line2);border-radius:12px;background:rgba(255,220,150,.02)}
@@ -299,6 +308,7 @@ input[type=text],select,textarea{font:15px var(--f-body);color:var(--cream);back
 .invgrid .inv .t{font-size:12px;color:var(--muted)}.invgrid .inv .h{font-weight:700;font-size:20px}.invgrid .inv.zero{opacity:.55}
 .invgrid .inv .d{font-size:12px;font-weight:600}.invgrid .inv .d.up{color:var(--ok,#79d17a)}.invgrid .inv .d.down{color:var(--danger,#ef6a5a)}
 .invin{border-color:var(--gold,#f0b030)}
+.erow.don2{grid-template-columns:minmax(0,1fr) 130px 90px auto auto}
 .erow.inv{grid-template-columns:minmax(0,1fr) 160px auto}
 .bmbox{margin-top:14px;padding:12px 14px;border:1px dashed var(--line);border-radius:10px}
 .bmbox a.bm{display:inline-block;margin-top:4px;padding:7px 14px;border-radius:999px;background:linear-gradient(#f6c453,#d9971f);color:#2a1a05;font-weight:700;text-decoration:none;cursor:grab}
@@ -313,6 +323,25 @@ input[type=text],select,textarea{font:15px var(--f-body);color:var(--cream);back
 .propose textarea.artbody{min-height:110px;opacity:.9;cursor:text}
 details.bill.arch>summary{cursor:pointer;list-style:none}details.bill.arch>summary::-webkit-details-marker{display:none}
 details.bill.arch>summary .bt::before{content:'▸ ';color:var(--gold,#f0b030)}details.bill.arch[open]>summary .bt::before{content:'▾ '}
+.treasury .trhead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-bottom:14px}
+.treasury .k{display:block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.treasury .v{display:block;font:800 clamp(30px,5vw,44px)/1.1 var(--f-display,inherit);color:var(--gold-hi,#ffd77a);margin:4px 0}
+.treasury .v small{font-size:15px;font-weight:600;color:var(--muted)}
+.treasury .s{color:var(--muted);font-size:13.5px}.treasury .s b{color:var(--text,#f3e6c8)}
+.treasury a{color:var(--gold-hi,#ffd77a)}
+.treasury .trmeta{display:grid;gap:6px;justify-items:end;align-content:start;font-size:13px;color:var(--muted)}.treasury .trmeta b{color:var(--text,#f3e6c8)}
+.kpi.in .v{color:var(--ok,#79d17a)}.kpi.out .v{color:var(--danger,#ef6a5a)}
+.mv{font-weight:700;white-space:nowrap}.mv.in{color:var(--ok,#79d17a)}.mv.out{color:var(--danger,#ef6a5a)}
+.tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tag.ok{color:var(--ok,#79d17a);border-color:rgba(121,209,122,.4)}.tag.warn{color:var(--vacant,#e9c76b);border-color:rgba(233,199,107,.45)}
+.invgrid .inv .d.ok{color:var(--ok,#79d17a)}
+table.jour td{vertical-align:top}
+@media (max-width:560px){.treasury .trmeta{justify-items:start}
+table.jour thead{display:none}table.jour,table.jour tbody{display:block;width:100%!important;min-width:0!important}table.jour tr{width:100%;box-sizing:border-box}
+table.jour tr{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"w w" "q t" "c c";gap:4px 10px;padding:10px 4px;border-bottom:1px solid var(--line)}
+table.jour td{border:0!important;padding:0!important;background:none!important}
+table.jour td:nth-child(1){grid-area:w;font-size:12px;color:var(--muted)}table.jour td:nth-child(1) .hint{display:inline;margin-left:6px}
+table.jour td:nth-child(2){grid-area:q}table.jour td:nth-child(3){grid-area:c;text-align:left!important}table.jour td:nth-child(4){grid-area:t}}
 .hint.warn{color:var(--vacant,#e9c76b);margin:-4px 0 10px}
 .vote .vrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%}.vote .vland{min-width:170px;font-weight:600;color:var(--gold,#f0b030)}
 </style>
@@ -529,41 +558,112 @@ function parlHtml(s,si){
   h+='</div></div>';
   return h;
 }
+// ---- treasury ledger: treasury = last reconciliation (manual or from the game) + everything recorded after it
+const RES_ALIAS=[['срібл','Срібло'],['золот','Золото'],['вугіл','Вугілля'],['руд','Руда'],['нафт','Нафта'],['піхот','Піхотне оснащення'],['додат','Додаткове оснащення'],['артил','Артилерія'],['дрон','Дрони'],['танк','Танки'],['літак','Літаки'],['винищ','Літаки'],['корабл','Кораблі'],['есмін','Кораблі']];
+let RECON_DONE=false,JOUR_F='all',JOUR_ALL=false;
+function canonRes(s,name){const n=String(name||'').trim().toLowerCase();if(!n)return null;const items=invItems(s.treasury=s.treasury||{});
+  const ex=items.find(it=>String(it.name).toLowerCase()===n);if(ex)return ex.name;
+  for(const [st,tgt] of RES_ALIAS){if(n.includes(st)){const it=items.find(x=>x.name===tgt)||items.find(x=>String(x.name).toLowerCase().includes(st));if(it)return it.name;}}
+  const it=items.find(x=>String(x.name).toLowerCase().slice(0,4)===n.slice(0,4));return it?it.name:null;}
+function parseNeeds(t){return String(t||'').split(/\+|,|;/).map(x=>{const m=/(\d[\d\s .]*)\s*(.*)$/.exec(x.trim());if(!m)return null;const q=+m[1].replace(/\D/g,'');return q?{qty:q,res:(m[2]||'').trim()||'срібла'}:null;}).filter(Boolean);}
+function silverOf(s,res,qty){const c=canonRes(s,res)||String(res||'');if(/^срібл/i.test(c)||/^срібл/i.test(String(res||'')))return qty;
+  const pr=(s.prices||[]).find(p=>(canonRes(s,p.name)||'')===c||String(p.name||'').trim().toLowerCase()===String(res||'').trim().toLowerCase());
+  return pr&&String(pr.price).trim()!==''?qty*(+pr.price||0):null;}
+const RES_GEN={'срібло':'срібла','золото':'золота','руда':'руди','нафта':'нафти'};
+function itemSilver(s,it){const q=+it.qty||0;if(it.price!=null&&it.price!=='')return q*(+it.price||0);return silverOf(s,it.res,q);}
+function freezePrices(s){(s.patronList||[]).forEach(p=>(p.items||[]).forEach(it=>{if(it.price==null||it.price===''){const v=silverOf(s,it.res,1);if(v!==null)it.price=String(v);}}));}
+function resWord(s,res){const w=String(canonRes(s,res)||res||'').toLowerCase();return RES_GEN[w]||w;}
+function movements(s){const out=[];const tr=s.treasury||{};
+  (s.weeks||[]).forEach((w,wi)=>(s.members||[]).forEach((m,mi)=>{if(!(w.done||[])[mi])return;const txt=(w.got&&w.got[mi])||m.needs;out.push({kind:'week',at:(w.at||[])[mi]||null,date:w.label,who:m.name||'Вакантно',what:'Тижневий внесок',items:parseNeeds(txt)});}));
+  (s.patronList||[]).forEach(p=>(p.items||[]).forEach(it=>{if(+it.qty)out.push({kind:'patron',at:it.at||null,date:it.date||'',who:p.name,what:'Пожертва',items:[{res:it.res,qty:+it.qty}]});}));
+  (s.expenses||[]).forEach(e=>{if(+e.amount)out.push({kind:'expense',at:e.at||null,date:e.date,who:e.by,what:e.what||'Витрата',items:[{res:e.unit||'Срібло',qty:-(+e.amount)}]});});
+  out.forEach(o=>{o.counted=!!o.at&&(!tr.baseAt||o.at>tr.baseAt);o.items.forEach(i=>{i.canon=canonRes(s,i.res);});});
+  return out;}
+function treasuryNow(s){const items=invItems(s.treasury=s.treasury||{});const cur={},delta={};items.forEach(it=>{cur[it.name]=+it.qty||0;});
+  movements(s).forEach(o=>{if(!o.counted)return;o.items.forEach(i=>{if(i.canon&&i.canon in cur){cur[i.canon]+=i.qty;delta[i.canon]=(delta[i.canon]||0)+i.qty;}});});
+  return {cur,delta};}
+function reconcile(s,vals){const tr=s.treasury=s.treasury||{};const {cur}=treasuryNow(s);const items=invItems(tr);
+  if(vals)vals.forEach((v,i)=>{if(!items[i])items.push({name:'Ресурс '+(i+1),qty:''});});
+  items.forEach((it,i)=>{const c=cur[it.name]||0;it.prev=String(c);it.qty=String(vals&&vals[i]!=null?vals[i]:c);});
+  tr.baseAt=new Date().toISOString();tr.checked=nowStamp();}
+function moneyCell(s,items){return items.map(i=>{const sv=silverOf(s,i.res,Math.abs(i.qty));return `<span class="mv ${i.qty<0?'out':'in'}">${i.qty<0?'−':'+'}${fmt(Math.abs(i.qty))} ${esc(resWord(s,i.res))}</span>${sv!==null&&!/^срібл/i.test(i.canon||i.res)?`<span class="hint"> ≈ ${fmt(sv)} срібла</span>`:''}`}).join('<br>');}
 function econHtml(s,si){
-  const mem=s.members, isVac=m=>!String(m.name||'').trim()||/^вакант/i.test(m.name);
+  const mem=s.members||(s.members=[]), isVac=m=>!String(m.name||'').trim()||/^вакант/i.test(m.name);
+  s.weeks=s.weeks||[];
   let h='<div class="econ">';
   const tr=s.treasury||(s.treasury={balance:'',checked:'',link:'https://dragpolit.com/economy/country/193'});
-  if(editing){h+=`<div class="block"><h3>Казна держави</h3><div class="erow pt"><span class="hint" style="align-self:center">Дата, коли востаннє звіряли цифри з грою (кнопка-закладка ставить її сама)</span><input type="text" id="tc" data-a="tc" data-s="${si}" value="${esc(tr.checked)}" placeholder="Дата перевірки"><span></span></div><input type="text" id="tl" data-a="tl" data-s="${si}" value="${esc(tr.link)}" placeholder="Посилання на казну в грі"><div class="elabel">Ресурси казни (як в Inventory у грі, в тому ж порядку)</div><div class="invedit">${invItems(tr).map((it,ii)=>`<div class="erow inv"><input type="text" id="in-${ii}" data-a="in" data-s="${si}" data-p="${ii}" value="${esc(it.name)}" placeholder="Назва"><input type="text" inputmode="numeric" id="iq-${ii}" data-a="iq" data-s="${si}" data-p="${ii}" value="${esc(it.qty)}" placeholder="Кількість"><button class="small danger" data-a="idel" data-s="${si}" data-p="${ii}">✕</button></div>`).join('')}</div><div class="landtools"><button class="small" data-a="iadd" data-s="${si}">+ Ресурс</button></div>
-      <div class="bmbox"><b>Кнопка «Казна → сайт»</b><p class="hint">Перетягніть цю кнопку мишкою на панель закладок браузера (один раз). Потім відкрийте свою країну в грі й натисніть закладку: відкриється сайт із новими цифрами, лишиться натиснути «Оновити казну».</p><a class="bm" href="${esc(BOOKMARKLET)}" onclick="event.preventDefault();alert('Цю кнопку треба перетягнути на панель закладок, а натискати вже на сторінці гри.')">⇢ Казна на сайт</a></div></div>`;}
-  else{const ok=String(tr.balance||'').trim();const n=currentWeek(s.weeks);const paid=n?(n.done||[]).filter(Boolean).length:0;
-    const its=(tr.items||[]).filter(it=>String(it.qty).trim()!=='');const main=its[0];
-    if(INV_IN){h+=`<div class="block invin"><h3>Нові цифри казни з гри</h3><div class="invgrid">${INV_IN.map((v,i)=>{const it=(tr.items||[])[i];const old=it&&String(it.qty).trim()!==''?+it.qty:null;const d=old==null?null:v-old;return `<div class="inv"><span class="t">${esc(it?it.name:'Ресурс '+(i+1))}</span><span class="h">${fmt(v)}</span>${d?`<span class="d ${d>0?'up':'down'}">${d>0?'+':''}${fmt(d)}</span>`:''}</div>`}).join('')}</div><div class="landtools">${AUTH.admin?`<button class="primary small" data-a="invapply" ${busy?'disabled':''}>Оновити казну</button>`:`<span class="hint">${AUTH.email?'Оновити казну може лише адмін':'Увійдіть як адмін, щоб оновити казну'}</span>`}<button class="ghost small" data-a="invcancel">Скасувати</button></div></div>`;}
-    h+=`<div class="ecotop"><div class="kpi"><span class="k">Казна держави</span><span class="v">${main?fmt(main.qty):(ok?esc(tr.balance):'—')}</span><span class="s">${main?esc(main.name.toLowerCase())+' · ':''}${(main||ok)&&tr.checked?'за даними гри на '+esc(tr.checked)+' · ':''}${/^https:\/\//.test(tr.link||'')?`<a href="${esc(tr.link)}" target="_blank" rel="noopener">Відкрити казну в грі ↗</a>`:''}</span></div><div class="kpi"><span class="k">Внески цього тижня</span><span class="v">${paid} з ${s.members.length}</span><span class="s">${n?esc(n.label):''}</span></div><div class="kpi"><span class="k">Від меценатів</span><span class="v">${fmt((s.patronList||[]).reduce((a,p)=>a+patronValue(s,p),0))}</span><span class="s">срібла загалом</span></div></div>`;
-    if(its.length)h+=`<div class="block"><h3>Ресурси в казні <small>${tr.checked?'перевірено '+esc(tr.checked):''}</small></h3><div class="invgrid">${its.map(it=>{const d=it.prev!=null&&it.prev!==''?(+it.qty)-(+it.prev):0;return `<div class="inv${+it.qty?'':' zero'}"><span class="t">${esc(it.name)}</span><span class="h">${fmt(it.qty)}</span>${d?`<span class="d ${d>0?'up':'down'}">${d>0?'+':''}${fmt(d)}</span>`:''}</div>`}).join('')}</div></div>`;}
+  const items=invItems(tr);const {cur,delta}=treasuryNow(s);
+  const link=/^https:\/\//.test(tr.link||'')?`<a href="${esc(tr.link)}" target="_blank" rel="noopener">Відкрити казну в грі ↗</a>`:'';
+  const mv=movements(s);
+  // ===== treasury
   if(editing){
-    h+='<div class="lands"><div class="elabel">Учасники бюджету та їхні внески</div>'+mem.map((m,mi)=>`<div class="erow mem"><input type="text" id="mn-${mi}" data-a="mn" data-s="${si}" data-p="${mi}" value="${esc(m.name)}" placeholder="Ім'я або «Вакантно»"><input type="text" id="mq-${mi}" data-a="mq" data-s="${si}" data-p="${mi}" value="${esc(m.needs)}" placeholder="Що здає щотижня"><button class="small danger" data-a="mdel" data-s="${si}" data-p="${mi}">Прибрати</button></div>`).join('')+`<div><button class="small" data-a="madd" data-s="${si}">+ Учасник</button></div></div>`;
+    h+=`<div class="block"><h3>Казна держави <small>${tr.checked?'остання звірка '+esc(tr.checked):''}</small></h3>
+      <p class="hint">Тут поточні цифри казни: остання звірка плюс внески й пожертви та мінус витрати, записані після неї. Якщо виправите будь-яке число, це стане новою звіркою, і всі попередні записи вважатимуться вже врахованими.</p>
+      <div class="invedit">${items.map((it,ii)=>`<div class="erow inv"><input type="text" id="in-${ii}" data-a="in" data-s="${si}" data-p="${ii}" value="${esc(it.name)}" placeholder="Назва"><input type="text" inputmode="numeric" id="iq-${ii}" data-a="iq" data-s="${si}" data-p="${ii}" value="${esc(RECON_DONE?it.qty:(String(it.qty).trim()===''&&!delta[it.name]?'':String(cur[it.name])))}" placeholder="Кількість"><button class="small danger" data-a="idel" data-s="${si}" data-p="${ii}">✕</button></div>`).join('')}</div><div class="landtools"><button class="small" data-a="iadd" data-s="${si}">+ Ресурс</button></div>
+      <input type="text" id="tl" data-a="tl" data-s="${si}" value="${esc(tr.link)}" placeholder="Посилання на казну в грі">
+      <div class="bmbox"><b>Кнопка «Казна → сайт»</b><p class="hint">Перетягніть цю кнопку мишкою на панель закладок браузера (один раз). Потім відкрийте свою країну в грі й натисніть закладку: відкриється сайт із цифрами з гри, лишиться натиснути «Оновити казну».</p><a class="bm" href="${esc(BOOKMARKLET)}" onclick="event.preventDefault();alert('Цю кнопку треба перетягнути на панель закладок, а натискати вже на сторінці гри.')">⇢ Казна на сайт</a></div></div>`;
+  } else {
+    if(INV_IN){h+=`<div class="block invin"><h3>Цифри казни з гри <small>порівняно з тим, що мало бути за записами сайту</small></h3><div class="invgrid">${INV_IN.map((v,i)=>{const it=items[i];const exp=it?cur[it.name]:null;const d=exp==null?null:v-exp;return `<div class="inv"><span class="t">${esc(it?it.name:'Ресурс '+(i+1))}</span><span class="h">${fmt(v)}</span>${d?`<span class="d ${d>0?'up':'down'}">${d>0?'+':''}${fmt(d)} від очікуваного</span>`:(exp!=null?'<span class="d ok">✓ збігається</span>':'')}</div>`}).join('')}</div><div class="landtools">${AUTH.admin?`<button class="primary small" data-a="invapply" ${busy?'disabled':''}>Оновити казну</button>`:`<span class="hint">${AUTH.email?'Оновити казну може лише адмін':'Увійдіть як адмін, щоб оновити казну'}</span>`}<button class="ghost small" data-a="invcancel">Скасувати</button></div></div>`;}
+    const shownItems=items.filter(it=>String(it.qty).trim()!==''||delta[it.name]);
+    let total=0,unpriced=0;shownItems.forEach(it=>{const v=silverOf(s,it.name,cur[it.name]);if(v===null){if(cur[it.name])unpriced++;}else total+=v;});
+    const since=tr.baseAt?'з '+esc(tr.checked||fmtDT(tr.baseAt)):'';
+    h+=`<div class="block treasury"><div class="trhead"><div><span class="k">Казна держави</span><span class="v">${shownItems.length?fmt(cur[items[0].name]||0):'—'}<small> ${shownItems.length?esc(String(items[0].name).toLowerCase()):''}</small></span><span class="s">${shownItems.length?`усе разом ≈ <b>${fmt(total)}</b> срібла за ринковими цінами${unpriced?` (без ${unpriced} ресурс${unpriced>1?'ів':'у'} без ціни)`:''}`:'Казну ще не звіряли з грою'}</span></div><div class="trmeta">${tr.checked?`<span>Звірено з грою: <b>${esc(tr.checked)}</b></span>`:''}${link}</div></div>
+      ${shownItems.length?`<div class="invgrid">${shownItems.map(it=>{const d=delta[it.name]||0;return `<div class="inv${cur[it.name]?'':' zero'}"><span class="t">${esc(it.name)}</span><span class="h">${fmt(cur[it.name])}</span>${d?`<span class="d ${d>0?'up':'down'}" title="зміни за записами сайту після звірки">${d>0?'+':''}${fmt(d)} ${since}</span>`:''}</div>`}).join('')}</div>`:''}</div>`;
+    // KPIs: this week, patrons, expenses
+    const n=currentWeek(s.weeks);const paid=n?(n.done||[]).filter(Boolean).length:0;
+    const wkSilver=n?mem.reduce((a,m,mi)=>(n.done||[])[mi]?a+parseNeeds((n.got&&n.got[mi])||m.needs).reduce((x,i)=>x+(silverOf(s,i.res,i.qty)||0),0):a,0):0;
+    const patTot=(s.patronList||[]).reduce((a,p)=>a+(p.items||[]).reduce((x,it)=>x+(itemSilver(s,it)||0),0),0);
+    const exTot=(s.expenses||[]).reduce((a,e)=>a+(silverOf(s,e.unit||'Срібло',+e.amount||0)||0),0);
+    h+=`<div class="ecotop"><div class="kpi in"><span class="k">Внески цього тижня</span><span class="v">${paid} з ${mem.length}</span><span class="s">${n?esc(n.label)+' · ':''}≈ ${fmt(wkSilver)} срібла</span></div><div class="kpi in"><span class="k">Від меценатів</span><span class="v">+${fmt(patTot)}</span><span class="s">срібла загалом</span></div><div class="kpi out"><span class="k">Витрати</span><span class="v">−${fmt(exTot)}</span><span class="s">срібла загалом</span></div></div>`;
+    // journal
+    const kinds={all:'Усе',week:'Внески',patron:'Меценати',expense:'Витрати'};
+    const ord=mv.map((o,i)=>({o,i})).sort((a,b)=>(b.o.at||'').localeCompare(a.o.at||'')||b.i-a.i).map(x=>x.o);
+    const fl=ord.filter(o=>JOUR_F==='all'||o.kind===JOUR_F);const lim=JOUR_ALL?fl:fl.slice(0,12);
+    const icon={week:'📅',patron:'🎁',expense:'💸'};
+    h+=`<div class="block"><h3>Рух казни <small>усі надходження й витрати</small></h3><div class="afilter">${Object.entries(kinds).map(([k,l])=>`<button class="small${JOUR_F===k?' primary':''}" data-a="jf" data-k="${k}">${l}</button>`).join('')}</div>`;
+    h+=fl.length?`<div class="tblwrap" style="border:0;background:transparent"><table class="exp jour"><thead><tr><th>Коли</th><th>Що</th><th class="num">Зміна</th><th>У казні</th></tr></thead><tbody>${lim.map(o=>`<tr><td>${o.at?esc(fmtDT(o.at)):esc(o.date||'раніше')}${o.at&&o.kind==='week'?`<div class="hint">тиждень ${esc(o.date)}</div>`:''}</td><td>${icon[o.kind]} <b>${esc(o.who||'—')}</b><div class="hint">${esc(o.what)}</div></td><td class="num">${moneyCell(s,o.items)}</td><td>${o.items.some(i=>!i.canon)?'<span class="tag warn">⚠ ресурсу немає в казні</span>':o.counted?'<span class="tag ok">✓ враховано</span>':'<span class="tag">до звірки</span>'}</td></tr>`).join('')}</tbody></table></div>${fl.length>lim.length?`<div><button class="small" data-a="jall">Показати все (${fl.length})</button></div>`:''}<p class="hint">«До звірки» означає, що запис був зроблений раніше, ніж казну востаннє звірили з грою, тож він уже входить у цифри казни.</p>`:'<p class="empty">Записів ще немає.</p>';
+    h+='</div>';
+  }
+  // ===== weekly contributions
+  h+=`<div class="block"><h3>Тижневі внески <small>позначка «Так» одразу додає внесок у казну</small></h3>`;
+  if(editing){
+    h+='<div class="elabel">Учасники бюджету та що здають щотижня (напр. «40 000 срібла + 500 нафти»)</div>'+mem.map((m,mi)=>`<div class="erow mem"><input type="text" id="mn-${mi}" data-a="mn" data-s="${si}" data-p="${mi}" value="${esc(m.name)}" placeholder="Ім'я або «Вакантно»"><input type="text" id="mq-${mi}" data-a="mq" data-s="${si}" data-p="${mi}" value="${esc(m.needs)}" placeholder="Що здає щотижня"><button class="small danger" data-a="mdel" data-s="${si}" data-p="${mi}">Прибрати</button></div>${parseNeeds(m.needs).some(i=>!canonRes(s,i.res))?'<p class="hint warn">⚠ Не впізнаю ресурс. Пишіть як у казні: срібло, золото, вугілля, руда, нафта…</p>':''}`).join('')+`<div><button class="small" data-a="madd" data-s="${si}">+ Учасник</button></div>`;
   }
   h+='<div class="tblwrap"><table class="bud"><thead><tr><th>Тиждень</th>'+mem.map(m=>`<th><span class="${isVac(m)?'vacname':''}">${esc(m.name||'Вакантно')}</span><span class="need">${esc(m.needs)}</span></th>`).join('')+(editing?'<th></th>':'')+'</tr></thead><tbody>';
   const weeks=s.weeks.slice().map((w,wi)=>({w,wi})).reverse();
   h+=weeks.map(({w,wi})=>'<tr>'+(editing?`<th><input type="text" id="wl-${wi}" data-a="wl" data-s="${si}" data-w="${wi}" value="${esc(w.label)}"></th>`:`<th class="wk">${esc(w.label)}</th>`)+mem.map((m,mi)=>{const v=!!(w.done||[])[mi];const lab=v?'✓ Так':'✕ Ні';return '<td>'+(editing?`<button class="st ${v?'y':'n'}" data-a="tog" data-s="${si}" data-w="${wi}" data-p="${mi}" aria-pressed="${v}">${lab}</button>`:`<span class="st ${v?'y':'n'}">${lab}</span>`)+'</td>'}).join('')+(editing?`<td><button class="small danger" data-a="wdel" data-s="${si}" data-w="${wi}">Прибрати</button></td>`:'')+'</tr>').join('');
   h+='</tbody><tfoot><tr><th>Здано</th>'+mem.map((m,mi)=>{const n=s.weeks.length,c=s.weeks.filter(w=>(w.done||[])[mi]).length;return `<td>${c} з ${n}</td>`}).join('')+(editing?'<td></td>':'')+'</tr></tfoot></table></div>';
   if(editing)h+=`<div><button data-a="wadd" data-s="${si}">+ Новий тиждень</button></div>`;
+  h+='</div>';
+  // ===== expenses
   const ex=s.expenses||[];
-  const byUnit={};ex.forEach(e=>{const u=(e.unit||'срібла').trim()||'срібла';byUnit[u]=(byUnit[u]||0)+(+e.amount||0);});
-  const sumTxt=Object.keys(byUnit).length?Object.entries(byUnit).map(([u,v])=>fmt(v)+' '+esc(u)).join(' · '):'0';
-  const exSilver=ex.reduce((a,e)=>{const p=priceOf(s,e.unit||'срібла');return a+(p===null?0:(+e.amount||0)*p);},0);
-  h+=`<div class="block"><h3>Витрати <small>Разом: ${sumTxt}${Object.keys(byUnit).some(u=>!/^срібл/i.test(u))?' ≈ '+fmt(exSilver)+' срібла':''}</small></h3>`;
+  const resOpts=items.map(it=>it.name);
+  const exTot2=ex.reduce((a,e)=>a+(silverOf(s,e.unit||'Срібло',+e.amount||0)||0),0);
+  h+=`<div class="block"><h3>Витрати <small>Разом ≈ ${fmt(exTot2)} срібла · кожна витрата віднімається з казни</small></h3>`;
   if(editing){
-    h+=ex.map((e,ei)=>`<div class="erow ex"><input type="text" id="ed-${ei}" data-a="ed" data-s="${si}" data-p="${ei}" value="${esc(e.date)}" placeholder="Дата"><input type="text" id="ew-${ei}" data-a="ew" data-s="${si}" data-p="${ei}" value="${esc(e.what)}" placeholder="На що"><input type="text" inputmode="numeric" id="ea-${ei}" data-a="ea" data-s="${si}" data-p="${ei}" value="${esc(e.amount)}" placeholder="Сума"><input type="text" id="eu-${ei}" data-a="eu" data-s="${si}" data-p="${ei}" value="${esc(e.unit)}" placeholder="срібла"><input type="text" id="eb-${ei}" data-a="eb" data-s="${si}" data-p="${ei}" value="${esc(e.by)}" placeholder="Хто погодив"><button class="small danger" data-a="exdel" data-s="${si}" data-p="${ei}">Прибрати</button></div>`).join('')+`<div><button class="small" data-a="exadd" data-s="${si}">+ Витрата</button></div>`;
+    h+=ex.map((e,ei)=>{const c=canonRes(s,e.unit||'Срібло');return `<div class="erow ex"><input type="text" id="ed-${ei}" data-a="ed" data-s="${si}" data-p="${ei}" value="${esc(e.date)}" placeholder="Дата"><input type="text" id="ew-${ei}" data-a="ew" data-s="${si}" data-p="${ei}" value="${esc(e.what)}" placeholder="На що"><input type="text" inputmode="numeric" id="ea-${ei}" data-a="ea" data-s="${si}" data-p="${ei}" value="${esc(e.amount)}" placeholder="Кількість"><select id="eu-${ei}" data-a="eu" data-s="${si}" data-p="${ei}">${resOpts.map(o=>`<option${o===c?' selected':''}>${esc(o)}</option>`).join('')}${c?'':`<option selected>${esc(e.unit||'')}</option>`}</select><input type="text" id="eb-${ei}" data-a="eb" data-s="${si}" data-p="${ei}" value="${esc(e.by)}" placeholder="Хто погодив"><button class="small danger" data-a="exdel" data-s="${si}" data-p="${ei}">Прибрати</button></div>`}).join('')+`<div><button class="small" data-a="exadd" data-s="${si}">+ Витрата</button></div>`;
   } else if(!ex.length){
     h+='<p class="empty">Витрат ще не внесено. Щоб додати, натисніть «Редагувати», а потім «+ Витрата».</p>';
   } else {
-    h+='<div class="tblwrap" style="border:0;background:transparent"><table class="exp"><thead><tr><th>Дата</th><th>На що</th><th class="num">Сума</th><th>Хто погодив</th></tr></thead><tbody>'+ex.slice().reverse().map(e=>`<tr><td>${esc(e.date)}</td><td>${esc(e.what)}</td><td class="num">${fmt(e.amount)} ${esc(e.unit||'срібла')}</td><td>${esc(e.by||'')}</td></tr>`).join('')+'</tbody></table></div>';
+    h+='<div class="tblwrap" style="border:0;background:transparent"><table class="exp"><thead><tr><th>Дата</th><th>На що</th><th class="num">Сума</th><th>Хто погодив</th></tr></thead><tbody>'+ex.slice().reverse().map(e=>`<tr><td>${esc(e.date)}</td><td>${esc(e.what)}</td><td class="num"><span class="mv out">−${fmt(e.amount)} ${esc(resWord(s,e.unit||'Срібло'))}</span></td><td>${esc(e.by||'')}</td></tr>`).join('')+'</tbody></table></div>';
   }
   h+='</div>';
-  // ---- market prices
+  // ===== patrons
+  const pl=s.patronList||[];
+  const pv=p=>(p.items||[]).reduce((x,it)=>x+(itemSilver(s,it)||0),0);
+  const tot=pl.reduce((a,p)=>a+pv(p),0);
+  h+=`<div class="block"><h3>Меценати <small>Разом: ${fmt(tot)} срібла · нова пожертва одразу додається в казну</small></h3>`;
+  if(editing){
+    h+=pl.map((p,pi)=>`<div class="artedit"><div class="erow pt"><input type="text" id="pnm-${pi}" data-a="pnm" data-s="${si}" data-p="${pi}" value="${esc(p.name)}" placeholder="Ім'я мецената"><span class="dv">= ${fmt(pv(p))} срібла</span><button class="small danger" data-a="pdel" data-s="${si}" data-p="${pi}">Видалити мецената</button></div>`+(p.items||[]).map((it,ii)=>{const c=canonRes(s,it.res);return `<div class="erow don2"><select id="pr-${pi}-${ii}" data-a="pir" data-s="${si}" data-p="${pi}" data-i="${ii}">${resOpts.map(o=>`<option${o===c?' selected':''}>${esc(o)}</option>`).join('')}${c?'':`<option selected>${esc(it.res)}</option>`}</select><input type="text" inputmode="numeric" id="pq-${pi}-${ii}" data-a="piq" data-s="${si}" data-p="${pi}" data-i="${ii}" value="${esc(it.qty)}" placeholder="Кількість"><input type="text" inputmode="numeric" id="pp-${pi}-${ii}" data-a="pip" data-s="${si}" data-p="${pi}" data-i="${ii}" value="${esc(it.price??'')}" placeholder="ціна" title="Ціна за 1 шт. у сріблі на момент пожертви"${/^срібл/i.test(canonRes(s,it.res)||it.res)?' disabled':''}><span class="dv">${itemSilver(s,it)===null?'немає ціни':'= '+fmt(itemSilver(s,it))+' срібла'}${it.date?' · '+esc(it.date):''}</span><button class="small danger" data-a="pidel" data-s="${si}" data-p="${pi}" data-i="${ii}">Прибрати</button></div>`}).join('')+`<div><button class="small" data-a="piadd" data-s="${si}" data-p="${pi}">+ Пожертва</button></div></div>`).join('')+`<div><button class="small" data-a="padd2" data-s="${si}">+ Меценат</button> <span class="hint">нові пожертви додаються в казну. Ціна запам’ятовується на день пожертви, тож коли ринок зміниться, внесок мецената в сріблі лишиться тим самим</span></div>`;
+  } else if(!tot){h+='<p class="empty">Пожертв ще немає.</p>';}
+  else {
+    h+=donutHtml(pl.map(p=>({name:p.name,amount:pv(p)})),tot);
+    h+='<div class="tblwrap" style="border:0;background:transparent"><table class="exp"><thead><tr><th>Меценат</th><th>Що пожертвував</th><th class="num">У сріблі</th></tr></thead><tbody>'+pl.slice().sort((a,b)=>pv(b)-pv(a)).map(p=>`<tr><td><b>${esc(p.name)}</b></td><td>${(p.items||[]).map(it=>`${fmt(it.qty)} ${esc(resWord(s,it.res))}${itemSilver(s,it)===null?' <span class="hint">(немає ціни)</span>':(!/^срібл/i.test(canonRes(s,it.res)||it.res)&&it.price?` <span class="hint">по ${fmt(it.price)}</span>`:'')}`).join(' · ')}</td><td class="num">${fmt(pv(p))}</td></tr>`).join('')+'</tbody></table></div>';
+  }
+  h+='</div>';
+  // ===== market prices
   const pr=s.prices||[];
-  h+=`<div class="block"><h3>Ринкові ціни <small>${s.pricesDate?'станом на '+esc(s.pricesDate)+' · ':''}срібла за 1 шт.</small></h3>`;
+  h+=`<div class="block"><h3>Ринкові ціни <small>${s.pricesDate?'станом на '+esc(s.pricesDate)+' · ':''}срібла за 1 шт. · за ними все рахується в сріблі</small></h3>`;
   if(editing){
     h+=`<div class="erow pt"><span class="hint">Дата цін</span><input type="text" id="pdt" data-a="pdt" data-s="${si}" value="${esc(s.pricesDate||'')}" placeholder="напр. 08.10"><span></span></div>`;
     h+=pr.map((p,pi)=>`<div class="erow pt"><input type="text" id="prn-${pi}" data-a="prn" data-s="${si}" data-p="${pi}" value="${esc(p.name)}" placeholder="Ресурс"><input type="text" inputmode="numeric" id="prp-${pi}" data-a="prp" data-s="${si}" data-p="${pi}" value="${esc(p.price)}" placeholder="Ціна в сріблі"><button class="small danger" data-a="prdel" data-s="${si}" data-p="${pi}">Прибрати</button></div>`).join('')+`<div><button class="small" data-a="pradd" data-s="${si}">+ Ресурс</button></div>`;
@@ -571,20 +671,7 @@ function econHtml(s,si){
     h+='<div class="prices">'+pr.map(p=>`<div class="pc"><span class="pn">${esc(p.name)}</span><span class="pp">${String(p.price||'').trim()?fmt(p.price):'<span class="hint">немає</span>'}</span></div>`).join('')+'</div>';
   }
   h+='</div>';
-  // ---- patrons: one entry per person, any mix of resources, valued in silver
-  const pl=s.patronList||[];
-  const tot=pl.reduce((a,p)=>a+patronValue(s,p),0);
-  h+=`<div class="block"><h3>Меценати <small>Разом: ${fmt(tot)} срібла</small></h3>`;
-  if(editing){
-    const opts=['Срібло'].concat(pr.map(p=>p.name)).filter((v,ix,arr)=>v&&arr.indexOf(v)===ix);
-    h+=pl.map((p,pi)=>`<div class="artedit"><div class="erow pt"><input type="text" id="pnm-${pi}" data-a="pnm" data-s="${si}" data-p="${pi}" value="${esc(p.name)}" placeholder="Ім'я мецената"><span class="dv">= ${fmt(patronValue(s,p))} срібла</span><button class="small danger" data-a="pdel" data-s="${si}" data-p="${pi}">Видалити мецената</button></div>`+(p.items||[]).map((it,ii)=>{const known=opts.indexOf(it.res)>=0;return `<div class="erow don2"><select id="pr-${pi}-${ii}" data-a="pir" data-s="${si}" data-p="${pi}" data-i="${ii}">${opts.map(o=>`<option${o===it.res?' selected':''}>${esc(o)}</option>`).join('')}${known?'':`<option selected>${esc(it.res)}</option>`}</select><input type="text" inputmode="numeric" id="pq-${pi}-${ii}" data-a="piq" data-s="${si}" data-p="${pi}" data-i="${ii}" value="${esc(it.qty)}" placeholder="Кількість"><span class="dv">${priceOf(s,it.res)===null?'немає ціни':'= '+fmt((+it.qty||0)*priceOf(s,it.res))+' срібла'}</span><button class="small danger" data-a="pidel" data-s="${si}" data-p="${pi}" data-i="${ii}">Прибрати</button></div>`}).join('')+`<div><button class="small" data-a="piadd" data-s="${si}" data-p="${pi}">+ Ресурс</button></div></div>`).join('')+`<div><button class="small" data-a="padd2" data-s="${si}">+ Меценат</button> <span class="hint">у одного мецената може бути кілька ресурсів, у срібло все перерахується за ринковою ціною</span></div>`;
-  } else if(!tot){h+='<p class="empty">Пожертв ще немає.</p>';}
-  else {
-    h+=donutHtml(pl.map(p=>({name:p.name,amount:patronValue(s,p)})),tot);
-    h+='<div class="tblwrap" style="border:0;background:transparent"><table class="exp"><thead><tr><th>Меценат</th><th>Що пожертвував</th><th class="num">У сріблі</th></tr></thead><tbody>'+pl.slice().sort((a,b)=>patronValue(s,b)-patronValue(s,a)).map(p=>`<tr><td><b>${esc(p.name)}</b></td><td>${(p.items||[]).map(it=>{const pc=priceOf(s,it.res);return `${fmt(it.qty)} ${esc(String(it.res||'').toLowerCase())}${pc===null?' <span class="hint">(немає ціни)</span>':''}`}).join(' · ')}</td><td class="num">${fmt(patronValue(s,p))}</td></tr>`).join('')+'</tbody></table></div>';
-  }
   h+='</div>';
-  h+='</div></div>';
   return h;
 }
 function bodyHtml(t){return String(t||'').split('\n').map(line=>{const lvl=(line.match(/^ */)[0].length)>>1;const x=line.trim();if(!x)return '';const m=/^(\d+(?:\.\d+)*\.)\s+(.*)$/.exec(x);return `<p class="cl" style="padding-left:${lvl*1.6}em">${m?`<b>${esc(m[1])}</b> ${esc(m[2])}`:esc(x)}</p>`}).join('');}
@@ -615,7 +702,10 @@ function render(){
   else if(AUTH.email) bar=`<span class="status">${esc(AUTH.email)}${myLand()?' · Представник: '+esc(myLand()):''}</span><button class="ghost small" data-a="logout">Вийти</button>`;
   else if(AUTH.ready) bar=`<button class="small" data-a="login">Увійти через Google</button>`;
   const status=msg?`<span class="status${msgErr?' err':''}">${esc(msg)}</span>`:(editing&&dirty?'<span class="status">Є незбережені зміни</span>':'');
-  let html=`<header class="top"><div><div class="eyebrow"><i></i>DragPolit · Державний реєстр</div><h1>Українська Держава</h1><div class="meta">Землі, військо, економіка, Палата Земель і Конституція · оновлено ${esc(state.updated)}</div></div><div class="bar">${status}${bar}</div></header>`;
+  const lands=state.sections.filter(x=>!x.kind&&x.lands&&x.id!=='army'&&!/курін|військ/i.test(x.title||'')).reduce((n,x)=>n+x.lands.length,0);
+  const rp=landLeaders();const passedN=allBills().filter(b=>effStatus(b)==='passed').length;
+  const chips=[['Земель',lands],['Представників',rp.filter(r=>r.name).length+' з '+rp.length],['Законів прийнято',passedN],['Оновлено',esc(state.updated),1]];
+  let html=`<header class="top"><div class="hl"><div class="eyebrow"><i></i><a href="https://dragpolit.com" target="_blank" rel="noopener">DragPolit<span aria-hidden="true">↗</span></a><span class="sep">·</span>Державний реєстр</div><h1>Українська Держава</h1><p class="lead">Офіційний реєстр держави української спільноти DragPolit: землі та їхні Отамани, військо, скарбниця, Палата Земель і Конституція.</p><div class="chips">${chips.map(([k,v,pre])=>pre?`<span class="chip">${k} <b>${v}</b></span>`:`<span class="chip"><b>${v}</b>${k}</span>`).join('')}</div></div><div class="bar">${status}${bar}</div></header>`;
   html+='<nav class="toc" aria-label="Розділи">'+state.sections.filter(s=>!s.tab).map(s=>`<button data-a="tab" data-id="${esc(s.id)}" ${s.id===active?'aria-current="page"':''}>${NAV_ICONS[s.id]?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${NAV_ICONS[s.id]}</svg>`:''}<span>${esc(s.nav||s.title)}</span></button>`).join('')+'</nav>';
   state.sections.forEach((s,si)=>{
     if((s.tab||s.id)!==active)return;
@@ -676,7 +766,7 @@ app.addEventListener('input',e=>{
   if(a==='mq'){sec.members[+t.dataset.p].needs=t.value;return;}
   if(a==='wl'){sec.weeks[+t.dataset.w].label=t.value;return;}
   if(a==='in'){sec.treasury.items[+t.dataset.p].name=t.value;return;}
-  if(a==='iq'){sec.treasury.items[+t.dataset.p].qty=t.value.replace(/\D/g,'');return;}
+  if(a==='iq'){if(!RECON_DONE){reconcile(sec);RECON_DONE=true;}sec.treasury.items[+t.dataset.p].qty=t.value.replace(/\D/g,'');return;}
   if(a==='tb'){(sec.treasury=sec.treasury||{}).balance=t.value;return;}
   if(a==='tc'){(sec.treasury=sec.treasury||{}).checked=t.value;return;}
   if(a==='tl'){(sec.treasury=sec.treasury||{}).link=t.value.trim();return;}
@@ -689,6 +779,7 @@ app.addEventListener('input',e=>{
   if(a==='prn'){sec.prices[+t.dataset.p].name=t.value;return;}
   if(a==='prp'){sec.prices[+t.dataset.p].price=t.value.replace(/[^0-9]/g,'');return;}
   if(a==='pnm'){sec.patronList[+t.dataset.p].name=t.value;return;}
+  if(a==='pip'){sec.patronList[+t.dataset.p].items[+t.dataset.i].price=t.value.replace(/[^0-9.]/g,'');return;}
   if(a==='piq'){sec.patronList[+t.dataset.p].items[+t.dataset.i].qty=t.value.replace(/[^0-9]/g,'');return;}
   if(a==='dd'){sec.donations[+t.dataset.p].date=t.value;return;}
   if(a==='dn'){sec.donations[+t.dataset.p].name=t.value;return;}
@@ -709,9 +800,9 @@ app.addEventListener('change',e=>{
   if(a==='dr'){sec.donations[+t.dataset.p].res=t.value;render();}
   else if(a==='bs'){const bill=sec.bills[+t.dataset.p];bill.status=t.value;if(t.value==='veto'&&bill.applied){const cs=constSec();if(revertAmend(bill,cs&&cs.doc)){msg='Вето: зміну до Конституції скасовано. Не забудьте зберегти.';msgErr=false;}else{msg='Вето поставлено, але статтю з того часу змінювали: перевірте Конституцію вручну.';msgErr=true;}}render();}
   else if(a==='bc'){sec.bills[+t.dataset.p].chapter=+t.value;}
-  else if(a==='pir'){sec.patronList[+t.dataset.p].items[+t.dataset.i].res=t.value;render();}
-  else if(a==='piq'||a==='pnm'){render();}
-  else if(a==='dq'||a==='prp'||a==='prn'){render();}
+  else if(a==='pir'){const it=sec.patronList[+t.dataset.p].items[+t.dataset.i];it.res=t.value;const v=silverOf(sec,it.res,1);it.price=v===null?'':String(v);render();}
+  // re-render a moment later, so a button click that caused this blur still lands
+  else if(a==='piq'||a==='pip'||a==='pnm'||a==='dq'||a==='prp'||a==='prn'||a==='ea'||a==='iq'){setTimeout(()=>{const ae=document.activeElement;const keep=ae&&ae.id;render();if(keep){const el=document.getElementById(keep);if(el)el.focus();}},250);}
 });
 app.addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;const a=b.dataset.a;
@@ -721,6 +812,8 @@ app.addEventListener('click',async e=>{
   if(a==='npmode'){DRAFT.mode=b.dataset.k;render();return;}
   if(a==='nptake'){const ta=document.getElementById('np-artbody');if(ta){const sel=ta.value.slice(ta.selectionStart,ta.selectionEnd);if(sel.trim()){DRAFT.find=sel;}else{msg='Спершу виділіть шматок тексту статті';msgErr=true;}}render();return;}
   if(a==='af'){ARCH_F=b.dataset.k;render();return;}
+  if(a==='jf'){JOUR_F=b.dataset.k;JOUR_ALL=false;render();return;}
+  if(a==='jall'){JOUR_ALL=true;render();return;}
   if(a==='propose'){const ml=myLands();const land=ml.includes(DRAFT.land)?DRAFT.land:ml[0];if(!land)return;
     if(!DRAFT.title.trim()){msg='Впишіть назву законопроєкту';msgErr=true;render();return;}
     let amend=null;const mode=DRAFT.mode||'none';const cs=constSec();
@@ -745,8 +838,7 @@ app.addEventListener('click',async e=>{
     busy=false;render();return;}
   if(a==='invcancel'){INV_IN=null;try{history.replaceState(null,'',location.pathname);}catch(_){}render();return;}
   if(a==='invapply'){if(!AUTH.admin||!INV_IN)return;const es=state.sections.find(x=>x.kind==='economy');if(!es)return;const tr=es.treasury=es.treasury||{link:'https://dragpolit.com/economy/country/193'};const items=invItems(tr);
-    INV_IN.forEach((v,i)=>{if(!items[i])items[i]={name:'Ресурс '+(i+1),qty:''};items[i].prev=items[i].qty===''?null:items[i].qty;items[i].qty=String(v);});
-    tr.checked=nowStamp();busy=true;render();
+    reconcile(es,INV_IN);busy=true;render();
     try{await window.FB.save(state);saved=JSON.stringify(state);INV_IN=null;try{history.replaceState(null,'',location.pathname);}catch(_){}msg='Казну оновлено';}catch(err){state=JSON.parse(saved);msg='Не вдалося зберегти казну';msgErr=true;}
     busy=false;render();return;}
   if(a==='login'){window.FB.login().catch(err=>{msg='Не вдалося увійти: '+(err&&err.code||'');msgErr=true;render();});return;}
@@ -759,14 +851,14 @@ app.addEventListener('click',async e=>{
   else if(a==='cdel'){if(b.dataset.confirm==='1'){s.doc.chapters.splice(+b.dataset.c,1);}else{b.dataset.confirm='1';b.textContent='Точно видалити розділ?';return;}}
   else if(a==='cup'){const c=+b.dataset.c,ch=s.doc.chapters;[ch[c-1],ch[c]]=[ch[c],ch[c-1]];}
   else if(a==='cdown'){const c=+b.dataset.c,ch=s.doc.chapters;[ch[c+1],ch[c]]=[ch[c],ch[c+1]];}
-  else if(a==='tog'){const w=s.weeks[+b.dataset.w];w.done=w.done||[];w.done[+b.dataset.p]=!w.done[+b.dataset.p];}
+  else if(a==='tog'){const w=s.weeks[+b.dataset.w],mi=+b.dataset.p;w.done=w.done||[];w.at=w.at||[];w.got=w.got||[];w.done[mi]=!w.done[mi];if(w.done[mi]){w.at[mi]=new Date().toISOString();w.got[mi]=(s.members[mi]||{}).needs||'';}else{w.at[mi]=null;w.got[mi]=null;}}
   else if(a==='wadd'){const last=s.weeks[s.weeks.length-1];s.weeks.push({label:nextWeek(last&&last.label),done:s.members.map(()=>false)});}
   else if(a==='wdel'){s.weeks.splice(+b.dataset.w,1);}
   else if(a==='madd'){s.members.push({name:'',needs:''});s.weeks.forEach(w=>{(w.done=w.done||[]).push(false);});}
   else if(a==='mdel'){const p=+b.dataset.p;s.members.splice(p,1);s.weeks.forEach(w=>{(w.done||[]).splice(p,1);});}
   else if(a==='iadd'){invItems(s.treasury=s.treasury||{}).push({name:'',qty:''});}
   else if(a==='idel'){s.treasury.items.splice(+b.dataset.p,1);}
-  else if(a==='exadd'){(s.expenses=s.expenses||[]).push({date:today(),what:'',amount:'',unit:'срібла',by:''});}
+  else if(a==='exadd'){(s.expenses=s.expenses||[]).push({date:today(),what:'',amount:'',unit:'Срібло',by:'',at:new Date().toISOString()});}
   else if(a==='exdel'){s.expenses.splice(+b.dataset.p,1);}
   else if(a==='pradd'){(s.prices=s.prices||[]).push({name:'',price:''});}
   else if(a==='prdel'){s.prices.splice(+b.dataset.p,1);}
@@ -777,16 +869,16 @@ app.addEventListener('click',async e=>{
   else if(a==='radd'){(s.reps=s.reps||[]).push({land:'',name:''});}
   else if(a==='rdel'){s.reps.splice(+b.dataset.p,1);}
   else if(a==='b2c'){const bill=s.bills[+b.dataset.p];const cs=state.sections.find(x=>x.kind==='doc');if(cs){const chs=cs.doc.chapters;const ci=Math.min(chs.length-1,Math.max(0,bill.chapter??chs.length-1));const no=nextArticleNo(cs.doc);chs[ci].articles.push({title:'Стаття '+no+'. '+(bill.title||'Без назви'),body:bill.text||''});bill.article='Стаття '+no;msg='Додано в Конституцію як Стаття '+no+'. Не забудьте зберегти.';}}
-  else if(a==='padd2'){(s.patronList=s.patronList||[]).push({name:'',items:[{res:'Срібло',qty:''}]});}
+  else if(a==='padd2'){(s.patronList=s.patronList||[]).push({name:'',items:[{res:'Срібло',qty:'',price:'1',at:new Date().toISOString(),date:today()}]});}
   else if(a==='pdel'){if(b.dataset.confirm==='1'){s.patronList.splice(+b.dataset.p,1);}else{b.dataset.confirm='1';b.textContent='Точно видалити?';return;}}
-  else if(a==='piadd'){s.patronList[+b.dataset.p].items.push({res:'Срібло',qty:''});}
+  else if(a==='piadd'){s.patronList[+b.dataset.p].items.push({res:'Срібло',qty:'',price:'1',at:new Date().toISOString(),date:today()});}
   else if(a==='pidel'){s.patronList[+b.dataset.p].items.splice(+b.dataset.i,1);}
   else if(a==='dadd'){const last=(s.donations||[]).slice(-1)[0];(s.donations=s.donations||[]).push({date:today(),name:'',res:'Срібло',qty:''});}
   else if(a==='ddel'){s.donations.splice(+b.dataset.p,1);}
   else if(a==='patadd'){s.patrons.push({name:'',amount:''});}
   else if(a==='patdel'){s.patrons.splice(+b.dataset.p,1);}
-  else if(a==='edit'){editing=true;}
-  else if(a==='cancel'){state=JSON.parse(saved);editing=false;}
+  else if(a==='edit'){editing=true;RECON_DONE=false;}
+  else if(a==='cancel'){state=JSON.parse(saved);editing=false;RECON_DONE=false;}
   else if(a==='padd'){l.posts.push({title:s.kind==='units'?'Сотник':'1-й Крайовий Отаман',holder:''});}
   else if(a==='ldradd'){s.leaders.push({title:'',holder:''});}
   else if(a==='ldrdel'){s.leaders.splice(+b.dataset.p,1);}
@@ -800,7 +892,7 @@ app.addEventListener('click',async e=>{
   else if(a==='save'){
     if(!AUTH.admin)return;busy=true;msg='Зберігаю…';render();
     const d=new Date();state.updated=String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+d.getFullYear();
-    try{await window.FB.save(state);saved=JSON.stringify(state);busy=false;editing=false;msg='Збережено';}
+    try{await window.FB.save(state);saved=JSON.stringify(state);busy=false;editing=false;RECON_DONE=false;msg='Збережено';}
     catch(err){busy=false;const c=err&&err.code;
       if(c==='permission-denied'){msg='Немає прав на збереження. Увійдіть акаунтом адміна.';msgErr=true;}
       else if(c==='not_writer'||c==='not_granted'||c==='consent_required'||c==='capability_disabled'){readOnly=true;editing=false;state=JSON.parse(saved);msg='У вас лише перегляд, зберігати зміни не можна';msgErr=true;}
@@ -830,7 +922,7 @@ async function finalizeExpired(){
 async function refreshLive(){if(!window.FB||busy||editing||document.visibilityState!=='visible')return;try{PROPS=await window.FB.loadProposals();VOTES=await window.FB.loadVotes();}catch(_){}}
 setInterval(async()=>{if(editing)return;await refreshLive();const ae=document.activeElement;if(ae&&ae.id&&ae.id.startsWith('np-'))return;render();finalizeExpired();},60000);
 window.APP={votes(v){VOTES=v||{};votesLoaded=true;render();finalizeExpired();},props(l){PROPS=l||[];render();},load(s){const p=s.sections.find(x=>x.kind==='parliament');if(p)(p.bills||[]).forEach((b,i)=>{if(!b.id)b.id='b'+i+'x'+Date.now().toString(36);});state=s;
-  if(p&&p.repEmails&&!p.repHolder){p.repHolder={};landLeaders().forEach(r=>{if(String(p.repEmails[r.land]||'').trim()&&r.name)p.repHolder[r.land]=r.name;});}saved=JSON.stringify(s);msg='';if(INV_IN){const es=s.sections.find(x=>x.kind==='economy');if(es)active=es.tab||es.id;}render();},fail(t){msg=t;msgErr=true;render();},auth(a){AUTH=a;if(!a.admin)editing=false;render();finalizeExpired();}};
+  if(p&&p.repEmails&&!p.repHolder){p.repHolder={};landLeaders().forEach(r=>{if(String(p.repEmails[r.land]||'').trim()&&r.name)p.repHolder[r.land]=r.name;});}{const es=s.sections.find(x=>x.kind==='economy');if(es)freezePrices(es);}saved=JSON.stringify(s);msg='';if(INV_IN){const es=s.sections.find(x=>x.kind==='economy');if(es)active=es.tab||es.id;}render();},fail(t){msg=t;msgErr=true;render();},auth(a){AUTH=a;if(!a.admin)editing=false;render();finalizeExpired();}};
 if(window.APP_READY)window.APP_READY();
 })();
 </script>
