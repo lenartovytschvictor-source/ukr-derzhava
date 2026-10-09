@@ -372,7 +372,9 @@ table.jour td:nth-child(2){grid-area:q}table.jour td:nth-child(3){grid-area:c;te
 .vbar{position:relative}.vbar .two3{position:absolute;top:-3px;bottom:-3px;width:2px;background:#fff;opacity:.7}
 .pill.sign{color:var(--gold-hi,#ffd77a);border-color:rgba(240,176,48,.5)}.pill.ov{color:var(--veto,#c9a7f0);border-color:rgba(199,163,232,.45)}
 @media (max-width:860px){.home{grid-template-columns:1fr}.chron{position:static}.awform{grid-template-columns:1fr}}
-nav.toc button{padding:8px 9px;gap:5px;font-size:13px}nav.toc button svg{width:16px;height:16px}
+nav.toc button{padding:8px 7px;gap:5px;font-size:12.5px;flex:none}nav.toc button svg{width:15px;height:15px}
+nav.toc{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;scrollbar-color:rgba(240,176,48,.35) transparent;justify-content:safe center}
+.judge .plk .av{display:none}.pet .bh,.case .bh{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.pet .bt,.case .bt{font-weight:700;font-size:16px}.pet .bm,.case .bm{margin-top:4px}.dossier>button{width:auto}
 .awards{display:grid;gap:16px}.awards>.block{margin:0}
 .award .landtools{flex-wrap:wrap}.award .hvin{flex:1 1 100%;min-width:0}
 @media (max-width:620px){nav.toc button{padding:8px 10px;font-size:13px}}
@@ -430,6 +432,50 @@ a.plk:hover span{text-decoration:underline;text-underline-offset:3px}.plk i{font
 .replist{margin-top:10px}.replist>summary{cursor:pointer;color:var(--gold-hi,#ffd77a);font-weight:600;margin-bottom:10px}
 @media (max-width:640px){.rtwrap{display:none}.rtlist{display:grid}
   .hseat{width:54px}.hseat .hav{width:30px;height:30px;border-width:2px}.hseat .hl{display:none}.tribune.in{display:none}.tribune.out{display:grid;position:static;transform:none;margin:8px auto 0;width:max-content;border-radius:12px;border-bottom:1px solid rgba(240,176,48,.55);grid-template-columns:auto auto;column-gap:8px;align-items:center}.tribune.out .tk{grid-column:2}.tribune.out .seatlink{grid-row:1/3;grid-column:1}.tribune.out .tn{grid-column:2}.tribune .hav{width:30px;height:30px}}
+.army{display:grid;gap:16px}.army>.block{margin:0}
+.cmdrow{display:flex;flex-wrap:wrap;gap:12px}
+.cmdcard{display:flex;align-items:center;gap:12px;padding:10px 16px 10px 10px;border:1px solid rgba(240,176,48,.45);border-radius:999px;background:linear-gradient(90deg,rgba(240,176,48,.12),rgba(255,220,150,.03))}
+.cmdcard .cav{width:52px;height:52px;border-radius:50%;object-fit:cover;border:3px solid var(--gold,#f0b030)}.cmdcard .cav.none{display:grid;place-items:center;font-weight:800;background:#3a2610;color:var(--gold-hi,#ffd77a)}
+.cmdcard.vac .cav{border-style:dashed;opacity:.6}.cmdcard.vac .sn{color:var(--vacant,#e9c76b)}
+.st{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-soft,#d8a648)}.sn{font-weight:700}
+.cmdcard .plk .av,.upost .plk .av{display:none}
+.units{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.unit{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(180deg,rgba(255,220,150,.05),transparent);display:grid;gap:12px;align-content:start}
+.uhead{display:grid;grid-template-columns:84px 1fr;gap:12px;align-items:center}.uemb{width:84px;height:84px;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,.6))}
+.uhead h4{margin:0 0 4px;font-size:16.5px;line-height:1.25}
+.uposts{display:grid;gap:8px}.upost{display:flex;align-items:center;gap:10px;padding:6px 10px 6px 6px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.15)}
+.uav{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--gold,#f0b030)}.uav.none{display:grid;place-items:center;font-weight:800;background:#3a2610;color:var(--gold-hi,#ffd77a)}
+.upost.vac .uav{border-style:dashed;opacity:.6}.upost.vac .sn{color:var(--vacant,#e9c76b)}
+.mchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.mchip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px 3px 4px;border:1px solid var(--line);border-radius:999px;background:rgba(255,220,150,.04);font-size:13px}
+.mchip button{border:0;background:none;color:var(--danger,#ef6a5a);font-size:16px;line-height:1;padding:0 2px;cursor:pointer;min-height:0}
+.uhist summary{cursor:pointer;font-size:12.5px;color:var(--muted)}
+@media (max-width:560px){.units{grid-template-columns:1fr}.uhead{grid-template-columns:64px 1fr}.uemb{width:64px;height:64px}.cmdcard{border-radius:14px;flex:1 1 100%}}
+.dlist{display:grid;gap:6px}.dl1{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:baseline;padding:8px 12px;border:1px solid var(--line);border-radius:10px}.dl1.zero{opacity:.6}
+.erow.dl{grid-template-columns:minmax(0,1fr) 120px 170px auto}@media (max-width:640px){.erow.dl{grid-template-columns:1fr 1fr}}
+.disc{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}.disc>summary{cursor:pointer;color:var(--gold-hi,#ffd77a);font-weight:600;font-size:13.5px}
+.cm{padding:8px 10px;border-left:2px solid var(--line);margin:8px 0}.cmh{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px}.cmt{white-space:pre-wrap;line-height:1.5;margin-top:4px}
+.cmx{margin-left:auto;padding:2px 8px}.cmform{display:grid;gap:8px;margin-top:8px}.cmform textarea{min-height:70px;width:100%}
+.petitions .petnew{margin:4px 0 12px}.petnew summary{cursor:pointer;color:var(--gold-hi,#ffd77a);font-weight:600;margin-bottom:8px}.petnew input,.petnew textarea{width:100%;margin-bottom:8px}
+.pet{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px}.pet .pt,.case .pt{white-space:pre-wrap;line-height:1.5;margin:6px 0}
+.petbar{height:8px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden;margin:8px 0 4px}.petbar i{display:block;height:100%;background:linear-gradient(90deg,#f0b030,#79d17a)}
+.signers{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;font-size:13px}
+.court{display:grid;gap:16px}.court>.block{margin:0}.benchrow{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.judge{display:flex;align-items:center;gap:12px;padding:10px 18px 10px 10px;border:1px solid rgba(240,176,48,.45);border-radius:14px;background:linear-gradient(180deg,#3d2810,#2a1b0c)}
+.jav{width:58px;height:58px;border-radius:50%;object-fit:cover;border:3px solid var(--gold,#f0b030)}.jav.none{display:grid;place-items:center;font-weight:800;background:#3a2610;color:var(--gold-hi,#ffd77a)}
+.vacn{color:var(--vacant,#e9c76b)}
+.compose>summary{cursor:pointer}.compose input,.compose textarea,.compose select{width:100%;margin-bottom:8px}
+.case{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px}.case.decided{border-left:3px solid var(--ok,#79d17a)}.case.dismissed{border-left:3px solid var(--danger,#ef6a5a)}
+.verdict{margin-top:8px;padding:10px 12px;border-radius:10px;background:rgba(240,176,48,.07);border:1px solid rgba(240,176,48,.35)}.verdict p{white-space:pre-wrap;margin:6px 0}
+.vform{display:grid;gap:8px;margin-top:10px}.vform textarea{min-height:80px;width:100%}
+.struck{text-decoration:line-through;opacity:.6}
+.pill.void{color:#c7a3e8;border-color:rgba(199,163,232,.45)}
+.linkbtn{background:none;border:0;padding:0;font:inherit;color:inherit;font-weight:700;cursor:pointer;text-align:left;min-height:0}.linkbtn:hover{text-decoration:underline}
+.dossier .dhead{display:flex;gap:18px;align-items:center;margin:14px 0}.avhuge{width:110px;height:110px;border-radius:50%;object-fit:cover;border:4px solid var(--gold,#f0b030);box-shadow:0 0 30px -6px rgba(240,176,48,.6)}.avhuge.none{display:grid;place-items:center;font-size:44px;font-weight:800;background:#3a2610;color:var(--gold-hi,#ffd77a)}
+.dtag{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft,#d8a648)}.dname{font:800 clamp(24px,4vw,34px)/1.1 var(--f-display,inherit);margin:4px 0 6px}
+.dstats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}.dstats>div{display:grid;padding:8px 14px;border:1px solid var(--line);border-radius:12px;min-width:110px}.dstats b{font-size:22px;color:var(--gold-hi,#ffd77a)}.dstats span{font-size:12px;color:var(--muted)}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}.dsec{border:1px solid var(--line);border-radius:12px;padding:12px 14px}.dsec h4{margin:0 0 8px;color:var(--gold-hi,#ffd77a)}.dsec ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.dawards{display:grid;gap:8px}.daw{display:flex;gap:10px;align-items:center}.daw img{width:44px;height:44px;object-fit:contain}.daw.revoked{opacity:.55}
+@media (max-width:560px){.dossier .dhead{flex-direction:column;align-items:flex-start}.avhuge{width:84px;height:84px}}
 .hint.warn{color:var(--vacant,#e9c76b);margin:-4px 0 10px}
 .vote .vrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%}.vote .vland{min-width:170px;font-weight:600;color:var(--gold,#f0b030)}
 </style>
@@ -471,7 +517,7 @@ function editLand(l,si,li,n,kind){
     <div><button class="small" data-a="fadd" data-s="${si}" data-l="${li}">${U?'+ Нова емблема':'+ Новий прапор'}</button> <span class="hint">${U?'нова назва чи нова емблема':'нова назва чи новий прапор землі'}</span></div>
     <div class="elabel">Посади</div>${posts}
     <div><button class="small" data-a="padd" data-s="${si}" data-l="${li}">+ Посада</button></div>
-    ${U?`<div class="elabel">Вояки (через кому)</div><input type="text" id="mb-${l.id}" data-a="mb" data-s="${si}" data-l="${li}" value="${esc((l.members||[]).join(', '))}" placeholder="Ім'я, Ім'я, …" list="plist"><span class="hint">імена з реєстру гравців стануть посиланнями</span>`:''}
+    ${U?`<div class="elabel">Вояки (${(l.members||[]).length})</div><div class="mchips">${(l.members||[]).map((m,mi)=>`<span class="mchip">${plink(m)}<button type="button" data-a="mrem" data-s="${si}" data-l="${li}" data-p="${mi}" title="Прибрати з куреня" aria-label="Прибрати ${esc(m)}">×</button></span>`).join('')||'<span class="hint">Вояків ще немає</span>'}</div><label class="fl">Додати вояка<select id="madd-${l.id}" data-a="madd" data-s="${si}" data-l="${li}" class="plsel"><option value="">— оберіть гравця —</option>${players().map(p=>p.name).filter(n=>!(l.members||[]).includes(n)).sort((a,b)=>a.localeCompare(b,'uk')).map(n=>`<option>${esc(n)}</option>`).join('')}</select></label>`:''}
   </div></article>`;
 }
 const fmt=n=>Number(n||0).toLocaleString('uk-UA');
@@ -482,7 +528,8 @@ let INV_IN=null;
 function invItems(tr){if(!tr.items)tr.items=INV_DEFAULT.map(n=>({name:n,qty:''}));return tr.items;}
 function nowStamp(){const d=new Date();return pad2(d.getDate())+'.'+pad2(d.getMonth()+1)+'.'+String(d.getFullYear()).slice(2)+' о '+pad2(d.getHours())+':'+pad2(d.getMinutes());}
 let active=null;
-try{const h=(location.hash||'').slice(1);if(h)active=h;}catch(e){}
+let DOSSIER=null;
+try{const h=decodeURIComponent((location.hash||'').slice(1));if(h.startsWith('players/')){active='players';DOSSIER=h.slice(8);}else if(h)active=h;}catch(e){}
 const SERIES=['#3987e5','#d95926','#199e70','#c98500','#d55181','#008300','#9085e9','#e66767'];
 function donutHtml(list,tot){
   // colour follows the patron (stored order), never the rank; 9+ patrons fold into "Інші"
@@ -537,7 +584,7 @@ function landLeaders(){
   }));
   return out;
 }
-const NAV_ICONS={"ud": "<path d=\"M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14\"/>", "army": "<path d=\"M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z\"/>", "econ": "<ellipse cx=\"12\" cy=\"6\" rx=\"7\" ry=\"3\"/><path d=\"M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6\"/>", "parl": "<path d=\"M3 21h18M4 10h16M12 3 3 8h18l-9-5ZM6 10v8m4-8v8m4-8v8m4-8v8\"/>", "gov": "<rect x=\"3\" y=\"7\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18\"/>", "home": "<path d=\"M3 11 12 4l9 7M5 10v10h5v-6h4v6h5V10\"/>", "awards": "<circle cx=\"12\" cy=\"9\" r=\"5\"/><path d=\"m9 13.5-2 7.5 5-3 5 3-2-7.5\"/>", "players": "<circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.3 3.3 0 0 1 0 6.4M18.5 14.8c1.7.7 2.8 2.5 3 5.2\"/>", "const": "<path d=\"M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm2 5h6M9 12h6M9 16h4\"/>"};
+const NAV_ICONS={"ud": "<path d=\"M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14\"/>", "army": "<path d=\"M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z\"/>", "econ": "<ellipse cx=\"12\" cy=\"6\" rx=\"7\" ry=\"3\"/><path d=\"M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6\"/>", "parl": "<path d=\"M3 21h18M4 10h16M12 3 3 8h18l-9-5ZM6 10v8m4-8v8m4-8v8m4-8v8\"/>", "gov": "<rect x=\"3\" y=\"7\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18\"/>", "home": "<path d=\"M3 11 12 4l9 7M5 10v10h5v-6h4v6h5V10\"/>", "awards": "<circle cx=\"12\" cy=\"9\" r=\"5\"/><path d=\"m9 13.5-2 7.5 5-3 5 3-2-7.5\"/>", "players": "<circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.3 3.3 0 0 1 0 6.4M18.5 14.8c1.7.7 2.8 2.5 3 5.2\"/>", "court": "<path d=\"M12 3v18M5 21h14M6 7h12M6 7l-3 7a3 3 0 0 0 6 0L6 7Zm12 0-3 7a3 3 0 0 0 6 0l-3-7Z\"/>", "const": "<path d=\"M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm2 5h6M9 12h6M9 16h4\"/>"};
 let VOTES={},PROPS=[],DRAFT={land:'',title:'',text:''},votesLoaded=false;
 const VOTE_MS=24*3600*1000;
 
@@ -558,6 +605,7 @@ function phase(b){if(isOpen(b))return 'voting';
   if(Date.now()<Date.parse(b.closesAt)+VETO_MS)return 'sign';
   return 'passed';}
 function effStatus(b){const ph=phase(b);return ph==='voting'?'review':ph==='override'?'ov':ph;}
+function lawState(b){const ph=phase(b);return ph==='passed'&&voidedBy(b.id)?'void':ph;}
 const lc=e=>String(e||'').trim().toLowerCase();
 // ---------- реєстр гравців: єдине місце, де живуть пошта, ігровий профіль і аватарка ----------
 function plSec(st){return (st||state).sections.find(x=>x.kind==='players');}
@@ -613,13 +661,68 @@ function hemicycle(reps,chair,bill){const n=reps.length;if(!n)return '';
   const legend=bill?`<div class="hlegend"><span class="lg v-for">За</span><span class="lg v-against">Проти</span><span class="lg v-abstain">Утримався</span><span class="lg none">Ще не голосував</span><span class="hint">· «${esc(bill.title||'')}»</span></div>`:'';
   const trib=cls=>`<div class="tribune ${cls}"><span class="tk">Голова Палати</span>${chair?seatLink(chair,seatAv(chair,'hav'),'Голова Палати: '+chair)+`<span class="tn">${plink(chair)}</span>`:'<span class="tn vacn">Вакантно</span>'}</div>`;
   return `<div class="hemi" role="group" aria-label="Зал Палати Земель"><div class="hall">${html}${trib('in')}</div>${trib('out')}${legend}</div>`;}
+function courtHtml(s,si){const judges=((govSec()||{}).posts||[]).filter(p=>p.perm==='court');const mine=me();const judge=isJudge();
+  let h='<div class="court">';
+  h+=`<div class="block bench"><div class="benchrow">${judges.length?judges.map(p=>`<div class="judge">${seatAv(p.name,'jav')}<div><div class="st">${esc(p.title)}</div><div class="sn">${String(p.name||'').trim()?plink(p.name):'<span class="vacn">Вакантно</span>'}</div></div></div>`).join(''):'<p class="hint">Посади судді ще немає. Її можна додати в Канцелярії (права «Суддя»).</p>'}<div class="hint">⚖️ Суд розглядає позови громадян і може визнати закон неконституційним, тоді він втрачає чинність.</div></div></div>`;
+  if(mine&&!editing){const laws=allBills().filter(b=>phase(b)==='passed'&&!voidedBy(b.id));
+    h+=`<details class="block compose" data-o="cd"${OPEN.has('cd')?' open':''}><summary><h3 style="display:inline">Подати позов</h3></summary><input type="text" id="cd-title" data-a="cd" data-k="title" maxlength="200" value="${esc(CD.title)}" placeholder="Суть позову"><label class="fl">Проти кого${`<select id="cd-def" data-a="cd" data-k="def"><option value="">— оберіть —</option><option value="__law"${CD.def==='__law'?' selected':''}>Закон (перевірка на відповідність Конституції)</option><option value="Держава"${CD.def==='Держава'?' selected':''}>Українська Держава</option>${players().map(p=>p.name).sort((a,b)=>a.localeCompare(b,'uk')).map(n=>`<option${n===CD.def?' selected':''}>${esc(n)}</option>`).join('')}</select>`}</label>${CD.def==='__law'?`<label class="fl">Закон${laws.length?`<select id="cd-bill" data-a="cd" data-k="bill">${laws.map(b=>`<option value="${esc(b.id)}"${b.id===CD.bill?' selected':''}>${esc((b.no?b.no+'. ':'')+(b.title||''))}</option>`).join('')}</select>`:'<span class="hint"> чинних законів немає</span>'}</label>`:''}<textarea id="cd-text" data-a="cd" data-k="text" maxlength="8000" placeholder="Обставини справи та чого просите">${esc(CD.text)}</textarea><button class="small primary" data-a="cdpost" ${busy?'disabled':''}>Подати до Суду</button></details>`;}
+  const open=CASES.filter(c=>c.status==='open').sort((a,b)=>(a.at||0)-(b.at||0));const done=CASES.filter(c=>c.status!=='open').sort((a,b)=>String(b.verdict&&b.verdict.at||'').localeCompare(String(a.verdict&&a.verdict.at||'')));
+  const caseCard=c=>{const law=c.billId?allBills().find(b=>b.id===c.billId):null;const v=c.verdict;
+    return `<article class="case ${c.status}"><div class="bh"><span class="bt">Справа №${esc(c.no||'')} · ${esc(c.title)}</span><span class="pill ${c.status==='open'?'review':c.status==='decided'?'passed':'rejected'}">${c.status==='open'?'⏳ На розгляді':c.status==='decided'?'⚖️ Позов задоволено':'✕ У позові відмовлено'}</span></div><div class="bm">Позивач: ${plink(c.plaintiff)} · Відповідач: ${c.billId?'закон «'+esc(law?law.title:c.billTitle||'')+'»':plink(c.defendant)} · ${esc(fmtDT(msIso(c.at)))}</div>${c.text?`<p class="pt">${esc(c.text)}</p>`:''}${v?`<div class="verdict"><b>Рішення Суду</b>${v.voidBill?' · <span class="tag warn">закон визнано неконституційним і скасовано</span>':''}<p>${esc(v.text||'')}</p><div class="hint">${esc(v.role||'Суддя')} ${plink(v.by||'')} · ${esc(fmtDT(v.at||''))}</div></div>`:''}
+      ${c.status==='open'&&judge?`<div class="vform"><textarea id="vd-${esc(c.id)}" data-a="vd" data-id="${esc(c.id)}" placeholder="Текст рішення">${esc((VD[c.id]||{}).text||'')}</textarea>${c.billId?`<label class="chk"><input type="checkbox" data-a="vdv" data-id="${esc(c.id)}"${(VD[c.id]||{}).voidLaw?' checked':''}> визнати закон неконституційним і скасувати його</label>`:''}<div class="landtools"><button class="small primary" data-a="vdok" data-id="${esc(c.id)}">⚖️ Задовольнити позов</button><button class="small danger" data-a="vdno" data-id="${esc(c.id)}">Відмовити</button></div></div>`:''}${AUTH.admin?`<div class="landtools"><button class="small ghost" data-a="cdel" data-id="${esc(c.id)}">Видалити справу</button></div>`:''}</article>`;};
+  h+=`<div class="block"><h3>Справи на розгляді <small>${open.length}</small></h3>${open.length?open.map(caseCard).join(''):'<p class="empty">Справ на розгляді немає.</p>'}</div>`;
+  if(done.length)h+=`<details class="block"><summary><h3 style="display:inline">Архів рішень <small>${done.length}</small></h3></summary>${done.map(caseCard).join('')}</details>`;
+  return h+'</div>';}
+// ---------- особова справа ----------
+function dossierHtml(name){const p=plByName(name);if(!p)return `<div class="block"><p>Гравця «${esc(name)}» немає в реєстрі.</p><button class="small" data-a="dosback">← До реєстру</button></div>`;
+  const now=[],past=[];
+  state.sections.forEach(sec=>{(sec.leaders||[]).forEach(l=>{if(l.holder===name)now.push(l.title+' · '+(sec.nav||sec.title));});
+    (sec.lands||[]).forEach(l=>{const ln=(l.flags[l.flags.length-1]||{}).name||'';const posts=l.posts||[];const top=posts.filter(q=>otaNum(q)>0).sort((a,b)=>otaNum(b)-otaNum(a))[0];
+      posts.forEach(q=>{if(q.holder!==name)return;const cur=!(otaNum(q)>0)||q===top;(cur&&!l.lostAt?now:past).push(q.title+' · '+ln+(l.lostAt?' (Землю втрачено)':''));});
+      (l.members||[]).forEach(m=>{if(m===name)now.push('Вояк · '+ln);});});});
+  ((govSec()||{}).posts||[]).forEach(q=>{if(q.name===name)now.push(q.title);});
+  if(((parlSec()||{}).chair||'')===name)now.push('Голова Палати Земель');
+  const hist=[];allBills().forEach(b=>{const am=b.amend;if(!am||phase(b)!=='passed')return;const t=b.closesAt||'';
+    if(['ataman','chair','gov'].includes(am.mode)&&am.name===name)hist.push({at:t,tx:lawShort(am)+' (закон «'+b.title+'»)'});
+    if(am.mode==='govfire'&&am.who===name)hist.push({at:t,tx:lawShort(am)+' (закон «'+b.title+'»)'});
+    if((am.mode==='addplayer'||am.mode==='editplayer')&&(am.name===name||am.newName===name))hist.push({at:t,tx:lawShort(am)});});
+  const aw=AWARDS.filter(a=>a.recipient===name);
+  const laws=allBills().filter(b=>String(b.author||'').startsWith(name));
+  const em=lc(p.email);const titles={};allBills().forEach(b=>titles[b.id]=b.title);
+  const votes=[];Object.entries(VOTES).forEach(([bid,vs])=>vs.forEach(v=>{if(em&&lc(v.email)===em)votes.push({bid,choice:v.choice,land:v.land});}));
+  const vc=k=>votes.filter(v=>v.choice===k).length;
+  const econ=state.sections.find(x=>x.kind==='economy');let weeks=0,don=0;
+  if(econ){const mi=(econ.members||[]).findIndex(m=>m.name===name);if(mi>=0)weeks=(econ.weeks||[]).filter(w=>(w.done||[])[mi]).length;(econ.patronList||[]).filter(q=>q.name===name).forEach(q=>(q.items||[]).forEach(it=>{don+=itemSilver(econ,it)||0;}));}
+  const docs=NEWS.filter(n=>n.by===name);const cases=CASES.filter(c=>c.plaintiff===name||c.defendant===name);
+  const u=profUrl(p.profile);
+  const sec=(t,body)=>`<div class="dsec"><h4>${t}</h4>${body}</div>`;const ul=a=>a.length?'<ul>'+a.map(x=>`<li>${x}</li>`).join('')+'</ul>':'<p class="hint">—</p>';
+  return `<div class="block dossier"><button class="small" data-a="dosback">← До реєстру</button><div class="dhead">${avImg(p,'avhuge')}<div><div class="dtag">Особова справа</div><h3 class="dname">${esc(name)}</h3><div class="plmeta">${u?`<a href="${esc(u)}" target="_blank" rel="noopener">Профіль у грі ↗</a>`:''}${p.email?'<span class="tag ok">✓ акаунт прив’язано</span>':''}</div></div></div>
+    <div class="dstats"><div><b>${now.length}</b><span>посад зараз</span></div><div><b>${aw.filter(a=>!a.revoked).length}</b><span>відзнак</span></div><div><b>${laws.length}</b><span>законопроєктів</span></div><div><b>${votes.length}</b><span>голосів у Палаті</span></div>${weeks?`<div><b>${weeks}</b><span>тижневих внесків</span></div>`:''}${don?`<div><b>${fmt(don)}</b><span>срібла пожертв</span></div>`:''}</div>
+    <div class="dgrid">${sec('Посади зараз',ul(now.map(esc)))}${sec('Колишні посади',ul(past.map(esc)))}
+    ${sec('Відзнаки',aw.length?'<div class="dawards">'+aw.map(a=>`<div class="daw${a.revoked?' revoked':''}">${a.img?`<img src="${esc(a.img)}" alt="">`:'🎖'}<div><b>${esc(a.title)}</b><div class="hint">${esc(a.reason||'')}${a.revoked?' · позбавлено':''}</div></div></div>`).join('')+'</div>':'<p class="hint">—</p>')}
+    ${sec('Історія призначень',ul(hist.sort((a,b)=>String(b.at).localeCompare(String(a.at))).map(x=>esc(x.tx)+(x.at?` <span class="hint">· ${esc(fmtDT(x.at))}</span>`:''))))}
+    ${sec('Законопроєкти',ul(laws.map(b=>`${esc(b.title||'')} <span class="pill ${esc(lawState(b)==='void'?'void':effStatus(b))}">${(BST[lawState(b)==='void'?'void':effStatus(b)]||BST.review)[1]}</span>`)))}
+    ${sec('Голосування',votes.length?`<div class="vleg"><span>За: <b>${vc('for')}</b></span><span>Проти: <b>${vc('against')}</b></span><span>Утримався: <b>${vc('abstain')}</b></span></div>`+ul(votes.slice(-8).reverse().map(v=>`${esc(titles[v.bid]||'законопроєкт')}: <b>${CH[v.choice]?CH[v.choice][0]:''}</b> <span class="hint">(${esc(v.land)})</span>`)):'<p class="hint">—</p>')}
+    ${docs.length?sec('Укази й публікації',ul(docs.map(n=>(n.type==='decree'?'Указ №'+esc(n.no||'')+' ':'')+'«'+esc(n.title)+'»'))):''}
+    ${cases.length?sec('Судові справи',ul(cases.map(c=>`Справа №${esc(c.no||'')} «${esc(c.title)}» — ${c.plaintiff===name?'позивач':'відповідач'}`))):''}</div></div>`;}
+// ---------- Військо: командування й курені ----------
+function armyHtml(s,si){const sec=s;const def=((govSec()||{}).posts||[]).find(p=>p.id==='def');
+  const cmd=[...(sec.leaders||[]).map(l=>({title:l.title,name:l.holder==='0'?'':l.holder})),...(def?[{title:def.title,name:def.name}]:[])].filter((x,i,a)=>a.findIndex(y=>y.title===x.title)===i);
+  const total=(sec.lands||[]).reduce((n,l)=>n+(l.members||[]).length+(l.posts||[]).filter(q=>String(q.holder||'').trim()&&q.holder!=='0').length,0);
+  let h=`<div class="army"><div class="block command"><h3>Командування <small>${(sec.lands||[]).length} куренів · ${total} у строю</small></h3><div class="cmdrow">${cmd.map(c=>{const v=!String(c.name||'').trim();return `<div class="cmdcard${v?' vac':''}">${seatLink(c.name,seatAv(c.name,'cav'),c.title+': '+(v?'вакантно':c.name))}<div><div class="st">${esc(c.title)}</div><div class="sn">${v?'Вакантно':plink(c.name)}</div></div></div>`;}).join('')}</div></div>`;
+  h+='<div class="units">'+(sec.lands||[]).map(l=>{const c=l.flags[l.flags.length-1]||{};const posts=(l.posts||[]);const mem=l.members||[];
+    return `<article class="unit"><div class="uhead"><img class="uemb" src="${esc(c.img||'')}" alt="Емблема: ${esc(c.name||'')}"><div><h4>${esc(c.name||'')}</h4><div class="hint">${posts.filter(q=>String(q.holder||'').trim()&&q.holder!=='0').length+mem.length} у строю</div></div></div>
+      <div class="uposts">${posts.map(q=>{const v=!String(q.holder||'').trim()||q.holder==='0';return `<div class="upost${v?' vac':''}">${seatLink(v?'':q.holder,seatAv(v?'':q.holder,'uav'),q.title+': '+(v?'вакантно':q.holder))}<div><div class="st">${esc(q.title)}</div><div class="sn">${v?'Вакантно':plink(q.holder)}</div></div></div>`;}).join('')}</div>
+      ${mem.length?`<div class="umembers"><div class="st">Вояки · ${mem.length}</div><div class="mchips">${mem.map(m=>`<span class="mchip">${plink(m)}</span>`).join('')}</div></div>`:''}
+      ${l.flags.length>1?`<details class="uhist"><summary>Історія куреня</summary>${l.flags.map(f=>`<div class="hint">${f.date?esc(f.date)+' · ':''}${esc(f.name)}</div>`).join('')}</details>`:''}</article>`;}).join('')+'</div>';
+  return h+'</div>';}
 function playersHtml(s,si){const list=s.list||(s.list=[]);let h='<div class="players">';
   if(editing){h+=`<div class="block"><h3>Гравці <small>пошта — це вхід через Google: лише ця людина зможе діяти від імені гравця</small></h3>`+list.map((p,pi)=>`<div class="erow plrow"><button type="button" class="avbtn" data-a="plimg" data-s="${si}" data-p="${pi}" title="${p.img?'Своя аватарка (натисніть, щоб змінити)':'Аватарка з гри; натисніть, щоб завантажити свою'}">${avatarOf(p)?avImg(p,'avs'):'🙂'}</button><input type="text" id="pln-${pi}" data-a="pln" data-s="${si}" data-p="${pi}" data-old="${esc(p.name)}" value="${esc(p.name)}" placeholder="Ім’я в грі"${!AUTH.admin&&p.name&&!p._new?' readonly title="Перейменувати гравця може лише адміністрація"':''}><input type="text" id="plp-${pi}" data-a="plp" data-s="${si}" data-p="${pi}" value="${esc(p.profile)}" placeholder="Профіль у грі: 257 або посилання"><input type="text" inputmode="email" id="ple-${pi}" data-a="ple" data-s="${si}" data-p="${pi}" value="${esc(p.email)}" placeholder="Google-пошта"><button class="small danger" data-a="pldel" data-s="${si}" data-p="${pi}">Прибрати</button></div>`).join('')+`<div class="landtools"><button class="small" data-a="pladd" data-s="${si}">+ Гравець</button></div><p class="hint">${AUTH.admin?'':'Права голосу й посад за новими поштами вмикаються протягом 15 хвилин. '}Перейменування гравця змінює його ім’я всюди на сайті. Аватарка береться з гри сама, якщо вказано номер профілю. Свою можна завантажити, натиснувши на кружечок.</p></div>`;}
-  else{const me=plByEmail(AUTH.email);
+  else{if(DOSSIER)return dossierHtml(DOSSIER);const me=plByEmail(AUTH.email);
     if(AUTH.email&&!AUTH.bot)h+=`<div class="block mine">${me?`Ви увійшли як ${plink(me.name)}`:'Вашої пошти ще немає в реєстрі. Попросіть адміністрацію додати вас, щоб голосувати чи діяти на посаді.'}</div>`;
     const sorted=list.slice().sort((a,b)=>a.name.localeCompare(b.name,'uk'));
     h+=`<div class="block"><h3>Гравці <small>${list.length}</small></h3><div class="plgrid">${sorted.map(p=>{const u=profUrl(p.profile);const roles=[];landLeaders().forEach(r=>{if(r.name===p.name)roles.push('Крайовий Отаман: '+r.land);});const g=govSec();((g&&g.posts)||[]).forEach(q=>{if(q.name===p.name)roles.push(q.title);});if(((parlSec()||{}).chair||'')===p.name)roles.push('Голова Палати');
-      return `<div class="plcard">${avImg(p,'avbig')}<div><div class="pn">${esc(p.name)}</div>${roles.length?`<div class="hint">${roles.map(esc).join(' · ')}</div>`:''}<div class="plmeta">${u?`<a href="${esc(u)}" target="_blank" rel="noopener">Профіль у грі ↗</a>`:'<span class="hint">профіль не вказано</span>'}${p.email?'<span class="tag ok">✓ акаунт прив’язано</span>':''}</div></div></div>`}).join('')}</div></div>`;}
+      return `<div class="plcard">${avImg(p,'avbig')}<div><div class="pn"><button class="linkbtn" data-a="dos" data-n="${esc(p.name)}">${esc(p.name)}</button></div>${roles.length?`<div class="hint">${roles.map(esc).join(' · ')}</div>`:''}<div class="plmeta">${u?`<a href="${esc(u)}" target="_blank" rel="noopener">Профіль у грі ↗</a>`:'<span class="hint">профіль не вказано</span>'}${p.email?'<span class="tag ok">✓ акаунт прив’язано</span>':''}<button class="small" data-a="dos" data-n="${esc(p.name)}">📁 Особова справа</button></div></div></div>`}).join('')}</div></div>`;}
   return h+'</div>';}
 function myPost(){const g=govSec();return AUTH.email&&g?(g.posts||[]).find(p=>String(p.name||'').trim()&&emailOf(p.name)===AUTH.email):null;}
 function isHetman(){const p=govPost(state,'hetman');return !!(AUTH.email&&p&&String(p.name||'').trim()&&emailOf(p.name)===AUTH.email);}
@@ -639,7 +742,7 @@ window.APP_VOTERMAP=voterMap;
 function myLands(){if(!AUTH.email)return [];return Object.entries(voterMap()).filter(([l,em])=>em===AUTH.email).map(e=>e[0]);}
 function myLand(){return myLands().join(', ');}
 const CH={for:['За','f'],against:['Проти','a'],abstain:['Утримався','z']};
-const BST={review:['⏳','На розгляді'],sign:['✍️','На підписі в Гетьмана'],ov:['🗳','Подолання вето'],passed:['✓','Прийнято'],rejected:['✕','Відхилено'],veto:['⛔','Ветовано Гетьманом']};
+const BST={void:['⚖️','Скасовано Судом'],review:['⏳','На розгляді'],sign:['✍️','На підписі в Гетьмана'],ov:['🗳','Подолання вето'],passed:['✓','Прийнято'],rejected:['✕','Відхилено'],veto:['⛔','Ветовано Гетьманом']};
 // ---- constitution amendments carried by bills ----
 function constSec(){return state.sections.find(x=>x.kind==='doc');}
 function findArticle(doc,am){let art=null;doc.chapters.forEach(c=>c.articles.forEach(a=>{if(!art&&a.title===am.artTitle)art=a;}));if(!art){const c=doc.chapters[+am.ci];art=c&&c.articles[+am.ai]||null;}return art;}
@@ -669,7 +772,7 @@ function revertAmend(b,doc){const ap=b.applied;if(!ap||!doc)return false;let ok=
     else if(ap.mode==='replace'&&a.title===ap.artTitle&&a.body===ap.after){a.body=ap.before;ok=true;}});});
   if(ok){delete b.applied;delete b.article;}return ok;}
 const CONST_MODES=['replace','add','delart','addch','delch'];
-const LAW_MODES=[['none','Нічого не змінює автоматично'],['Конституція',[['replace','Змінити текст статті'],['add','Додати нову статтю'],['delart','Виключити статтю'],['addch','Створити новий розділ'],['delch','Виключити розділ']]],['Землі',[['ataman','Призначити Крайового Отамана'],['dismiss','Звільнити Крайового Отамана'],['rename','Перейменувати Землю'],['flag','Затвердити новий прапор Землі'],['newland','Утворити нову Землю'],['loseland','Визнати втрату контролю над Землею'],['restoreland','Відновити втрачену Землю']]],['Гравці',[['addplayer','Внести нового гравця до реєстру'],['editplayer','Змінити дані гравця'],['delplayer','Виключити гравця з реєстру']]],['Палата Земель',[['chair','Обрати Голову Палати'],['chairfire','Звільнити Голову Палати']]],['Гетьман і Канцелярія',[['gov','Призначити на посаду (Гетьман, Писар, Секретарі)'],['govfire','Звільнити з посади']]]];
+const LAW_MODES=[['none','Нічого не змінює автоматично'],['Конституція',[['replace','Змінити текст статті'],['add','Додати нову статтю'],['delart','Виключити статтю'],['addch','Створити новий розділ'],['delch','Виключити розділ']]],['Землі',[['ataman','Призначити Крайового Отамана'],['dismiss','Звільнити Крайового Отамана'],['rename','Перейменувати Землю'],['flag','Затвердити новий прапор Землі'],['newland','Утворити нову Землю'],['loseland','Визнати втрату контролю над Землею'],['restoreland','Відновити втрачену Землю']]],['Гравці',[['addplayer','Внести нового гравця до реєстру'],['editplayer','Змінити дані гравця'],['delplayer','Виключити гравця з реєстру']]],['Палата Земель',[['chair','Обрати Голову Палати'],['chairfire','Звільнити Голову Палати']]],['Гетьман і Канцелярія',[['gov','Призначити на посаду (Гетьман, Писар, Секретарі, Суддя)'],['govfire','Звільнити з посади'],['revokedecree','Скасувати указ Гетьмана']]]];
 const maskEmail=e=>String(e||'').replace(/^(.)[^@]*(@.*)$/,'$1***$2');
 function landList(st){const out=[];st.sections.filter(x=>!x.kind&&x.lands).forEach(sec=>sec.lands.forEach(l=>out.push({sec,l,name:(l.flags[l.flags.length-1]||{}).name||''})));return out;}
 function findLand(st,name){return landList(st).find(x=>x.name===name)||null;}
@@ -709,6 +812,7 @@ function applyLaw(b,st){const am=b.amend;if(!am||!am.mode||am.mode==='none')retu
     const sec=landSecs(st).find(q=>q.id===x.lostFrom)||landSecs(st)[0];ls.lands.splice(ls.lands.indexOf(x),1);const ap={mode:'restoreland',landId:x.id,from:x.lostFrom,lostAt:x.lostAt,sec:sec.id};
     delete x.lostFrom;delete x.lostAt;x.restoredAt=today();sec.lands.push(x);return ok(ap);}
   if(am.mode==='addplayer'){const ps=plSec(st);if(!ps||!am.name||plByName(am.name,st))return fail();const id='pl'+String(b.id||Date.now().toString(36)).slice(-10);ps.list.push({id,name:am.name,profile:am.profile||'',email:lc(am.email),img:''});return ok({mode:'addplayer',id});}
+  if(am.mode==='revokedecree'){if(!am.newsId)return fail();return ok({mode:'revokedecree',newsId:am.newsId});}
   if(am.mode==='editplayer'){const pp=plByName(am.name,st);if(!pp)return fail();if(am.newName&&plByName(am.newName,st))return fail();const ap={mode:'editplayer',name:am.newName||am.name,oldName:am.name,prev:{profile:pp.profile||'',email:pp.email||''}};
     if(am.profile)pp.profile=am.profile;if(am.email)pp.email=lc(am.email);if(am.clearEmail)pp.email='';if(am.newName){renameEverywhere(am.name,am.newName,st);pp.name=am.newName;}return ok(ap);}
   if(am.mode==='delplayer'){const ps=plSec(st);const pp=plByName(am.name,st);if(!ps||!pp)return fail();const i=ps.list.indexOf(pp);ps.list.splice(i,1);return ok({mode:'delplayer',p:pp,i});}
@@ -725,6 +829,7 @@ function revertLaw(b,st){const ap=b.applied;if(!ap)return false;
     const rE=(parl.repEmails=parl.repEmails||{}),rH=(parl.repHolder=parl.repHolder||{});if(ap.prevE==null)delete rE[ap.land];else rE[ap.land]=ap.prevE;if(ap.prevH==null)delete rH[ap.land];else rH[ap.land]=ap.prevH;}
   else if(ap.mode==='rename'){const L=findLand(st,ap.land);if(!L)return false;L.l.flags.pop();['repEmails','repHolder'].forEach(k=>{const m=parl[k];if(m&&ap.land in m){m[ap.oldName]=m[ap.land];delete m[ap.land];}});}
   else if(ap.mode==='flag'){const L=findLand(st,ap.land);if(!L)return false;L.l.flags.pop();}
+  else if(ap.mode==='revokedecree'){}
   else if(ap.mode==='editplayer'){const pp=plByName(ap.name,st);if(!pp)return false;pp.profile=ap.prev.profile;pp.email=ap.prev.email;if(ap.name!==ap.oldName){renameEverywhere(ap.name,ap.oldName,st);pp.name=ap.oldName;}}
   else if(ap.mode==='delplayer'){const ps=plSec(st);if(!ps||plByName(ap.p.name,st))return false;ps.list.splice(Math.min(ap.i,ps.list.length),0,ap.p);}
   else if(ap.mode==='addplayer'){const ps=plSec(st);if(!ps)return false;ps.list=ps.list.filter(x=>x.id!==ap.id);}
@@ -746,6 +851,7 @@ function amendHtml(b){const am=b.amend;if(!am||!am.mode||am.mode==='none')return
   else if(am.mode==='rename')h+=`<div class="lawline">✏️ Перейменувати Землю: «${esc(am.land)}» → <b>«${esc(am.newName)}»</b></div>`;
   else if(am.mode==='flag')h+=`<div class="lawline">🏳 Новий прапор Землі «${esc(am.land)}»</div>${am.img?`<img class="lawflag" src="${esc(am.img)}" alt="Новий прапор Землі ${esc(am.land)}">`:''}`;
   else if(am.mode==='chair')h+=`<div class="lawline">🪑 Голова Палати Земель: <b>${plink(am.name)}</b></div>`;
+  else if(am.mode==='revokedecree')h+=`<div class="lawline">🚫 Скасувати Указ Гетьмана №${esc(am.no||'')} «${esc(am.title||'')}»</div>`;
   else if(am.mode==='editplayer')h+=`<div class="lawline">✏️ Змінити дані гравця <b>${plink(am.name)}</b>: ${[am.newName?`ім’я → «${esc(am.newName)}»`:'',am.profile?`профіль → ${esc(am.profile)}`:'',am.email?`пошта → ${esc(maskEmail(am.email))}`:'',am.clearEmail?'пошту відв’язати':''].filter(Boolean).join(', ')}</div>`;
   else if(am.mode==='delplayer')h+=`<div class="lawline">🚫 Виключити з реєстру гравців: <b>${esc(am.name)}</b>. Він втратить вхід, голос і посади на сайті.</div>`;
   else if(am.mode==='addplayer'){const u=profUrl(am.profile);h+=`<div class="lawline">👤 Внести до реєстру гравців: <b>${esc(am.name)}</b>${u?` · <a href="${esc(u)}" target="_blank" rel="noopener">профіль у грі ↗</a>`:''}${am.email?` <span class="hint">· вхід: ${esc(maskEmail(am.email))}</span>`:''}</div>`;}
@@ -760,13 +866,13 @@ function amendHtml(b){const am=b.amend;if(!am||!am.mode||am.mode==='none')return
   return h+'</div>';}
 // passed laws are shown in effect immediately, even before an admin opens the site and stores them
 let VIEW_CACHE={key:'',st:null};
-function viewState(){const pend=allBills().filter(b=>b.amend&&b.amend.mode&&b.amend.mode!=='none'&&!b.applied&&!b.applyFailed&&phase(b)==='passed');
-  if(!pend.length)return state;const key=saved.length+'|'+JSON.stringify(state).length+'|'+pend.map(b=>b.id).join(',')+'|'+Object.keys(SIGS).length;
+function viewState(){const pend=allBills().filter(b=>b.amend&&b.amend.mode&&b.amend.mode!=='none'&&!b.applied&&!b.applyFailed&&phase(b)==='passed');const voidNow=((parlSec()||{}).bills||[]).some(x=>x.applied&&x.status==='passed'&&voidedBy(x.id));if(voidNow&&!pend.length)pend.push({id:'__void',amend:{mode:'none'}});
+  if(!pend.length)return state;const key=saved.length+'|'+JSON.stringify(state).length+'|'+pend.map(b=>b.id).join(',')+'|'+Object.keys(SIGS).length+'|'+CASES.filter(c=>c.verdict&&c.verdict.voidBill).length;
   if(VIEW_CACHE.key===key)return VIEW_CACHE.st;
-  const c=JSON.parse(JSON.stringify(state));pend.slice().sort((x,y)=>String(x.closesAt||'').localeCompare(String(y.closesAt||''))).forEach(b=>applyLaw(JSON.parse(JSON.stringify(b)),c));
+  const c=JSON.parse(JSON.stringify(state));(((c.sections.find(x=>x.kind==='parliament')||{}).bills)||[]).forEach(x=>{if(x.applied&&x.status==='passed'&&voidedBy(x.id))revertLaw(x,c);});pend.filter(b=>!voidedBy(b.id)).slice().sort((x,y)=>String(x.closesAt||'').localeCompare(String(y.closesAt||''))).forEach(b=>applyLaw(JSON.parse(JSON.stringify(b)),c));
   VIEW_CACHE={key,st:c};return c;}
 // live bills submitted by representatives (Firestore "proposals"), voting 12h from submission
-function liveBills(){return PROPS.filter(pr=>pr.at).map(pr=>({id:pr.id,live:true,email:pr.email,title:pr.title,text:pr.text,date:pr.date,author:pr.author?pr.author+' ('+pr.land+')':pr.land,amend:pr.amend||null,voting:true,status:'review',closesAt:new Date(pr.at+VOTE_MS).toISOString()}));}
+function liveBills(){return PROPS.filter(pr=>pr.at).map(pr=>({id:pr.id,live:true,email:pr.email,title:pr.title,text:pr.text,date:pr.date,author:pr.petition?pr.author:(pr.author?pr.author+' ('+pr.land+')':pr.land),amend:pr.amend||null,voting:true,status:'review',closesAt:new Date(pr.at+VOTE_MS).toISOString()}));}
 function allBills(){const p=parlSec();return [...liveBills(),...((p&&p.bills)||[])];}
 function artOptions(){const cs=constSec();const out=[];if(cs)cs.doc.chapters.forEach((c,ci)=>c.articles.forEach((a,ai)=>out.push({v:ci+':'+ai,t:a.title,ci,ai,a})));return out;}
 function proposeForm(ml){const opts=artOptions();const cs=constSec();const mode=DRAFT.mode||'none';
@@ -790,6 +896,7 @@ function proposeForm(ml){const opts=artOptions();const cs=constSec();const mode=
   if(mode==='rename')h+=landSel()+`<input type="text" id="np-newName" data-a="np" data-k="newName" maxlength="80" value="${esc(DRAFT.newName||'')}" placeholder="Нова назва Землі">`;
   if(mode==='flag')h+=landSel()+`<div class="landtools"><button type="button" class="small" data-a="nppick">${DRAFT.img?'Змінити картинку':'Вибрати картинку прапора'}</button>${DRAFT.img?`<img class="lawflag" src="${esc(DRAFT.img)}" alt="Новий прапор">`:''}</div>`;
   if(mode==='chair')h+=who('Ім’я Голови Палати',false);
+  if(mode==='revokedecree'){const ds=NEWS.filter(n=>n.type==='decree'&&!decreeRevoked(n)).sort((a,b)=>(b.at||0)-(a.at||0));h+=ds.length?`<label class="fl">Указ<select id="np-dec" data-a="np" data-k="dec">${ds.map(n=>`<option value="${esc(n.id)}"${n.id===DRAFT.dec?' selected':''}>№${esc(n.no||'')} «${esc(n.title)}»</option>`).join('')}</select></label>`:'<p class="hint warn">Чинних указів немає.</p>';}
   if(mode==='delart'){const cur=opts.find(o=>o.v===DRAFT.art)||opts[0];h+=`<label class="fl">Стаття, яку виключити<select id="np-art" data-a="np" data-k="art">${opts.map(o=>`<option value="${o.v}"${cur&&o.v===cur.v?' selected':''}>${esc(o.t.length>90?o.t.slice(0,90)+'…':o.t)}</option>`).join('')}</select></label>${cur?`<textarea readonly class="artbody">${esc(cur.a.body||'')}</textarea>`:''}<p class="hint">Номери інших статей не змінюються.</p>`;}
   if(mode==='addch'){const chs=cs?cs.doc.chapters:[];const pos=DRAFT.chpos==null||DRAFT.chpos===''?chs.length:+DRAFT.chpos;h+=`<input type="text" id="np-chname" data-a="np" data-k="chname" maxlength="120" value="${esc(DRAFT.chname||'')}" placeholder="Назва розділу (без номера), напр. Збройні сили"><label class="fl">Де розмістити<select id="np-chpos" data-a="np" data-k="chpos">${chs.map((c,i)=>`<option value="${i}"${i===pos?' selected':''}>перед «${esc(c.title)}» — стане Розділом ${roman(i+1)}</option>`).join('')}<option value="${chs.length}"${pos===chs.length?' selected':''}>в кінці — Розділ ${roman(chs.length+1)}</option></select></label>${pos<chs.length?`<p class="hint">Розділи, що йдуть після нього, отримають наступні номери (${esc(chs[pos].title.split('.')[0])} стане Розділом ${roman(pos+2)} і так далі). Статті до нового розділу можна додати наступними законами.</p>`:''}`;}
   if(mode==='delch'){const chs=cs?cs.doc.chapters:[];const cur=chs[+DRAFT.chdel||0];h+=`<label class="fl">Розділ, який виключити<select id="np-chdel" data-a="np" data-k="chdel">${chs.map((c,i)=>`<option value="${i}"${String(i)===String(DRAFT.chdel||0)?' selected':''}>${esc(c.title)}</option>`).join('')}</select></label>${cur&&cur.articles.length?`<p class="hint warn">⚠ Разом з розділом буде виключено статті: ${cur.articles.map(a=>esc(a.title.split('.')[0])).join(', ')}.</p>`:''}<p class="hint">Номери наступних розділів зсунуться на один.</p>`;}
@@ -805,6 +912,17 @@ function proposeForm(ml){const opts=artOptions();const cs=constSec();const mode=
   if(mode==='gov')h+=`<label class="fl">Посада<select id="np-post" data-a="np" data-k="post">${((gov&&gov.posts)||[]).map(p=>`<option value="${esc(p.id)}"${p.id===DRAFT.post?' selected':''}>${esc(p.title)}</option>`).join('')}</select></label>`+who('Ім’я',true);
   h+=`<div><button class="primary small" data-a="propose" ${busy?'disabled':''}>Подати й почати голосування</button></div><p class="hint">Якщо «За» буде більше, ніж «Проти», закон прийнято${mode!=='none'?', і зміна відбудеться сама':''}. Помилку можна відкликати протягом 10 хвилин.</p></div>`;
   return h;}
+function petitionsHtml(){const mine=me();const min=petMin();const now=Date.now();
+  const st=pt=>pt.status==='passed'?'passed':(pt.at&&now>pt.at+PET_MS?'expired':'open');
+  const list=PETS.slice().sort((a,b)=>(b.at||0)-(a.at||0));const shown=list.filter(pt=>PETF==='all'||st(pt)===PETF);
+  let h=`<div class="block petitions"><h3>Петиції громадян <small>${min} підпис${min===1?'':min<5?'и':'ів'} — і петиція стає законопроєктом · збір триває 7 днів</small></h3>`;
+  if(mine)h+=`<details class="petnew" data-o="pd"${OPEN.has('pd')?' open':''}><summary>✍️ Створити петицію</summary><input type="text" id="pd-title" data-a="pd" data-k="title" maxlength="200" value="${esc(PD.title)}" placeholder="Що пропонуєте"><textarea id="pd-text" data-a="pd" data-k="text" maxlength="5000" placeholder="Текст петиції">${esc(PD.text)}</textarea><button class="small primary" data-a="pdpost" ${busy?'disabled':''}>Опублікувати й підписати</button></details>`;
+  h+=`<div class="afilter">${[['open','Збирають підписи'],['passed','Передані до Палати'],['expired','Не набрали'],['all','Усі']].map(([k,l])=>`<button class="small${PETF===k?' primary':''}" data-a="petf" data-k="${k}">${l} · ${k==='all'?list.length:list.filter(x=>st(x)===k).length}</button>`).join('')}</div>`;
+  h+=shown.length?shown.map(pt=>{const sg=PSIGNS[pt.id]||[];const n=sg.length;const s0=st(pt);const signed=mine&&sg.some(x=>lc(x.email)===AUTH.email);
+    return `<article class="pet ${s0}"><div class="bh"><span class="bt">${esc(pt.title)}</span><span class="pill ${s0==='passed'?'passed':s0==='expired'?'rejected':'review'}">${s0==='passed'?'✓ Передано до Палати':s0==='expired'?'⌛ Не набрала підписів':'✍️ Збирає підписи'}</span></div><div class="bm">Ініціатор: ${plink(pt.by)} · ${esc(fmtDT(msIso(pt.at)))}${s0==='open'?' · залишилось '+timeLeft(new Date(pt.at+PET_MS).toISOString()):''}</div>${pt.text?`<p class="pt">${esc(pt.text)}</p>`:''}<div class="petbar"><i style="width:${Math.min(100,n/min*100)}%"></i></div><div class="vleg"><span>Підписів: <b>${n}</b> з ${min}</span></div>${n?`<div class="signers">${sg.map(x=>plink(x.by)).join('')}</div>`:''}${s0==='open'&&mine&&!signed?`<div class="landtools"><button class="small primary" data-a="psign" data-id="${esc(pt.id)}" ${busy?'disabled':''}>Підписати</button></div>`:''}${signed&&s0==='open'?'<div class="hint">✓ Ви підписали</div>':''}${AUTH.admin?`<div class="landtools"><button class="small ghost" data-a="pdel" data-id="${esc(pt.id)}">Видалити</button></div>`:''}</article>`;}).join(''):'<p class="empty">Тут поки порожньо.</p>';
+  return h+'</div>';}
+function discHtml(b){const cs=COMMENTS.filter(c=>c.bill===b.id).sort((x,y)=>(x.at||0)-(y.at||0));const mine=me();
+  return `<details class="disc" data-o="cm:${esc(b.id)}"${OPEN.has('cm:'+b.id)?' open':''}><summary>💬 Обговорення${cs.length?' ('+cs.length+')':''}</summary>${cs.length?cs.map(c=>`<div class="cm"><div class="cmh">${plink(c.by)}${c.role?` <span class="hint">· ${esc(c.role)}</span>`:''} <span class="hint">· ${esc(fmtDT(msIso(c.at)))}</span>${AUTH.admin||(AUTH.email&&lc(c.email)===AUTH.email)?`<button class="small ghost cmx" data-a="cmdel" data-id="${esc(c.id)}" title="Видалити">✕</button>`:''}</div><div class="cmt">${esc(c.text)}</div></div>`).join(''):'<p class="hint">Ще ніхто не висловився.</p>'}${mine?`<div class="cmform"><textarea id="cm-${esc(b.id)}" data-a="cmt" data-id="${esc(b.id)}" maxlength="2000" placeholder="Ваша думка щодо законопроєкту">${esc(CMD[b.id]||'')}</textarea><button class="small primary" data-a="cmpost" data-id="${esc(b.id)}" ${busy?'disabled':''}>Надіслати</button></div>`:`<p class="hint">${AUTH.email?'Писати можуть гравці з реєстру.':'Увійдіть через Google, щоб долучитися до обговорення.'}</p>`}</details>`;}
 function signHtml(b,me){const ph=phase(b);const sg=SIGS[b.id]||(b.sig?{decision:b.sig.decision,reason:b.sig.reason,by:b.sig.by,at:Date.parse(b.sig.at)}:null);
   if(ph==='sign'){const end=new Date(Date.parse(b.closesAt)+VETO_MS).toISOString();
     return `<div class="signbox"><b>✍️ Закон прийнято Палатою й чекає рішення Гетьмана</b><div class="bm">до ${fmtDT(end)} · залишилось ${timeLeft(end)}. Якщо Гетьман нічого не вирішить, закон набере чинності сам.</div>${isHetman()?`<div class="landtools"><button class="small primary" data-a="hsign" data-id="${esc(b.id)}" ${busy?'disabled':''}>✍️ Підписати</button><input type="text" id="hv-${esc(b.id)}" data-a="hvr" data-id="${esc(b.id)}" value="${esc(HV[b.id]||'')}" placeholder="Причина вето" maxlength="500" class="hvin"><button class="small danger" data-a="hveto" data-id="${esc(b.id)}" ${busy?'disabled':''}>⛔ Ветувати</button></div>`:''}</div>`;}
@@ -813,7 +931,7 @@ function signHtml(b,me){const ph=phase(b);const sg=SIGS[b.id]||(b.sig?{decision:
   if(sg&&FINAL.includes(ph)){if(sg.decision==='sign')return `<div class="bm signed">✍️ Підписано Гетьманом${sg.by?' ('+esc(sg.by)+')':''}</div>`;
     const o=b.ov||ovTally(b);return `<div class="signbox veto"><b>⛔ Гетьман ветував закон${sg.by?' ('+esc(sg.by)+')':''}</b>${sg.reason?`<div class="bm">Причина: ${esc(sg.reason)}</div>`:''}${ph==='passed'?`<div class="amok">✓ Палата подолала вето (За ${o.f} з ${o.f+o.a+o.z})</div>`:`<div class="bm">Вето не подолано${(o.f+o.a+o.z)?` (За ${o.f} з ${o.f+o.a+o.z})`:''}</div>`}</div>`;}
   return '';}
-function billCard(b,lead,me,compact){const T=tally(b),vs=T.vs;const f=T.f,a=T.a,z=T.z;const es=effStatus(b);const t=f+a+z;const st=BST[es]||BST.review;
+function billCard(b,lead,me,compact){const T=tally(b),vs=T.vs;const f=T.f,a=T.a,z=T.z;const es=lawState(b)==='void'?'void':effStatus(b);const t=f+a+z;const st=BST[es]||BST.review;
   const open=isOpen(b);
   const br=b.closesAt&&!open&&(expired(b)||b.autoClosed||b.live)?baseRes(b):'';const ended=br?`<div class="bm">Голосування завершилося ${fmtDT(b.closesAt)}${br==='passed'?' · більшість «За»':' · «За» не більше, ніж «Проти»'}</div>`:'';
   const voteUi=open?`<div class="vote"><span class="live">Голосування триває</span>${b.closesAt?`<span class="hint">до ${fmtDT(b.closesAt)} · залишилось ${timeLeft(b.closesAt)}</span>`:''}${me.length?me.map(land=>{const mine=vs.find(v=>v.land===land);return `<div class="vrow">${me.length>1?`<span class="vland">${esc(land)}</span>`:''}${Object.keys(CH).map(k=>`<button class="small ${CH[k][1]}${mine&&mine.choice===k?' on':''}" data-a="vote" data-b="${esc(b.id)}" data-c="${k}" data-l="${esc(land)}" ${busy?'disabled':''}>${CH[k][0]}</button>`).join('')}${mine?'<span class="hint">голос враховано, можна змінити</span>':''}</div>`}).join(''):(AUTH.email?'<span class="hint">Голосують лише Представники Земель</span>':'<span class="hint">Представники Земель: увійдіть через Google, щоб проголосувати</span>')}</div>`:'';
@@ -822,8 +940,9 @@ function billCard(b,lead,me,compact){const T=tally(b),vs=T.vs;const f=T.f,a=T.a,
   const tools=b.live&&(AUTH.admin||canWithdraw)&&open?`<div class="landtools"><button class="small danger" data-a="prej" data-id="${esc(b.id)}">${AUTH.admin?'Зняти з голосування':'Відкликати'}</button></div>`:'';
   const body=`<div class="bm">${[b.date&&esc(b.date),b.author&&'Вніс: '+plinkAuthor(b.author)].filter(Boolean).join(' · ')}</div>${t?`<div class="vbar" role="img" aria-label="За ${f}, проти ${a}, утрималися ${z}">${f?`<i class="f" style="width:${f/t*100}%"></i>`:''}${a?`<i class="a" style="width:${a/t*100}%"></i>`:''}${z?`<i class="z" style="width:${z/t*100}%"></i>`:''}</div><div class="vleg"><span>За: <b>${f}</b></span><span>Проти: <b>${a}</b></span><span>Утрималися: <b>${z}</b></span></div>`:''}${voteUi}${ended}${signHtml(b,me)}${amendHtml(b)}${who}${b.who&&!vs.length?`<div class="bm">${esc(b.who)}</div>`:''}${b.text?`<details${compact?'':' open'}><summary>Текст законопроєкту</summary><p>${esc(b.text)}</p></details>`:''}${tools}`;
   const head=`<span class="bt">${b.no?esc(b.no)+'. ':''}${esc(b.title||'Без назви')}</span><span class="pill ${esc(es)}">${st[0]} ${st[1]}</span>`;
-  if(compact)return `<details class="bill arch"><summary class="bh">${head}</summary>${body}</details>`;
-  return `<article class="bill"><div class="bh">${head}</div>${body}</article>`;}
+  const disc=discHtml(b);
+  if(compact)return `<details class="bill arch"><summary class="bh">${head}</summary>${body}${disc}</details>`;
+  return `<article class="bill"><div class="bh">${head}</div>${body}${disc}</article>`;}
 let ARCH_F='all';
 function parlHtml(s,si){
   const bills=s.bills||[];const reps=landLeaders();
@@ -831,7 +950,7 @@ function parlHtml(s,si){
   const chair=String(s.chair||'').trim();
   const all=allBills();
   if(editing){
-    h+=`<div class="block"><h3>Голова Палати Земель</h3>${plSelect('pch',`data-a="pch" data-s="${si}"`,s.chair)}</div>`;
+    h+=`<div class="block"><h3>Голова Палати Земель</h3>${plSelect('pch',`data-a="pch" data-s="${si}"`,s.chair)}<label class="fl" style="margin-top:12px">Скільки підписів потрібно, щоб петиція стала законопроєктом<input type="text" inputmode="numeric" id="pmin" data-a="pmin" data-s="${si}" value="${esc(s.petitionMin||5)}" style="max-width:120px"></label></div>`;
   }else{
     const cnt=k=>all.filter(b=>effStatus(b)===k).length;
     h+=`<div class="ecotop"><div class="kpi"><span class="k">Голова Палати</span><span class="v" style="font-size:24px">${chair?plink(chair):'<span style="color:var(--vacant)">Вакантно</span>'}</span></div><div class="kpi"><span class="k">Законопроєкти</span><span class="v">${all.length}</span><span class="s pcounts">${['review','passed','rejected','veto'].map(k=>`<span class="pill ${k}">${BST[k][0]} ${({review:'На розгляді',passed:'Прийнято',rejected:'Відхилено',veto:'Вето'})[k]}: ${cnt(k)+(k==='review'?cnt('sign')+cnt('ov'):0)}</span>`).join('')}</span></div><div class="kpi"><span class="k">Представників у Палаті</span><span class="v">${reps.filter(r=>String(r.name||'').trim()).length} з ${reps.length}</span><span class="s">місць зайнято</span></div></div>`;
@@ -844,12 +963,13 @@ function parlHtml(s,si){
   } else {
     const lead={};reps.forEach(r=>lead[r.land]=r.name);const me=myLands();
     if(me.length)h+=proposeForm(me);
+    h+=petitionsHtml();
     const active=all.filter(b=>['voting','sign','override'].includes(phase(b))||(!b.voting&&(b.status||'review')==='review'&&!b.closesAt));
     const arch=all.filter(b=>!active.includes(b)).sort((x,y)=>String(y.closesAt||y.date||'').localeCompare(String(x.closesAt||x.date||'')));
     h+=`<div class="block"><h3>На голосуванні <small>${active.length?'новіші зверху':''}</small></h3>${active.length?active.slice().reverse().map(b=>billCard(b,lead,me,false)).join(''):'<p class="empty">Зараз немає законопроєктів на голосуванні.</p>'}</div>`;
-    const fl=[['all','Усі'],['passed','Прийнято'],['rejected','Відхилено'],['veto','Вето']];
-    const shown=arch.filter(b=>ARCH_F==='all'||effStatus(b)===ARCH_F);
-    h+=`<div class="block"><h3>Архів законів <small>${arch.length} всього</small></h3><div class="afilter">${fl.map(([k,l])=>`<button class="small${ARCH_F===k?' primary':''}" data-a="af" data-k="${k}">${l}${k==='all'?'':' · '+arch.filter(b=>effStatus(b)===k).length}</button>`).join('')}</div>${shown.length?shown.map(b=>billCard(b,lead,me,true)).join(''):'<p class="empty">Тут поки порожньо.</p>'}</div>`;
+    const fl=[['all','Усі'],['passed','Прийнято'],['rejected','Відхилено'],['veto','Вето'],['void','Скасовано Судом']];
+    const lst=b=>lawState(b)==='void'||b.status==='void'?'void':effStatus(b);const shown=arch.filter(b=>ARCH_F==='all'||lst(b)===ARCH_F);
+    h+=`<div class="block"><h3>Архів законів <small>${arch.length} всього</small></h3><div class="afilter">${fl.map(([k,l])=>`<button class="small${ARCH_F===k?' primary':''}" data-a="af" data-k="${k}">${l}${k==='all'?'':' · '+arch.filter(b=>lst(b)===k).length}</button>`).join('')}</div>${shown.length?shown.map(b=>billCard(b,lead,me,true)).join(''):'<p class="empty">Тут поки порожньо.</p>'}</div>`;
   }
   // representatives = territory leaders taken from the lands tabs
   h+=`<div class="block"><h3>Представники Земель <small>Крайові Отамани з вкладки «Землі УД»</small></h3>`;
@@ -875,7 +995,17 @@ const RES_GEN={'срібло':'срібла','золото':'золота','ру
 function itemSilver(s,it){const q=+it.qty||0;if(it.price!=null&&it.price!=='')return q*(+it.price||0);return silverOf(s,it.res,q);}
 function freezePrices(s){(s.patronList||[]).forEach(p=>(p.items||[]).forEach(it=>{if(it.price==null||it.price===''){const v=silverOf(s,it.res,1);if(v!==null)it.price=String(v);}}));}
 function resWord(s,res){const w=String(canonRes(s,res)||res||'').toLowerCase();return RES_GEN[w]||w;}
+const DAILY_H=21;
+function kyivOffMin(ms){try{const v=new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Kyiv',timeZoneName:'shortOffset'}).formatToParts(new Date(ms)).find(x=>x.type==='timeZoneName').value;const m=/GMT([+-]\d+)(?::(\d+))?/.exec(v);if(!m)return 120;const h=+m[1];return h*60+(m[2]?Math.sign(h||1)*+m[2]:0);}catch(_){return 120;}}
+// moments of 21:00 (Kyiv) strictly after fromMs and not later than toMs
+function dailyTicks(fromMs,toMs){const out=[];if(!(toMs>fromMs))return out;const start=fromMs-36*3600*1000;
+  for(let t=start;t<=toMs+36*3600*1000;t+=86400000){const k=new Date(t+kyivOffMin(t)*60000);const y=k.getUTCFullYear(),mo=k.getUTCMonth(),d=k.getUTCDate();const noon=Date.UTC(y,mo,d,12);const tick=Date.UTC(y,mo,d,DAILY_H,0)-kyivOffMin(noon)*60000;if(tick>fromMs&&tick<=toMs&&!out.includes(tick))out.push(tick);}
+  return out.sort((a,b)=>a-b);}
+function nextTick(){const n=Date.now();return dailyTicks(n,n+2*86400000)[0]||n;}
+function dailyRate(it){const h=it.hist||[];return h.length?(+h[h.length-1].qty||0):0;}
 function movements(s){const out=[];const tr=s.treasury||{};
+  (s.daily||[]).forEach(it=>{const h=it.hist||[];h.forEach((seg,i)=>{const q=+seg.qty||0;if(!q)return;const from=Date.parse(seg.from);const to=i+1<h.length?Date.parse(h[i+1].from):Date.now();
+    dailyTicks(from,to).forEach(t=>out.push({kind:'daily',at:new Date(t).toISOString(),date:'',who:'',what:it.what||'Щоденне списання',items:[{res:it.res||'Срібло',qty:-q}]}));});});
   (s.weeks||[]).forEach((w,wi)=>(s.members||[]).forEach((m,mi)=>{if(!(w.done||[])[mi])return;const txt=(w.got&&w.got[mi])||m.needs;out.push({kind:'week',at:(w.at||[])[mi]||null,date:w.label,who:m.name||'Вакантно',what:'Тижневий внесок',items:parseNeeds(txt)});}));
   (s.patronList||[]).forEach(p=>(p.items||[]).forEach(it=>{if(+it.qty)out.push({kind:'patron',at:it.at||null,date:it.date||'',who:p.name,what:'Пожертва',items:[{res:it.res,qty:+it.qty}]});}));
   (s.expenses||[]).forEach(e=>{if(+e.amount)out.push({kind:'expense',at:e.at||null,date:e.date,who:e.by,what:e.what||'Витрата',items:[{res:e.unit||'Срібло',qty:-(+e.amount)}]});});
@@ -915,12 +1045,12 @@ function econHtml(s,si){
     const exTot=(s.expenses||[]).reduce((a,e)=>a+(silverOf(s,e.unit||'Срібло',+e.amount||0)||0),0);
     h+=`<div class="ecotop"><div class="kpi in"><span class="k">Внески цього тижня</span><span class="v">${paid} з ${mem.length}</span><span class="s">${n?esc(n.label)+' · ':''}≈ ${fmt(wkSilver)} срібла</span></div><div class="kpi in"><span class="k">Від меценатів</span><span class="v">${patTot?"+":""}${fmt(patTot)}</span><span class="s">срібла загалом</span></div><div class="kpi out"><span class="k">Витрати</span><span class="v">${exTot?"−":""}${fmt(exTot)}</span><span class="s">срібла загалом</span></div></div>`;
     // journal
-    const kinds={all:'Усе',week:'Внески',patron:'Меценати',expense:'Витрати'};
+    const kinds={all:'Усе',week:'Внески',patron:'Меценати',expense:'Витрати',daily:'Щоденні списання'};
     const ord=mv.map((o,i)=>({o,i})).sort((a,b)=>(b.o.at||'').localeCompare(a.o.at||'')||b.i-a.i).map(x=>x.o);
     const fl=ord.filter(o=>JOUR_F==='all'||o.kind===JOUR_F);const lim=JOUR_ALL?fl:fl.slice(0,12);
-    const icon={week:'📅',patron:'🎁',expense:'💸'};
+    const icon={week:'📅',patron:'🎁',expense:'💸',daily:'🕘'};
     h+=`<div class="block"><h3>Рух казни <small>усі надходження й витрати</small></h3><div class="afilter">${Object.entries(kinds).map(([k,l])=>`<button class="small${JOUR_F===k?' primary':''}" data-a="jf" data-k="${k}">${l}</button>`).join('')}</div>`;
-    h+=fl.length?`<div class="tblwrap" style="border:0;background:transparent"><table class="exp jour"><thead><tr><th>Коли</th><th>Що</th><th class="num">Зміна</th></tr></thead><tbody>${lim.map(o=>`<tr><td>${o.at?esc(fmtDT(o.at)):esc(o.date||'раніше')}${o.at&&o.kind==='week'?`<div class="hint">тиждень ${esc(o.date)}</div>`:''}</td><td>${icon[o.kind]} <b>${o.who?plink(o.who):'—'}</b><div class="hint">${esc(o.what)}</div></td><td class="num">${moneyCell(s,o.items)}${o.items.some(i=>!i.canon)?'<div><span class="tag warn">⚠ такого ресурсу немає в казні</span></div>':''}</td></tr>`).join('')}</tbody></table></div>${fl.length>lim.length?`<div><button class="small" data-a="jall">Показати все (${fl.length})</button></div>`:''}`:'<p class="empty">Записів ще немає.</p>';
+    h+=fl.length?`<div class="tblwrap" style="border:0;background:transparent"><table class="exp jour"><thead><tr><th>Коли</th><th>Що</th><th class="num">Зміна</th></tr></thead><tbody>${lim.map(o=>`<tr><td>${o.at?esc(fmtDT(o.at)):esc(o.date||'раніше')}${o.at&&o.kind==='week'?`<div class="hint">тиждень ${esc(o.date)}</div>`:''}</td><td>${icon[o.kind]} <b>${o.kind==='daily'?'Держава':(o.who?plink(o.who):'—')}</b><div class="hint">${esc(o.what)}</div></td><td class="num">${moneyCell(s,o.items)}${o.items.some(i=>!i.canon)?'<div><span class="tag warn">⚠ такого ресурсу немає в казні</span></div>':''}</td></tr>`).join('')}</tbody></table></div>${fl.length>lim.length?`<div><button class="small" data-a="jall">Показати все (${fl.length})</button></div>`:''}`:'<p class="empty">Записів ще немає.</p>';
     h+='</div>';
   }
   // ===== weekly contributions
@@ -946,6 +1076,13 @@ function econHtml(s,si){
   } else {
     h+='<div class="tblwrap" style="border:0;background:transparent"><table class="exp"><thead><tr><th>Дата</th><th>На що</th><th class="num">Сума</th><th>Хто погодив</th></tr></thead><tbody>'+ex.slice().reverse().map(e=>`<tr><td>${esc(e.date)}</td><td>${esc(e.what)}</td><td class="num"><span class="mv out">−${fmt(e.amount)} ${esc(resWord(s,e.unit||'Срібло'))}</span></td><td>${esc(e.by||'')}</td></tr>`).join('')+'</tbody></table></div>';
   }
+  h+='</div>';
+  // ===== daily write-offs
+  const dl=s.daily||(s.daily=[]);const perDay=dl.reduce((a,it)=>a+(silverOf(s,it.res||'Срібло',dailyRate(it))||0),0);
+  h+=`<div class="block daily"><h3>Щоденні державні списання <small>щодня о ${DAILY_H}:00 за Києвом · наступне ${esc(fmtDT(new Date(nextTick()).toISOString()))}</small></h3>`;
+  if(editing){h+='<p class="hint">Сума діє з моменту збереження: якщо змінити її сьогодні, нова сума спишеться вже о '+DAILY_H+':00. Попередні дні рахуються за старою сумою.</p>'+dl.map((it,di)=>{const c=canonRes(s,it.res||'Срібло');return `<div class="erow dl"><input type="text" id="dw-${di}" data-a="dw" data-s="${si}" data-p="${di}" value="${esc(it.what)}" placeholder="На що (напр. утримання армії)"><input type="text" inputmode="numeric" id="dq2-${di}" data-a="dq2" data-s="${si}" data-p="${di}" value="${esc(String(dailyRate(it)))}" placeholder="0"><select id="dr2-${di}" data-a="dr2" data-s="${si}" data-p="${di}">${resOpts.map(o=>`<option${o===c?' selected':''}>${esc(o)}</option>`).join('')}</select><button class="small danger" data-a="dldel" data-s="${si}" data-p="${di}">Прибрати</button></div>`;}).join('')+`<div><button class="small" data-a="dladd" data-s="${si}">+ Списання</button></div>`;}
+  else if(!dl.length)h+='<p class="empty">Щоденних списань ще немає.</p>';
+  else h+=`<div class="dlist">${dl.map(it=>{const q=dailyRate(it);return `<div class="dl1${q?'':' zero'}"><span>🕘 ${esc(it.what||'Списання')}</span><b class="mv out">${q?'−'+fmt(q)+' '+esc(resWord(s,it.res||'Срібло')):'0 (ще не діє)'}</b><span class="hint">на день</span></div>`;}).join('')}</div><div class="vleg"><span>Разом на день ≈ <b>${fmt(perDay)}</b> срібла</span><span>на тиждень ≈ <b>${fmt(perDay*7)}</b></span></div>`;
   h+='</div>';
   // ===== patrons
   const pl=s.patronList||[];
@@ -1024,11 +1161,13 @@ function renderInner(){
     if(s.kind==='home'){html+=homeHtml(s,si)+'</section>';return;}
     if(s.kind==='awards'){html+=awardsHtml(s,si)+'</section>';return;}
     if(s.kind==='players'){html+=playersHtml(s,si)+'</section>';return;}
-    if(s.leaders){
+    if(s.kind==='court'){html+=courtHtml(s,si)+'</section>';return;}
+    if(s.leaders&&!(s.kind==='units'&&!editing)){
       if(editing){html+='<div class="lands"><div class="elabel">Керівництво</div>'+s.leaders.map((p,pi)=>`<div class="erow"><input type="text" id="lt-${s.id}-${pi}" data-a="lt" data-s="${si}" data-p="${pi}" value="${esc(p.title)}" placeholder="Посада">${plSelect(`lh-${s.id}-${pi}`,`data-a="lh" data-s="${si}" data-p="${pi}"`,p.holder)}<button class="small danger" data-a="ldrdel" data-s="${si}" data-p="${pi}">Прибрати</button></div>`).join('')+`<div><button class="small" data-a="ldradd" data-s="${si}">+ Посада керівництва</button></div></div>`;}
       else if(s.leaders.length){html+='<div class="leaders">'+s.leaders.map(p=>{const v=!String(p.holder||'').trim()||p.holder==='0';return `<div class="post${v?' vac':''}"><span class="t">${esc(p.title)}</span><span class="h">${v?'Вакантно':plink(p.holder)}</span></div>`}).join('')+'</div>';}
     }
     if(s.kind==='lost'&&!s.lands.length){html=html.slice(0,html.lastIndexOf('<section'));return;}
+    if(s.kind==='units'&&!editing){html+=armyHtml(s,si)+'</section>';return;}
     html+='<div class="lands">';
     html+=s.lands.map((l,li)=>editing?editLand(l,si,li,s.lands.length,s.kind):viewLand(l,s.kind)).join('');
     if(editing&&s.kind!=='lost') html+=`<div><button data-a="ladd" data-s="${si}">${s.kind==='units'?'+ Додати курінь':'+ Додати землю'}</button></div>`;
@@ -1065,6 +1204,12 @@ function docHtml(){
 app.addEventListener('input',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;
   if(a==='hvr'){HV[t.dataset.id]=t.value;return;}
+  if(a==='cmt'){CMD[t.dataset.id]=t.value;return;}
+  if(a==='pd'){PD[t.dataset.k]=t.value;return;}
+  if(a==='cd'){CD[t.dataset.k]=t.value;if(t.dataset.k==='def'||t.dataset.k==='bill')render();return;}
+  if(a==='vd'){(VD[t.dataset.id]=VD[t.dataset.id]||{}).text=t.value;return;}
+  if(a==='vdv'){(VD[t.dataset.id]=VD[t.dataset.id]||{}).voidLaw=t.checked;return;}
+  if(a==='drr'){VD['dr'+t.dataset.id]=t.value;return;}
   if(a==='awr'){AWR[t.dataset.id]=t.value;return;}
   if(a==='nd'){ND[t.dataset.k]=t.value;if(t.dataset.k==='type')render();return;}
   if(a==='ad'){AD[t.dataset.k]=t.value;return;}
@@ -1078,6 +1223,7 @@ app.addEventListener('input',e=>{
   if(a==='gpe'){sec.posts[+t.dataset.p].email=t.value.trim();return;}
   if(a==='lt'){sec.leaders[+t.dataset.p].title=t.value;return;}
   if(a==='pch'){sec.chair=t.value;return;}
+  if(a==='pmin'){sec.petitionMin=Math.max(1,+t.value.replace(/\D/g,'')||5);return;}
   if(a==='re'){const land=t.dataset.l;(sec.repEmails=sec.repEmails||{})[land]=t.value.trim();const r=landLeaders().find(x=>x.land===land);(sec.repHolder=sec.repHolder||{})[land]=r?r.name:'';return;}
   if(['bn','bd','bt','ba','bx','vw'].includes(a)){const k={bn:'no',bd:'date',bt:'title',ba:'author',bx:'text',vw:'who'}[a];sec.bills[+t.dataset.p][k]=t.value;return;}
   if(['vf','va','vz'].includes(a)){const k={vf:'vfor',va:'vagainst',vz:'vabstain'}[a];sec.bills[+t.dataset.p][k]=t.value.replace(/[^0-9]/g,'');return;}
@@ -1104,6 +1250,9 @@ app.addEventListener('input',e=>{
   if(a==='prn'){sec.prices[+t.dataset.p].name=t.value;return;}
   if(a==='prp'){sec.prices[+t.dataset.p].price=t.value.replace(/[^0-9]/g,'');return;}
   if(a==='pnm'){sec.patronList[+t.dataset.p].name=t.value;return;}
+  if(a==='dw'){sec.daily[+t.dataset.p].what=t.value;return;}
+  if(a==='dq2'){const it=sec.daily[+t.dataset.p];const v=t.value.replace(/\D/g,'')||'0';const h=it.hist=it.hist||[];const last=h[h.length-1];const now=Date.now();
+    if(last&&!dailyTicks(Date.parse(last.from),now).length)last.qty=v;else h.push({from:new Date(now).toISOString(),qty:v});return;}
   if(a==='pip'){sec.patronList[+t.dataset.p].items[+t.dataset.i].price=t.value.replace(/[^0-9.]/g,'');return;}
   if(a==='piq'){sec.patronList[+t.dataset.p].items[+t.dataset.i].qty=t.value.replace(/[^0-9]/g,'');return;}
   if(a==='dd'){sec.donations[+t.dataset.p].date=t.value;return;}
@@ -1124,6 +1273,8 @@ app.addEventListener('change',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;const sec=state.sections[+t.dataset.s];
   if(a==='dr'){sec.donations[+t.dataset.p].res=t.value;render();}
   else if(a==='pln'){const nv=t.value.trim();const ov=t.dataset.old||'';if(ov&&nv&&ov!==nv){if(players().filter(x=>x.name===nv).length>1){msg='Гравець з таким ім’ям уже є';msgErr=true;}else{renameEverywhere(ov,nv);t.dataset.old=nv;msg='Ім’я змінено всюди на сайті';msgErr=false;setTimeout(()=>render(),250);}}}
+  else if(a==='madd'){const l=sec.lands[+t.dataset.l];if(t.value&&!(l.members||[]).includes(t.value)){(l.members=l.members||[]).push(t.value);}render();}
+  else if(a==='dr2'){sec.daily[+t.dataset.p].res=t.value;}
   else if(a==='gpp'){sec.posts[+t.dataset.p].perm=t.value;}
   else if(a==='bs'){const bill=sec.bills[+t.dataset.p];bill.status=t.value;if(t.value==='veto'&&bill.applied){if(revertLaw(bill,state)){msg='Вето: дію закону скасовано. Не забудьте зберегти.';msgErr=false;}else{msg='Вето поставлено, але з того часу це вже змінювали: перевірте вручну.';msgErr=true;}}render();}
   else if(a==='bc'){sec.bills[+t.dataset.p].chapter=+t.value;}
@@ -1140,6 +1291,25 @@ app.addEventListener('click',async e=>{
     busy=true;render();try{await window.FB.sign(id,a==='hsign'?'sign':'veto',reason,hetmanName(state));msg=a==='hsign'?'Закон підписано, він набрав чинності':'Закон ветовано. Палата має 24 години, щоб подолати вето.';msgErr=false;}catch(err){msg=err&&err.code==='permission-denied'?'Не прийнято: час на рішення вийшов або ви не Гетьман':'Не вдалося';msgErr=true;}busy=false;render();return;}
   if(a==='ovote'){const land=b.dataset.l;if(!myLands().includes(land))return;busy=true;render();try{await window.FB.ovote(b.dataset.b,b.dataset.c,land);msg='Голос збережено';msgErr=false;}catch(err){msg=err&&err.code==='permission-denied'?'Голос не прийнято: час на подолання вето вийшов':'Не вдалося проголосувати';msgErr=true;}busy=false;render();return;}
   if(a==='ff'){FEED_F=b.dataset.k;render();return;}
+  if(a==='dos'){DOSSIER=b.dataset.n;active='players';try{history.replaceState(null,'','#players/'+encodeURIComponent(DOSSIER));}catch(_){}render();window.scrollTo(0,0);return;}
+  if(a==='dosback'){DOSSIER=null;try{history.replaceState(null,'','#players');}catch(_){}render();return;}
+  if(a==='cmopen'){CMD['open_'+b.dataset.id]=!CMD['open_'+b.dataset.id];return;}
+  if(a==='cmpost'){const m=me();const id=b.dataset.id;const txt=String(CMD[id]||'').trim();if(!m||!txt)return;const mp=myPost();busy=true;render();try{await window.FB.postComment({bill:id,text:txt,by:m.name,role:mp?mp.title:(myLands().length?'Представник: '+myLands().join(', '):'')});CMD[id]='';OPEN.add('cm:'+id);}catch(_){msg='Не вдалося надіслати';msgErr=true;}busy=false;render();return;}
+  if(a==='cmdel'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return;}try{await window.FB.delComment(b.dataset.id);}catch(_){}render();return;}
+  if(a==='pdopen'){PD.open=!PD.open;return;}
+  if(a==='cdopen'){CD.open=!CD.open;return;}
+  if(a==='petf'){PETF=b.dataset.k;render();return;}
+  if(a==='pdpost'){const m=me();if(!m)return;if(!PD.title.trim()){msg='Впишіть, що пропонуєте';msgErr=true;render();return;}busy=true;render();try{await window.FB.createPetition({title:PD.title.trim(),text:PD.text.trim(),by:m.name});PD={title:'',text:''};msg='Петицію опубліковано й підписано вами';msgErr=false;}catch(_){msg='Не вдалося опублікувати';msgErr=true;}busy=false;render();return;}
+  if(a==='psign'){const m=me();if(!m)return;busy=true;render();try{await window.FB.signPetition(b.dataset.id,m.name);msg='Ви підписали петицію';msgErr=false;}catch(_){msg='Не вдалося підписати';msgErr=true;}busy=false;render();return;}
+  if(a==='pdel'&&b.dataset.id&&!b.dataset.s){if(!AUTH.admin)return;if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return;}try{await window.FB.delPetition(b.dataset.id);}catch(_){}render();return;}
+  if(a==='cdpost'){const m=me();if(!m)return;if(!CD.title.trim()||!CD.def){msg='Вкажіть суть позову й відповідача';msgErr=true;render();return;}
+    const laws=allBills().filter(x=>phase(x)==='passed'&&!voidedBy(x.id));const law=CD.def==='__law'?(laws.find(x=>x.id===CD.bill)||laws[0]):null;if(CD.def==='__law'&&!law){msg='Немає чинних законів';msgErr=true;render();return;}
+    const no=CASES.reduce((mx,c)=>Math.max(mx,+c.no||0),0)+1;busy=true;render();
+    try{await window.FB.fileCase({no,title:CD.title.trim(),text:CD.text.trim(),plaintiff:m.name,defendant:law?'':CD.def,billId:law?law.id:'',billTitle:law?law.title:''});CD={title:'',def:'',text:'',bill:''};msg='Позов подано до Суду';msgErr=false;}catch(_){msg='Не вдалося подати позов';msgErr=true;}busy=false;render();return;}
+  if(a==='vdok'||a==='vdno'){if(!isJudge())return;const id=b.dataset.id;const v=VD[id]||{};if(!String(v.text||'').trim()){msg='Впишіть текст рішення';msgErr=true;render();return;}const c=CASES.find(x=>x.id===id);const mp=myPost();busy=true;render();
+    try{await window.FB.decideCase(id,a==='vdok'?'decided':'dismissed',{text:v.text.trim(),by:mp?mp.name:'',role:mp?mp.title:'Суддя',at:new Date().toISOString(),voidBill:a==='vdok'&&v.voidLaw&&c&&c.billId?c.billId:''});delete VD[id];msg='Рішення ухвалено';msgErr=false;}catch(_){msg='Не вдалося зберегти рішення';msgErr=true;}busy=false;render();return;}
+  if(a==='cdel'&&b.dataset.id){if(!AUTH.admin)return;if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return;}try{await window.FB.delCase(b.dataset.id);}catch(_){}render();return;}
+  if(a==='drev'){if(!isHetman())return;const id=b.dataset.id;const reason=String(VD['dr'+id]||'').trim();if(!reason){msg='Вкажіть причину скасування';msgErr=true;render();return;}const mp=myPost();busy=true;render();try{await window.FB.revokeNews(id,{by:'Гетьман '+(mp?mp.name:''),reason});msg='Указ скасовано';msgErr=false;}catch(_){msg='Не вдалося';msgErr=true;}busy=false;render();return;}
   if(a==='ntype'){ND.type=b.dataset.k;render();return;}
   if(a==='npost'){const mp=myPost();if(!mp)return;const type=ND.type==='decree'&&isHetman()?'decree':'news';if(!ND.title.trim()){msg='Впишіть заголовок';msgErr=true;render();return;}
     const no=type==='decree'?NEWS.filter(n=>n.type==='decree').reduce((m,n)=>Math.max(m,+n.no||0),0)+1:0;busy=true;render();
@@ -1179,6 +1349,7 @@ app.addEventListener('click',async e=>{
     if(mode==='rename')amend={mode,land:land2,newName:String(DRAFT.newName).trim()};
     if(mode==='flag')amend={mode,land:land2,img:DRAFT.img};
     if(mode==='chair')amend={mode,name:nname,email:nemail};
+    if(mode==='revokedecree'){const ds=NEWS.filter(n=>n.type==='decree'&&!decreeRevoked(n));const d=ds.find(n=>n.id===DRAFT.dec)||ds[0];if(!d){bad('Чинних указів немає');return;}amend={mode,newsId:d.id,no:d.no||'',title:d.title};}
     if(mode==='delart'){const opts=artOptions();const cur=opts.find(o=>o.v===DRAFT.art)||opts[0];if(!cur){bad('У Конституції немає статей');return;}amend={mode,ci:cur.ci,ai:cur.ai,artTitle:cur.a.title,body:String(cur.a.body||'').slice(0,3000)};}
     if(mode==='addch'){const chs=cs?cs.doc.chapters:[];const nm=chName(String(DRAFT.chname||'').trim());if(!nm){bad('Впишіть назву розділу');return;}const pos=DRAFT.chpos==null||DRAFT.chpos===''?chs.length:Math.min(chs.length,+DRAFT.chpos);amend={mode,name:nm,pos,shift:pos<chs.length};}
     if(mode==='delch'){const chs=cs?cs.doc.chapters:[];const c=chs[+DRAFT.chdel||0];if(!c){bad('Немає розділів');return;}amend={mode,chTitle:c.title,arts:c.articles.map(a=>a.title)};}
@@ -1214,7 +1385,7 @@ app.addEventListener('click',async e=>{
     busy=false;render();return;}
   if(a==='login'){window.FB.login().catch(err=>{msg='Не вдалося увійти: '+(err&&err.code||'');msgErr=true;render();});return;}
   if(a==='logout'){editing=false;state=JSON.parse(saved);window.FB.logout();return;}
-  if(a==='tab'){active=b.dataset.id;try{history.replaceState(null,'','#'+active);}catch(_){}render();window.scrollTo(0,0);return;}
+  if(a==='tab'){active=b.dataset.id;DOSSIER=null;try{history.replaceState(null,'','#'+active);}catch(_){}render();window.scrollTo(0,0);return;}
   else if(a==='jump'){const el=document.getElementById(b.dataset.to);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});return;}
   else if(a==='aadd'){s.doc.chapters[+b.dataset.c].articles.push({title:'Стаття '+nextArticleNo(s.doc)+'. ',body:''});}
   else if(a==='adel'){const cc=s.doc.chapters[+b.dataset.c];if(b.dataset.confirm==='1'){cc.articles.splice(+b.dataset.r,1);}else{b.dataset.confirm='1';b.textContent='Точно видалити?';return;}}
@@ -1227,6 +1398,9 @@ app.addEventListener('click',async e=>{
   else if(a==='wdel'){s.weeks.splice(+b.dataset.w,1);}
   else if(a==='madd'){s.members.push({name:'',needs:''});s.weeks.forEach(w=>{(w.done=w.done||[]).push(false);});}
   else if(a==='mdel'){const p=+b.dataset.p;s.members.splice(p,1);s.weeks.forEach(w=>{(w.done||[]).splice(p,1);});}
+  else if(a==='mrem'){const l=s.lands[+b.dataset.l];l.members.splice(+b.dataset.p,1);}
+  else if(a==='dladd'){(s.daily=s.daily||[]).push({id:'d'+Date.now().toString(36),what:'',res:'Срібло',hist:[{from:new Date().toISOString(),qty:'0'}]});}
+  else if(a==='dldel'){if(b.dataset.confirm==='1'){s.daily.splice(+b.dataset.p,1);}else{b.dataset.confirm='1';b.textContent='Точно? Минулі списання теж зникнуть';return;}}
   else if(a==='pladd'){(s.list=s.list||[]).push({id:'pl'+Date.now().toString(36),name:'',email:'',profile:'',img:'',_new:true});}
   else if(a==='pldel'){if(b.dataset.confirm==='1'){s.list.splice(+b.dataset.p,1);}else{b.dataset.confirm='1';b.textContent='Точно?';return;}}
   else if(a==='plimg'){const pp=s.list[+b.dataset.p];pickAvatar(img=>{pp.img=img;render();});return;}
@@ -1302,11 +1476,29 @@ async function finalizeExpired(){
   try{await window.FB.save(state);saved=JSON.stringify(state);for(const lb of liveDone){try{await window.FB.delProposal(lb.id);}catch(_){}}PROPS=await window.FB.loadProposals();msg='Голосування завершилося, результат збережено';msgErr=false;}catch(e){state=JSON.parse(saved);res='save-error '+(e&&e.code||'');}
   busy=false;render();return res;
 }
+async function stateDuties(){if(!AUTH.admin||!window.FB||busy||editing)return '';const out=[];const min=petMin();
+  for(const pt of PETS){if(pt.status==='passed')continue;if(pt.at&&Date.now()>pt.at+PET_MS)continue;const n=(PSIGNS[pt.id]||[]).length;if(n<min)continue;
+    try{const signers=(PSIGNS[pt.id]||[]).map(x=>x.by).join(', ');await window.FB.petitionToBill(pt,`${pt.text||''}\n\n— Петиція громадян. Ініціатор: ${pt.by}. Підписали: ${signers}.`);out.push('petition '+pt.id);}catch(e){out.push('petition-error');}}
+  const p=parlSec();let changed=false;
+  ((p&&p.bills)||[]).forEach(b=>{if(b.status==='passed'&&voidedBy(b.id)){if(b.applied)revertLaw(b,state);b.status='void';b.voidedBy=voidedBy(b.id).id;changed=true;}});
+  ((p&&p.bills)||[]).forEach(b=>{if(b.status==='passed'&&b.amend&&b.amend.mode==='revokedecree'&&!b.newsDone){const n=NEWS.find(x=>x.id===b.amend.newsId);if(n&&!n.revoked){window.FB.revokeNews(n.id,{by:'Палата Земель',reason:'закон «'+(b.title||'')+'»'}).catch(()=>{});}b.newsDone=true;changed=true;}});
+  if(changed){try{await window.FB.save(state);saved=JSON.stringify(state);out.push('state');}catch(_){state=JSON.parse(saved);}}
+  return out.join(',');}
 function botReady(){if(AUTH.bot&&AUTH.admin&&votesLoaded&&sigsLoaded)window.__BOT_READY=true;}
-window.__botTick=async()=>{for(let i=0;i<60&&busy;i++)await new Promise(r=>setTimeout(r,500));const r=await finalizeExpired();let a='access ok';try{await window.FB.syncAccess(state);}catch(e){a='access error '+(e&&e.code||'');}return r+' · '+a;};
+window.__botTick=async()=>{for(let i=0;i<60&&busy;i++)await new Promise(r=>setTimeout(r,500));const r=await finalizeExpired();const d=await stateDuties();let a='access ok';try{await window.FB.syncAccess(state);}catch(e){a='access error '+(e&&e.code||'');}return r+(d?' · '+d:'')+' · '+a;};
 async function refreshLive(){if(!window.FB||busy||editing||document.visibilityState!=='visible')return;try{PROPS=await window.FB.loadProposals();VOTES=await window.FB.loadVotes();}catch(_){}}
 setInterval(async()=>{if(editing)return;const ae=document.activeElement;if(ae&&ae.id&&ae.id.startsWith('np-'))return;render();finalizeExpired();},60000);
 let REMOTE=null,EDIT_SCOPE='';
+const OPEN=new Set();
+app.addEventListener('toggle',e=>{const d=e.target;if(d&&d.dataset&&d.dataset.o){if(d.open)OPEN.add(d.dataset.o);else OPEN.delete(d.dataset.o);}},true);
+let COMMENTS=[],PETS=[],PSIGNS={},CASES=[],CMD={},PD={title:'',text:''},CD={title:'',def:'',text:'',bill:''},VD={},PETF='open';
+const PET_MS=7*24*3600*1000;
+function me(){return plByEmail(AUTH.email);}
+function isCitizen(){return !!me();}
+function isJudge(){const g=govSec();return !!(AUTH.email&&g&&(g.posts||[]).some(p=>p.perm==='court'&&String(p.name||'').trim()&&emailOf(p.name)===AUTH.email));}
+function petMin(){const p=parlSec();return Math.max(1,+((p&&p.petitionMin)||5));}
+function voidedBy(id){return CASES.find(c=>c.status==='decided'&&c.verdict&&c.verdict.voidBill===id)||null;}
+function decreeRevoked(n){if(n.revoked)return n.revoked;const b=allBills().find(x=>x.amend&&x.amend.mode==='revokedecree'&&x.amend.newsId===n.id&&phase(x)==='passed');return b?{by:'Палата Земель',reason:'закон «'+(b.title||'')+'»',at:b.closesAt}:null;}
 // ---------- home: decrees & news feed + chronicle ----------
 const msIso=v=>typeof v==='number'?new Date(v).toISOString():(v||'');
 function lawShort(am){if(!am||!am.mode)return '';switch(am.mode){
@@ -1314,6 +1506,7 @@ function lawShort(am){if(!am||!am.mode)return '';switch(am.mode){
   case 'rename':return `Землю «${am.land}» перейменовано на «${am.newName}»`;case 'flag':return `новий прапор Землі «${am.land}»`;
   case 'newland':return `утворено нову Землю «${am.name}»`;case 'loseland':return `втрачено контроль над Землею «${am.land}»`;case 'restoreland':return `Землю «${am.land}» відновлено`;
   case 'addplayer':return `до реєстру внесено гравця ${am.name}`;
+  case 'revokedecree':return `скасовано Указ Гетьмана №${am.no||''} «${am.title||''}»`;
   case 'editplayer':return `змінено дані гравця ${am.name}${am.newName?' (тепер '+am.newName+')':''}`;case 'delplayer':return `гравця ${am.name} виключено з реєстру`;
   case 'delart':return `виключено ${String(am.artTitle||'статтю').split('.')[0]} Конституції`;case 'addch':return `створено новий розділ Конституції «${am.name}»`;case 'delch':return `виключено розділ Конституції «${chName(am.chTitle)}»`;
   case 'chair':return `${am.name} — Голова Палати Земель`;case 'chairfire':return 'звільнено Голову Палати Земель';
@@ -1324,7 +1517,9 @@ function chronicle(){const ev=[];
     if(ph==='passed')ev.push({at:t,ic:'⚖️',tx:`Набрав чинності закон «${b.title||''}»${b.amend&&b.amend.mode&&b.amend.mode!=='none'?': '+lawShort(b.amend):''}`});
     else if(ph==='veto')ev.push({at:t,ic:'⛔',tx:`Гетьман ветував закон «${b.title||''}»`});
     else ev.push({at:t,ic:'✕',tx:`Палата відхилила законопроєкт «${b.title||''}»`});});
-  NEWS.filter(n=>n.type==='decree').forEach(n=>ev.push({at:msIso(n.at),ic:'📜',tx:`Указ Гетьмана №${n.no||''} «${n.title}»`}));
+  NEWS.filter(n=>n.type==='decree').forEach(n=>{ev.push({at:msIso(n.at),ic:'📜',tx:`Указ Гетьмана №${n.no||''} «${n.title}»`});const rv=decreeRevoked(n);if(rv&&rv.at)ev.push({at:msIso(rv.at),ic:'🚫',tx:`Указ №${n.no||''} «${n.title}» втратив чинність`});});
+  CASES.filter(c=>c.verdict).forEach(c=>ev.push({at:c.verdict.at||'',ic:'⚖️',tx:`Суд ухвалив рішення у справі №${c.no||''} «${c.title}»${c.verdict.voidBill?': закон скасовано':''}`}));
+  PETS.filter(pt=>pt.status==='passed').forEach(pt=>ev.push({at:msIso(pt.at),ic:'✍️',tx:`Петиція «${pt.title}» набрала підписи й стала законопроєктом`}));
   AWARDS.forEach(a=>{ev.push({at:msIso(a.at),ic:'🎖',tx:`${a.recipient} нагороджено відзнакою «${a.title}»`});if(a.revoked)ev.push({at:a.revoked.at||'',ic:'🚫',tx:`${a.recipient} позбавлено відзнаки «${a.title}»`});});
   return ev.filter(e=>e.at).sort((x,y)=>y.at.localeCompare(x.at));}
 function homeHtml(s,si){const mp=myPost();const het=isHetman();
@@ -1336,8 +1531,8 @@ function homeHtml(s,si){const mp=myPost();const het=isHetman();
   h+=`<div class="block"><h3>Стрічка <small>укази, новини й закони</small></h3><div class="afilter">${[['all','Усе'],['decree','Укази'],['news','Новини'],['law','Закони']].map(([k,l])=>`<button class="small${FEED_F===k?' primary':''}" data-a="ff" data-k="${k}">${l}</button>`).join('')}</div>`;
   h+=shown.length?shown.slice(0,40).map(x=>{
     if(x.kind==='law'){const b=x.b;return `<article class="post law"><div class="ph"><span class="tag ok">⚖️ Закон</span><span class="hint">${esc(fmtDT(x.at))}</span></div><h4>${b.no?esc(b.no)+'. ':''}${esc(b.title||'')}</h4>${b.amend&&b.amend.mode&&b.amend.mode!=='none'?`<p>${esc(lawShort(b.amend))}</p>`:''}${b.text?`<details><summary>Текст закону</summary><p>${esc(b.text)}</p></details>`:''}<div class="hint">Вніс: ${plinkAuthor(b.author||'')}</div></article>`;}
-    const n=x.n;const canDel=AUTH.admin||(AUTH.email&&lc(n.email)===AUTH.email);
-    return `<article class="post ${n.type}"><div class="ph"><span class="tag${n.type==='decree'?' warn':''}">${n.type==='decree'?'📜 Указ Гетьмана №'+esc(n.no||''):'📰 Новина'}</span><span class="hint">${esc(fmtDT(x.at))}</span></div><h4>${esc(n.title)}</h4>${n.text?`<p>${esc(n.text)}</p>`:''}<div class="hint">${esc(n.role||'')} ${plink(n.by||'')}</div>${canDel?`<div class="landtools"><button class="small danger" data-a="ndel" data-id="${esc(n.id)}">Видалити</button></div>`:''}</article>`;}).join(''):'<p class="empty">Тут поки порожньо. Укази видає Гетьман, новини — члени уряду.</p>';
+    const n=x.n;const canDel=AUTH.admin||(AUTH.email&&lc(n.email)===AUTH.email);const rv=n.type==='decree'?decreeRevoked(n):null;
+    return `<article class="post ${n.type}"><div class="ph"><span class="tag${n.type==='decree'?' warn':''}">${n.type==='decree'?'📜 Указ Гетьмана №'+esc(n.no||''):'📰 Новина'}</span><span class="hint">${esc(fmtDT(x.at))}</span></div><h4${rv?' class="struck"':''}>${esc(n.title)}</h4>${n.text?`<p${rv?' class="struck"':''}>${esc(n.text)}</p>`:''}<div class="hint">${esc(n.role||'')} ${plink(n.by||'')}</div>${rv?`<div class="amfail">🚫 Втратив чинність${rv.at?' '+esc(fmtDT(msIso(rv.at))):''}: ${esc(rv.by||'')}${rv.reason?' · '+esc(rv.reason):''}</div>`:''}${n.type==='decree'&&!rv&&isHetman()?`<div class="landtools"><input type="text" class="hvin" id="dr-${esc(n.id)}" data-a="drr" data-id="${esc(n.id)}" value="${esc(VD['dr'+n.id]||'')}" placeholder="Причина скасування"><button class="small danger" data-a="drev" data-id="${esc(n.id)}">Скасувати указ</button></div>`:''}${canDel?`<div class="landtools"><button class="small danger" data-a="ndel" data-id="${esc(n.id)}">Видалити</button></div>`:''}</article>`;}).join(''):'<p class="empty">Тут поки порожньо. Укази видає Гетьман, новини — члени уряду.</p>';
   h+='</div></div>';
   const ch=chronicle();
   h+=`<aside class="block chron"><h3>Літопис</h3>${ch.length?'<ol>'+ch.slice(0,30).map(e=>`<li><span class="ci">${e.ic}</span><div><div class="cx">${esc(e.tx)}</div><div class="hint">${esc(fmtDT(e.at))}</div></div></li>`).join('')+'</ol>':'<p class="empty">Події з’являться тут самі: закони, укази, відзнаки.</p>'}</aside>`;
@@ -1352,11 +1547,12 @@ function awardsHtml(s,si){const mp=myPost();const act=AWARDS.filter(a=>!a.revoke
   return h+'</div>';}
 function isFin(){const g=govSec();return !!(AUTH.email&&g&&(g.posts||[]).some(p=>p.perm==='econ'&&String(p.name||'').trim()&&emailOf(p.name)===AUTH.email));}
 function govHtml(s,si){const posts=s.posts||(s.posts=[]);let h='<div class="gov">';
-  if(editing){h+='<div class="block"><h3>Посади Канцелярії <small>можна також призначати законом через Палату</small></h3>'+posts.map((p,pi)=>`<div class="artedit"><div class="erow gp"><input type="text" id="gpt-${pi}" data-a="gpt" data-s="${si}" data-p="${pi}" value="${esc(p.title)}" placeholder="Назва посади">${plSelect(`gpn-${pi}`,`data-a="gpn" data-s="${si}" data-p="${pi}"`,p.name)}${['hetman','pysar','fin','def'].includes(p.id)?'':`<button class="small danger" data-a="gpdel" data-s="${si}" data-p="${pi}">Прибрати</button>`}</div>${p.id==='hetman'?'<p class="hint">Гетьман: підписує або ветує закони (12 годин після голосування), видає укази, вручає відзнаки.</p>':`<label class="fl">Права на сайті<select id="gpp-${pi}" data-a="gpp" data-s="${si}" data-p="${pi}">${[['','Лише новини та відзнаки'],['econ','+ редагує Економіку'],['lands','+ редагує Землі та Військо']].map(([k,l])=>`<option value="${k}"${(p.perm||'')===k?' selected':''}>${l}</option>`).join('')}</select></label>`}</div>`).join('')+`<div><button class="small" data-a="gpadd" data-s="${si}">+ Посада</button></div></div>`;}
-  else{h+=`<div class="block rtwrap">${roundTable(posts)}</div>`;h+='<div class="leaders govposts rtlist">'+posts.map(p=>{const v=!String(p.name||'').trim();return `<div class="post${v?' vac':''}"><span class="t">${esc(p.title)}</span><span class="h">${v?'Вакантно':plink(p.name)}</span>${p.perm==='econ'?'<span class="t perm">💰 веде Економіку</span>':p.perm==='lands'?'<span class="t perm">🗺 веде Землі та Військо</span>':p.id==='hetman'?'<span class="t perm">✍️ підписує закони, видає укази</span>':''}</div>`}).join('')+'</div>';}
+  if(editing){h+='<div class="block"><h3>Посади Канцелярії <small>можна також призначати законом через Палату</small></h3>'+posts.map((p,pi)=>`<div class="artedit"><div class="erow gp"><input type="text" id="gpt-${pi}" data-a="gpt" data-s="${si}" data-p="${pi}" value="${esc(p.title)}" placeholder="Назва посади">${plSelect(`gpn-${pi}`,`data-a="gpn" data-s="${si}" data-p="${pi}"`,p.name)}${['hetman','pysar','fin','def'].includes(p.id)?'':`<button class="small danger" data-a="gpdel" data-s="${si}" data-p="${pi}">Прибрати</button>`}</div>${p.id==='hetman'?'<p class="hint">Гетьман: підписує або ветує закони (12 годин після голосування), видає укази, вручає відзнаки.</p>':`<label class="fl">Права на сайті<select id="gpp-${pi}" data-a="gpp" data-s="${si}" data-p="${pi}">${[['','Лише новини та відзнаки'],['econ','+ редагує Економіку'],['lands','+ редагує Землі та Військо'],['court','Суддя (розглядає справи в Суді)']].map(([k,l])=>`<option value="${k}"${(p.perm||'')===k?' selected':''}>${l}</option>`).join('')}</select></label>`}</div>`).join('')+`<div><button class="small" data-a="gpadd" data-s="${si}">+ Посада</button></div></div>`;}
+  else{h+=`<div class="block rtwrap">${roundTable(posts.filter(p=>p.perm!=='court'))}</div>`;h+='<div class="leaders govposts rtlist">'+posts.map(p=>{const v=!String(p.name||'').trim();return `<div class="post${v?' vac':''}"><span class="t">${esc(p.title)}</span><span class="h">${v?'Вакантно':plink(p.name)}</span>${p.perm==='econ'?'<span class="t perm">💰 веде Економіку</span>':p.perm==='lands'?'<span class="t perm">🗺 веде Землі та Військо</span>':p.id==='hetman'?'<span class="t perm">✍️ підписує закони, видає укази</span>':''}</div>`}).join('')+'</div>';}
   return h+'</div>';}
 function ensureSections(s){ensureGov(s);ensurePlayers(s);
   if(!s.sections.some(x=>x.kind==='home'))s.sections.unshift({id:'home',kind:'home',nav:'Головна',title:'Головна',note:'Укази, новини та літопис держави'});
+  if(!s.sections.some(x=>x.kind==='court')){const i=s.sections.findIndex(x=>x.kind==='gov');s.sections.splice(i<0?s.sections.length:i+1,0,{id:'court',kind:'court',nav:'Суд',title:'Генеральний Суд',note:'Судова влада Української Держави'});}
   if(!s.sections.some(x=>x.kind==='awards')){const i=s.sections.findIndex(x=>x.kind==='gov');s.sections.splice(i<0?s.sections.length:i+1,0,{id:'awards',kind:'awards',nav:'Відзнаки',title:'Державні відзнаки',note:'Нагороди та ордени Української Держави'});}}
 function ensureGov(s){let g=s.sections.find(x=>x.kind==='gov');
   if(!g){const i=s.sections.findIndex(x=>x.kind==='parliament');g={id:'gov',kind:'gov',nav:'Канцелярія',title:'Гетьманська Канцелярія',note:'Гетьман та уряд Української Держави',posts:[]};s.sections.splice(i<0?s.sections.length:i+1,0,g);}
@@ -1365,11 +1561,16 @@ function ensureGov(s){let g=s.sections.find(x=>x.kind==='gov');
   if(!g.posts.some(p=>p.id==='pysar'))g.posts.push({id:'pysar',title:'Генеральний Писар',name:'',email:'',perm:'lands'});
   if(!g.posts.some(p=>p.id==='fin'))g.posts.push({id:'fin',title:'Секретар Фінансів',name:'',email:'',perm:'econ'});
   if(!g.posts.some(p=>p.id==='def'))g.posts.push({id:'def',title:'Секретар Оборони',name:'',email:'',perm:''});
+  if(!g.posts.some(p=>p.id==='judge'))g.posts.push({id:'judge',title:'Генеральний Суддя',name:'',email:'',perm:'court'});
   const py=g.posts.find(p=>p.id==='pysar');if(py&&!py.perm)py.perm='lands';
   if(g.note==='Уряд Української Держави')g.note='Гетьман та уряд Української Держави';}
 window.APP={sigs(m){SIGS=m||{};sigsLoaded=true;botReady();render();finalizeExpired();},
   ovotes(o){OVOTES=o||{};},
   news(l){NEWS=l||[];render();},
+  comments(l){COMMENTS=l||[];render();},
+  pets(l){PETS=l||[];render();},
+  psigns(m){PSIGNS=m||{};render();},
+  cases(l){CASES=l||[];render();},
   awards(l){AWARDS=l||[];render();},
   remoteEcon(sec){const i=state.sections.findIndex(x=>x.kind==='economy');if(i<0)return;freezePrices(sec);const cur=JSON.stringify(state.sections[i]);if(JSON.stringify(sec)===cur)return;
     if(editing||busy){msg='Хтось щойно змінив Економіку. Після збереження або скасування ви побачите свіжу версію.';msgErr=false;render();return;}
@@ -1461,7 +1662,8 @@ function rolesOf(copy){
   const mail = n => { const p = reg.find(q => q.name === String(n || "").trim()); return p ? String(p.email || "").trim().toLowerCase() : ""; };
   const posts = ((gov && gov.posts) || []).filter(p => mail(p.name));
   const em = f => posts.filter(f).map(p => mail(p.name));
-  return { econ: em(p => p.perm === "econ"), lands: em(p => p.perm === "lands"), hetman: em(p => p.id === "hetman"), gov: em(() => true) };
+  return { econ: em(p => p.perm === "econ"), lands: em(p => p.perm === "lands"), hetman: em(p => p.id === "hetman"), court: em(p => p.perm === "court"),
+    gov: em(p => p.perm !== "court"), citizens: [...new Set(reg.map(q => String(q.email || "").trim().toLowerCase()).filter(Boolean))] };
 }
 async function save(state){
   const copy = JSON.parse(JSON.stringify(state));
@@ -1518,6 +1720,7 @@ function votesFrom(snap){
   snap.forEach(d => { const bill = d.ref.parent.parent; if (!bill) return; const top = bill.parent && bill.parent.id; const t = top === "overrides" ? o : v; (t[bill.id] = t[bill.id] || []).push({ land: d.id, ...d.data() }); });
   return { v, o };
 }
+function signsFrom(snap){ const out = {}; snap.forEach(d => { const pt = d.ref.parent.parent; if (!pt) return; (out[pt.id] = out[pt.id] || []).push({ ...d.data(), at: ms(d.data().at) }); }); return out; }
 function sigsFrom(snap){ const out = {}; snap.forEach(d => { const v = d.data(); out[d.id] = { ...v, at: ms(v.at) }; }); return out; }
 async function loadVotes(){ const r = votesFrom(await getDocs(collectionGroup(db, "votes"))); window.APP.ovotes(r.o); return r.v; }
 async function loadProposals(){ return listFrom(await getDocs(collection(db, "proposals"))); }
@@ -1556,6 +1759,23 @@ async function revokeAward(id, r){
   await updateDoc(doc(db, "awards", id), { revoked: { by: r.by || "", role: r.role || "", reason: r.reason || "", email, at: nowIso() } });
 }
 async function delAward(id){ await deleteDoc(doc(db, "awards", id)); }
+const uid8 = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const myMail = () => (auth.currentUser.email || "").toLowerCase();
+// ---- comments, petitions, court, decrees
+async function postComment(c){ await setDoc(doc(db, "comments", uid8("c")), { bill: c.bill, text: c.text, by: c.by, role: c.role || "", email: myMail(), at: serverTimestamp() }); }
+async function delComment(id){ await deleteDoc(doc(db, "comments", id)); }
+async function createPetition(pt){ const id = uid8("t"); await setDoc(doc(db, "petitions", id), { title: pt.title, text: pt.text || "", by: pt.by, email: myMail(), at: serverTimestamp(), status: "open" }); await signPetition(id, pt.by); }
+async function signPetition(id, by){ await setDoc(doc(db, "petitions", id, "signs", myMail()), { by, email: myMail(), at: serverTimestamp() }); }
+async function delPetition(id){ await deleteDoc(doc(db, "petitions", id)); }
+async function petitionToBill(pt, text){
+  const bid = "p" + pt.id;
+  await setDoc(doc(db, "proposals", bid), { title: pt.title, text, land: "Петиція громадян", author: pt.by + " (петиція)", date: new Date().toLocaleDateString("uk-UA"), amend: null, email: "", petition: pt.id, at: serverTimestamp() });
+  await updateDoc(doc(db, "petitions", pt.id), { status: "passed", billId: bid });
+}
+async function fileCase(c){ await setDoc(doc(db, "cases", uid8("k")), { no: c.no, title: c.title, text: c.text || "", plaintiff: c.plaintiff, defendant: c.defendant || "", billId: c.billId || "", billTitle: c.billTitle || "", email: myMail(), at: serverTimestamp(), status: "open", verdict: null }); }
+async function decideCase(id, status, verdict){ await updateDoc(doc(db, "cases", id), { status, verdict }); }
+async function delCase(id){ await deleteDoc(doc(db, "cases", id)); }
+async function revokeNews(id, r){ await updateDoc(doc(db, "news", id), { revoked: { by: r.by || "", reason: r.reason || "", at: nowIso() } }); }
 
 // live updates: new bills, votes, decisions and edits appear without reloading the page
 function watch(){
@@ -1564,6 +1784,10 @@ function watch(){
   onSnapshot(collection(db, "signatures"), snap => window.APP.sigs(sigsFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "news"), snap => window.APP.news(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "awards"), snap => window.APP.awards(listFrom(snap)), e => console.warn(e));
+  onSnapshot(collection(db, "comments"), snap => window.APP.comments(listFrom(snap)), e => console.warn(e));
+  onSnapshot(collection(db, "petitions"), snap => window.APP.pets(listFrom(snap)), e => console.warn(e));
+  onSnapshot(collectionGroup(db, "signs"), snap => window.APP.psigns(signsFrom(snap)), e => console.warn(e));
+  onSnapshot(collection(db, "cases"), snap => window.APP.cases(listFrom(snap)), e => console.warn(e));
   const part = (name, setter) => { let first = true; onSnapshot(doc(db, "site", name), async snap => {
     if (first) { first = false; return; }
     if (!snap.exists() || snap.metadata.hasPendingWrites || !STATE_JSON) return;
@@ -1578,6 +1802,7 @@ function watch(){
 window.FB = {
   save, saveEcon, saveLands, savePlayers, syncAccess, loadVotes, loadProposals, vote, ovote, sign, propose, delProposal,
   postNews, delNews, giveAward, revokeAward, delAward,
+  postComment, delComment, createPetition, signPetition, delPetition, petitionToBill, fileCase, decideCase, delCase, revokeNews,
   login: () => signInWithPopup(auth, new GoogleAuthProvider()),
   logout: () => signOut(auth),
 };
@@ -1596,6 +1821,10 @@ function start(){
       getDocs(collection(db, "signatures")).then(s => window.APP.sigs(sigsFrom(s))).catch(e => { console.warn(e); window.APP.sigs({}); }),
       getDocs(collection(db, "news")).then(s => window.APP.news(listFrom(s))).catch(e => console.warn(e)),
       getDocs(collection(db, "awards")).then(s => window.APP.awards(listFrom(s))).catch(e => console.warn(e)),
+      getDocs(collection(db, "comments")).then(s => window.APP.comments(listFrom(s))).catch(e => console.warn(e)),
+      getDocs(collection(db, "petitions")).then(s => window.APP.pets(listFrom(s))).catch(e => console.warn(e)),
+      getDocs(collectionGroup(db, "signs")).then(s => window.APP.psigns(signsFrom(s))).catch(e => console.warn(e)),
+      getDocs(collection(db, "cases")).then(s => window.APP.cases(listFrom(s))).catch(e => console.warn(e)),
     ]); })
     .then(() => loadVotes()).then(v => { window.APP.votes(v); watch(); })
     .catch(e => { console.error(e); window.APP.fail("Не вдалося завантажити дані: " + (e.code || e.message)); });
