@@ -1177,13 +1177,13 @@ function isPros(){return permMine('prosecutor');}
 function isGenJudge(){const p=govPost(state,'judge');return !!(AUTH.email&&!postBan()&&filledP(p)&&emailOf(p.name)===AUTH.email);}
 function canLicense(){return AUTH.admin||isInterior()||isGenJudge();}
 function myCourtPost(){if(!AUTH.email||postBan())return null;return cPosts().find(p=>(p.perm==='court'||p.perm==='arbiter')&&filledP(p)&&emailOf(p.name)===AUTH.email)||null;}
-function bench(c){const rec=c.recused||[];const seats=cPosts().filter(p=>p.perm==='court'&&filledP(p)&&!rec.includes(p.id)).slice(0,2);const arb=cPosts().find(p=>p.perm==='arbiter'&&filledP(p)&&!rec.includes(p.id))||null;
+function bench(c){const rec=c.recused||[];const party=[lc(c.email),lc(c.defEmail)].filter(Boolean);const free=p=>filledP(p)&&!rec.includes(p.id)&&!party.includes(emailOf(p.name));const seats=cPosts().filter(p=>p.perm==='court'&&free(p)).slice(0,2);const arb=cPosts().find(p=>p.perm==='arbiter'&&free(p))||null;
   if(seats.length<2&&arb)return {seats:[...seats,arb],sub:arb,arb:null};return {seats,sub:null,arb};}
 function cStage(c){const st=c.status||'open';if(st==='hearing'&&c.hearingUntil&&Date.parse(c.hearingUntil)<=Date.now())return 'delib';return st;}
 function isAdv(email){const a=ADVS.find(x=>lc(x.id)===lc(email));return !!(a&&a.status==='licensed');}
 function advName(e){const a=ADVS.find(x=>lc(x.id)===lc(e));return a?a.name:'';}
 function seeOf(c){const a=c.adv||{};return [...new Set([a.pl&&a.pl.ok?lc(a.pl.email):'',a.df&&a.df.ok?lc(a.df.email):'',...(c.wits||[]).map(lc)].filter(Boolean))];}
-function caseRole(c){const m=me();if(!m)return '';const e=AUTH.email;const my=myCourtPost();if(my){const B=bench(c);if(B.seats.some(p=>p.id===my.id)||(B.arb&&B.arb.id===my.id))return 'judge';}
+function caseRole(c){const m=me();if(!m)return '';const e=AUTH.email;const my=myCourtPost();if(my&&lc(c.email)!==e&&lc(c.defEmail)!==e){const B=bench(c);if(B.seats.some(p=>p.id===my.id)||(B.arb&&B.arb.id===my.id))return 'judge';}
   if(lc(c.email)===e)return c.pros?'pros':'plaintiff';if(c.defEmail&&lc(c.defEmail)===e)return 'defendant';const a=c.adv||{};
   if(a.pl&&a.pl.ok&&lc(a.pl.email)===e)return 'advpl';if(a.df&&a.df.ok&&lc(a.df.email)===e)return 'advdf';if(isPros())return 'pros';if((c.wits||[]).map(lc).includes(e))return 'witness';return 'citizen';}
 function canSeeSealed(c){if(!AUTH.email)return false;if(AUTH.admin||isJudge()||isArbiter()||isHetman()||isInterior()||isPros())return true;return [c.email,c.defEmail,...(c.see||[])].map(lc).includes(AUTH.email);}
