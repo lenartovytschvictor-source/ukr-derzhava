@@ -3214,7 +3214,7 @@ window.FB = {
   postComment, delComment, createPetition, signPetition, delPetition, petitionToBill, fileCase, decideCase, delCase, revokeNews, updCase, postNote, delNote,
   postSealed, delSealed, postProtocol, updProtocol, setAdvocate, updAdvocate, delAdvocate, pardon, watchSealed,
   applyCitizen, delApp, decideApp, saveRanks, setEmergency, foundAward, updAwardType, delAwardType, saveChurch, postTreaty, updTreaty, delTreaty,
-  login: () => signInWithPopup(auth, new GoogleAuthProvider()),
+  login: () => { const p = new GoogleAuthProvider(); if (p.setCustomParameters) p.setCustomParameters({ prompt: 'select_account' }); return signInWithPopup(auth, p); },
   logout: () => signOut(auth),
 };
 // the GitHub bot signs in with a one-time token and acts as an administrator
