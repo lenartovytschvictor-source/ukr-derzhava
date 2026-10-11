@@ -2508,7 +2508,7 @@ app.addEventListener('click',async e=>{
   else if(a==='up'&&li>0){[s.lands[li-1],s.lands[li]]=[s.lands[li],s.lands[li-1]];}
   else if(a==='down'&&li<s.lands.length-1){[s.lands[li+1],s.lands[li]]=[s.lands[li],s.lands[li+1]];}
   else if(a==='save'){
-    {const seen={},dup=[];players().forEach(p=>{const e=lc(p.email);if(!e)return;if(seen[e])dup.push(seen[e]+' і '+p.name+' ('+e+')');else seen[e]=p.name;});if(dup.length){msg='Одна пошта прив’язана до двох гравців: '+dup.join('; ')+'. Залиште її лише в одного.';msgErr=true;render();return;}}
+    {const seen={},dup=[];players().forEach(p=>{const e=lc(p.email);if(!e)return;if(seen[e])dup.push(seen[e]+' і '+p.name+' ('+e+')');else seen[e]=p.name;});const dk=dup.join('|');if(dup.length&&window.__dupOk!==dk){window.__dupOk=dk;msg='Одна пошта прив’язана до двох гравців: '+dup.join('; ')+'. Сайт вважатиме їх однією людиною. Краще залиште пошту лише в одного. Щоб зберегти як є, натисніть «Зберегти» ще раз.';msgErr=true;render();return;}}
     const finOnly=!AUTH.admin&&EDIT_SCOPE==='econ'&&isFin();const landsOnly=!AUTH.admin&&EDIT_SCOPE==='lands'&&isPysar();const plOnly=!AUTH.admin&&EDIT_SCOPE==='players'&&canPlayers();const rkOnly=!AUTH.admin&&EDIT_SCOPE==='ranks'&&isHetman();const chOnly=!AUTH.admin&&EDIT_SCOPE==='church'&&isPatriarch();if(!AUTH.admin&&!finOnly&&!landsOnly&&!plOnly&&!rkOnly&&!chOnly)return;
     {const cs=churchSec();if(cs){const pc=churchSec(JSON.parse(saved));const cp=myPost();churchLog(pc,cs,isPatriarch()?'Патріарх '+cs.patriarch:(cp?cp.title+' '+cp.name:'Адміністрація'));}}busy=true;msg='Зберігаю…';render();
     const d=new Date();state.updated=String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+d.getFullYear();
