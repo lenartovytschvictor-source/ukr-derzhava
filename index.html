@@ -978,9 +978,11 @@ function emailOf(n,st){const p=plByName(n,st);return p?lc(p.email):'';}
 // аватарки з гри лежать за постійною адресою: …/avatars/users/<номер профілю>.webp
 const AV_BASE='https://pub-5cade92008cd4292b3ce9093dd3b0158.r2.dev/avatars/users/';
 function profId(v){v=String(v||'').trim();if(/^\d+$/.test(v))return v;const m=/profile\/(\d+)/i.exec(v);return m?m[1]:'';}
-function avatarOf(p){if(!p)return '';if(p.img)return p.img;const id=profId(p.profile);return id?AV_BASE+id+'.webp':'';}
-window.avErr=function(i){const s=document.createElement('span');s.className=i.className+' none';s.textContent=i.dataset.ini||'?';s.setAttribute('aria-hidden','true');i.replaceWith(s);};
-function avImg(p,cls){const n=p?p.name:'';const src=avatarOf(p);const ini=esc(String(n).slice(0,1));return src?`<img class="${cls}" src="${esc(src)}" alt="" loading="lazy" data-ini="${ini}" onerror="avErr(this)">`:`<span class="${cls} none" aria-hidden="true">${ini}</span>`;}
+const AV_EXT=['webp','png','jpg','jpeg','gif'];const AV_OK={};
+function avatarOf(p){if(!p)return '';if(p.img)return p.img;const id=profId(p.profile);if(!id)return '';const k=AV_OK[id];if(k==='none')return '';return AV_BASE+id+'.'+(k||'webp');}
+window.avOk=function(i){const m=/\/(\d+)\.(\w+)$/.exec(i.src||'');if(m&&i.src.startsWith(AV_BASE))AV_OK[m[1]]=m[2];};
+window.avErr=function(i){const m=/\/(\d+)\.(\w+)$/.exec(i.src||'');if(m&&i.src.startsWith(AV_BASE)){const n=AV_EXT.indexOf(m[2])+1;if(n>0&&n<AV_EXT.length){i.src=AV_BASE+m[1]+'.'+AV_EXT[n];return;}AV_OK[m[1]]='none';}const s=document.createElement('span');s.className=i.className+' none';s.textContent=i.dataset.ini||'?';s.setAttribute('aria-hidden','true');i.replaceWith(s);};
+function avImg(p,cls){const n=p?p.name:'';const src=avatarOf(p);const ini=esc(String(n).slice(0,1));return src?`<img class="${cls}" src="${esc(src)}" alt="" loading="lazy" data-ini="${ini}" onload="avOk(this)" onerror="avErr(this)">`:`<span class="${cls} none" aria-hidden="true">${ini}</span>`;}
 function profUrl(v){v=String(v||'').trim();if(!v)return '';if(/^\d+$/.test(v))return 'https://dragpolit.com/profile/'+v;const m=/dragpolit\.com\/(?:[a-z]{2}\/)?profile\/(\d+)/i.exec(v);return m?'https://dragpolit.com/profile/'+m[1]:'';}
 function plink(name,o){const n=String(name||'').trim();const p=plByName(n);if(!p)return esc(n);const u=profUrl(p.profile);const av=avImg(p,'av');
   return u?`<a class="plk" href="${esc(u)}" target="_blank" rel="noopener" title="Профіль ${esc(n)} у грі">${av}<span>${esc(n)}</span><i aria-hidden="true">↗</i></a>`:`<span class="plk">${av}<span>${esc(n)}</span></span>`;}
