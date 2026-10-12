@@ -921,6 +921,18 @@ textarea#about{width:100%;min-height:130px}
 .door.d-pros{--dc:#d2a6ff;--dbg1:#3c2357;--dbg2:#5a3482}
 .door.d-mzs{--dc:#73d6e6;--dbg1:#163f48;--dbg2:#215c69}
 .door.d-mvs{--dc:#b9c4d4;--dbg1:#353c47;--dbg2:#4e5868}
+
+.lgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.lcard{position:relative;overflow:hidden;grid-template-columns:170px minmax(0,1fr);gap:18px;padding:16px 18px;border-radius:16px;background:linear-gradient(135deg,rgba(46,31,15,.96),rgba(22,15,8,.97));box-shadow:0 14px 30px -20px #000}
+.lcard .lbg{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(34px) saturate(1.3);opacity:.16;pointer-events:none}
+.lcard>*:not(.lbg){position:relative}
+.lcard:hover{border-color:var(--gold-soft);transform:translateY(-1px)}
+.lflag{align-self:start}
+.lflag img{width:170px;height:112px;border-radius:8px;border:2px solid rgba(242,181,68,.35);box-shadow:0 10px 22px -10px #000}
+.lname{font-size:19px;letter-spacing:.01em}
+.lhead{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.lhead .lav{width:44px;height:44px}
+.lhead .lh{font-size:15px}
 @media (max-width:980px){.chamber{grid-template-columns:minmax(0,1fr)}.chamber .hallc{order:-1}.doors{grid-template-columns:repeat(2,minmax(0,1fr))}.door.r{grid-template-columns:46px minmax(0,1fr);text-align:left}.door.r .arch{order:0}.door.r .knob{left:auto;right:6px}
   .cab,.lex{grid-template-columns:minmax(0,1fr)}.cab .portrait,.lex .toc{position:static;max-height:none}
   .qacts{grid-template-columns:repeat(2,minmax(0,1fr))}.hgrid,.dgrid.two{grid-template-columns:minmax(0,1fr)}
@@ -1196,7 +1208,7 @@ function landCard(l,kind){const c=cur(l);const h=landHead(l);const lost=kind==='
   const others=(l.posts||[]).filter(q=>q!==h.post&&!h.past.includes(q)&&!(otaNum(q)>0)&&String(q.holder||'').trim()&&q.holder!=='0');
   const rep=landLeaders().find(r=>r.land===nm);const vm=voterMap();const seat=rep&&rep.name?(vm[nm]?'🗳 голосує в Палаті':'⚠ без пошти — не голосує'):'';
   const lg=landLog([nm]).slice(0,4);const ep=eparchyOf(nm);
-  return `<article class="lcard${lost?' lost':''}${h.name?'':' vacant'}"><div class="lflag"><img src="${esc(c.img)}" alt="Прапор: ${esc(nm)}"></div><div class="lbody"><div class="lname">${esc(nm)}${l.lostAt?` <span class="pill rejected">🏴 Втрачено ${esc(l.lostAt)}</span>`:''}${l.restoredAt?` <span class="pill passed">🔁 Відновлено ${esc(l.restoredAt)}</span>`:''}</div>
+  return `<article class="lcard${lost?' lost':''}${h.name?'':' vacant'}"><div class="lbg" style="background-image:url('${esc(c.img)}')"></div><div class="lflag"><img src="${esc(c.img)}" alt="Прапор: ${esc(nm)}"></div><div class="lbody"><div class="lname">${esc(nm)}${l.lostAt?` <span class="pill rejected">🏴 Втрачено ${esc(l.lostAt)}</span>`:''}${l.restoredAt?` <span class="pill passed">🔁 Відновлено ${esc(l.restoredAt)}</span>`:''}</div>
     <div class="lhead">${seatAv(h.name,'lav')}<div><div class="lt">${esc(h.post?h.post.title.replace(/^\d+\s*-?\s*[йя]?\s*/,''):'Очільник')}</div><div class="lh">${h.name?(plByName(h.name)?`<button class="linkbtn" data-a="dos" data-n="${esc(h.name)}">${esc(h.name)}</button>`:esc(h.name)):'<span class="vacn">Вакантно</span>'}</div>${seat?`<div class="hint">${seat}</div>`:''}</div></div>
     ${others.length||ep?`<div class="lposts">${others.map(q=>`<span class="tag">${esc(q.title)}: ${esc(q.holder)}</span>`).join('')}${ep?`<span class="tag">⛪ ${esc(ep.name)}</span>`:''}</div>`:''}
     ${h.past.length||l.flags.length>1||lg.length?`<details class="lmore"><summary>Історія Землі</summary>${h.past.length?`<div class="hint">Попередні очільники:</div><ol class="lpast">${h.past.slice().reverse().map(q=>`<li>${esc(q.title)} — ${plink(q.holder)}</li>`).join('')}</ol>`:''}${l.flags.length>1?`<div class="hint">Прапори й назви:</div><div class="lflags">${l.flags.map((f,i)=>`<span class="lf${i===l.flags.length-1?' cur':''}"><img src="${esc(f.img)}" alt="">${f.date?esc(f.date)+' · ':''}${esc(f.name)}</span>`).join('<span class="arrow">→</span>')}</div>`:''}${lg.length?`<div class="hint">Останні події:</div><ul class="llog">${lg.map(e=>`<li>${e.ic} ${esc(e.tx)} <span class="hint">· ${esc(fmtDT(e.at))}</span></li>`).join('')}</ul>`:''}</details>`:''}
@@ -2621,7 +2633,9 @@ function render(){const real=state;if(!editing)state=viewState();try{render0();}
 function render0(){const cm0=document.getElementById('chmsgs');const cmS=cm0?{top:cm0.scrollTop,bot:cm0.scrollHeight-cm0.scrollTop-cm0.clientHeight<60}:null;const ae=document.activeElement;const fid=ae&&ae.id&&app.contains(ae)?ae.id:null;let s0=null,s1=null;try{s0=ae.selectionStart;s1=ae.selectionEnd;}catch(_){}
   renderInner();document.documentElement.lang=LANG==='en'?'en':'uk';if(LANG==='en')trTree(app);app.querySelectorAll('nav.toc,.subnav').forEach(nv=>{if(nv.scrollWidth>nv.clientWidth){const c=nv.querySelector('[aria-current]');if(c)nv.scrollLeft=Math.max(0,c.offsetLeft-nv.clientWidth/2+c.offsetWidth/2);}});
   if(fid){const el=document.getElementById(fid);if(el&&el!==document.activeElement){el.focus({preventScroll:true});try{if(s0!=null)el.setSelectionRange(s0,s1);}catch(_){}}}
-  {const cm=document.getElementById('chmsgs');if(cm){if(CHAT.stick||!cmS||cmS.bot){cm.scrollTop=cm.scrollHeight;if(CHAT.msgs)CHAT.stick=false;}else cm.scrollTop=cmS.top;}}
+  {const cm=document.getElementById('chmsgs');if(cm){const st=CHAT.stick||Date.now()<(CHAT.stickUntil||0)||!cmS||cmS.bot;
+    if(st){cm.scrollTop=cm.scrollHeight;if(CHAT.msgs&&CHAT.stick){CHAT.stick=false;CHAT.stickUntil=Date.now()+3000;}}else cm.scrollTop=cmS.top;
+    cm.querySelectorAll('img').forEach(im=>{if(!im.complete)im.addEventListener('load',()=>{const near=cm.scrollHeight-cm.scrollTop-cm.clientHeight<260;if(Date.now()<(CHAT.stickUntil||0)||near)cm.scrollTop=cm.scrollHeight;},{once:true});});}}
   setTimeout(()=>{try{chatEnsure();}catch(e){console.warn(e);}try{setFavicon();}catch(_){}},0);
 }
 function renderInner(){
@@ -3134,13 +3148,13 @@ app.addEventListener('click',async e=>{
   if(a==='ptab'){PTAB=b.dataset.k;render();return;}
   if(a==='zoom'){const im=b.querySelector('img');ZOOM=im?im.src:'';render();return;}
   if(a==='zoomx'){ZOOM='';render();return;}
-  if(a==='chth'){CHAT.th=b.dataset.k;CHAT.limit=50;CHAT.img=null;render();return;}
+  if(a==='chth'){CHAT.th=b.dataset.k;CHAT.limit=50;CHAT.img=null;CHAT.stick=true;render();return;}
   if(a==='chmore'){CHAT.limit+=50;render();return;}
   if(a==='chreply'){const m=(CHAT.msgs||[]).find(x=>x.id===b.dataset.k);if(!m)return;const p=plByEmail(m.from);CHAT.reply={th:CHAT.th,id:m.id,from:m.from,name:p?p.name:(m.name||''),text:m.text||(m.img?'🖼 зображення':'')};render();const ta=document.getElementById('chin');if(ta)ta.focus();return;}
   if(a==='chreplyx'){CHAT.reply=null;render();return;}
   if(a==='chmention'){mentionPick(b.dataset.k);return;}
   if(a==='chjump'){const el=document.getElementById('cm-'+b.dataset.k);if(el){CHAT.hl=b.dataset.k;el.scrollIntoView({block:'center',behavior:'smooth'});el.classList.add('hl');setTimeout(()=>{el.classList.remove('hl');CHAT.hl='';},1600);}else{msg='Це повідомлення вже не завантажене — натисніть «Показати раніші»';msgErr=false;render();}return;}
-  if(a==='chping'){const x=PINGS.find(q=>q.id===b.dataset.k);if(!x)return;CHAT.th=x.th;CHAT.limit=50;CHAT.hl=x.mid||'';CHAT.stick=false;chSeen('pings',vms(x.at));const cs=sectionByKind('chat');if(cs)active=cs.id;render();setTimeout(()=>{const el=document.getElementById('cm-'+x.mid);if(el)el.scrollIntoView({block:'center'});setTimeout(()=>{CHAT.hl='';},2500);},700);return;}
+  if(a==='chping'){const x=PINGS.find(q=>q.id===b.dataset.k);if(!x)return;CHAT.th=x.th;CHAT.limit=50;CHAT.hl=x.mid||'';CHAT.stick=false;CHAT.stickUntil=0;chSeen('pings',vms(x.at));const cs=sectionByKind('chat');if(cs)active=cs.id;render();setTimeout(()=>{const el=document.getElementById('cm-'+x.mid);if(el)el.scrollIntoView({block:'center'});setTimeout(()=>{CHAT.hl='';},2500);},700);return;}
   if(a==='chpingseen'){chSeen('pings',Math.max(...PINGS.map(x=>vms(x.at)),Date.now()));if(window.FB.delPings)window.FB.delPings(AUTH.email,PINGS.filter(x=>vms(x.at)<Date.now()-7*86400000).map(x=>x.id)).catch(()=>{});render();return;}
   if(a==='chsend'){const ta=document.getElementById('chin');if(ta)CHAT.draft[CHAT.th]=ta.value;chSend();return;}
   if(a==='chfmt'){chFmt(b.dataset.k);return;}
