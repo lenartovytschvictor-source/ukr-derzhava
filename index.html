@@ -933,6 +933,23 @@ textarea#about{width:100%;min-height:130px}
 .lhead{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
 .lhead .lav{width:44px;height:44px}
 .lhead .lh{font-size:15px}
+
+button.lcard{all:unset;box-sizing:border-box;cursor:pointer;position:relative;overflow:hidden;display:grid;grid-template-columns:170px minmax(0,1fr);gap:18px;align-items:center;padding:16px 18px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(46,31,15,.96),rgba(22,15,8,.97));box-shadow:0 14px 30px -20px #000;transition:transform .15s,border-color .15s}
+button.lcard:hover,button.lcard:focus-visible{border-color:var(--gold);transform:translateY(-2px)}
+button.lcard.vacant{border-style:dashed}
+.lcard .lbody{display:grid;gap:6px;min-width:0}
+.lcard .lt{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.lhead2{display:flex;gap:10px;align-items:center}.lhead2 .lh{font-weight:700;font-size:16px;color:var(--cream)}
+.lhead2 .lav{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--gold-soft);display:grid;place-items:center;background:var(--panel2);color:var(--gold);font-weight:700;flex:0 0 auto}
+.lhead2 .lav.vacant{border-style:dashed;border-color:var(--muted);color:var(--muted)}
+.lcard>.lmore2,.lmore2{position:absolute;right:14px;bottom:10px;font-size:12px;color:var(--muted)}button.lcard:hover .lmore2{color:var(--gold-hi)}
+.lmodal{display:grid;gap:14px}
+.lmhead{position:relative;overflow:hidden;display:flex;gap:18px;align-items:center;padding:14px;border-radius:14px;border:1px solid var(--line)}
+.lmhead>*:not(.lbg){position:relative}.lmhead .lbg{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(30px);opacity:.25}
+.lmflag{width:200px;height:132px;object-fit:cover;border-radius:10px;border:2px solid rgba(242,181,68,.45)}
+.lmhead h3{margin:2px 0 6px;font:700 26px var(--f-display)}
+.lmgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.lmodal .dsec h4{margin:8px 0 6px}
 @media (max-width:980px){.chamber{grid-template-columns:minmax(0,1fr)}.chamber .hallc{order:-1}.doors{grid-template-columns:repeat(2,minmax(0,1fr))}.door.r{grid-template-columns:46px minmax(0,1fr);text-align:left}.door.r .arch{order:0}.door.r .knob{left:auto;right:6px}
   .cab,.lex{grid-template-columns:minmax(0,1fr)}.cab .portrait,.lex .toc{position:static;max-height:none}
   .qacts{grid-template-columns:repeat(2,minmax(0,1fr))}.hgrid,.dgrid.two{grid-template-columns:minmax(0,1fr)}
@@ -1204,15 +1221,20 @@ function landLogDiff(prev,next){try{if(!prev||!next)return;const ls=landLogSec(n
   ls.log=(ls.log||[]).concat(out.map(e=>({at,...e,...(by?{by}:{})}))).slice(-400);}catch(e){console.warn(e);}}
 window.APP_LANDLOG=st=>landLogDiff(saved?JSON.parse(saved):null,st);
 function landLog(names){const ls=landLogSec();const L=((ls&&ls.log)||[]).slice().reverse();return names?L.filter(e=>names.includes(e.land)):L;}
-function landCard(l,kind){const c=cur(l);const h=landHead(l);const lost=kind==='lost'||l.lostAt;const nm=c.name;
+let LANDM='';
+function landInfo(l){const c=cur(l);const h=landHead(l);const nm=c.name;
   const others=(l.posts||[]).filter(q=>q!==h.post&&!h.past.includes(q)&&!(otaNum(q)>0)&&String(q.holder||'').trim()&&q.holder!=='0');
-  const rep=landLeaders().find(r=>r.land===nm);const vm=voterMap();const seat=rep&&rep.name?(vm[nm]?'🗳 голосує в Палаті':'⚠ без пошти — не голосує'):'';
-  const lg=landLog([nm]).slice(0,4);const ep=eparchyOf(nm);
-  return `<article class="lcard${lost?' lost':''}${h.name?'':' vacant'}"><div class="lbg" style="background-image:url('${esc(c.img)}')"></div><div class="lflag"><img src="${esc(c.img)}" alt="Прапор: ${esc(nm)}"></div><div class="lbody"><div class="lname">${esc(nm)}${l.lostAt?` <span class="pill rejected">🏴 Втрачено ${esc(l.lostAt)}</span>`:''}${l.restoredAt?` <span class="pill passed">🔁 Відновлено ${esc(l.restoredAt)}</span>`:''}</div>
-    <div class="lhead">${seatAv(h.name,'lav')}<div><div class="lt">${esc(h.post?h.post.title.replace(/^\d+\s*-?\s*[йя]?\s*/,''):'Очільник')}</div><div class="lh">${h.name?(plByName(h.name)?`<button class="linkbtn" data-a="dos" data-n="${esc(h.name)}">${esc(h.name)}</button>`:esc(h.name)):'<span class="vacn">Вакантно</span>'}</div>${seat?`<div class="hint">${seat}</div>`:''}</div></div>
-    ${others.length||ep?`<div class="lposts">${others.map(q=>`<span class="tag">${esc(q.title)}: ${esc(q.holder)}</span>`).join('')}${ep?`<span class="tag">⛪ ${esc(ep.name)}</span>`:''}</div>`:''}
-    ${h.past.length||l.flags.length>1||lg.length?`<details class="lmore"><summary>Історія Землі</summary>${h.past.length?`<div class="hint">Попередні очільники:</div><ol class="lpast">${h.past.slice().reverse().map(q=>`<li>${esc(q.title)} — ${plink(q.holder)}</li>`).join('')}</ol>`:''}${l.flags.length>1?`<div class="hint">Прапори й назви:</div><div class="lflags">${l.flags.map((f,i)=>`<span class="lf${i===l.flags.length-1?' cur':''}"><img src="${esc(f.img)}" alt="">${f.date?esc(f.date)+' · ':''}${esc(f.name)}</span>`).join('<span class="arrow">→</span>')}</div>`:''}${lg.length?`<div class="hint">Останні події:</div><ul class="llog">${lg.map(e=>`<li>${e.ic} ${esc(e.tx)} <span class="hint">· ${esc(fmtDT(e.at))}</span></li>`).join('')}</ul>`:''}</details>`:''}
-  </div></article>`;}
+  const rep=landLeaders().find(r=>r.land===nm);const vm=voterMap();const seat=rep&&rep.name?(vm[nm]?'🗳 Голосує в Палаті Земель':'⚠ Немає пошти в реєстрі — не голосує'):'Місце в Палаті вакантне';
+  const lg=landLog([nm]);const ep=eparchyOf(nm);const sec=state.sections.find(x=>(x.lands||[]).includes(l));
+  return `<div class="lmodal"><div class="lmhead"><div class="lbg" style="background-image:url('${esc(c.img)}')"></div><img class="lmflag" src="${esc(c.img)}" alt="Прапор: ${esc(nm)}"><div><div class="hint">${esc(sec?(sec.title||sec.nav||''):'')}</div><h3>${esc(nm)}</h3>${l.lostAt?`<span class="pill rejected">🏴 Втрачено ${esc(l.lostAt)}</span> `:''}${l.restoredAt?`<span class="pill passed">🔁 Відновлено ${esc(l.restoredAt)}</span>`:''}</div></div>
+    <div class="lmgrid"><div class="dsec"><h4>Очільник</h4><div class="lhead">${seatAv(h.name,'lav')}<div><div class="lt">${esc(h.post?h.post.title:'Очільник')}</div><div class="lh">${h.name?(plByName(h.name)?`<button class="linkbtn" data-a="dos" data-n="${esc(h.name)}">${esc(h.name)}</button>`:esc(h.name)):'<span class="vacn">Вакантно</span>'}</div><div class="hint">${seat}</div></div></div>
+      ${others.length?`<h4>Інші посади</h4><ul class="lpast">${others.map(q=>`<li>${esc(q.title)} — ${plink(q.holder)}</li>`).join('')}</ul>`:''}${ep?`<h4>Церква</h4><p class="hint">⛪ ${esc(ep.name)}${ep.bishop?' · єпископ '+esc(ep.bishop):''}</p>`:''}</div>
+    <div class="dsec"><h4>Попередні очільники</h4>${h.past.length?`<ol class="lpast">${h.past.slice().reverse().map(q=>`<li>${esc(q.title)} — ${plink(q.holder)}</li>`).join('')}</ol>`:'<p class="hint">—</p>'}
+      ${l.flags.length>1?`<h4>Прапори й назви</h4><div class="lflags">${l.flags.map((f,i)=>`<span class="lf${i===l.flags.length-1?' cur':''}"><img src="${esc(f.img)}" alt="">${f.date?esc(f.date)+' · ':''}${esc(f.name)}</span>`).join('<span class="arrow">→</span>')}</div>`:''}</div></div>
+    <div class="dsec"><h4>Літопис Землі</h4>${lg.length?`<ol class="chrl">${lg.slice(0,30).map(e=>`<li><span class="ci">${e.ic}</span><div><div>${esc(e.tx)}</div><div class="hint">${esc(fmtDT(e.at))}${e.by?' · '+esc(e.by):''}</div></div></li>`).join('')}</ol>`:'<p class="hint">Подій ще немає.</p>'}</div></div>`;}
+function landCard(l,kind){const c=cur(l);const h=landHead(l);const lost=kind==='lost'||l.lostAt;const nm=c.name;
+  if(LANDM===nm)MODALH=`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="landm" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide"><button class="small bmx" data-a="landm" data-k="">✕ Закрити</button>${landInfo(l)}</div></div>`;
+  return `<button type="button" class="lcard${lost?' lost':''}${h.name?'':' vacant'}" data-a="landm" data-k="${esc(nm)}" title="Історія Землі"><span class="lbg" style="background-image:url('${esc(c.img)}')"></span><span class="lflag"><img src="${esc(c.img)}" alt="Прапор: ${esc(nm)}"></span><span class="lbody"><span class="lname">${esc(nm)}${l.lostAt?` <span class="pill rejected">🏴 ${esc(l.lostAt)}</span>`:''}</span><span class="lt">${esc(h.post?h.post.title.replace(/^\d+\s*-?\s*[йя]?\s*/,''):'Очільник')}</span><span class="lhead2">${seatAv(h.name,'lav')}<span class="lh">${h.name?esc(h.name):'<span class="vacn">Вакантно</span>'}</span></span></span><span class="lmore2">Історія →</span></button>`;}
 function landsTop(s){const L=s.lands||[];const heads=L.map(l=>landHead(l));const filled=heads.filter(h=>h.name).length;const vm=voterMap();const votes=L.filter(l=>vm[cur(l).name]).length;
   return `<div class="ltop"><div class="kpi"><span class="k">Земель</span><span class="v">${L.length}</span></div><div class="kpi"><span class="k">З очільником</span><span class="v">${filled}</span></div><div class="kpi"><span class="k">Вакантно</span><span class="v">${L.length-filled}</span></div><div class="kpi"><span class="k">Голосують у Палаті</span><span class="v">${votes}</span></div></div>`;}
 function landsChron(s){const names=(s.lands||[]).map(l=>cur(l).name);const lg=landLog(names);
@@ -2857,7 +2879,7 @@ app.addEventListener('change',e=>{
   // re-render a moment later, so a button click that caused this blur still lands
   else if(a==='piq'||a==='pip'||a==='pnm'||a==='dq'||a==='prp'||a==='prn'||a==='ea'||a==='iq'){setTimeout(()=>{const ae=document.activeElement;const keep=ae&&ae.id;render();if(keep){const el=document.getElementById(keep);if(el)el.focus();}},250);}
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&(BILLM||HOMEM||ZOOM)){BILLM='';HOMEM='';ZOOM='';render();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&(BILLM||HOMEM||ZOOM||LANDM)){BILLM='';HOMEM='';ZOOM='';LANDM='';render();}
   if(e.target&&e.target.id==='chin'&&(e.key==='Enter'||e.key==='Tab')&&!e.shiftKey&&!e.isComposing&&CHAT.mq!=null){const L=mentionList();if(L.length){e.preventDefault();mentionPick(L[0].name);return;}}
   if(e.target&&e.target.id==='chin'&&e.key==='Escape'&&CHAT.mq!=null){CHAT.mq=null;render();return;}
   if(e.target&&e.target.id==='chin'&&e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();CHAT.draft[CHAT.th]=e.target.value;chSend();}});
@@ -3146,6 +3168,7 @@ app.addEventListener('click',async e=>{
   if(a==='cabgo'){const k=b.dataset.k;CAB='';DOSSIER=null;if(k.startsWith('court:')){const cs=sectionByKind('court');active=cs?cs.id:'court';COURT_V=k.slice(6);}else{delete SUB[k];active=k;}try{history.replaceState(null,'','#'+active);}catch(_){}render();window.scrollTo(0,0);return;}
   if(a==='hjump'){{const e0=document.getElementById(b.dataset.to);const d=e0&&e0.querySelector('details[data-o]');if(d&&!d.open){OPEN.add(d.dataset.o);render();}}const el=document.getElementById(b.dataset.to);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});const f=el.querySelector('input,textarea');if(f)setTimeout(()=>{try{f.focus({preventScroll:true});}catch(_){}},350);}return;}
   if(a==='ptab'){PTAB=b.dataset.k;render();return;}
+  if(a==='landm'){LANDM=b.dataset.k||'';render();return;}
   if(a==='zoom'){const im=b.querySelector('img');ZOOM=im?im.src:'';render();return;}
   if(a==='zoomx'){ZOOM='';render();return;}
   if(a==='chth'){CHAT.th=b.dataset.k;CHAT.limit=50;CHAT.img=null;CHAT.stick=true;render();return;}
