@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=1280,viewport-fit=cover">
 <title>Українська Держава</title>
+<link rel="icon" id="favicon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%233a2410' stroke='%23f2b544' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='19' fill='%232b55b8'/%3E%3Cpath d='M32 18v28M24 24v12c0 6 4 9 8 10 4-1 8-4 8-10V24' fill='none' stroke='%23ffd56e' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Rubik:wght@400;500;600;700;800&family=Lora:ital,wght@0,600;0,700;1,600&family=Marck+Script&display=swap">
 <style>*{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 .spill{display:inline-flex;gap:4px;align-items:center;font-size:12px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);margin:2px 4px 2px 0;color:var(--cream)}
@@ -830,6 +831,18 @@ textarea.fulltext.sm{min-height:140px}
 .evimgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}.evimg{all:unset;cursor:zoom-in;position:relative;display:inline-block}.evimg img{height:110px;max-width:220px;object-fit:cover;border-radius:8px;border:1px solid var(--line2,var(--line))}
 .evimgs.edit .evimg{cursor:default}.evimgs.edit .evimg img{height:70px}.evimgs.edit .evimg button{position:absolute;top:2px;right:2px;padding:2px 6px}
 .imgzoom img{max-width:100%;max-height:78vh;display:block;margin:0 auto;border-radius:10px}
+
+.chm.tome .chb{box-shadow:0 0 0 2px rgba(111,179,255,.55)}
+.chm.hl .chb{animation:chhl 1.6s ease}@keyframes chhl{0%,40%{box-shadow:0 0 0 3px var(--gold)}100%{box-shadow:none}}
+.mention{color:#9fc3ff;font-weight:700;background:rgba(111,179,255,.12);border-radius:4px;padding:0 3px}.mention.me{color:#2a1606;background:var(--gold)}
+.chrq{all:unset;cursor:pointer;display:grid;gap:1px;border-left:3px solid var(--gold-soft);padding:3px 8px;background:rgba(0,0,0,.25);border-radius:0 8px 8px 0;font-size:12.5px;max-width:100%}
+.chrq b{color:var(--gold)}.chrq span{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chreplybar{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;border-left:3px solid var(--gold);padding:4px 8px;background:rgba(242,181,68,.08);border-radius:0 8px 8px 0}
+.chreplybar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chmlist{display:flex;flex-wrap:wrap;gap:6px}
+.chmopt{all:unset;cursor:pointer;display:flex;gap:6px;align-items:center;padding:4px 10px 4px 4px;border:1px solid var(--line);border-radius:999px;background:var(--panel2);font-size:13px}.chmopt:hover,.chmopt:first-child{border-color:var(--gold)}
+.chmopt .chav{width:24px;height:24px;font-size:11px}
+.chth.ping.new b{color:var(--gold-hi)}
 /* ---- FF: нова структура ---- */
 .chamber{display:grid;grid-template-columns:190px minmax(0,1fr) 190px;gap:14px;align-items:start;background:radial-gradient(700px 300px at 50% 0,rgba(242,181,68,.10),transparent 70%),var(--panel)}
 .chamber .hallc{display:grid;gap:10px;justify-items:center;min-width:0}
@@ -1196,7 +1209,8 @@ function landsChron(s){const names=(s.lands||[]).map(l=>cur(l).name);const lg=la
 // ---------- KK: чат — кімнати, особисті повідомлення, модерація ----------
 const ROOMS=[['general','🏛','Загальний','усі громадяни й туристи'],['parl','🗳','Палата Земель','Представники Земель'],['gov','✍️','Уряд','Гетьман і Секретарі'],['court','⚖️','Суд','судді й Прокурор'],['church','✝','Церква','Патріарх і духовенство']];
 const CHAT_IMG_DAYS=15;
-let CHAT={th:'r:general',msgs:null,sub:'',unsub:null,limit:50,draft:{},img:null,zoom:'',dms:[],dmsub:'',dmunsub:null,err:''},CHATBANS={};
+let PINGS=[],PINGSUB='',PINGUN=null;
+let CHAT={reply:null,mq:null,hl:'',th:'r:general',msgs:null,sub:'',unsub:null,limit:50,draft:{},img:null,zoom:'',dms:[],dmsub:'',dmunsub:null,err:''},CHATBANS={};
 let CHSEEN={};try{CHSEEN=JSON.parse(localStorage.getItem('ud-chseen')||'{}')||{};}catch(_){CHSEEN={};}
 function chSeen(k,t){CHSEEN[k]=Math.max(CHSEEN[k]||0,t||Date.now());try{localStorage.setItem('ud-chseen',JSON.stringify(CHSEEN));}catch(_){}}
 function isClergy(){const c=churchSec();if(!c||!AUTH.email)return false;if(c.patriarch&&emailOf(c.patriarch)===AUTH.email)return true;return (c.priests||[]).some(q=>q.name&&emailOf(q.name)===AUTH.email);}
@@ -1208,18 +1222,25 @@ function dmPair(a,b){return [lc(a),lc(b)].sort().join('|');}
 function thPath(th){if(th.startsWith('r:'))return 'chatrooms/'+th.slice(2)+'/msgs';if(th.startsWith('d:'))return 'dms/'+th.slice(2)+'/msgs';return '';}
 function dmOther(pair){const ms=pair.split('|');return ms.find(x=>x!==AUTH.email)||ms[0];}
 function nameByEmail(e){const p=plByEmail(e);return p?p.name:maskEmail(e);}
+function mentionPool(){const th=CHAT.th;if(th.startsWith('d:')){const o=dmOther(th.slice(2));const p=plByEmail(o);return p?[p]:[];}return players().filter(p=>p.email&&!p.exiled&&lc(p.email)!==AUTH.email);}
+function mentionsIn(txt){const out=new Set();players().filter(p=>p.email&&p.name).sort((a,b)=>b.name.length-a.name.length).forEach(p=>{if(txt.includes('@'+p.name))out.add(lc(p.email));});out.delete(AUTH.email);return [...out];}
+function mentionQ(ta){const v=ta.value.slice(0,ta.selectionStart);const m=/(^|\s)@([^\s@]{0,30})$/.exec(v);return m?m[2]:null;}
+function mentionList(){if(CHAT.mq==null)return [];const q=CHAT.mq.toLowerCase();return mentionPool().filter(p=>p.name.toLowerCase().includes(q)).sort((a,b)=>(a.name.toLowerCase().startsWith(q)?0:1)-(b.name.toLowerCase().startsWith(q)?0:1)||a.name.localeCompare(b.name,'uk')).slice(0,6);}
+function mentionPick(name){const ta=document.getElementById('chin');if(!ta)return;const pos=ta.selectionStart;const v=ta.value;const before=v.slice(0,pos).replace(/@([^\s@]{0,30})$/,'@'+name+' ');const nv=before+v.slice(pos);CHAT.draft[CHAT.th]=nv;CHAT.mq=null;render();const t2=document.getElementById('chin');if(t2){t2.focus();t2.setSelectionRange(before.length,before.length);}}
 function fmtMsg(t){let h=esc(t||'');
   h=h.replace(/`([^`\n]+)`/g,'<code>$1</code>').replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>').replace(/__([^_\n]+)__/g,'<u>$1</u>').replace(/~~([^~\n]+)~~/g,'<s>$1</s>').replace(/(^|[^*\w])\*([^*\n]+)\*/g,'$1<i>$2</i>');
   h=h.replace(/(^|[\s(])(https?:\/\/[^\s<]+)/g,(m,p,u)=>`${p}<a href="${u}" target="_blank" rel="noopener nofollow">${u}</a>`);
+  players().filter(p=>p.name&&p.email).sort((a,b)=>b.name.length-a.name.length).forEach(p=>{const k='@'+esc(p.name);if(h.includes(k))h=h.split(k).join(`<span class="mention${lc(p.email)===AUTH.email?' me':''}">@${esc(p.name)}</span>`);});
   return h.split('\n').map(l=>l.startsWith('&gt; ')?`<span class="q">${l.slice(5)}</span>`:l).join('<br>');}
 function chatEnsure(){if(!window.FB||!window.FB.watchMsgs)return;
+  if(window.FB.watchPings&&AUTH.email!==PINGSUB){if(PINGUN)try{PINGUN();}catch(_){}PINGSUB=AUTH.email||'';PINGS=[];PINGUN=AUTH.email?window.FB.watchPings(AUTH.email,l=>{PINGS=l||[];render();}):null;}
   if(AUTH.email&&CHAT.dmsub!==AUTH.email){if(CHAT.dmunsub)try{CHAT.dmunsub();}catch(_){}CHAT.dmsub=AUTH.email;CHAT.dmunsub=window.FB.watchDms(AUTH.email,l=>{CHAT.dms=l||[];render();});}
   if(!AUTH.email&&CHAT.dmsub){if(CHAT.dmunsub)try{CHAT.dmunsub();}catch(_){}CHAT.dmsub='';CHAT.dms=[];}
   const cs=sectionByKind('chat');const on=cs&&active===cs.id&&AUTH.email;let key='';
   if(on){if(CHAT.th.startsWith('r:')&&!roomOk(CHAT.th.slice(2)))CHAT.th='r:'+((ROOMS.find(r=>roomOk(r[0]))||['general'])[0]);if(CHAT.th.startsWith('r:')?roomOk(CHAT.th.slice(2)):CHAT.th.startsWith('d:')&&CHAT.th.slice(2).split('|').includes(AUTH.email))key=CHAT.th+'#'+CHAT.limit;}
   if(key===CHAT.sub)return;if(CHAT.unsub)try{CHAT.unsub();}catch(_){}CHAT.unsub=null;CHAT.sub=key;CHAT.msgs=null;CHAT.err='';if(!key)return;
   const want=key;CHAT.stick=true;CHAT.unsub=window.FB.watchMsgs(thPath(CHAT.th),CHAT.limit,(l,e)=>{if(CHAT.sub!==want)return;if(e){CHAT.err=e.code||String(e);CHAT.msgs=[];render();return;}CHAT.msgs=l||[];const last=CHAT.msgs[CHAT.msgs.length-1];chSeen(CHAT.th,last?vms(last.at)||Date.now():Date.now());render();});}
-function chatUnread(){let n=0;(CHAT.dms||[]).forEach(d=>{const t=vms(d.last&&d.last.at)||vms(d.at);if(d.last&&d.last.from!==AUTH.email&&t>(CHSEEN['d:'+d.id]||0))n++;});return n;}
+function chatUnread(){let n=PINGS.filter(x=>vms(x.at)>(CHSEEN['pings']||0)).length;(CHAT.dms||[]).forEach(d=>{const t=vms(d.last&&d.last.at)||vms(d.at);if(d.last&&d.last.from!==AUTH.email&&t>(CHSEEN['d:'+d.id]||0))n++;});return n;}
 function chatHtml(s){if(!AUTH.email)return `<div class="block"><h3>Чат</h3><p class="hint">Увійдіть через Google, щоб читати й писати в чаті.</p><div><button class="small" data-a="login">Увійти через Google</button></div></div>`;
   if(!plByEmail(AUTH.email)&&!AUTH.admin)return `<div class="block"><h3>Чат</h3><p class="hint">Писати в чаті можуть громадяни й зареєстровані туристи. Подайте заявку на сторінці «Гравці».</p><div><button class="small" data-a="tab" data-id="players">🪪 Реєстрація</button></div></div>`;
   const th=CHAT.th;const dms=(CHAT.dms||[]).slice().sort((a,b)=>(vms(b.last&&b.last.at)||vms(b.at))-(vms(a.last&&a.last.at)||vms(a.at)));
@@ -1228,13 +1249,15 @@ function chatHtml(s){if(!AUTH.email)return `<div class="block"><h3>Чат</h3><p
   const others=players().filter(p=>p.email&&lc(p.email)!==AUTH.email&&!p.exiled).sort((a,b)=>a.name.localeCompare(b.name,'uk'));
   let side=`<aside class="block chside"><div class="chsh">Кімнати</div>${ROOMS.map(roomBtn).join('')}<div class="chsh">Особисті повідомлення</div><label class="fl sm"><select id="chnew" data-a="chnew"><option value="">✉️ Написати гравцеві…</option>${others.map(p=>`<option value="${esc(lc(p.email))}">${esc(p.name)}${p.tourist?' (турист)':''}</option>`).join('')}</select></label>${dms.map(dmBtn).join('')||'<p class="hint">Розмов ще немає.</p>'}`;
   if(chatMod()){const bl=Object.entries(CHATBANS).filter(([e,u])=>+u>Date.now());side+=`<div class="chsh">Модерація</div>${bl.length?bl.map(([e,u])=>`<div class="chban"><span>🔇 ${esc(nameByEmail(e))}<small>до ${esc(fmtDT(new Date(+u).toISOString()))}</small></span><button class="small ghost" data-a="chunban" data-k="${esc(e)}">Зняти</button></div>`).join(''):'<p class="hint">Заборон писати немає.</p>'}`;}
+  {const seen=CHSEEN['pings']||0;const pl=PINGS.slice(0,12);if(pl.length)side+=`<div class="chsh">🔔 Згадки ${PINGS.some(x=>vms(x.at)>seen)?'<i class="nbadge">'+PINGS.filter(x=>vms(x.at)>seen).length+'</i>':''}</div>${pl.map(x=>`<button type="button" class="chth ping${vms(x.at)>seen?' new':''}" data-a="chping" data-k="${esc(x.id)}"><span class="ic">${x.kind==='reply'?'↩':'@'}</span><span><b>${esc(x.name||'')}</b><small>${esc(String(x.text||'').slice(0,50))}</small></span></button>`).join('')}${PINGS.some(x=>vms(x.at)>seen)?'<button class="small ghost" data-a="chpingseen">Позначити прочитаним</button>':''}`;}
   side+='</aside>';
   let head='',sub='';if(th.startsWith('r:')){const r=ROOMS.find(x=>'r:'+x[0]===th)||ROOMS[0];head=`${r[1]} ${r[2]}`;sub=r[3];}else{const o=dmOther(th.slice(2));head='✉️ '+esc(nameByEmail(o));sub='особисте листування — бачите лише ви двоє';}
   const ms=CHAT.msgs;const ban=chatBanned();const canW=chatReg()&&!ban&&(th.startsWith('d:')||roomOk(th.slice(2)));
   const msgHtml=m=>{const mine=m.from===AUTH.email;const t=vms(m.at);const exp=vms(m.exp);const canDel=mine||(th.startsWith('r:')&&chatMod())||AUTH.admin;const p=plByEmail(m.from);
-    return `<div class="chm${mine?' me':''}">${mine?'':seatAv(p?p.name:(m.name||'?'),'chav')}<div class="chb"><div class="chmh">${mine?'':`<b>${p?`<button class="linkbtn" data-a="dos" data-n="${esc(p.name)}">${esc(p.name)}</button>`:esc(m.name||'')}</b>${p&&p.tourist?' <span class="tag">турист</span>':''}`}<span class="hint">${t?esc(fmtDT(new Date(t).toISOString())):'щойно'}</span>${canDel?`<button class="chx" data-a="chdel" data-k="${esc(m.id)}" title="Видалити">🗑</button>`:''}${!mine&&chatMod()&&th.startsWith('r:')?`<button class="chx" data-a="chmute" data-k="${esc(m.from)}" title="Заборонити писати на 3 дні">🔇</button>`:''}</div>${m.img?`<button type="button" class="chimgb" data-a="zoom"><img class="chimg" src="${esc(m.img)}" alt="Зображення"></button>${exp?`<div class="hint xs">🕒 зображення зникне ${esc(fmtDT(new Date(exp).toISOString()))}</div>`:''}`:m.imgGone?'<div class="hint">🖼 зображення видалено: минуло 15 днів</div>':''}${m.text?`<div class="cht">${fmtMsg(m.text)}</div>`:''}</div></div>`;};
+    const toMe=(m.mentions||[]).includes(AUTH.email)||(m.reply&&m.reply.from===AUTH.email&&!mine);
+    return `<div class="chm${mine?' me':''}${toMe?' tome':''}${CHAT.hl===m.id?' hl':''}" id="cm-${esc(m.id)}">${mine?'':seatAv(p?p.name:(m.name||'?'),'chav')}<div class="chb"><div class="chmh">${mine?'':`<b>${p?`<button class="linkbtn" data-a="dos" data-n="${esc(p.name)}">${esc(p.name)}</button>`:esc(m.name||'')}</b>${p&&p.tourist?' <span class="tag">турист</span>':''}`}<span class="hint">${t?esc(fmtDT(new Date(t).toISOString())):'щойно'}</span>${canW?`<button class="chx" data-a="chreply" data-k="${esc(m.id)}" title="Відповісти">↩</button>`:''}${canDel?`<button class="chx" data-a="chdel" data-k="${esc(m.id)}" title="Видалити">🗑</button>`:''}${!mine&&chatMod()&&th.startsWith('r:')?`<button class="chx" data-a="chmute" data-k="${esc(m.from)}" title="Заборонити писати на 3 дні">🔇</button>`:''}</div>${m.reply?`<button type="button" class="chrq" data-a="chjump" data-k="${esc(m.reply.id||'')}"><b>↩ ${esc(m.reply.name||'')}</b><span>${esc(String(m.reply.text||'').slice(0,140))}</span></button>`:''}${m.img?`<button type="button" class="chimgb" data-a="zoom"><img class="chimg" src="${esc(m.img)}" alt="Зображення"></button>${exp?`<div class="hint xs">🕒 зображення зникне ${esc(fmtDT(new Date(exp).toISOString()))}</div>`:''}`:m.imgGone?'<div class="hint">🖼 зображення видалено: минуло 15 днів</div>':''}${m.text?`<div class="cht">${fmtMsg(m.text)}</div>`:''}</div></div>`;};
   let main=`<div class="block chmain"><div class="chhead"><div><b>${head}</b><div class="hint">${esc(sub)}</div></div></div><div class="chmsgs" id="chmsgs">${ms==null?'<p class="hint">Завантаження…</p>':CHAT.err?`<p class="hint warn">Немає доступу до цієї розмови (${esc(CHAT.err)}).</p>`:(ms.length>=CHAT.limit?`<div class="chmore"><button class="small ghost" data-a="chmore">Показати раніші</button></div>`:'')+(ms.length?ms.map(msgHtml).join(''):'<p class="hint chempty">Тут ще ніхто нічого не написав. Почніть першим!</p>')}</div>`;
-  if(canW){const d=CHAT.draft[th]||'';main+=`<div class="chcomp"><div class="chtools">${[['b','<b>Ж</b>','Жирний (**текст**)'],['i','<i>К</i>','Курсив (*текст*)'],['u','<u>П</u>','Підкреслений (__текст__)'],['s','<s>З</s>','Закреслений (~~текст~~)'],['q','❝','Цитата'],['code','&lt;/&gt;','Код'],['link','🔗','Посилання']].map(([k,l,t])=>`<button type="button" class="small ghost" data-a="chfmt" data-k="${k}" title="${t}">${l}</button>`).join('')}<button type="button" class="small ghost" data-a="chimgpick" title="Додати зображення (зберігається ${CHAT_IMG_DAYS} днів)">🖼</button></div>${CHAT.img?`<div class="chprev"><img src="${esc(CHAT.img)}" alt=""><button class="small ghost" data-a="chimgx">✕ прибрати</button><span class="hint">зображення зберігатиметься ${CHAT_IMG_DAYS} днів</span></div>`:''}<div class="chrow"><textarea id="chin" data-a="chin" maxlength="4000" rows="2" placeholder="Повідомлення… (Enter — надіслати, Shift+Enter — новий рядок, можна вставити картинку)">${esc(d)}</textarea><button class="primary" data-a="chsend" ${busy?'disabled':''}>Надіслати</button></div></div>`;}
+  if(canW){const d=CHAT.draft[th]||'';main+=`<div class="chcomp"><div class="chtools">${[['b','<b>Ж</b>','Жирний (**текст**)'],['i','<i>К</i>','Курсив (*текст*)'],['u','<u>П</u>','Підкреслений (__текст__)'],['s','<s>З</s>','Закреслений (~~текст~~)'],['q','❝','Цитата'],['code','&lt;/&gt;','Код'],['link','🔗','Посилання']].map(([k,l,t])=>`<button type="button" class="small ghost" data-a="chfmt" data-k="${k}" title="${t}">${l}</button>`).join('')}<button type="button" class="small ghost" data-a="chimgpick" title="Додати зображення (зберігається ${CHAT_IMG_DAYS} днів)">🖼</button></div>${CHAT.img?`<div class="chprev"><img src="${esc(CHAT.img)}" alt=""><button class="small ghost" data-a="chimgx">✕ прибрати</button><span class="hint">зображення зберігатиметься ${CHAT_IMG_DAYS} днів</span></div>`:''}${CHAT.reply&&CHAT.reply.th===th?`<div class="chreplybar"><span>↩ Відповідь <b>${esc(CHAT.reply.name)}</b>: ${esc(String(CHAT.reply.text||'').slice(0,90))}</span><button class="small ghost" data-a="chreplyx">✕</button></div>`:''}${(()=>{const L=mentionList();return L.length?`<div class="chmlist">${L.map(p=>`<button type="button" class="chmopt" data-a="chmention" data-k="${esc(p.name)}">${seatAv(p.name,'chav')}<span>${esc(p.name)}</span></button>`).join('')}</div>`:'';})()}<div class="chrow"><textarea id="chin" data-a="chin" maxlength="4000" rows="2" placeholder="Повідомлення… @ — позначити гравця, Enter — надіслати, Shift+Enter — новий рядок">${esc(d)}</textarea><button class="primary" data-a="chsend" ${busy?'disabled':''}>Надіслати</button></div></div>`;}
   else main+=`<div class="chcomp"><p class="hint">${ban?`🔇 Вам заборонено писати в чаті до ${esc(fmtDT(new Date(ban).toISOString()))}.`:'Тут ви можете лише читати.'}</p></div>`;
   main+='</div>';
   return `<div class="chat">${side}${main}</div>`;}
@@ -1248,9 +1271,9 @@ function chFmt(k){const ta=document.getElementById('chin');if(!ta)return;const a
   else{const [l,r]=W[k];nv=v.slice(0,a)+l+(sel||'текст')+r+v.slice(b);ca=a+l.length;cb2=ca+(sel||'текст').length;}
   ta.value=nv;CHAT.draft[CHAT.th]=nv;ta.focus();ta.setSelectionRange(ca,cb2);}
 async function chSend(){const th=CHAT.th;const txt=String(CHAT.draft[th]||'').replace(/\s+$/,'');if(!txt.trim()&&!CHAT.img)return;if(!chatReg()){msg='Писати можуть лише громадяни й туристи';msgErr=true;render();return;}
-  const me0=plByEmail(AUTH.email);const m={text:txt.slice(0,4000),name:me0?me0.name:'',img:CHAT.img||''};let dm=null;
+  const me0=plByEmail(AUTH.email);const m={text:txt.slice(0,4000),name:me0?me0.name:'',img:CHAT.img||'',mentions:mentionsIn(txt).slice(0,20)};if(CHAT.reply&&CHAT.reply.th===th)m.reply={id:CHAT.reply.id,name:CHAT.reply.name,from:CHAT.reply.from,text:String(CHAT.reply.text||'').slice(0,200)};let dm=null;
   if(th.startsWith('d:')){const pair=th.slice(2);const o=dmOther(pair);dm={pair,members:pair.split('|'),names:pair.split('|').map(e=>e===AUTH.email?m.name:nameByEmail(e))};}
-  busy=true;render();try{await window.FB.sendMsg(thPath(th),m,dm);CHAT.draft[th]='';CHAT.img=null;CHAT.stick=true;msg='';}catch(e){msg='Не вдалося надіслати: '+(e&&e.code==='permission-denied'?'немає права писати тут':(e.code||e.message));msgErr=true;}busy=false;render();}
+  busy=true;render();try{const mid=await window.FB.sendMsg(thPath(th),m,dm);const to=new Set(m.mentions);if(m.reply&&m.reply.from&&m.reply.from!==AUTH.email)to.add(m.reply.from);if(to.size&&window.FB.sendPings){const tl=th.startsWith('r:')?(ROOMS.find(r=>'r:'+r[0]===th)||[])[2]:'особисті повідомлення';window.FB.sendPings([...to],{th,mid:mid||'',name:m.name,room:tl||'',text:(m.text||'🖼').slice(0,120),kind:m.mentions.length?'mention':'reply'}).catch(()=>{});}CHAT.draft[th]='';CHAT.img=null;CHAT.reply=null;CHAT.mq=null;CHAT.stick=true;msg='';}catch(e){msg='Не вдалося надіслати: '+(e&&e.code==='permission-denied'?'немає права писати тут':(e.code||e.message));msgErr=true;}busy=false;render();}
 
 let ZOOM='';
 function imgsHtml(list){list=(list||[]).filter(Boolean);return list.length?`<div class="evimgs">${list.map(src=>`<button type="button" class="evimg" data-a="zoom" title="Відкрити зображення"><img src="${esc(src)}" alt="Доказ"></button>`).join('')}</div>`:'';}
@@ -2591,12 +2614,15 @@ function constHtml(s,si){
   return h+'</article></div>';
 }
 function nextArticleNo(d){let mx=0;d.chapters.forEach(c=>c.articles.forEach(a=>{const m=/^Стаття\s+(\d+)/.exec(a.title);if(m)mx=Math.max(mx,+m[1]);}));return mx+1;}
+function inApp(){const u=navigator.userAgent||'';return /Telegram|FBAN|FBAV|Instagram|Line\/|MicroMessenger|; wv\)|TikTok|musical_ly|Snapchat/i.test(u);}
+let FAV_SRC='';
+function setFavicon(){try{const src=((govSec()||{}).emblem||{}).img||'';if(!src||src===FAV_SRC||!/^data:|^https?:/.test(src))return;FAV_SRC=src;const im=new Image();im.onload=()=>{const cv=document.createElement('canvas');cv.width=cv.height=64;const cx=cv.getContext('2d');const k=Math.min(64/im.width,64/im.height);const w=im.width*k,h=im.height*k;cx.drawImage(im,(64-w)/2,(64-h)/2,w,h);let l=document.getElementById('favicon');if(!l){l=document.createElement('link');l.id='favicon';l.rel='icon';document.head.appendChild(l);}l.href=cv.toDataURL('image/png');};im.src=src;}catch(_){}}
 function render(){const real=state;if(!editing)state=viewState();try{render0();}finally{state=real;}}
 function render0(){const cm0=document.getElementById('chmsgs');const cmS=cm0?{top:cm0.scrollTop,bot:cm0.scrollHeight-cm0.scrollTop-cm0.clientHeight<60}:null;const ae=document.activeElement;const fid=ae&&ae.id&&app.contains(ae)?ae.id:null;let s0=null,s1=null;try{s0=ae.selectionStart;s1=ae.selectionEnd;}catch(_){}
   renderInner();document.documentElement.lang=LANG==='en'?'en':'uk';if(LANG==='en')trTree(app);app.querySelectorAll('nav.toc,.subnav').forEach(nv=>{if(nv.scrollWidth>nv.clientWidth){const c=nv.querySelector('[aria-current]');if(c)nv.scrollLeft=Math.max(0,c.offsetLeft-nv.clientWidth/2+c.offsetWidth/2);}});
   if(fid){const el=document.getElementById(fid);if(el&&el!==document.activeElement){el.focus({preventScroll:true});try{if(s0!=null)el.setSelectionRange(s0,s1);}catch(_){}}}
   {const cm=document.getElementById('chmsgs');if(cm){if(CHAT.stick||!cmS||cmS.bot){cm.scrollTop=cm.scrollHeight;if(CHAT.msgs)CHAT.stick=false;}else cm.scrollTop=cmS.top;}}
-  setTimeout(()=>{try{chatEnsure();}catch(e){console.warn(e);}},0);
+  setTimeout(()=>{try{chatEnsure();}catch(e){console.warn(e);}try{setFavicon();}catch(_){}},0);
 }
 function renderInner(){
   if(!state.sections.length){app.innerHTML='<p class="status">'+esc(msg||'Завантаження…')+'</p>';return;}
@@ -2609,7 +2635,7 @@ function renderInner(){
   else if(AUTH.admin) bar=`<button data-a="edit">Редагувати</button><button class="ghost small" data-a="logout" title="${esc(AUTH.email)}">Вийти</button>`;
   else if(AUTH.email&&(isFin()||isPysar()||isHetman()||isPatriarch()||isInterior())) bar=`${isPatriarch()?'<button data-a="editchurch">Редагувати Церкву</button>':''}${isPysar()?'<button data-a="editlands">Редагувати Землі, Військо й Гравців</button>':''}${(isHetman()||isInterior())&&!isPysar()?'<button data-a="editplayers">Редагувати Гравців</button>':''}${isHetman()?'<button data-a="editranks">Редагувати звання</button>':''}${isFin()?'<button data-a="editecon">Редагувати економіку</button>':''}<button class="ghost small" data-a="logout" title="${esc(AUTH.email)}">Вийти</button>`;
   else if(AUTH.email) bar=`<span class="status">${plByEmail(AUTH.email)?plink(plByEmail(AUTH.email).name):esc(AUTH.email)}${myLand()?' · Представник: '+esc(myLand()):''}</span>${!plByEmail(AUTH.email)&&!AUTH.bot&&!(myApp()&&myApp().status==='open')?'<button class="small primary" data-a="tab" data-id="players">🪪 Стати громадянином</button>':''}<button class="ghost small" data-a="logout">Вийти</button>`;
-  else if(AUTH.ready) bar=`<button class="small" data-a="login">Увійти через Google</button>`;
+  else if(AUTH.ready) bar=`${inApp()?'<span class="status err">Щоб увійти, відкрийте сайт у Chrome чи Safari (⋮ → «Відкрити в браузері»)</span>':''}<button class="small" data-a="login">Увійти через Google</button>`;
   const status=msg?`<span class="status${msgErr?' err':''}">${esc(msg)}</span>`:(editing&&dirty?'<span class="status">Є незбережені зміни</span>':'');
   const lands=state.sections.filter(x=>!x.kind&&x.lands&&x.id!=='army'&&!/курін|військ/i.test(x.title||'')).reduce((n,x)=>n+x.lands.length,0);
   const rp=landLeaders();const passedN=allBills().filter(b=>effStatus(b)==='passed').length;
@@ -2690,7 +2716,7 @@ app.addEventListener('input',e=>{
   if(a==='lq'){LQ=t.value;render();return;}
   if(a==='actas'){ACTAS=t.value;try{localStorage.setItem('ud-actas',ACTAS);}catch(_){}DOSSIER=null;render();return;}
   if(a==='chd'){CHD[t.dataset.k]=t.value;return;}
-  if(a==='chin'){CHAT.draft[CHAT.th]=t.value;return;}
+  if(a==='chin'){CHAT.draft[CHAT.th]=t.value;const q=mentionQ(t);if(q!==CHAT.mq){CHAT.mq=q;render();}return;}
   if(a==='chnew'){const e=t.value;if(!e)return;CHAT.th='d:'+dmPair(AUTH.email,e);CHAT.img=null;render();return;}
   if(a==='about'){ABOUT=t.value;return;}
   if(a==='pr'){PR[t.dataset.k]=t.value;if(t.dataset.k==='art'){SP.pr={};render();}return;}
@@ -2818,6 +2844,8 @@ app.addEventListener('change',e=>{
   else if(a==='piq'||a==='pip'||a==='pnm'||a==='dq'||a==='prp'||a==='prn'||a==='ea'||a==='iq'){setTimeout(()=>{const ae=document.activeElement;const keep=ae&&ae.id;render();if(keep){const el=document.getElementById(keep);if(el)el.focus();}},250);}
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&(BILLM||HOMEM||ZOOM)){BILLM='';HOMEM='';ZOOM='';render();}
+  if(e.target&&e.target.id==='chin'&&(e.key==='Enter'||e.key==='Tab')&&!e.shiftKey&&!e.isComposing&&CHAT.mq!=null){const L=mentionList();if(L.length){e.preventDefault();mentionPick(L[0].name);return;}}
+  if(e.target&&e.target.id==='chin'&&e.key==='Escape'&&CHAT.mq!=null){CHAT.mq=null;render();return;}
   if(e.target&&e.target.id==='chin'&&e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();CHAT.draft[CHAT.th]=e.target.value;chSend();}});
 document.addEventListener('paste',e=>{const t=e.target;if(!t||t.id!=='chin')return;const it=[...((e.clipboardData&&e.clipboardData.items)||[])].find(x=>/^image\//.test(x.type));if(!it)return;e.preventDefault();chatImage(it.getAsFile(),img=>{if(img){CHAT.img=img;render();}});});
 app.addEventListener('click',async e=>{
@@ -3097,7 +3125,8 @@ app.addEventListener('click',async e=>{
     reconcile(es,INV_IN);busy=true;render();
     try{await window.FB.save(state);saved=JSON.stringify(state);INV_IN=null;try{history.replaceState(null,'',location.pathname);}catch(_){}msg='Казну оновлено';}catch(err){state=JSON.parse(saved);msg='Не вдалося зберегти казну';msgErr=true;}
     busy=false;render();return;}
-  if(a==='login'){window.FB.login().catch(err=>{msg='Не вдалося увійти: '+(err&&err.code||'');msgErr=true;render();});return;}
+  if(a==='login'){if(inApp()){msg='Ви відкрили сайт усередині Telegram, Instagram чи іншого застосунку — Google там не дозволяє входити. Натисніть ⋮ або «…» і виберіть «Відкрити в браузері» (Chrome чи Safari).';msgErr=true;render();return;}
+    window.FB.login().catch(err=>{const c=err&&err.code||'';msg=c==='auth/popup-closed-by-user'||c==='auth/cancelled-popup-request'?'Вхід скасовано':c==='auth/popup-blocked'?'Браузер заблокував вікно входу. Дозвольте спливаючі вікна для цього сайту й спробуйте ще раз.':c==='auth/unauthorized-domain'?'Цей домен ще не дозволено для входу (адміністратор має додати його у Firebase).':c==='auth/network-request-failed'?'Немає з’єднання з Google. Перевірте інтернет і спробуйте ще раз.':'Не вдалося увійти ('+c+'). Спробуйте відкрити сайт у Chrome чи Safari, а не всередині Telegram/Instagram.';msgErr=true;render();});return;}
   if(a==='logout'){editing=false;state=JSON.parse(saved);window.FB.logout();return;}
   if(a==='cab'){CAB=b.dataset.k||'';const ps=sectionByKind('parliament');if(ps)active=ps.id;DOSSIER=null;try{history.replaceState(null,'','#'+(CAB?'cab/'+CAB:active));}catch(_){}render();window.scrollTo(0,0);return;}
   if(a==='cabgo'){const k=b.dataset.k;CAB='';DOSSIER=null;if(k.startsWith('court:')){const cs=sectionByKind('court');active=cs?cs.id:'court';COURT_V=k.slice(6);}else{delete SUB[k];active=k;}try{history.replaceState(null,'','#'+active);}catch(_){}render();window.scrollTo(0,0);return;}
@@ -3107,6 +3136,12 @@ app.addEventListener('click',async e=>{
   if(a==='zoomx'){ZOOM='';render();return;}
   if(a==='chth'){CHAT.th=b.dataset.k;CHAT.limit=50;CHAT.img=null;render();return;}
   if(a==='chmore'){CHAT.limit+=50;render();return;}
+  if(a==='chreply'){const m=(CHAT.msgs||[]).find(x=>x.id===b.dataset.k);if(!m)return;const p=plByEmail(m.from);CHAT.reply={th:CHAT.th,id:m.id,from:m.from,name:p?p.name:(m.name||''),text:m.text||(m.img?'🖼 зображення':'')};render();const ta=document.getElementById('chin');if(ta)ta.focus();return;}
+  if(a==='chreplyx'){CHAT.reply=null;render();return;}
+  if(a==='chmention'){mentionPick(b.dataset.k);return;}
+  if(a==='chjump'){const el=document.getElementById('cm-'+b.dataset.k);if(el){CHAT.hl=b.dataset.k;el.scrollIntoView({block:'center',behavior:'smooth'});el.classList.add('hl');setTimeout(()=>{el.classList.remove('hl');CHAT.hl='';},1600);}else{msg='Це повідомлення вже не завантажене — натисніть «Показати раніші»';msgErr=false;render();}return;}
+  if(a==='chping'){const x=PINGS.find(q=>q.id===b.dataset.k);if(!x)return;CHAT.th=x.th;CHAT.limit=50;CHAT.hl=x.mid||'';CHAT.stick=false;chSeen('pings',vms(x.at));const cs=sectionByKind('chat');if(cs)active=cs.id;render();setTimeout(()=>{const el=document.getElementById('cm-'+x.mid);if(el)el.scrollIntoView({block:'center'});setTimeout(()=>{CHAT.hl='';},2500);},700);return;}
+  if(a==='chpingseen'){chSeen('pings',Math.max(...PINGS.map(x=>vms(x.at)),Date.now()));if(window.FB.delPings)window.FB.delPings(AUTH.email,PINGS.filter(x=>vms(x.at)<Date.now()-7*86400000).map(x=>x.id)).catch(()=>{});render();return;}
   if(a==='chsend'){const ta=document.getElementById('chin');if(ta)CHAT.draft[CHAT.th]=ta.value;chSend();return;}
   if(a==='chfmt'){chFmt(b.dataset.k);return;}
   if(a==='chimgpick'){pickFile(f=>chatImage(f,img=>{if(img){CHAT.img=img;render();}else{msg='Це не схоже на зображення';msgErr=true;render();}}));return;}
@@ -3699,6 +3734,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, collectionGroup, getDocs, writeBatch, serverTimestamp, onSnapshot, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithCustomToken, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// Власний домен: якщо на сайті є помічник входу (/__/auth/…), вхід через Google іде через наш домен,
+// а не через firebaseapp.com — так працює і в Safari, і в браузерах із розділеним сховищем.
+const OWN_AUTH = /(^|\.)ukr-derzhava\.in\.ua$/.test(location.hostname)
+  && await fetch("/__/firebase/init.json", { cache: "no-store" }).then(r => r.ok).catch(() => false);
+if (OWN_AUTH) firebaseConfig.authDomain = location.hostname;
 const fbApp = initializeApp(firebaseConfig);
 const db = getFirestore(fbApp);
 const auth = getAuth(fbApp);
@@ -3839,9 +3879,15 @@ function watchMsgs(path, n, cb){ const q = query(collection(db, path), orderBy("
 function watchDms(email, cb){ const q = query(collection(db, "dms"), where("members", "array-contains", email)); return onSnapshot(q, s => { const out = []; s.forEach(d => out.push({ id: d.id, ...d.data() })); cb(out); }, e => { console.warn(e); cb([]); }); }
 async function sendMsg(path, m, dm){ const id = uid8("m"); const v = { from: myMail(), name: m.name || "", text: m.text || "", at: serverTimestamp() };
   if (m.img) { v.img = m.img; v.exp = new Date(Date.now() + 15 * 86400000); }
+  if (m.mentions && m.mentions.length) v.mentions = m.mentions;
+  if (m.reply) v.reply = m.reply;
   await setDoc(doc(db, path, id), v);
   if (m.img) { try { await setDoc(doc(db, "chatgc", id), { path: path + "/" + id, exp: v.exp }); } catch (_) {} }
-  if (dm) { await setDoc(doc(db, "dms", dm.pair), { members: dm.members, names: dm.names, last: { text: (m.text || (m.img ? "🖼 зображення" : "")).slice(0, 80), from: myMail(), at: serverTimestamp() }, at: serverTimestamp() }, { merge: true }); } }
+  if (dm) { await setDoc(doc(db, "dms", dm.pair), { members: dm.members, names: dm.names, last: { text: (m.text || (m.img ? "🖼 зображення" : "")).slice(0, 80), from: myMail(), at: serverTimestamp() }, at: serverTimestamp() }, { merge: true }); }
+  return id; }
+function watchPings(email, cb){ const q = query(collection(db, "pings", email, "items"), orderBy("at", "desc"), limit(30)); return onSnapshot(q, s => { const out = []; s.forEach(d => out.push({ id: d.id, ...d.data() })); cb(out); }, e => { console.warn(e); cb([]); }); }
+async function sendPings(list, p){ for (const e of list) { try { await setDoc(doc(db, "pings", e, "items", uid8("p")), { from: myMail(), name: p.name || "", th: p.th, mid: p.mid || "", room: p.room || "", text: p.text || "", kind: p.kind || "mention", at: serverTimestamp() }); } catch (_) {} } }
+async function delPings(email, ids){ for (const id of ids) { try { await deleteDoc(doc(db, "pings", email, "items", id)); } catch (_) {} } }
 async function delMsg(path, id){ await deleteDoc(doc(db, path, id)); try { await deleteDoc(doc(db, "chatgc", id)); } catch (_) {} }
 async function chatBan(email, until){ await setDoc(doc(db, "chatmod", "bans"), { bans: { [email]: until } }, { merge: true }); }
 async function chatCleanup(){ let n = 0; const s = await getDocs(query(collection(db, "chatgc"), where("exp", "<=", new Date()), limit(100))); const list = []; s.forEach(d => list.push({ id: d.id, ...d.data() }));
@@ -3965,7 +4011,7 @@ window.FB = {
   save, saveEcon, saveLands, savePlayers, syncAccess, loadVotes, loadProposals, vote, ovote, sign, propose, delProposal,
   postNews, delNews, giveAward, revokeAward, delAward,
   postComment, delComment, createPetition, signPetition, delPetition, petitionToBill, fileCase, decideCase, delCase, revokeNews, updCase, postNote, delNote,
-  postSealed, delSealed, postProtocol, updProtocol, saveProfile, closeProposal, watchMsgs, watchDms, sendMsg, delMsg, chatBan, chatCleanup, setAdvocate, updAdvocate, delAdvocate, pardon, watchSealed,
+  postSealed, delSealed, postProtocol, updProtocol, saveProfile, closeProposal, watchMsgs, watchDms, sendMsg, delMsg, watchPings, sendPings, delPings, chatBan, chatCleanup, setAdvocate, updAdvocate, delAdvocate, pardon, watchSealed,
   applyCitizen, delApp, decideApp, saveRanks, setEmergency, foundAward, updAwardType, delAwardType, saveChurch, postTreaty, updTreaty, delTreaty,
   login: () => { const p = new GoogleAuthProvider(); if (p.setCustomParameters) p.setCustomParameters({ prompt: 'select_account' }); return signInWithPopup(auth, p); },
   logout: () => signOut(auth),
