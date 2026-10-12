@@ -770,6 +770,36 @@ textarea.fulltext.sm{min-height:140px}
 
 .bmbox.wide{width:min(900px,100%)}
 .pager{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:6px}
+
+.top2{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;padding-bottom:6px}
+.brand2{display:flex;align-items:center;gap:14px}
+.brand2 .gerb{width:58px;height:58px;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
+.brand2 .gerb.none{border-radius:50%;background:radial-gradient(circle,#2b55b8 0 40%,#f2b544 41% 46%,#3a2410 47%);box-shadow:0 0 0 2px var(--gold-soft)}
+.brand2 h1{margin:0;font:700 30px/1.1 var(--f-display);background:linear-gradient(180deg,#ffe29a,#f2b544);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand2 .bsub{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none}.brand2 .bsub:hover{color:var(--gold)}
+.actas{display:inline-flex;gap:6px;align-items:center;font-size:13px;border:1px solid var(--gold-soft);border-radius:999px;padding:3px 6px 3px 12px;background:rgba(242,181,68,.08)}
+.actas select{width:auto;padding:4px 8px;border-radius:999px;font-size:13px}
+.foot .langsw{margin:0}
+.chamber{grid-template-columns:172px minmax(0,1fr) 172px}
+.chamber .hall{aspect-ratio:1.6/1;max-width:none}
+.chamber .hseat{width:84px}
+.chamber .hseat .hl{font-size:9.5px;line-height:1.1;max-width:78px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.chhero{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:20px;align-items:center;background:radial-gradient(ellipse at 10% 50%,rgba(255,240,200,.14),transparent 60%),var(--panel);border-color:rgba(240,176,48,.55)}
+.chemb{width:96px;height:96px;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(0,0,0,.6))}.chemb.none{display:grid;place-items:center;font-size:48px;color:#f3e2b0;border:2px solid rgba(243,226,176,.5);border-radius:50%}
+.chemb.sm{width:56px;height:56px}
+.chname{font:700 24px var(--f-display);color:var(--cream)}
+.chtx{display:grid;gap:6px}
+.chpatr{display:flex;gap:12px;align-items:center;border-left:1px solid var(--line);padding-left:18px}
+.chpatr .pav{width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid #f3e2b0;display:grid;place-items:center;font-size:26px;background:#3a2610;color:#ffd77a}
+.chpatr .st{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-soft);max-width:220px}.chpatr .sn{font-weight:700;font-size:16px}
+.chbody{gap:12px}
+.epgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.epcard{display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;border:1px solid var(--line);border-radius:12px;padding:12px;background:rgba(0,0,0,.15)}
+.epcard>img,.epimg{width:72px;height:72px;object-fit:contain;border-radius:8px}.epimg.none{display:grid;place-items:center;font-size:30px;border:1px dashed var(--line)}
+.epbody{display:grid;gap:6px;min-width:0}.epname{font:700 16px var(--f-display)}
+.eplands{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px}.eplands .chk.dis{opacity:.45}
+.epedit .avbtn img{width:34px;height:34px;object-fit:contain}
+.chdform{display:grid;gap:8px;padding-bottom:12px;border-bottom:1px dashed var(--line)}
 /* ---- FF: нова структура ---- */
 .chamber{display:grid;grid-template-columns:190px minmax(0,1fr) 190px;gap:14px;align-items:start;background:radial-gradient(700px 300px at 50% 0,rgba(242,181,68,.10),transparent 70%),var(--panel)}
 .chamber .hallc{display:grid;gap:10px;justify-items:center;min-width:0}
@@ -1013,6 +1043,8 @@ Object.assign(EN,{"Закон":"Law","Зміна":"Amendment","Постанов�
 "Сторона позивача":"Plaintiff's side","Сторона відповідача":"Defendant's side","Місця для свідків":"Witness seats","Засідань зараз немає":"No hearings right now","Коли Суд відкриє провадження, місця сторін, адвокатів і свідків заповняться.":"When the Court opens proceedings, the seats of the parties, advocates and witnesses fill up.","порожньо":"empty","Свідок":"Witness","Позивач":"Plaintiff","Відповідач":"Defendant","Адвокат позивача":"Plaintiff's advocate","Адвокат відповідача":"Defendant's advocate","не в складі":"not on the bench","← До залу Палати Земель":"← Back to the Chamber of Lands","⚖️ ГЕНЕРАЛЬНИЙ СУД УКРАЇНСЬКОЇ ДЕРЖАВИ":"⚖️ GENERAL COURT OF THE UKRAINIAN STATE","🗣 Триває слухання":"🗣 Hearing in progress","🤝 Нарада суддів":"🤝 Judges deliberating",
 "✍️ Чекають вашого підпису":"✍️ Awaiting your signature","Палата поки не передала жодного закону на підпис.":"The Chamber has not sent any law for signature yet.","✍️ Внести законопроєкт до Палати":"✍️ Submit a bill to the Chamber","⚖️ Внести позов до Суду від імені держави":"⚖️ File a claim on behalf of the state","📝 Законодавча ініціатива":"📝 Legislative initiative","📝 Запропонувати зміну до кодексу чи Конституції":"📝 Propose an amendment to a code or the Constitution","⚖️ Внести законопроєкт":"⚖️ Submit a bill","Справи обвинувачення":"Prosecution cases","💰 Редагувати економіку":"💰 Edit the economy","📒 Скарбниця":"📒 Treasury","🗺 Редагувати Землі, Військо й Гравців":"🗺 Edit Lands, Army and Players","Штрафи, які треба зарахувати":"Fines to be credited"});
 EN_RX.push([/^(.+) очолив Землю «(.+)»(?: — (.+))?$/,m=>m[1]+' became leader of «'+m[2]+'»'+(m[3]?' — '+enT(m[3]):'')],[/^До складу «(.+)» внесено Землю «(.+)»$/,m=>'Land «'+m[2]+'» added to «'+m[1]+'»'],[/^Справа №(\S+)$/,m=>'Case No. '+m[1]]);
+Object.assign(EN,{"Доповнення до гри DragPolit":"An add-on to the game DragPolit","👤 Я —":"👤 I am —","⛪ Єпархії":"⛪ Eparchies","🙏 Духовенство":"🙏 Clergy","📜 Постанови":"📜 Resolutions","📖 Статут":"📖 Charter","🕯 Літопис":"🕯 Chronicle","Герб Церкви":"Church coat of arms","Завантажити герб":"Upload coat of arms","Змінити герб":"Change coat of arms","Прибрати":"Remove","Єпархії":"Eparchies","+ Єпархія":"+ Eparchy","Нова постанова Церкви":"New Church resolution","Видати постанову":"Issue resolution","Постанов ще немає.":"No resolutions yet.","Подій ще немає.":"No events yet.","Єпархій ще немає. Їх створює Патріарх у режимі «Редагувати Церкву».":"No eparchies yet. The Patriarch creates them in «Edit Church» mode.","Земель ще не віднесено":"No Lands assigned yet","Постанову видано":"Resolution issued"});
+EN_RX.push([/^Постанова Церкви №(\d+)$/,m=>'Church resolution No. '+m[1]],[/^Землі поза єпархіями: (.*)$/,m=>'Lands outside eparchies: '+m[1]],[/^Єпископ: (.*)$/,m=>'Bishop: '+m[1]]);
 EN_RX.unshift(
   [/^до «(.+)»: ще (.+)$/,m=>'to «'+enT(m[1])+'»: '+m[2].replace(/(\d+) дн\. вислуги/,'$1 more service days').replace(/(\d+) ⭐ заслуг/,'$1 ⭐ merit').replace(' і ',' and ')],[/^«(.+)» — під час найближчої перевірки$/,m=>'«'+enT(m[1])+'» at the next check'],
   [/^(\d+) оч\.$/,m=>m[1]+' pts'],[/^Очки служби: (\d+)(.*)$/,m=>'Service points: '+m[1]+m[2].replace(/ · до звання «(.+)» ще (\d+)/,' · '+'$2 to «$1»')],[/^від звання «(.+)»$/,m=>'from rank «'+enT(m[1])+'»'],[/^Військо · (\d+)$/,m=>'Troops · '+m[1]],
@@ -1119,10 +1151,10 @@ function landLog(names){const ls=landLogSec();const L=((ls&&ls.log)||[]).slice()
 function landCard(l,kind){const c=cur(l);const h=landHead(l);const lost=kind==='lost'||l.lostAt;const nm=c.name;
   const others=(l.posts||[]).filter(q=>q!==h.post&&!h.past.includes(q)&&!(otaNum(q)>0)&&String(q.holder||'').trim()&&q.holder!=='0');
   const rep=landLeaders().find(r=>r.land===nm);const vm=voterMap();const seat=rep&&rep.name?(vm[nm]?'🗳 голосує в Палаті':'⚠ без пошти — не голосує'):'';
-  const lg=landLog([nm]).slice(0,4);
+  const lg=landLog([nm]).slice(0,4);const ep=eparchyOf(nm);
   return `<article class="lcard${lost?' lost':''}${h.name?'':' vacant'}"><div class="lflag"><img src="${esc(c.img)}" alt="Прапор: ${esc(nm)}"></div><div class="lbody"><div class="lname">${esc(nm)}${l.lostAt?` <span class="pill rejected">🏴 Втрачено ${esc(l.lostAt)}</span>`:''}${l.restoredAt?` <span class="pill passed">🔁 Відновлено ${esc(l.restoredAt)}</span>`:''}</div>
     <div class="lhead">${seatAv(h.name,'lav')}<div><div class="lt">${esc(h.post?h.post.title.replace(/^\d+\s*-?\s*[йя]?\s*/,''):'Очільник')}</div><div class="lh">${h.name?(plByName(h.name)?`<button class="linkbtn" data-a="dos" data-n="${esc(h.name)}">${esc(h.name)}</button>`:esc(h.name)):'<span class="vacn">Вакантно</span>'}</div>${seat?`<div class="hint">${seat}</div>`:''}</div></div>
-    ${others.length?`<div class="lposts">${others.map(q=>`<span class="tag">${esc(q.title)}: ${esc(q.holder)}</span>`).join('')}</div>`:''}
+    ${others.length||ep?`<div class="lposts">${others.map(q=>`<span class="tag">${esc(q.title)}: ${esc(q.holder)}</span>`).join('')}${ep?`<span class="tag">⛪ ${esc(ep.name)}</span>`:''}</div>`:''}
     ${h.past.length||l.flags.length>1||lg.length?`<details class="lmore"><summary>Історія Землі</summary>${h.past.length?`<div class="hint">Попередні очільники:</div><ol class="lpast">${h.past.slice().reverse().map(q=>`<li>${esc(q.title)} — ${plink(q.holder)}</li>`).join('')}</ol>`:''}${l.flags.length>1?`<div class="hint">Прапори й назви:</div><div class="lflags">${l.flags.map((f,i)=>`<span class="lf${i===l.flags.length-1?' cur':''}"><img src="${esc(f.img)}" alt="">${f.date?esc(f.date)+' · ':''}${esc(f.name)}</span>`).join('<span class="arrow">→</span>')}</div>`:''}${lg.length?`<div class="hint">Останні події:</div><ul class="llog">${lg.map(e=>`<li>${e.ic} ${esc(e.tx)} <span class="hint">· ${esc(fmtDT(e.at))}</span></li>`).join('')}</ul>`:''}</details>`:''}
   </div></article>`;}
 function landsTop(s){const L=s.lands||[];const heads=L.map(l=>landHead(l));const filled=heads.filter(h=>h.name).length;const vm=voterMap();const votes=L.filter(l=>vm[cur(l).name]).length;
@@ -1248,7 +1280,9 @@ const lc=e=>String(e||'').trim().toLowerCase();
 function plSec(st){return (st||state).sections.find(x=>x.kind==='players');}
 function players(st){const s=plSec(st);return s?(s.list||(s.list=[])):[];}
 function plByName(n,st){n=String(n||'').trim();if(!n||n==='0'||/^вакант/i.test(n))return null;return players(st).find(p=>p.name===n)||null;}
-function plByEmail(e,st){e=lc(e);return e?players(st).find(p=>lc(p.email)===e)||null:null;}
+let ACTAS='';try{ACTAS=localStorage.getItem('ud-actas')||'';}catch(_){}
+function plByEmail(e,st){e=lc(e);if(!e)return null;const all=players(st).filter(p=>lc(p.email)===e);if(all.length<2)return all[0]||null;if(e===AUTH.email){const pick=all.find(p=>p.name===ACTAS);if(pick)return pick;}return all[0];}
+function dupSel(){const e=AUTH.email;if(!e||editing)return '';const all=players().filter(p=>lc(p.email)===e);if(all.length<2)return '';const cur=plByEmail(e);return `<label class="actas" title="На вашу пошту записано кількох гравців — оберіть, ким ви зараз дієте">👤 Я —<select id="actas" data-a="actas">${all.map(p=>`<option${p===cur?' selected':''}>${esc(p.name)}</option>`).join('')}</select></label>`;}
 function emailOf(n,st){const p=plByName(n,st);return p?lc(p.email):'';}
 // аватарки з гри лежать за постійною адресою: …/avatars/users/<номер профілю>.webp
 const AV_BASE='https://pub-5cade92008cd4292b3ce9093dd3b0158.r2.dev/avatars/users/';
@@ -1292,7 +1326,7 @@ function hemicycle(reps,chair,bill){const n=reps.length;if(!n)return '';
   // rows from the inside out; each row a little longer
   const rows=[];let left=n,k=0;const base=Math.max(3,Math.round(n/4));while(left>0){const cap=Math.min(left,base+k*2);rows.push(cap);left-=cap;k++;}
   const vmap={};if(bill){(VOTES[bill.id]||[]).forEach(v=>{vmap[v.land]=v.choice;});}
-  const pos=[];rows.forEach((cnt,ri)=>{const R0=17+ri*(19/Math.max(1,rows.length-1));for(let j=0;j<cnt;j++){const a=Math.PI-(cnt===1?Math.PI/2:j*Math.PI/(cnt-1));pos.push({a,x:50+R0*Math.cos(a),y:84-R0*Math.sin(a)*2.05,ri});}});
+  const pos=[];rows.forEach((cnt,ri)=>{const R0=17+ri*(19/Math.max(1,rows.length-1));for(let j=0;j<cnt;j++){const a=Math.PI-(cnt===1?Math.PI/2:j*Math.PI/(cnt-1));pos.push({a,x:50+R0*1.22*Math.cos(a),y:84-R0*Math.sin(a)*2.05,ri});}});
   pos.sort((p1,p2)=>p2.a-p1.a||p1.ri-p2.ri);
   let html='';
   reps.forEach((r,i)=>{const q=pos[i];const v=!r.name;const ch=vmap[r.land];
@@ -1390,7 +1424,6 @@ function parlView(s,si){const reps=landLeaders();const lead={};reps.forEach(r=>l
   if(ARCH_OPEN)h+=shown.length?`<div class="vlist alist">${shown.map(billRow).join('')}</div>`:'<p class="empty">Тут поки порожньо.</p>';
   else h+=arch.length?`<p class="hint recent">${arch.slice(0,3).map(b=>`<button type="button" class="lnk" data-a="billm" data-k="${esc(b.id)}">${b.no?esc(b.no)+' ':''}«${esc(b.title||'')}»</button>`).join(' · ')}${arch.length>3?' …':''}</p>`:'<p class="empty">Законів ще немає.</p>';
   h+='</div>';
-  h+=`<details class="block replist" data-o="reps"${OPEN.has('reps')?' open':''}><summary><h3 style="display:inline">Представники Земель</h3> <small>${reps.filter(r=>String(r.name||'').trim()).length} з ${reps.length}</small></summary><div class="reps">${reps.map(r=>{const v=!String(r.name||'').trim();return `<div class="rep${v?' vac':''}"><span class="t">${esc(r.land)}</span><span class="h">${v?'Вакантно':plink(r.name)}</span></div>`;}).join('')}</div></details>`;
   if(BILLM){const b=all.find(x=>x.id===BILLM);if(b)MODALH=`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="billm" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox"><button class="small bmx" data-a="billm" data-k="" aria-label="Закрити">✕ Закрити</button>${billCard(b,lead,me,false)}</div></div>`;else BILLM='';}
   return h+'</div>';}
 function cabinetHtml(id){const p=cPosts().find(x=>x.id===id);if(!p)return `<div class="block"><button class="small" data-a="cab" data-k="">← До залу Палати</button><p class="empty">Такого кабінету немає.</p></div>`;
@@ -2486,7 +2519,8 @@ function renderInner(){
   const lands=state.sections.filter(x=>!x.kind&&x.lands&&x.id!=='army'&&!/курін|військ/i.test(x.title||'')).reduce((n,x)=>n+x.lands.length,0);
   const rp=landLeaders();const passedN=allBills().filter(b=>effStatus(b)==='passed').length;
   const chips=[['Земель',lands],['Представників',rp.filter(r=>r.name).length+' з '+rp.length],['Законів прийнято',passedN],['Оновлено',esc(state.updated),1]];
-  let html=`<header class="top"><div class="hl"><div class="eyebrow"><i></i><a href="https://dragpolit.com" target="_blank" rel="noopener">DragPolit<span aria-hidden="true">↗</span></a><span class="sep">·</span>Державний реєстр<button class="langsw" data-a="lang" data-notr title="${LANG==='en'?'Українська версія':'English version'}" aria-label="${LANG==='en'?'Українська версія':'English version'}">${LANG==='en'?'UA':'EN'}</button></div><h1>Українська Держава</h1><p class="lead">Офіційний реєстр держави української спільноти DragPolit: землі та їхні Отамани, військо, скарбниця, Палата Земель і Конституція.</p><div class="chips">${chips.map(([k,v,pre])=>pre?`<span class="chip">${k} <b>${v}</b></span>`:`<span class="chip"><b>${v}</b>${k}</span>`).join('')}</div></div><div class="bar">${status}${bar}</div></header>`;
+  const gerbImg=((govSec()||{}).emblem||{}).img;
+  let html=`<header class="top top2"><div class="brand2">${gerbImg?`<img class="gerb" src="${esc(gerbImg)}" alt="Герб">`:'<span class="gerb none" aria-hidden="true"></span>'}<div><h1>Українська Держава</h1><a class="bsub" href="https://dragpolit.com" target="_blank" rel="noopener">Доповнення до гри DragPolit <span aria-hidden="true">↗</span></a></div></div><div class="bar">${status}${dupSel()}${bar}</div></header>`;
   if(emActive()){const c=EMERG.cur;const end=new Date(+c.untilMs).toISOString();html+=`<div class="emerg" role="status"><span class="emi" aria-hidden="true">🚨</span><div class="emt"><b>Надзвичайний стан</b>${c.reason?`<div>${esc(c.reason)}</div>`:''}<div class="hint">Запроваджено ${c.source==='law'?'законом'+(c.law?' «'+esc(c.law)+'»':''):'указом Гетьмана'+(c.decreeNo?' №'+esc(c.decreeNo):'')} · до ${esc(fmtDT(end))} · залишилось ${esc(timeLeft(end))} · законопроєкти голосуються 12 годин</div></div>${isHetman()&&c.source!=='law'?`<button class="small" data-a="emend" ${busy?'disabled':''}>Припинити</button>`:''}</div>`;}
   html+='<nav class="toc" aria-label="Розділи">'+state.sections.filter(s=>!s.tab).map(s=>`<button data-a="tab" data-id="${esc(s.id)}" ${s.id===active?'aria-current="page"':''}>${NAV_ICONS[s.id]?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${NAV_ICONS[s.id]}</svg>`:''}<span>${esc(s.navTop||s.nav||s.title)}</span></button>`).join('')+'</nav>';
   const ED=editing;
@@ -2524,7 +2558,7 @@ function renderInner(){
   editing=ED;
   html+=MODALH;MODALH='';
   html+=`<datalist id="plist">${players().map(p=>`<option value="${esc(p.name)}">`).join('')}</datalist>`;
-  html+='<footer class="foot"><span>Українська Держава · DragPolit</span><span>Дані оновлюються адміністрацією</span></footer>';
+  html+=`<footer class="foot"><span>Українська Держава · доповнення до гри <a href="https://dragpolit.com" target="_blank" rel="noopener">DragPolit</a></span><span><button class="langsw" data-a="lang" data-notr title="${LANG==='en'?'Українська версія':'English version'}">${LANG==='en'?'UA':'EN'}</button></span></footer>`;
   app.innerHTML=html;
 }
 function pickAvatar(cb){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const S=128,cv=document.createElement('canvas');cv.width=S;cv.height=S;const k=Math.max(S/im.width,S/im.height);const w=im.width*k,h=im.height*k;cv.getContext('2d').drawImage(im,(S-w)/2,(S-h)/2,w,h);cb(cv.toDataURL('image/jpeg',0.85));};im.src=r.result;};r.readAsDataURL(f);};inp.click();}
@@ -2557,6 +2591,8 @@ app.addEventListener('input',e=>{
   if(a==='sx'){const L=sxList(t.dataset.c);const x=L[+t.dataset.i];if(!x)return;if(t.dataset.k==='t'){x.t=t.value;delete x.min;delete x.max;render();}else x[t.dataset.k]=t.value.replace(/\D/g,'');return;}
   if(a==='sp'){const P0=SP[t.dataset.p]=SP[t.dataset.p]||{};const v=P0[t.dataset.t]=P0[t.dataset.t]||{};if(t.dataset.k==='on'){v.on=t.checked;render();}else v.v=t.value.replace(/\D/g,'');return;}
   if(a==='lq'){LQ=t.value;render();return;}
+  if(a==='actas'){ACTAS=t.value;try{localStorage.setItem('ud-actas',ACTAS);}catch(_){}DOSSIER=null;render();return;}
+  if(a==='chd'){CHD[t.dataset.k]=t.value;return;}
   if(a==='about'){ABOUT=t.value;return;}
   if(a==='pr'){PR[t.dataset.k]=t.value;if(t.dataset.k==='art'){SP.pr={};render();}return;}
   if(a==='pdn'){PDN[t.dataset.k]=t.value;return;}
@@ -2604,6 +2640,9 @@ app.addEventListener('input',e=>{
   if(a==='pch'){sec.chair=t.value;return;}
   if(a==='chp'){sec.patriarch=t.value;return;}
   if(a==='cpn'){sec.priests[+t.dataset.p].name=t.value;return;}
+  if(a==='epn'){sec.eparchies[+t.dataset.p].name=t.value;return;}
+  if(a==='epb'){sec.eparchies[+t.dataset.p].bishop=t.value;return;}
+  if(a==='epl'){const e=sec.eparchies[+t.dataset.p];const n=t.dataset.n;e.lands=(e.lands||[]).filter(x=>x!==n);if(t.checked){sec.eparchies.forEach(x=>{x.lands=(x.lands||[]).filter(y=>y!==n);});e.lands.push(n);}render();return;}
   if(a==='cpt'){sec.priests[+t.dataset.p].title=t.value;return;}
   if(a==='cpp'){sec.priests[+t.dataset.p].parish=t.value;return;}
   if(a==='chpre'){sec.charter.preamble=t.value;return;}
@@ -2963,6 +3002,10 @@ app.addEventListener('click',async e=>{
   if(a==='cabgo'){const k=b.dataset.k;CAB='';DOSSIER=null;if(k.startsWith('court:')){const cs=sectionByKind('court');active=cs?cs.id:'court';COURT_V=k.slice(6);}else{delete SUB[k];active=k;}try{history.replaceState(null,'','#'+active);}catch(_){}render();window.scrollTo(0,0);return;}
   if(a==='hjump'){{const e0=document.getElementById(b.dataset.to);const d=e0&&e0.querySelector('details[data-o]');if(d&&!d.open){OPEN.add(d.dataset.o);render();}}const el=document.getElementById(b.dataset.to);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});const f=el.querySelector('input,textarea');if(f)setTimeout(()=>{try{f.focus({preventScroll:true});}catch(_){}},350);}return;}
   if(a==='ptab'){PTAB=b.dataset.k;render();return;}
+  if(a==='cht'){CH_T=b.dataset.k;render();return;}
+  if(a==='chemb'){const sc=state.sections[+b.dataset.s];pickImage(img=>{sc.emblem={img};render();},true);return;}
+  if(a==='epimg'){const sc=state.sections[+b.dataset.s];const e=sc.eparchies[+b.dataset.p];pickImage(img=>{e.img=img;render();},true);return;}
+  if(a==='chdpub'){const c=churchSec();if(!c||!isPatriarch()||editing)return;const tt=CHD.title.trim();if(!tt){msg='Впишіть назву постанови';msgErr=true;render();return;}const before=JSON.stringify(c);const ds=c.decrees=c.decrees||[];const no=(ds.reduce((m,d)=>Math.max(m,+d.no||0),0))+1;const by=PATR_TITLE+' '+(c.patriarch||'');const at=new Date().toISOString();ds.push({id:'cd'+Date.now().toString(36),no,title:tt,text:CHD.text.trim(),at,by});(c.log=c.log||[]).push({at,tx:`Видано постанову Церкви №${no} «${tt}»`,by});busy=true;render();try{await window.FB.saveChurch(c);saved=JSON.stringify(state);CHD={title:'',text:''};msg='Постанову видано';msgErr=false;}catch(e){const i=state.sections.indexOf(c);if(i>=0)state.sections[i]=JSON.parse(before);msg='Не вдалося видати постанову';msgErr=true;}busy=false;render();return;}
   if(a==='cabprop'){DRAFT.cat=b.dataset.k;CAB='';const ps=sectionByKind('parliament');if(ps)active=ps.id;DOSSIER=null;try{history.replaceState(null,'','#'+active);}catch(_){}render();setTimeout(()=>{const el=document.querySelector('.propbox');if(el)el.scrollIntoView({block:'start'});},30);return;}
   if(a==='econt'){ECON_T=b.dataset.k;render();return;}
   if(a==='billm'){BILLM=b.dataset.k||'';render();return;}
@@ -2992,6 +3035,9 @@ app.addEventListener('click',async e=>{
   else if(a==='lxcdel'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно прибрати кодекс?';return;}s.codes.splice(+b.dataset.c,1);}
   else if(a==='lxadd'){const C0=s.codes[+b.dataset.c];const no=C0.next||(C0.articles.length+1);C0.next=no+1;C0.articles.push({id:'a'+Date.now().toString(36),no,title:'',body:'',sanc:[],since:today(),hist:[{at:new Date().toISOString(),tx:'Додано адміністрацією'}]});}
   else if(a==='lxdel'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return;}s.codes[+b.dataset.c].articles.splice(+b.dataset.r,1);}
+  else if(a==='epadd'){(s.eparchies=s.eparchies||[]).push({id:'ep'+Date.now().toString(36),name:'',img:'',bishop:'',lands:[]});}
+  else if(a==='epdel'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return;}s.eparchies.splice(+b.dataset.p,1);}
+  else if(a==='chembdel'){delete s.emblem;}
   else if(a==='cpadd'){(s.priests=s.priests||[]).push({name:'',title:'Священик',parish:'',since:today()});}
   else if(a==='cpdel'){s.priests.splice(+b.dataset.p,1);}
   else if(a==='chaadd'){const ar=s.charter.articles;ar.push({title:'Стаття '+(ar.length+1)+'. ',body:''});}
@@ -3218,13 +3264,34 @@ function defaultChurch(){return {id:'church',kind:'church',nav:'Церква',ti
 function churchSec(st){return (st||state).sections.find(x=>x.kind==='church');}
 function churchHols(){const c=churchSec();return (c&&c.holidays)||[];}
 function isPatriarch(){const c=churchSec();return !!(AUTH.email&&!postBan()&&c&&String(c.patriarch||'').trim()&&emailOf(c.patriarch)===AUTH.email);}
+let CH_T='ep',CHD={title:'',text:''};
+function eparchyOf(land){const c=churchSec();return c?(c.eparchies||[]).find(e=>(e.lands||[]).includes(land))||null:null;}
+function churchEditExtra(s,si){const eps=s.eparchies||(s.eparchies=[]);const lands=landList(state).map(x=>x.name);const em=s.emblem&&s.emblem.img;
+  let h=`<div class="block"><h3>Герб Церкви</h3><div class="landtools">${em?`<img class="chemb sm" src="${esc(em)}" alt="Герб Церкви">`:'<span class="hint">Герб ще не завантажено.</span>'}<button class="small" data-a="chemb" data-s="${si}">${em?'Змінити герб':'Завантажити герб'}</button>${em?`<button class="small ghost" data-a="chembdel" data-s="${si}">Прибрати</button>`:''}</div></div>`;
+  h+=`<div class="block"><h3>Єпархії <small>кожна Земля може належати лише до однієї єпархії</small></h3>${eps.map((e,i)=>{const taken=new Set(eps.filter((x,j)=>j!==i).flatMap(x=>x.lands||[]));return `<div class="artedit epedit"><div class="erow"><button type="button" class="avbtn" data-a="epimg" data-s="${si}" data-p="${i}" title="Зображення єпархії">${e.img?`<img src="${esc(e.img)}" alt="">`:'🖼'}</button><input type="text" id="epn-${i}" data-a="epn" data-s="${si}" data-p="${i}" value="${esc(e.name||'')}" placeholder="Назва, напр. Київська єпархія">${plSelect('epb-'+i,`data-a="epb" data-s="${si}" data-p="${i}"`,e.bishop||'','— єпископ (необов’язково) —')}<button class="small danger" data-a="epdel" data-s="${si}" data-p="${i}">Прибрати</button></div><div class="eplands">${lands.map(n=>`<label class="chk${taken.has(n)?' dis':''}"><input type="checkbox" data-a="epl" data-s="${si}" data-p="${i}" data-n="${esc(n)}"${(e.lands||[]).includes(n)?' checked':''}${taken.has(n)?' disabled':''}> ${esc(n)}</label>`).join('')}</div></div>`;}).join('')}<div><button class="small" data-a="epadd" data-s="${si}">+ Єпархія</button></div></div>`;
+  return h;}
+function churchView(s){const pr=s.priests||[];const ch=s.charter||{articles:[]};const pn=String(s.patriarch||'').trim();const cl=pr.filter(q=>String(q.name||'').trim());const eps=(s.eparchies||[]).filter(e=>e.name);const decs=(s.decrees||[]).slice().reverse();const em=s.emblem&&s.emblem.img;const lg=(s.log||[]).slice().reverse();
+  let h=`<div class="block chhero">${em?`<img class="chemb" src="${esc(em)}" alt="Герб Церкви">`:'<div class="chemb none">✝</div>'}<div class="chtx"><div class="chname">${esc(s.title||'Українська Соборна Церква')}</div><div class="hint">${esc(s.note||'')}</div><div class="dchips"><span class="dchip">⛪ Єпархій: <b>${eps.length}</b></span><span class="dchip">🙏 Духовенство: <b>${cl.length}</b></span><span class="dchip">📜 Постанов: <b>${decs.length}</b></span></div></div><div class="chpatr">${seatAv(pn,'pav')}<div><div class="st">${PATR_TITLE}</div><div class="sn">${pn?plink(pn):'<span class="vacn">Престол вакантний</span>'}</div></div></div></div>`;
+  const tabs=[['ep','⛪ Єпархії',eps.length],['cl','🙏 Духовенство',cl.length],['dec','📜 Постанови',decs.length],['st','📖 Статут',(ch.articles||[]).length],['log','🕯 Літопис',lg.length]];
+  h+=`<div class="afilter">${tabs.map(([k,l,n])=>`<button class="small${CH_T===k?' primary':''}" data-a="cht" data-k="${k}">${l}${n?' · '+n:''}</button>`).join('')}</div>`;
+  let b='';
+  if(CH_T==='ep'){const all=landList(state).map(x=>x.name);const free=all.filter(n=>!eps.some(e=>(e.lands||[]).includes(n)));
+    b=eps.length?`<div class="epgrid">${eps.map(e=>{const pp=cl.filter(q=>(e.lands||[]).includes(q.parish));return `<article class="epcard">${e.img?`<img src="${esc(e.img)}" alt="">`:'<div class="epimg none">⛪</div>'}<div class="epbody"><div class="epname">${esc(e.name)}</div>${e.bishop?`<div class="hint">Єпископ: ${plink(e.bishop)}</div>`:''}<div class="lposts">${(e.lands||[]).map(n=>`<span class="tag">${esc(n)}</span>`).join('')||'<span class="hint">Земель ще не віднесено</span>'}</div>${pp.length?`<div class="hint">Парафії: ${pp.map(q=>esc(q.name)).join(', ')}</div>`:''}</div></article>`;}).join('')}</div>`+(free.length?`<p class="hint">Землі поза єпархіями: ${free.map(esc).join(', ')}</p>`:''):'<p class="empty">Єпархій ще немає. Їх створює Патріарх у режимі «Редагувати Церкву».</p>';}
+  else if(CH_T==='cl')b=cl.length?'<div class="clergy">'+cl.map(q=>{const e=q.parish?eparchyOf(q.parish):null;return `<div class="cler">${seatLink(q.name,seatAv(q.name,'cav'),(q.title||'Священик')+' '+q.name)}<div><div class="st">${esc(q.title||'Священик')}</div><div class="sn">${plink(q.name)}</div>${q.parish?`<div class="hint">⛪ ${esc(q.parish)}${e?' · '+esc(e.name):''}</div>`:''}</div></div>`;}).join('')+'</div>':'<p class="empty">Священиків ще не призначено.</p>';
+  else if(CH_T==='dec'){if(isPatriarch()&&!AUTH.bot&&!editing)b+=`<div class="compose chdform"><h3>Нова постанова Церкви <small>від імені ${esc(PATR_TITLE)}</small></h3><input type="text" id="chd-title" data-a="chd" data-k="title" maxlength="200" value="${esc(CHD.title)}" placeholder="Назва постанови"><textarea id="chd-text" data-a="chd" data-k="text" maxlength="5000" placeholder="Текст постанови">${esc(CHD.text)}</textarea><div><button class="small primary" data-a="chdpub" ${busy?'disabled':''}>Видати постанову</button></div></div>`+docForm();
+    b+=decs.length?decs.map(d=>`<article class="post decree"><div class="ph"><span class="tag warn">📜 Постанова Церкви №${esc(d.no)}</span><span class="hint">${esc(fmtDT(d.at))}</span></div><h4>${esc(d.title)}</h4>${d.text?`<p>${esc(d.text).replace(/\n/g,'<br>')}</p>`:''}<div class="hint">${esc(d.by||'')}</div></article>`).join(''):'<p class="empty">Постанов ще немає.</p>';}
+  else if(CH_T==='st')b=`${ch.preamble?`<p class="pre">${esc(ch.preamble)}</p>`:''}${(ch.articles||[]).length?ch.articles.map(a=>`<details class="chart"><summary>${esc(a.title)}</summary><p>${esc(a.body||'')}</p></details>`).join(''):'<p class="empty">Статут ще не затверджено.</p>'}`;
+  else b=lg.length?`<ul class="rklog">${lg.slice(0,60).map(x=>`<li><span class="rki" aria-hidden="true">✝</span><div><div>${esc(x.tx)}</div><div class="hint">${esc(fmtDT(x.at))}${x.by?' · '+esc(x.by):''}</div></div></li>`).join('')}</ul>`:'<p class="empty">Подій ще немає.</p>';
+  return h+`<div class="block chbody">${b}</div>`;}
 function churchHtml(s,si){const pr=s.priests||(s.priests=[]);const ch=s.charter||(s.charter={preamble:'',articles:[]});ch.articles=ch.articles||[];const hs=s.holidays||(s.holidays=[]);let h='<div class="church">';
   if(editing){
     if(AUTH.admin)h+=`<div class="block"><h3>${PATR_TITLE} <small>призначає адміністрація або Палата Земель законом</small></h3>${plSelect('chp',`data-a="chp" data-s="${si}"`,s.patriarch,'— Престол вакантний —')}</div>`;
     h+=`<div class="block"><h3>Духовенство <small>священиків призначає Патріарх</small></h3>${pr.map((q,i)=>`<div class="erow cprow">${plSelect('cpn-'+i,`data-a="cpn" data-s="${si}" data-p="${i}"`,q.name,'— оберіть гравця —')}<select id="cpt-${i}" data-a="cpt" data-s="${si}" data-p="${i}" aria-label="Сан">${PRIEST_TITLES.map(t=>`<option${t===q.title?' selected':''}>${t}</option>`).join('')}</select><select id="cpp-${i}" data-a="cpp" data-s="${si}" data-p="${i}" aria-label="Парафія"><option value="">— без парафії —</option>${landList(state).map(x=>x.name).map(n=>`<option${n===q.parish?' selected':''}>${esc(n)}</option>`).join('')}</select><button class="small danger" data-a="cpdel" data-s="${si}" data-p="${i}">Звільнити</button></div>`).join('')}<div><button class="small" data-a="cpadd" data-s="${si}">+ Священик</button></div></div>`;
     h+=`<div class="block"><h3>Статут Церкви</h3><label class="fl">Преамбула<textarea id="chpre" data-a="chpre" data-s="${si}" placeholder="Вступ до Статуту">${esc(ch.preamble||'')}</textarea></label>${ch.articles.map((a,i)=>`<div class="artedit"><div class="erow"><input type="text" id="chat-${i}" data-a="chat" data-s="${si}" data-p="${i}" value="${esc(a.title)}" placeholder="Стаття ${i+1}. Назва"><button class="small ghost" data-a="chaup" data-s="${si}" data-p="${i}" ${i?'':'disabled'} aria-label="Вище">↑</button><button class="small danger" data-a="chadel" data-s="${si}" data-p="${i}">Прибрати</button></div><textarea id="chab-${i}" data-a="chab" data-s="${si}" data-p="${i}" placeholder="Текст статті">${esc(a.body||'')}</textarea></div>`).join('')}<div><button class="small" data-a="chaadd" data-s="${si}">+ Стаття</button></div></div>`;
     h+=`<div class="block"><h3>Церковні свята <small>з’являються в календарі нижче</small></h3>${hs.map((x,i)=>`<div class="erow hrow"><input type="text" id="chhn-${i}" data-a="chhn" data-s="${si}" data-p="${i}" value="${esc(x.name)}" placeholder="Назва свята, напр. Різдво Христове"><select id="chhd-${i}" data-a="chhd" data-s="${si}" data-p="${i}" aria-label="День">${Array.from({length:31},(_,k)=>`<option value="${k+1}"${+x.day===k+1?' selected':''}>${k+1}</option>`).join('')}</select><select id="chhm-${i}" data-a="chhm" data-s="${si}" data-p="${i}" aria-label="Місяць">${MONTHS_G.map((m,k)=>`<option value="${k+1}"${+x.month===k+1?' selected':''}>${m}</option>`).join('')}</select><input type="text" id="chht-${i}" data-a="chht" data-s="${si}" data-p="${i}" value="${esc(x.text||'')}" placeholder="Опис"><button class="small danger" data-a="chhdel" data-s="${si}" data-p="${i}">Прибрати</button></div>`).join('')}<div><button class="small" data-a="chhadd" data-s="${si}">+ Церковне свято</button></div></div>`;
+    h+=churchEditExtra(s,si);
     return h+'</div>';}
+  if(true)return h+churchView(s)+'</div>';
   const pn=String(s.patriarch||'').trim();const cl=pr.filter(q=>String(q.name||'').trim());
   h+=`<div class="block patr"><div class="patrav">${seatLink(pn,seatAv(pn,'pav'),PATR_TITLE+': '+(pn||'вакантно'))}</div><div class="patrtx"><div class="st">${PATR_TITLE}</div><div class="pname">${pn?plink(pn):'<span class="vacn">Престол вакантний</span>'}</div><div class="hint">Очолює Українську Соборну Церкву, призначає священиків, затверджує Статут Церкви та церковні свята.</div></div></div>`;
   if(isPatriarch()&&!AUTH.bot)h+=docForm();
@@ -3353,7 +3420,7 @@ function chronicle(){const ev=[];
   PROTS.forEach(p=>ev.push({at:msIso(p.at),ic:'📋',tx:`Адміністративний протокол №${p.no||''}: ${p.name} — ${p.art?p.art.label:''}`}));
   PARDONS.forEach(d=>ev.push({at:msIso(d.at),ic:'🕊',tx:`Гетьман помилував ${d.name}`}));
   ADVS.filter(a=>a.status==='licensed').forEach(a=>ev.push({at:a.grantedAt||msIso(a.at),ic:'🎓',tx:`${a.name} отримав адвокатську ліцензію`}));
-  APPS.filter(a=>a.status==='accepted'&&a.decision&&a.decision.at).forEach(a=>ev.push({at:a.decision.at,ic:'🪪',tx:`${a.name} прийнято до громадянства`}));
+  APPS.filter(a=>a.status==='accepted'&&a.decision&&a.decision.at).forEach(a=>ev.push({at:a.decision.at,ic:a.kind==='tourist'?'🧳':'🪪',tx:a.kind==='tourist'?`${a.name} зареєстрований як турист`:`${a.name} прийнято до громадянства`}));
   {const rs=ranksSec();((rs&&rs.log)||[]).forEach(x=>{if(x.at)ev.push({at:x.at,ic:'🎗',tx:`${x.name}: ${rankVerb(x)}`});});}
   emPeriods().forEach(({p,from,to})=>{ev.push({at:new Date(from).toISOString(),ic:'🚨',tx:`Запроваджено надзвичайний стан${p.source==='law'?' законом':' указом Гетьмана'}: ${p.reason||''}`});if(to<=Date.now())ev.push({at:new Date(to).toISOString(),ic:'🕊',tx:p.endedBy?`Надзвичайний стан припинено (${p.endedBy})`:'Надзвичайний стан завершився'});});
   AWARDS.forEach(a=>{ev.push({at:msIso(a.at),ic:'🎖',tx:`${a.recipient} нагороджено відзнакою «${a.title}»`});if(a.revoked)ev.push({at:a.revoked.at||'',ic:'🚫',tx:`${a.recipient} позбавлено відзнаки «${a.title}»`});});
@@ -3528,7 +3595,8 @@ async function hashId(str){
   return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
 }
 function walkImages(state, fn){
-  state.sections.forEach(s => { (s.lands||[]).forEach(l => (l.flags||[]).forEach(f => fn(f))); (s.bills||[]).forEach(b => { if (b.amend && b.amend.img) fn(b.amend); }); if (s.kind === "players") (s.list||[]).forEach(p => { if (p.img) fn(p); }); if (s.kind === "gov" && s.emblem && s.emblem.img) fn(s.emblem); });
+  if (state.__church) { const c = state.__church; if (c.emblem && c.emblem.img) fn(c.emblem); (c.eparchies || []).forEach(e => { if (e.img) fn(e); }); }
+  state.sections.forEach(s => { (s.lands||[]).forEach(l => (l.flags||[]).forEach(f => fn(f))); (s.bills||[]).forEach(b => { if (b.amend && b.amend.img) fn(b.amend); }); if (s.kind === "players") (s.list||[]).forEach(p => { if (p.img) fn(p); }); if (s.kind === "gov" && s.emblem && s.emblem.img) fn(s.emblem); if (s.kind === "church") { if (s.emblem && s.emblem.img) fn(s.emblem); (s.eparchies || []).forEach(e => { if (e.img) fn(e); }); } });
 }
 async function storeImages(st){
   const flags = []; walkImages(st, f => flags.push(f));
@@ -3603,7 +3671,7 @@ async function save(state){
   if (ps) { PLAYERS_JSON = JSON.stringify(ps); batch.set(doc(db, "site", "players"), { json: PLAYERS_JSON, updatedBy: who(), updatedAt: nowIso() }); }
   const rk = copy.sections.find(x => x.kind === "ranks");
   const chs = copy.sections.find(x => x.kind === "church");
-  if (chs) { CHURCH_JSON = JSON.stringify({ priests: chs.priests || [], charter: chs.charter || {}, holidays: chs.holidays || [], log: chs.log || [] }); batch.set(doc(db, "site", "church"), { json: CHURCH_JSON, updatedBy: who(), updatedAt: nowIso() }); }
+  if (chs) { CHURCH_JSON = JSON.stringify({ priests: chs.priests || [], charter: chs.charter || {}, holidays: chs.holidays || [], log: chs.log || [], emblem: chs.emblem || null, eparchies: chs.eparchies || [], decrees: chs.decrees || [] }); batch.set(doc(db, "site", "church"), { json: CHURCH_JSON, updatedBy: who(), updatedAt: nowIso() }); }
   if (rk) { RANKS_JSON = JSON.stringify(rk); batch.set(doc(db, "site", "ranks"), { json: RANKS_JSON, updatedBy: who(), updatedAt: nowIso() }); }
   const parl = copy.sections.find(x => x.kind === "parliament");
   ((parl && parl.bills) || []).forEach(b => { if (b.id) batch.set(doc(db, "ballots", b.id), { open: !!b.voting, title: b.title || "", closesAt: (b.voting && b.closesAt) ? new Date(b.closesAt) : null }); });
@@ -3690,7 +3758,7 @@ async function delAwardType(id){ await deleteDoc(doc(db, "awardTypes", id)); }
 async function postTreaty(t){ const id = "d" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); await setDoc(doc(db, "treaties", id), { kind: t.kind, partner: t.partner, url: t.url || "", title: t.title, text: t.text || "", by: t.by || "", role: t.role || "", email: (auth.currentUser.email || "").toLowerCase(), status: "draft", at: serverTimestamp() }); }
 async function updTreaty(id, v){ await updateDoc(doc(db, "treaties", id), v); }
 async function delTreaty(id){ await deleteDoc(doc(db, "treaties", id)); }
-async function saveChurch(sec){ const pick = { priests: sec.priests || [], charter: sec.charter || {}, holidays: sec.holidays || [], log: sec.log || [] }; CHURCH_JSON = JSON.stringify(pick); await setDoc(doc(db, "site", "church"), { json: CHURCH_JSON, updatedBy: who(), updatedAt: nowIso() }); }
+async function saveChurch(sec){ const cp = JSON.parse(JSON.stringify(sec)); await storeImages({ sections: [cp] }); if (cp.emblem) sec.emblem = cp.emblem; (cp.eparchies || []).forEach((e, i) => { if (sec.eparchies && sec.eparchies[i]) sec.eparchies[i].img = e.img; }); const pick = { priests: cp.priests || [], charter: cp.charter || {}, holidays: cp.holidays || [], log: cp.log || [], emblem: cp.emblem || null, eparchies: cp.eparchies || [], decrees: cp.decrees || [] }; CHURCH_JSON = JSON.stringify(pick); await setDoc(doc(db, "site", "church"), { json: CHURCH_JSON, updatedBy: who(), updatedAt: nowIso() }); }
 const uid8 = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const myMail = () => (auth.currentUser.email || "").toLowerCase();
 // ---- comments, petitions, court, decrees
