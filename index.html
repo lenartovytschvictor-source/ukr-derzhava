@@ -995,6 +995,22 @@ button.lcard.vacant{border-style:dashed}
 .commgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.comm{border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:6px;background:rgba(0,0,0,.12)}.comm.cvk{border-color:var(--gold-soft)}.commh{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.commh b{font-size:15px}
 .cmsel{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px}
 @media (max-width:760px){.eltl{grid-template-columns:1fr}.elhead{flex-direction:column}.elcand{flex-direction:column}.elbar{grid-template-columns:minmax(0,1fr) auto 40px}.elbar .elbt{grid-column:1/-1;grid-row:2}.elban{grid-template-columns:auto minmax(0,1fr)}.elban .ebgo{grid-column:1/-1}}
+
+.maptop{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}.maptop>*{margin:0!important}
+.mapwrap{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}.mapwrap.hasside{grid-template-columns:minmax(0,1fr) 290px}
+.mapbox{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0f1418}
+.mapsvg{display:block;width:100%;height:auto;aspect-ratio:1.73;touch-action:none;cursor:grab;user-select:none}.mapsvg:active{cursor:grabbing}
+.msea{fill:#13202b}
+.mreg{stroke:#0d0a08;stroke-width:.5;vector-effect:non-scaling-stroke;stroke-linejoin:round;cursor:pointer}.mreg:not(.our):not(.uni){opacity:.92}.mreg.our{stroke-width:.8}.mreg:hover{filter:brightness(1.2)}.mreg.sel{stroke:#fff;stroke-width:2.2;filter:brightness(1.25)}
+.mcity{cursor:pointer}.mcity circle{fill:#fff7e6;stroke:#140f0b;stroke-width:1;vector-effect:non-scaling-stroke}.mcity.cap circle{fill:#f2b544}.mcity text{fill:#fff7e6;paint-order:stroke;stroke:#140f0b;stroke-width:2.5px;vector-effect:non-scaling-stroke;pointer-events:none;font-weight:600}
+.mctry{fill:rgba(255,255,255,.35);text-anchor:middle;font-weight:700;letter-spacing:.06em;pointer-events:none;text-transform:uppercase}.mctry.uni{fill:rgba(255,255,255,.75)}
+.mland{cursor:pointer}.mland image{filter:drop-shadow(0 1px 2px rgba(0,0,0,.8))}.mlbl{font-weight:700;fill:#fff;text-anchor:middle;paint-order:stroke;stroke:rgba(15,10,6,.85);stroke-width:2.6px;vector-effect:non-scaling-stroke;pointer-events:none}
+.mtip{position:absolute;pointer-events:none;background:rgba(20,15,10,.92);border:1px solid var(--gold-soft);border-radius:8px;padding:4px 8px;font-size:12.5px;color:var(--cream);white-space:nowrap;z-index:2}
+.mside{border:1px solid var(--line);border-radius:16px;padding:14px;background:var(--panel);display:grid;gap:10px;align-content:start}.mside h3{margin:0}.mside .gamebtn{justify-self:start}
+.mlandb{all:unset;cursor:pointer;display:flex;gap:10px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:12px}.mlandb:hover{border-color:var(--gold)}.mlandb img{width:48px;height:32px;object-fit:cover;border-radius:4px}.mlandb span{display:grid}.mlandb small{color:var(--muted)}
+.mlegend{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:10px}.mlg{all:unset;display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--cream)}button.mlg{cursor:pointer}button.mlg:hover{color:var(--gold-hi)}.mlg i{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid rgba(0,0,0,.4)}
+.mcopy{margin-top:6px;font-size:11.5px}
+@media (max-width:760px){.mapwrap.hasside{grid-template-columns:1fr}.mapsvg{aspect-ratio:auto;height:58vh}}
 /* ---- PP: мобільна версія ---- */
 .mnav{display:none}
 .chback{display:none}
@@ -1341,8 +1357,9 @@ const cur=l=>l.flags[l.flags.length-1]||{img:'',name:'Нова земля',date:
 const uid=()=>'l'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 
 // ---------- II: Землі — новий вигляд і літопис ----------
-function landHead(l){{const hp=(l.posts||[])[l.head];if(hp&&l.head!=null){const nm=String(hp.holder||'').trim()&&hp.holder!=='0'?hp.holder:'';const base=String(hp.title||'').replace(/^\d+\s*-?\s*[йя]?\s*/,'');const N=q=>{const m=/^(\d+)/.exec(String(q.title||'').trim());return m?+m[1]:0;};const past=(l.posts||[]).filter(q=>q!==hp&&String(q.title||'').replace(/^\d+\s*-?\s*[йя]?\s*/,'')===base&&N(q)<N(hp)&&String(q.holder||'').trim()&&q.holder!=='0');return {post:hp,name:nm,past};}}
-  {const N=q=>{const m=/^(\d+)\s*-?\s*[йя]?\s*(.*)$/.exec(String(q.title||'').trim());return m?+m[1]:0;};const st=(l.posts||[]).filter(q=>/старост/i.test(q.title||''));if(st.length){const srt=st.slice().sort((a,b)=>N(b)-N(a));const t=srt[0];return {post:t,name:String(t.holder||'').trim()&&t.holder!=='0'?t.holder:'',past:srt.slice(1).filter(q=>String(q.holder||'').trim()&&q.holder!=='0')};}}
+function landHead(l){const r=landHead0(l);const fl=(l.posts||[]).filter(q=>q.past&&q!==r.post&&String(q.holder||'').trim()&&q.holder!=='0'&&!r.past.includes(q));if(fl.length)r.past=[...fl,...r.past];return r;}
+function landHead0(l){{const hp=(l.posts||[])[l.head];if(hp&&l.head!=null){const nm=String(hp.holder||'').trim()&&hp.holder!=='0'?hp.holder:'';const base=String(hp.title||'').replace(/^\d+\s*-?\s*[йя]?\s*/,'');const N=q=>{const m=/^(\d+)/.exec(String(q.title||'').trim());return m?+m[1]:0;};const past=(l.posts||[]).filter(q=>q!==hp&&String(q.title||'').replace(/^\d+\s*-?\s*[йя]?\s*/,'')===base&&N(q)<N(hp)&&String(q.holder||'').trim()&&q.holder!=='0');return {post:hp,name:nm,past};}}
+  {const N=q=>{const m=/^(\d+)\s*-?\s*[йя]?\s*(.*)$/.exec(String(q.title||'').trim());return m?+m[1]:0;};const st=(l.posts||[]).filter(q=>/старост/i.test(q.title||'')&&!q.past);if(st.length){const srt=st.slice().sort((a,b)=>N(b)-N(a));const t=srt[0];return {post:t,name:String(t.holder||'').trim()&&t.holder!=='0'?t.holder:'',past:srt.slice(1).filter(q=>String(q.holder||'').trim()&&q.holder!=='0')};}}
   const posts=(l.posts||[]).filter(q=>String(q.holder||'').trim()&&q.holder!=='0');const ota=(l.posts||[]).filter(q=>otaNum(q)>0).sort((a,b)=>otaNum(b)-otaNum(a));
   if(ota.length){const t=ota[0];return {post:t,name:String(t.holder||'').trim()&&t.holder!=='0'?t.holder:'',past:ota.slice(1).filter(q=>String(q.holder||'').trim()&&q.holder!=='0')};}
   const h=posts.find(q=>/отаман|сотник|командир|голова|писар|намісник/i.test(q.title||''))||posts[0];return {post:h||null,name:h?h.holder:'',past:[]};}
@@ -1366,7 +1383,7 @@ window.APP_LANDLOG=st=>landLogDiff(saved?JSON.parse(saved):null,st);
 function landLog(names){const ls=landLogSec();const L=((ls&&ls.log)||[]).slice().reverse();return names?L.filter(e=>names.includes(e.land)):L;}
 let LANDM='';
 function landInfo(l){const c=cur(l);const h=landHead(l);const nm=c.name;
-  const others=(l.posts||[]).filter(q=>q!==h.post&&!h.past.includes(q)&&!(otaNum(q)>0)&&String(q.holder||'').trim()&&q.holder!=='0');
+  const others=(l.posts||[]).filter(q=>q!==h.post&&!h.past.includes(q)&&!(otaNum(q)>0)&&!q.past&&String(q.holder||'').trim()&&q.holder!=='0');
   const rep=landLeaders().find(r=>r.land===nm);const vm=voterMap();const seat=rep&&rep.name?(vm[nm]?'🗳 Голосує в Палаті Земель':'⚠ Немає пошти в реєстрі — не голосує'):'Місце в Палаті вакантне';
   const lg=landLog([nm]);const ep=eparchyOf(nm);const sec=state.sections.find(x=>(x.lands||[]).includes(l));
   return `<div class="lmodal"><div class="lmhead"><div class="lbg" style="background-image:url('${esc(c.img)}')"></div><img class="lmflag" src="${esc(c.img)}" alt="Прапор: ${esc(nm)}"><div><div class="hint">${esc(sec?(sec.title||sec.nav||''):'')}</div><h3>${esc(nm)}</h3>${l.lostAt?`<span class="pill rejected">🏴 Втрачено ${esc(l.lostAt)}</span> `:''}${l.restoredAt?`<span class="pill passed">🔁 Відновлено ${esc(l.restoredAt)}</span>`:''}</div></div>
@@ -1470,7 +1487,7 @@ function viewLand(l,kind){
 }
 function editLand(l,si,li,n,kind){
   const c=cur(l);const U=kind==='units';
-  const posts=l.posts.map((p,pi)=>`<div class="erow"><input type="text" id="pt-${l.id}-${pi}" data-a="pt" data-s="${si}" data-l="${li}" data-p="${pi}" value="${esc(p.title)}" placeholder="Посада">${plSelect(`ph-${l.id}-${pi}`,`data-a="ph" data-s="${si}" data-l="${li}" data-p="${pi}"`,p.holder)}${U?'':`<button class="small${l.head===pi?' primary':' ghost'}" data-a="lhead" data-s="${si}" data-l="${li}" data-p="${pi}" title="${l.head===pi?'Очільник Землі (натисніть, щоб зняти)':'Зробити цю посаду очільником Землі'}">👑</button>`}<button class="small danger" data-a="pdel" data-s="${si}" data-l="${li}" data-p="${pi}">Прибрати</button></div>`).join('');
+  const posts=l.posts.map((p,pi)=>`<div class="erow"><input type="text" id="pt-${l.id}-${pi}" data-a="pt" data-s="${si}" data-l="${li}" data-p="${pi}" value="${esc(p.title)}" placeholder="Посада">${plSelect(`ph-${l.id}-${pi}`,`data-a="ph" data-s="${si}" data-l="${li}" data-p="${pi}"`,p.holder)}${U?'':`<button class="small${l.head===pi?' primary':' ghost'}" data-a="lhead" data-s="${si}" data-l="${li}" data-p="${pi}" title="${l.head===pi?'Очільник Землі (натисніть, щоб зняти)':'Зробити цю посаду очільником Землі'}">👑</button><button class="small${p.past?' primary':' ghost'}" data-a="lpast" data-s="${si}" data-l="${li}" data-p="${pi}" title="${p.past?'Позначено як колишнього очільника (натисніть, щоб зняти)':'Позначити: це колишній очільник Землі'}">🕰</button>`}<button class="small danger" data-a="pdel" data-s="${si}" data-l="${li}" data-p="${pi}">Прибрати</button></div>`).join('');
   const flags=l.flags.map((f,fi)=>`<div class="fver${U?' unit':''}"><img src="${f.img}" alt=""><input type="text" id="fn-${l.id}-${fi}" data-a="fn" data-s="${si}" data-l="${li}" data-f="${fi}" value="${esc(f.name)}" placeholder="${U?'Назва куреня':'Назва землі'}"><input type="text" id="fd-${l.id}-${fi}" data-a="fd" data-s="${si}" data-l="${li}" data-f="${fi}" value="${esc(f.date)}" placeholder="Дата"><button class="small danger" data-a="fdel" data-s="${si}" data-l="${li}" data-f="${fi}" ${l.flags.length<2?'disabled':''}>Прибрати</button></div>`).join('');
   return `<article class="land edit${U?' unit':''}"><div class="flagbox"><img src="${c.img}" alt=""></div>
   <div class="info">
@@ -1661,7 +1678,7 @@ function defaultLaws(){const at=new Date().toISOString();const A=(no,title,body,
 function isSw(s){return !!s&&(s.sw===true||(s.sw!==false&&SW_KINDS.includes(s.kind)));}
 function restructure(s){const S=s.sections;const by=k=>S.find(x=>x.kind===k);const ud=S.find(x=>x.id==='ud')||S.find(x=>!x.kind&&x.lands);
   const parl=by('parliament'),laws=by('laws'),doc=by('doc'),pl=by('players'),gov=by('gov'),econ=by('economy'),aw=by('awards'),court=by('court'),units=by('units'),church=by('church'),home=by('home');
-  if(ud){ud.navTop='Держава';S.filter(x=>!x.kind&&x.lands&&x!==ud).forEach(x=>{x.tab=ud.id;x.sw=true;});if(econ){econ.tab=ud.id;econ.sw=true;}if(aw){aw.tab=ud.id;aw.sw=true;}{const el=by('elections');if(el){el.tab=ud.id;el.sw=true;}}}
+  if(ud){ud.navTop='Держава';S.filter(x=>!x.kind&&x.lands&&x!==ud).forEach(x=>{x.tab=ud.id;x.sw=true;});if(econ){econ.tab=ud.id;econ.sw=true;}if(aw){aw.tab=ud.id;aw.sw=true;}{const el=by('elections');if(el){el.tab=ud.id;el.sw=true;}const mp=by('map');if(mp){mp.tab=ud.id;mp.sw=true;}}}
   if(laws){delete laws.tab;laws.nav='Законодавство';if(doc){doc.tab=laws.id;doc.sw=false;doc.hideView=true;}}
   const cs0=by('court');if(cs0&&parl){cs0.tab=parl.id;cs0.sw=true;parl.noSub=true;}if(pl){pl.nav='Гравці';if(ud){pl.tab=ud.id;pl.sw=true;}else delete pl.tab;}
   if(gov&&parl){gov.tab=parl.id;gov.sw=false;gov.hideView=true;}
@@ -1922,7 +1939,7 @@ function lawsHtml(s,si){const cs=s.codes||(s.codes=[]);if(!editing)return lexVie
   else{const list=byKind(LAWT).filter(b=>hit(b.title)||hit(b.text)).sort((x,y)=>String(y.closesAt||y.date||'').localeCompare(String(x.closesAt||x.date||'')));
     h+=`<div class="block"><h3>${esc(({law:'Закони',code:'Закони про зміни до кодексів',const:'Конституційні закони',res:'Постанови Палати Земель',decl:'Резолюції Палати Земель'})[LAWT]||'')} <small>${esc(ACT_HINT[LAWT]||'')}</small></h3>${LAWT==='const'&&constSec()?`<div class="landtools"><button class="small" data-a="tab" data-id="${esc(constSec().id)}">📜 Відкрити Конституцію</button></div>`:''}${list.length?(MORE.acts?list:list.slice(0,10)).map(actRow).join('')+(list.length>10?moreBtn('acts',list.length):''):`<p class="empty">${q?'Нічого не знайдено.':'Тут поки порожньо.'}</p>`}</div>`;}
   return h+'</div>';}
-NAV_ICONS.elections='<path d="M5 10h14v10H5z"/><path d="M9 10V5h6v5M9 14h6"/>';NAV_ICONS.chat='<path d="M4 5h16v11H9l-5 4V5Z"/><path d="M8 9h8M8 12h5"/>';
+NAV_ICONS.map='<path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10Z"/><circle cx="12" cy="11" r="2.2"/>';NAV_ICONS.elections='<path d="M5 10h14v10H5z"/><path d="M9 10V5h6v5M9 14h6"/>';NAV_ICONS.chat='<path d="M4 5h16v11H9l-5 4V5Z"/><path d="M8 9h8M8 12h5"/>';
 NAV_ICONS.laws='<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4Z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8h6M9 11h4"/>';
 // ---------- Генеральний Суд v2 ----------
 const CSTAT={open:['review','📥 Нова справа'],hearing:['sign','🗣 Слухання'],delib:['ov','🤝 Нарада суддів'],decided:['passed','⚖️ Позов задоволено'],dismissed:['rejected','✕ У позові відмовлено'],rejected:['rejected','⛔ Відмовлено у відкритті'],withdrawn:['void','↩ Позов відкликано'],settled:['passed','🤝 Мирова угода']};
@@ -2513,6 +2530,85 @@ function modeFields(mode){const opts=artOptions();const cs=constSec();const land
   if(mode==='patriarchfire'){const c=churchSec();h+=c&&String(c.patriarch||'').trim()?`<p class="hint">Зараз Патріарх: <b>${esc(c.patriarch)}</b>. Після прийняття закону престол стане вакантним.</p>`:'<p class="hint warn">Престол і так вакантний.</p>';}
   if(mode==='emergencyend'){const c=EMERG.cur;h+=emActive()?`<p class="hint">Зараз діє надзвичайний стан до ${esc(fmtDT(new Date(+c.untilMs).toISOString()))}: ${esc(c.reason||'')}. Після прийняття закону його буде припинено.</p>`:'<p class="hint warn">Зараз надзвичайного стану немає.</p>';}
   return h;}
+// ---------- Карта держави (регіони DragPolit) ----------
+let MAP_L='lands',MAPSEL='',MAPEDIT=false,MAPZ=null;const GAME_REGION='https://dragpolit.com/region/';
+function loadMapGeo(){if(window.MAPGEO||window.__mapLoading)return;window.__mapLoading=true;const sc=document.createElement('script');sc.src='mapgeo.js?v=2';sc.onload=()=>{window.__mapLoading=false;renderSoon();};sc.onerror=()=>{window.__mapLoading=false;window.__mapErr=true;renderSoon();};document.head.appendChild(sc);}
+function udilSec(){return landSecs()[0]||null;}
+function mapLandIdx(){const out=[];landSecs().forEach(sec=>(sec.lands||[]).forEach(l=>out.push({l,sec,lost:false})));((lostSec()||{}).lands||[]).forEach(l=>out.push({l,sec:lostSec(),lost:true}));return out;}
+const mapNorm=t=>String(t||'').toLowerCase().replace(/[’ʼ`']/g,'').replace(/днепр/g,'дніпро').replace(/священий/g,'священний').replace(/\s+/g,' ').trim();
+function mapRegs(){const G=window.MAPGEO;if(G.__r)return G.__r;G.__r=G.regs.map(a=>({id:a[0],n:a[1],cid:a[2],au:a[3],d:a[4],x:a[5],y:a[6],city:a[7],a:a[8]}));G.__by={};G.__r.forEach(r=>G.__by[r.id]=r);return G.__r;}
+function mapOurs(r){return window.MAPGEO.ours.includes(r.cid);}
+function mapResolve(){const idx=mapLandIdx();const ov=((udilSec()||{}).udils)||{};const res={};const byName=n=>{const k=mapNorm(n);return k?idx.find(x=>(x.l.flags||[]).some(f=>mapNorm(f.name)===k))||null:null;};
+  mapRegs().forEach(r=>{let e=null;if(r.id in ov)e=ov[r.id]?idx.find(x=>x.l.id===ov[r.id])||null:null;else if(mapOurs(r))e=byName(r.au);res[r.id]=e;});return res;}
+const MAP_PAL=['#4f8fd6','#d8a03c','#5fb36b','#c96a5a','#8f7bd1','#3fb3b0','#d77fb0','#9fb84a','#e0874a','#6b9ee8','#b58a5c','#58c08f','#d35f78','#a58fe0','#c9b545','#4aa0c9','#e07a5f','#7fbf7f','#b06ad6','#c0a080'];
+function mapColor(l){const all=mapLandIdx().filter(x=>!x.lost).map(x=>x.l.id);const i=all.indexOf(l.id);return i<0?'#777':MAP_PAL[i%MAP_PAL.length];}
+function mapKind(r,e){if(e&&e.lost)return 'lost';if(!e)return mapOurs(r)?(r.cid==='8'?'domcap':'cap'):'none';const n=cur(e.l).name;if(e.sec&&e.sec.id==='ck')return 'dom';if(/кубан/i.test(n))return 'ext';if(/автоном/i.test(n))return 'aut';if(/священн|особлив/i.test(n))return 'spec';return 'land';}
+const MAP_KINDS={land:['#4f8fd6','Земля'],aut:['#d8a03c','Автономія'],spec:['#c9b545','Земля особливого статусу'],ext:['#5fb36b','Екстериторіальна адміністрація'],dom:['#c94c4c','Домініон (Червоний Клин)'],cap:['#f2d27a','Столичний регіон'],domcap:['#e8908a','Столиця Домініону'],lost:['#5a5550','Втрачено'],none:['#3a3530','Інші держави']};
+function mapForeign(r){const G=window.MAPGEO;const c=G.countries[r.cid];if(G.union.includes(r.cid))return c&&c[1]?c[1]:'#7fb08a';return '#36312c';}
+function mapFill(r,e){
+  if(MAP_L==='pol'){const c=window.MAPGEO.countries[r.cid];return c&&c[1]?c[1]:'#4a4540';}
+  if(!mapOurs(r)&&!e)return mapForeign(r);
+  if(MAP_L==='lands'){if(!e)return MAP_KINDS[mapKind(r,e)][0];return e.lost?MAP_KINDS.lost[0]:mapColor(e.l);}
+  if(MAP_L==='kind')return MAP_KINDS[mapKind(r,e)][0];
+  if(!e)return '#6a6258';const nm=cur(e.l).name;
+  if(MAP_L==='head'){if(e.lost)return MAP_KINDS.lost[0];return landHead(e.l).name?'#5fb36b':'#d8a03c';}
+  if(MAP_L==='ep'){const ep=eparchyOf(nm);if(!ep)return '#4a4540';const eps=((churchSec()||{}).eparchies||[]).filter(x=>x.name);return MAP_PAL[eps.indexOf(ep)%MAP_PAL.length];}
+  if(MAP_L==='el'){const on=elActive().some(x=>x.post&&x.post.kind==='land'&&x.post.key===nm);return on?'#f2b544':'#4a4540';}
+  return '#777';}
+function mapLegend(res){const G=window.MAPGEO;const used=new Map();const R=mapRegs();
+  const uni=G.union.map(c=>G.countries[c]).filter(Boolean).map(c=>`<span class="mlg"><i style="background:${c[1]}"></i>${esc(c[0])} · союзна держава</span>`).join('');
+  if(MAP_L==='lands'){R.forEach(r=>{const e=res[r.id];if(e&&!e.lost)used.set(e.l.id,[mapColor(e.l),cur(e.l).name]);});return [...used.values()].map(([c,n])=>`<button type="button" class="mlg" data-a="landm" data-k="${esc(n)}"><i style="background:${c}"></i>${esc(n)}</button>`).join('')+`<span class="mlg"><i style="background:${MAP_KINDS.cap[0]}"></i>Столичний регіон</span>`+uni;}
+  if(MAP_L==='kind'){R.forEach(r=>{if(!mapOurs(r)&&!res[r.id])return;const k=mapKind(r,res[r.id]);used.set(k,MAP_KINDS[k]);});return [...used.values()].map(([c,n])=>`<span class="mlg"><i style="background:${c}"></i>${esc(n)}</span>`).join('')+uni;}
+  if(MAP_L==='pol'){const cs=new Map();R.forEach(r=>{const c=G.countries[r.cid];if(c&&r.cid)cs.set(r.cid,c);});return [...cs.values()].sort((a,b)=>a[0].localeCompare(b[0])).map(c=>`<span class="mlg"><i style="background:${c[1]}"></i>${esc(c[0])}</span>`).join('');}
+  if(MAP_L==='head')return `<span class="mlg"><i style="background:#5fb36b"></i>Є очільник</span><span class="mlg"><i style="background:#d8a03c"></i>Посада вакантна</span>`;
+  if(MAP_L==='ep'){const eps=((churchSec()||{}).eparchies||[]).filter(x=>x.name);return (eps.map((ep,i)=>`<span class="mlg"><i style="background:${MAP_PAL[i%MAP_PAL.length]}"></i>${esc(ep.name)}${ep.bishop?' · '+esc(ep.bishop):''}</span>`).join('')||'<span class="hint">Єпархій ще не створено.</span>')+'<span class="mlg"><i style="background:#4a4540"></i>Поза єпархіями</span>';}
+  if(MAP_L==='el'){const a=elActive();const loc=a.filter(x=>x.post&&x.post.kind==='land');const nat=a.filter(x=>!(x.post&&x.post.kind==='land'));return (loc.length?`<span class="mlg"><i style="background:#f2b544"></i>Тривають вибори очільника Землі</span>`:'<span class="hint">Виборів у Землях зараз немає.</span>')+(nat.length?`<span class="hint">По всій державі: ${nat.map(x=>esc(x.post.title)).join(', ')}</span>`:'');}
+  return '';}
+function mapHtml(s,si){const G=window.MAPGEO;
+  if(!G){loadMapGeo();return `<div class="block"><p class="hint">${window.__mapErr?'Не вдалося завантажити карту. Перевірте, чи файл mapgeo.js лежить поруч з index.html.':'Завантажую карту…'}</p></div>`;}
+  const R=mapRegs();const res=mapResolve();const can=(isPysar()||AUTH.admin)&&!AUTH.bot;
+  const layers=[['lands','🗺 Землі'],['kind','🏛 Устрій'],['head','👑 Очільники'],['ep','⛪ Єпархії'],['el','🗳 Вибори'],['pol','🌍 Політична']];
+  const lc={};R.forEach(r=>{const e=res[r.id];if(!e||e.lost)return;const o=lc[e.l.id]||(lc[e.l.id]={x:0,y:0,a:0,e});const w=Math.max(r.a,0.3);o.x+=r.x*w;o.y+=r.y*w;o.a+=w;});
+  const cl={};if(MAP_L==='pol'||MAP_L==='lands'||MAP_L==='kind'){R.forEach(r=>{if(!r.cid||(mapOurs(r)&&MAP_L!=='pol'))return;const o=cl[r.cid]||(cl[r.cid]={x:0,y:0,a:0,big:null});o.a+=r.a;if(!o.big||r.a>o.big.a)o.big=r;});Object.values(cl).forEach(o=>{const c=o.big;let sx=0,sy=0,sa=0;R.forEach(r=>{if(r.cid===c.cid&&Math.hypot(r.x-c.x,r.y-c.y)<350){sx+=r.x*r.a;sy+=r.y*r.a;sa+=r.a;}});o.x=sx;o.y=sy;o.a=sa;});}
+  const z=MAPZ||{x:G.vb[0],y:G.vb[1],w:G.vb[2],h:G.vb[3]};const sw=(z.w/1000).toFixed(2);
+  let svg=`<svg id="mapsvg" class="mapsvg" viewBox="${z.x} ${z.y} ${z.w} ${z.h}" style="--sw:${sw}" role="img" aria-label="Карта Української Держави"><rect x="${G.box[0]-4000}" y="${G.box[1]-4000}" width="${G.box[2]+8000}" height="${G.box[3]+8000}" class="msea"/>`;
+  R.forEach(r=>{const e=res[r.id];const f=mapFill(r,e);const our=mapOurs(r)||!!e;svg+=`<path d="${r.d}" class="mreg${our?' our':''}${G.union.includes(r.cid)?' uni':''}${MAPSEL===r.id?' sel':''}" data-u="${r.id}" fill="${f}"><title>${esc(r.n)}${e?' — '+esc(cur(e.l).name):r.cid&&!mapOurs(r)&&G.countries[r.cid]?' — '+esc(G.countries[r.cid][0]):''}</title></path>`;});
+  R.forEach(r=>{if(!r.city||!(mapOurs(r)||G.union.includes(r.cid)||res[r.id]))return;const cap=r.n==='Львів'||(r.cid==='8'&&!res[r.id]);svg+=`<g class="mcity${cap?' cap':''}" data-u="${r.id}"><circle cx="${r.x}" cy="${r.y}" r="${(z.w/380).toFixed(1)}"/><text x="${r.x+z.w/250}" y="${r.y+z.w/400}" style="font-size:${(z.w/120).toFixed(1)}px">${esc(r.n)}</text></g>`;});
+  Object.entries(cl).forEach(([cid,o])=>{if(o.a<25||!G.countries[cid])return;svg+=`<text x="${(o.x/o.a).toFixed(0)}" y="${(o.y/o.a).toFixed(0)}" class="mctry${G.union.includes(cid)?' uni':''}" style="font-size:${(z.w/(G.union.includes(cid)?85:110)).toFixed(1)}px">${esc(G.countries[cid][0])}</text>`;});
+  if(MAP_L==='lands'||MAP_L==='head')Object.values(lc).forEach(o=>{const x=o.x/o.a,y=o.y/o.a;const c=cur(o.e.l);const k=z.w/1000;svg+=`<g class="mland" data-a="landm" data-k="${esc(c.name)}">${c.img?`<image href="${esc(c.img)}" x="${(x-11*k).toFixed(0)}" y="${(y-19*k).toFixed(0)}" width="${(22*k).toFixed(0)}" height="${(14*k).toFixed(0)}" preserveAspectRatio="xMidYMid slice"/>`:''}<text x="${x.toFixed(0)}" y="${(y+6*k).toFixed(0)}" class="mlbl" style="font-size:${(9*k).toFixed(1)}px">${esc(c.name.replace(/ Земля$/,''))}</text></g>`;});
+  svg+='</svg>';
+  let side='';const r0=MAPSEL&&G.__by[MAPSEL];
+  if(r0){const e=res[r0.id];const nm=e?cur(e.l).name:'';const h=e?landHead(e.l):null;const ep=nm?eparchyOf(nm):null;const ctry=G.countries[r0.cid];const our=mapOurs(r0);
+    side=`<div class="mside"><div class="hint">${our?(r0.city?'Місто':'Уділ'):'Регіон'}</div><h3>${esc(r0.n)}</h3>${!our&&ctry?`<div class="hint">${esc(ctry[0])}${ctry[2]?' · '+esc(ctry[2]):''}${G.union.includes(r0.cid)?' · союзна держава':''}</div>`:''}
+      ${e?`<button type="button" class="mlandb" data-a="landm" data-k="${esc(nm)}">${cur(e.l).img?`<img src="${esc(cur(e.l).img)}" alt="">`:''}<span><b>${esc(nm)}</b><small>${esc(MAP_KINDS[mapKind(r0,e)][1])} · відкрити сторінку Землі</small></span></button>
+      <div class="dsec"><div class="hint">${esc(h&&h.post?h.post.title:'Очільник')}</div><div>${h&&h.name?plink(h.name):'<span class="vacn">Вакантно</span>'}</div></div>${ep?`<div class="hint">⛪ ${esc(ep.name)}${ep.bishop?' · єпископ '+esc(ep.bishop):''}</div>`:''}`:our?`<p class="hint">${esc(MAP_KINDS[mapKind(r0,e)][1])}${r0.cid==='8'?' Червоного Клину':' Української Держави'}.</p>`:''}
+      <a class="gamebtn" href="${GAME_REGION}${encodeURIComponent(r0.id)}" target="_blank" rel="noopener">🎮 Регіон у грі ↗</a>
+      ${MAPEDIT&&can&&(our||e)?`<label class="fl">Належить Землі<select id="map-as" data-a="mapas" data-u="${esc(r0.id)}"><option value="">— без Землі —</option>${mapLandIdx().map(x=>`<option value="${esc(x.l.id)}"${e&&e.l.id===x.l.id?' selected':''}>${esc(cur(x.l).name)}${x.lost?' (втрачена)':''}</option>`).join('')}</select></label><button class="small ghost" data-a="mapreset" data-u="${esc(r0.id)}">Як у грі${r0.au?' ('+esc(r0.au)+')':''}</button>`:''}
+      <button class="small ghost" data-a="mapsel" data-u="">✕ Закрити</button></div>`;}
+  let h=`<div class="maptop"><div class="afilter">${layers.map(([k,l])=>`<button class="small${MAP_L===k?' primary':''}" data-a="mapl" data-k="${k}">${l}</button>`).join('')}</div><div class="landtools">${can?`<button class="small${MAPEDIT?' primary':' ghost'}" data-a="mapedit">✏️ Розподіл уділів</button>`:''}<button class="small ghost" data-a="mapz" data-k="in" aria-label="Наблизити">＋</button><button class="small ghost" data-a="mapz" data-k="out" aria-label="Віддалити">－</button><button class="small ghost" data-a="mapz" data-k="0" aria-label="Уся держава">⤢</button></div></div>`;
+  if(MAPEDIT&&can)h+='<p class="hint warn">Режим розподілу: натисніть на уділ і виберіть, якій Землі він належить. Зміни зберігаються одразу.</p>';
+  h+=`<div class="mapwrap${side?' hasside':''}"><div class="mapbox" id="mapbox">${svg}<div class="mtip" id="mtip" hidden></div></div>${side}</div><div class="mlegend">${mapLegend(res)}</div><p class="hint mcopy">Регіони й межі — з політичної карти DragPolit. Колесо миші або два пальці — масштаб, перетягування — рух карти, клік на регіон — подробиці й посилання на регіон у грі.</p>`;
+  if(LANDM){const x=mapLandIdx().find(q=>cur(q.l).name===LANDM);if(x&&!MODALH)MODALH=`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="landm" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide"><button class="small bmx" data-a="landm" data-k="">✕ Закрити</button>${landInfo(x.l)}</div></div>`;}
+  return h;}
+function mapFit(){const sv=document.getElementById('mapsvg');const G=window.MAPGEO;if(!sv||!G||MAPZ)return;const r=sv.getBoundingClientRect();if(!r.width||!r.height)return;const ar=r.width/r.height,[vx,vy,vw,vh]=G.vb,g=vw/vh;if(Math.abs(ar-g)<0.06)return;let w,h;if(ar<g){h=vh;w=h*ar;}else{w=vw;h=w/ar;}const cx=vx+(ar<g?vw*0.36:vw/2),cy=vy+vh/2;MAPZ={x:cx-w/2,y:cy-h/2,w,h};mapApplyZ();}
+function mapApplyZ(){const sv=document.getElementById('mapsvg');if(sv&&MAPZ)sv.setAttribute('viewBox',`${MAPZ.x} ${MAPZ.y} ${MAPZ.w} ${MAPZ.h}`);}
+function mapLim(){const G=window.MAPGEO;return {max:G.box[2],min:G.vb[2]/10};}
+function mapZoom(f,cx,cy){const G=window.MAPGEO;if(!G)return;const z=MAPZ||{x:G.vb[0],y:G.vb[1],w:G.vb[2],h:G.vb[3]};const L=mapLim();const nw=Math.min(L.max,Math.max(L.min,z.w*f));const k=nw/z.w;cx=cx==null?z.x+z.w/2:cx;cy=cy==null?z.y+z.h/2:cy;MAPZ={x:cx-(cx-z.x)*k,y:cy-(cy-z.y)*k,w:nw,h:z.h*k};mapApplyZ();clearTimeout(window.__mzT);window.__mzT=setTimeout(()=>{if(Math.abs(nw-(window.__mzW||0))>1){window.__mzW=nw;render();}},350);}
+function mapPt(sv,ev){const r=sv.getBoundingClientRect();const G=window.MAPGEO;const z=MAPZ||{x:G.vb[0],y:G.vb[1],w:G.vb[2],h:G.vb[3]};return {x:z.x+(ev.clientX-r.left)/r.width*z.w,y:z.y+(ev.clientY-r.top)/r.height*z.h};}
+(function(){const P=new Map();let drag=null,moved=false,pinch=null;
+  const z0=()=>{const G=window.MAPGEO;return MAPZ||{x:G.vb[0],y:G.vb[1],w:G.vb[2],h:G.vb[3]};};
+  document.addEventListener('wheel',ev=>{const sv=ev.target.closest&&ev.target.closest('#mapsvg');if(!sv)return;ev.preventDefault();const p=mapPt(sv,ev);mapZoom(ev.deltaY>0?1.18:1/1.18,p.x,p.y);},{passive:false});
+  document.addEventListener('pointerdown',ev=>{const sv=ev.target.closest&&ev.target.closest('#mapsvg');if(!sv)return;P.set(ev.pointerId,{x:ev.clientX,y:ev.clientY});moved=false;
+    if(P.size===1){MAPZ=z0();drag={x:ev.clientX,y:ev.clientY,z:{...MAPZ},r:sv.getBoundingClientRect()};}
+    else if(P.size===2){const [a,b]=[...P.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),z:{...z0()},m:mapPt(sv,{clientX:(a.x+b.x)/2,clientY:(a.y+b.y)/2})};drag=null;}});
+  document.addEventListener('pointermove',ev=>{if(!P.has(ev.pointerId)){const sv=ev.target.closest&&ev.target.closest('#mapsvg');const tip=document.getElementById('mtip');if(sv&&tip&&ev.pointerType==='mouse'){const u=ev.target.closest('[data-u]');const t=u&&u.querySelector('title');if(t||u){tip.textContent=t?t.textContent:((window.MAPGEO.__by||{})[u.dataset.u]||{}).n||'';const bx=document.getElementById('mapbox').getBoundingClientRect();tip.style.left=(ev.clientX-bx.left+12)+'px';tip.style.top=(ev.clientY-bx.top+12)+'px';tip.hidden=false;}else tip.hidden=true;}return;}
+    P.set(ev.pointerId,{x:ev.clientX,y:ev.clientY});
+    if(pinch&&P.size===2){const [a,b]=[...P.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);if(d>0){const L=mapLim();const nw=Math.min(L.max,Math.max(L.min,pinch.z.w*pinch.d/d));const kk=nw/pinch.z.w;MAPZ={x:pinch.m.x-(pinch.m.x-pinch.z.x)*kk,y:pinch.m.y-(pinch.m.y-pinch.z.y)*kk,w:nw,h:pinch.z.h*kk};mapApplyZ();moved=true;}return;}
+    if(drag){const dx=ev.clientX-drag.x,dy=ev.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>5)moved=true;if(moved){MAPZ={...drag.z,x:drag.z.x-dx/drag.r.width*drag.z.w,y:drag.z.y-dy/drag.r.height*drag.z.h};mapApplyZ();}}});
+  const up=ev=>{if(!P.has(ev.pointerId))return;P.delete(ev.pointerId);const wasPinch=!!pinch;if(P.size<2)pinch=null;
+    if(P.size===0){const was=moved;drag=null;if(wasPinch){window.__mzW=MAPZ&&MAPZ.w;render();return;}if(!was){const el=document.elementFromPoint(ev.clientX,ev.clientY);const land=el&&el.closest&&el.closest('.mland');const u=el&&el.closest&&el.closest('[data-u]');if(land){LANDM=land.dataset.k;render();}else if(u){MAPSEL=u.dataset.u;render();}}}};
+  document.addEventListener('pointerup',up);document.addEventListener('pointercancel',ev=>{P.delete(ev.pointerId);pinch=null;drag=null;});})();
+
 // ---------- Комітети Палати, ЦВК і вибори ----------
 let ELECTIONS=[],CANDS={},MYVOTE={},EL_T='cur',ELM='',EF={post:'',other:'',via:'',reg:'2',vote:'2',note:''},CF={},ELCONF='';
 const RES_MODES=[['none','📋 Звичайна постанова'],['committee','👥 Утворити комітет'],['committeedel','✕ Розпустити комітет'],['election','🗳 Призначити вибори']];
@@ -2912,7 +3008,7 @@ function render(){const real=state;if(!editing)state=viewState();try{render0();}
 function render0(){const cm0=document.getElementById('chmsgs');const cmS=cm0?{top:cm0.scrollTop,bot:cm0.scrollHeight-cm0.scrollTop-cm0.clientHeight<60}:null;const ae=document.activeElement;const fid=ae&&ae.id&&app.contains(ae)?ae.id:null;let s0=null,s1=null;try{s0=ae.selectionStart;s1=ae.selectionEnd;}catch(_){}
   renderInner();document.documentElement.lang=LANG==='en'?'en':'uk';if(LANG==='en')trTree(app);app.querySelectorAll('nav.toc,.subnav').forEach(nv=>{if(nv.scrollWidth>nv.clientWidth){const c=nv.querySelector('[aria-current]');if(c)nv.scrollLeft=Math.max(0,c.offsetLeft-nv.clientWidth/2+c.offsetWidth/2);}});
   if(fid){const el=document.getElementById(fid);if(el&&el!==document.activeElement){el.focus({preventScroll:true});try{if(s0!=null)el.setSelectionRange(s0,s1);}catch(_){}}}
-  {const cm=document.getElementById('chmsgs');if(cm){const st=CHAT.stick||Date.now()<(CHAT.stickUntil||0)||!cmS||cmS.bot;
+  mapFit();{const cm=document.getElementById('chmsgs');if(cm){const st=CHAT.stick||Date.now()<(CHAT.stickUntil||0)||!cmS||cmS.bot;
     if(st){cm.scrollTop=cm.scrollHeight;if(CHAT.msgs&&CHAT.stick){CHAT.stick=false;CHAT.stickUntil=Date.now()+3000;}}else cm.scrollTop=cmS.top;
     cm.querySelectorAll('img').forEach(im=>{if(!im.complete)im.addEventListener('load',()=>{const near=cm.scrollHeight-cm.scrollTop-cm.clientHeight<260;if(Date.now()<(CHAT.stickUntil||0)||near)cm.scrollTop=cm.scrollHeight;},{once:true});});}}
   setTimeout(()=>{try{chatEnsure();}catch(e){console.warn(e);}try{setFavicon();}catch(_){}},0);
@@ -2955,6 +3051,7 @@ function renderInner(){chatMarkSeen();
     if(s.kind==='chat'){html+=chatHtml(s)+'</section>';return;}
     if(s.kind==='awards'){html+=awardsHtml(s,si)+'</section>';return;}
     if(s.kind==='elections'){html+=electionsHtml(s,si)+'</section>';return;}
+    if(s.kind==='map'){html+=mapHtml(s,si)+'</section>';return;}
     if(s.kind==='players'){html+=playersHtml(s,si)+'</section>';return;}
     if(s.kind==='court'){html+=courtHtml(s,si)+'</section>';return;}
     if(s.kind==='laws'){html+=lawsHtml(s,si)+'</section>';return;}
@@ -3013,6 +3110,7 @@ app.addEventListener('input',e=>{
   if(a==='lq'){LQ=t.value;render();return;}
   if(a==='actas'){ACTAS=t.value;try{localStorage.setItem('ud-actas',ACTAS);}catch(_){}DOSSIER=null;render();return;}
   if(a==='chd'){CHD[t.dataset.k]=t.value;return;}
+  if(a==='mapas'){const us=udilSec();if(!us||!(isPysar()||AUTH.admin)||editing)return;us.udils=us.udils||{};us.udils[t.dataset.u]=t.value;busy=true;render();(async()=>{try{await window.FB.saveLands(state.sections.filter(isLandsSec));saved=JSON.stringify(state);msg='Розподіл уділів збережено';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося зберегти';msgErr=true;state=JSON.parse(saved);}busy=false;render();})();return;}
   if(a==='ef'){EF[t.dataset.k]=t.value;if(t.tagName==='SELECT')render();return;}
   if(a==='cf'){CF[t.dataset.e]=t.value;return;}
   if(a==='pd2'){PD2[t.dataset.k]=t.value;if(t.dataset.k!=='qty'||true){if(t.tagName==='SELECT')render();}return;}
@@ -3307,6 +3405,11 @@ app.addEventListener('click',async e=>{
   if(a==='wimg'){const w=weekReport(WREP);showDoc({type:'ВІСНИК',issuer:'ТИЖНЕВИЙ ЗВІТ УКРАЇНСЬКОЇ ДЕРЖАВИ',date:dateLong(),title:w.label,body:w.S.length?w.S.map(x=>`${x.t}:\n`+x.items.map(i=>'• '+i).join('\n')).join('\n\n'):'Цього тижня подій не було.',role:'Гетьманська Канцелярія',name:'',seal:'gov'});return;}
   if(a==='awmode'){AWMODE=b.dataset.k;render();return;}
   if(a==='awt'){AW_T=b.dataset.k;render();return;}
+  if(a==='mapl'){MAP_L=b.dataset.k;render();return;}
+  if(a==='mapedit'){MAPEDIT=!MAPEDIT;render();return;}
+  if(a==='mapsel'){MAPSEL=b.dataset.u||'';render();return;}
+  if(a==='mapz'){const k=b.dataset.k;if(k==='0'){MAPZ=null;render();}else mapZoom(k==='in'?1/1.4:1.4);return;}
+  if(a==='mapreset'){const us=udilSec();if(!us||!(isPysar()||AUTH.admin)||editing)return;us.udils=us.udils||{};delete us.udils[b.dataset.u];busy=true;render();try{await window.FB.saveLands(state.sections.filter(isLandsSec));saved=JSON.stringify(state);msg='Уділ повернуто як у Конституції';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося зберегти';msgErr=true;state=JSON.parse(saved);}busy=false;render();return;}
   if(a==='gosub'){PROF='';active=b.dataset.p;SUB[b.dataset.p]=b.dataset.id;MMORE=false;try{history.replaceState(null,'','#'+b.dataset.id);}catch(_){}render();window.scrollTo(0,0);return;}
   if(a==='elt'){EL_T=b.dataset.k;render();return;}
   if(a==='elnew'){ELM='new';EF={post:'',other:'',via:'',reg:'2',vote:'2',note:''};render();return;}
@@ -3577,7 +3680,8 @@ app.addEventListener('click',async e=>{
   else if(a==='ldradd'){s.leaders.push({title:'',holder:''});}
   else if(a==='ldrdel'){s.leaders.splice(+b.dataset.p,1);}
   else if(a==='pdel'){const pi=+b.dataset.p;l.posts.splice(pi,1);if(l.head===pi)delete l.head;else if(l.head>pi)l.head--;}
-  else if(a==='lhead'){const pi=+b.dataset.p;if(l.head===pi)delete l.head;else l.head=pi;}
+  else if(a==='lhead'){const pi=+b.dataset.p;if(l.head===pi)delete l.head;else{l.head=pi;if(l.posts[pi])delete l.posts[pi].past;}}
+  else if(a==='lpast'){const q=l.posts[+b.dataset.p];if(q){if(q.past)delete q.past;else{q.past=true;if(l.head===+b.dataset.p)delete l.head;}}}
   else if(a==='fdel'){l.flags.splice(+b.dataset.f,1);}
   else if(a==='fadd'){pickImage(img=>{l.flags.push({img,name:cur(l).name,date:today()});render();},s.kind==='units');return;}
   else if(a==='ladd'){const U=s.kind==='units';pickImage(img=>{s.lands.push({id:uid(),flags:[{img,name:U?'Новий курінь':'Нова земля',date:''}],posts:[{title:U?'Сотник':'1-й Крайовий Отаман',holder:''}]});render();},U);return;}
@@ -3696,7 +3800,7 @@ app.addEventListener('toggle',e=>{const d=e.target;if(d&&d.dataset&&d.dataset.o)
 let COMMENTS=[],PETS=[],PSIGNS={},CASES=[],CMD={},PD={title:'',text:''},CD={title:'',def:'',text:'',bill:'',kind:'civil',arts:[],art:'',closed:false,asPros:false},VD={},PETF='open';
 const PET_MS=7*24*3600*1000;
 const SW_KINDS=['laws','gov','players','ranks'];const SUB={};
-const SUB_LABEL={parliament:'Палата',laws:'Кодекси й акти',doc:'Конституція',economy:'Економіка',awards:'Відзнаки',elections:'Вибори',gov:'Канцелярія',players:'Гравці',units:'Курені',ranks:'Звання'};
+const SUB_LABEL={parliament:'Палата',laws:'Кодекси й акти',doc:'Конституція',economy:'Економіка',awards:'Відзнаки',elections:'Вибори',map:'Карта',gov:'Канцелярія',players:'Гравці',units:'Курені',ranks:'Звання'};
 let EMERG={cur:null,hist:[]},APPS=[],AP={name:'',profile:'',land:'',about:'',kind:'citizen'},APR={},RK={name:'',ladder:'mil',rank:'',reason:''},CAL={y:0,m:0,d:0},ES={hours:'48'};
 function emActive(){const c=EMERG&&EMERG.cur;return !!(c&&+c.untilMs>Date.now());}
 function voteHours(){return emActive()?12:24;}
@@ -4048,6 +4152,7 @@ function ensureSections(s){ensureGov(s);ensurePlayers(s);
   if(!s.sections.some(x=>x.kind==='home'))s.sections.unshift({id:'home',kind:'home',nav:'Головна',title:'Головна',note:'Укази, новини та літопис держави'});
   if(!s.sections.some(x=>x.kind==='court')){const i=s.sections.findIndex(x=>x.kind==='gov');s.sections.splice(i<0?s.sections.length:i+1,0,{id:'court',kind:'court',nav:'Суд',title:'Генеральний Суд',note:'Судова влада Української Держави'});}
   if(!s.sections.some(x=>x.kind==='awards')){const i=s.sections.findIndex(x=>x.kind==='gov');s.sections.splice(i<0?s.sections.length:i+1,0,{id:'awards',kind:'awards',nav:'Відзнаки',title:'Державні відзнаки',note:'Нагороди та ордени Української Держави'});}
+  if(!s.sections.some(x=>x.kind==='map')){const i=s.sections.findIndex(x=>x.id==='ud');s.sections.splice(i<0?1:i+1,0,{id:'map',kind:'map',nav:'Карта',title:'Карта держави',note:'Землі, уділи, єпархії та вибори'});}
   if(!s.sections.some(x=>x.kind==='elections')){const i=s.sections.findIndex(x=>x.kind==='awards');s.sections.splice(i<0?s.sections.length:i+1,0,{id:'elections',kind:'elections',nav:'Вибори',title:'Вибори',note:'Вибори на державні посади, ЦВК і комітети Палати'});}
   if(!s.sections.some(x=>x.kind==='calendar')){const i=s.sections.findIndex(x=>x.kind==='home');s.sections.splice(i+1,0,{id:'calendar',kind:'calendar',nav:'Календар',title:'Календар держави',note:'Державні свята, строки та пам’ятні дати',holidays:[]});}
   if(!s.sections.some(x=>x.kind==='ranks')){const i=s.sections.findIndex(x=>x.kind==='awards');s.sections.splice(i<0?s.sections.length:i+1,0,defaultRanks());}
