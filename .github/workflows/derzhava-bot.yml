@@ -20,9 +20,13 @@ jobs:
         run: |
           npm install --no-audit --no-fund
           npx playwright install --with-deps chromium
-      - name: Закрити голосування й виконати закони
+      - name: Закрити голосування, виконати закони й надіслати вісті в Telegram
         working-directory: bot
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           SITE_URL: https://ukr-derzhava.in.ua/
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_THREAD_ID: ${{ secrets.TELEGRAM_THREAD_ID }}
+          TELEGRAM_REMIND_THREAD_ID: ${{ secrets.TELEGRAM_REMIND_THREAD_ID }}
         run: node tick.mjs
