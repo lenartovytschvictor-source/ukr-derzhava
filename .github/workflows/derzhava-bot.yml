@@ -1,15 +1,18 @@
 name: Державний бот
-# GitHub запускає розклад нерегулярно (буває раз на кілька годин),
-# тому бот працює «змінами»: один запуск живе ~5,5 години й робить свою роботу
-# кожні 15 хвилин, а наприкінці сам запускає наступну зміну.
-# Розклад лишається як запасний варіант, якщо ланцюжок колись обірветься.
+# GitHub запускає розклад нерегулярно, тому бот працює «змінами»:
+# один запуск живе ~5,5 години, робить роботу кожні 15 хвилин
+# і наприкінці сам запускає наступну зміну.
+# Розклад — лише страховка: якщо зміна вже працює, запуск за розкладом
+# одразу завершується (зелена галочка, ~1 хвилина) і нічого не дублює.
 on:
   schedule:
-    - cron: "*/15 * * * *"
-  workflow_dispatch: {}
-concurrency:
-  group: derzhava-bot
-  cancel-in-progress: false
+    - cron: "17 */2 * * *"
+  workflow_dispatch:
+    inputs:
+      chain:
+        description: "Службове: наступна зміна"
+        required: false
+        default: "0"
 permissions:
   actions: write
   contents: read
@@ -18,16 +21,29 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 355
     steps:
+      - name: Чи вже працює інша зміна?
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event.inputs.chain }}" = "1" ]; then echo "skip=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          n=$(gh run list -R "${{ github.repository }}" --workflow derzhava-bot.yml --status in_progress --json databaseId -q "[.[] | select(.databaseId != ${{ github.run_id }})] | length")
+          if [ "${n:-0}" -gt 0 ]; then echo "Зміна вже працює — цей запуск не потрібен"; echo "skip=true" >> "$GITHUB_OUTPUT"; else echo "skip=false" >> "$GITHUB_OUTPUT"; fi
       - uses: actions/checkout@v5
+        if: steps.check.outputs.skip != 'true'
       - uses: actions/setup-node@v5
+        if: steps.check.outputs.skip != 'true'
         with:
           node-version: 22
       - name: Встановити
+        if: steps.check.outputs.skip != 'true'
         working-directory: bot
         run: |
           npm install --no-audit --no-fund
           npx playwright install --with-deps chromium
       - name: Зміна бота (кожні 15 хвилин протягом ~5,5 години)
+        id: shift
+        if: steps.check.outputs.skip != 'true'
         working-directory: bot
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
@@ -48,7 +64,7 @@ jobs:
             if [ $pause -gt 0 ]; then sleep $pause; fi
           done
       - name: Запустити наступну зміну
-        if: always()
+        if: steps.shift.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run derzhava-bot.yml --ref "${{ github.ref_name }}" -R "${{ github.repository }}"
+        run: gh workflow run derzhava-bot.yml --ref "${{ github.ref_name }}" -R "${{ github.repository }}" -f chain=1
