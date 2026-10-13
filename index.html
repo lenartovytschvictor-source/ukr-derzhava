@@ -981,6 +981,20 @@ button.lcard.vacant{border-style:dashed}
 .fame{list-style:none;margin:0;padding:0;display:grid;gap:6px}.fame li{display:grid;grid-template-columns:36px 34px minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:12px}
 .fame .fr{font-size:18px;text-align:center;font-weight:700}.fame .fi{display:flex;gap:3px}.fame .fi img{width:26px;height:26px;object-fit:contain}.fame b{color:var(--gold-hi);font-size:18px}
 @media (max-width:760px){.pdform{grid-template-columns:1fr 1fr}.pdform>b{grid-column:1/-1}.dawards.big{grid-template-columns:1fr}.awcat2{grid-template-columns:repeat(2,minmax(0,1fr))}.fame li{grid-template-columns:30px 30px minmax(0,1fr) auto}.fame .fi{display:none}.awmhead{flex-direction:column;align-items:flex-start}}
+
+.elban{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;width:100%;padding:14px 18px;margin-bottom:14px;border:1px solid var(--gold-soft);border-radius:16px;background:linear-gradient(110deg,rgba(242,181,68,.16),rgba(242,181,68,.03) 60%),var(--panel)}
+.elban:hover,.elban:focus-visible{border-color:var(--gold)}.elban .ebi{font-size:30px}.elban .ebt{display:grid;gap:2px}.elban b{font-size:17px;color:var(--cream)}.elban small{color:var(--muted);font-size:12.5px}.elban .ebgo{font-weight:700;color:var(--gold-hi);white-space:nowrap}
+.elcard{border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px;background:var(--panel)}.elcard.ph-vote{border-color:var(--gold-soft);box-shadow:0 0 0 1px rgba(242,181,68,.15),0 10px 30px rgba(0,0,0,.25)}.elcard.ph-cancelled{opacity:.65}
+.elhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.elhead h3{margin:2px 0 4px;font-size:22px}
+.eltl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}.elstep{border:1px solid var(--line);border-radius:12px;padding:8px 12px;display:grid;gap:2px;background:rgba(0,0,0,.12)}.elstep b{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.elstep span{font-weight:600}.elstep small{color:var(--gold-hi)}.elstep.on{border-color:var(--gold);background:rgba(242,181,68,.08)}.elstep.done{opacity:.6}
+.elcands h4{margin:6px 0 8px}.elcand{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin-bottom:8px}.elcand.myv{border-color:var(--ok,#7fd18b)}.elcm{display:grid;gap:4px;min-width:0}.elcm details summary{cursor:pointer;font-size:12.5px;color:var(--muted)}
+.elapply{margin-top:10px;border:1px dashed var(--gold-soft);border-radius:12px;padding:10px}.elapply>summary{cursor:pointer;font-weight:700;color:var(--gold-hi)}.elapply textarea{margin:8px 0;min-height:70px}
+.elres{display:grid;gap:8px;margin-top:8px}.elwin{font-size:17px;padding:10px 12px;border-radius:12px;background:rgba(242,181,68,.1);border:1px solid var(--gold-soft)}.elwin.tie{background:rgba(255,255,255,.04);border-color:var(--line)}
+.elbar{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr) auto 44px;gap:10px;align-items:center}.elbt{height:10px;border-radius:6px;background:rgba(255,255,255,.06);overflow:hidden}.elbt i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-hi))}
+.elmgmt{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+.commgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.comm{border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:6px;background:rgba(0,0,0,.12)}.comm.cvk{border-color:var(--gold-soft)}.commh{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.commh b{font-size:15px}
+.cmsel{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px}
+@media (max-width:760px){.eltl{grid-template-columns:1fr}.elhead{flex-direction:column}.elcand{flex-direction:column}.elbar{grid-template-columns:minmax(0,1fr) auto 40px}.elbar .elbt{grid-column:1/-1;grid-row:2}.elban{grid-template-columns:auto minmax(0,1fr)}.elban .ebgo{grid-column:1/-1}}
 /* ---- PP: мобільна версія ---- */
 .mnav{display:none}
 .chback{display:none}
@@ -1647,7 +1661,7 @@ function defaultLaws(){const at=new Date().toISOString();const A=(no,title,body,
 function isSw(s){return !!s&&(s.sw===true||(s.sw!==false&&SW_KINDS.includes(s.kind)));}
 function restructure(s){const S=s.sections;const by=k=>S.find(x=>x.kind===k);const ud=S.find(x=>x.id==='ud')||S.find(x=>!x.kind&&x.lands);
   const parl=by('parliament'),laws=by('laws'),doc=by('doc'),pl=by('players'),gov=by('gov'),econ=by('economy'),aw=by('awards'),court=by('court'),units=by('units'),church=by('church'),home=by('home');
-  if(ud){ud.navTop='Держава';S.filter(x=>!x.kind&&x.lands&&x!==ud).forEach(x=>{x.tab=ud.id;x.sw=true;});if(econ){econ.tab=ud.id;econ.sw=true;}if(aw){aw.tab=ud.id;aw.sw=true;}}
+  if(ud){ud.navTop='Держава';S.filter(x=>!x.kind&&x.lands&&x!==ud).forEach(x=>{x.tab=ud.id;x.sw=true;});if(econ){econ.tab=ud.id;econ.sw=true;}if(aw){aw.tab=ud.id;aw.sw=true;}{const el=by('elections');if(el){el.tab=ud.id;el.sw=true;}}}
   if(laws){delete laws.tab;laws.nav='Законодавство';if(doc){doc.tab=laws.id;doc.sw=false;doc.hideView=true;}}
   const cs0=by('court');if(cs0&&parl){cs0.tab=parl.id;cs0.sw=true;parl.noSub=true;}if(pl){pl.nav='Гравці';if(ud){pl.tab=ud.id;pl.sw=true;}else delete pl.tab;}
   if(gov&&parl){gov.tab=parl.id;gov.sw=false;gov.hideView=true;}
@@ -1908,7 +1922,7 @@ function lawsHtml(s,si){const cs=s.codes||(s.codes=[]);if(!editing)return lexVie
   else{const list=byKind(LAWT).filter(b=>hit(b.title)||hit(b.text)).sort((x,y)=>String(y.closesAt||y.date||'').localeCompare(String(x.closesAt||x.date||'')));
     h+=`<div class="block"><h3>${esc(({law:'Закони',code:'Закони про зміни до кодексів',const:'Конституційні закони',res:'Постанови Палати Земель',decl:'Резолюції Палати Земель'})[LAWT]||'')} <small>${esc(ACT_HINT[LAWT]||'')}</small></h3>${LAWT==='const'&&constSec()?`<div class="landtools"><button class="small" data-a="tab" data-id="${esc(constSec().id)}">📜 Відкрити Конституцію</button></div>`:''}${list.length?(MORE.acts?list:list.slice(0,10)).map(actRow).join('')+(list.length>10?moreBtn('acts',list.length):''):`<p class="empty">${q?'Нічого не знайдено.':'Тут поки порожньо.'}</p>`}</div>`;}
   return h+'</div>';}
-NAV_ICONS.chat='<path d="M4 5h16v11H9l-5 4V5Z"/><path d="M8 9h8M8 12h5"/>';
+NAV_ICONS.elections='<path d="M5 10h14v10H5z"/><path d="M9 10V5h6v5M9 14h6"/>';NAV_ICONS.chat='<path d="M4 5h16v11H9l-5 4V5Z"/><path d="M8 9h8M8 12h5"/>';
 NAV_ICONS.laws='<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4Z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8h6M9 11h4"/>';
 // ---------- Генеральний Суд v2 ----------
 const CSTAT={open:['review','📥 Нова справа'],hearing:['sign','🗣 Слухання'],delib:['ov','🤝 Нарада суддів'],decided:['passed','⚖️ Позов задоволено'],dismissed:['rejected','✕ У позові відмовлено'],rejected:['rejected','⛔ Відмовлено у відкритті'],withdrawn:['void','↩ Позов відкликано'],settled:['passed','🤝 Мирова угода']};
@@ -2324,7 +2338,7 @@ function revertAmend(b,doc){const ap=b.applied;if(!ap||!doc)return false;let ok=
     else if(ap.mode==='replace'&&a.title===ap.artTitle&&a.body===ap.after){a.body=ap.before;ok=true;}});});
   if(ok){delete b.applied;delete b.article;}return ok;}
 const CONST_MODES=['replace','add','delart','addch','delch','constfull'];
-const LAW_MODES=[['none','Нічого не змінює автоматично'],['Конституція',[['replace','Змінити текст статті'],['add','Додати нову статтю'],['delart','Виключити статтю'],['addch','Створити новий розділ'],['delch','Виключити розділ'],['constfull','Нова редакція Конституції в цілому']]],['Землі',[['ataman','Призначити Крайового Отамана'],['dismiss','Звільнити Крайового Отамана'],['rename','Перейменувати Землю'],['flag','Затвердити новий прапор Землі'],['newland','Утворити нову Землю'],['loseland','Визнати втрату контролю над Землею'],['restoreland','Відновити втрачену Землю']]],['Гравці',[['addplayer','Внести нового гравця до реєстру'],['editplayer','Змінити дані гравця'],['delplayer','Виключити гравця з реєстру']]],['Палата Земель',[['chair','Обрати Голову Палати'],['chairfire','Звільнити Голову Палати']]],['Гетьман і Канцелярія',[['gov','Призначити на посаду (Гетьман, Писар, Секретарі, Суддя)'],['govfire','Звільнити з посади'],['revokedecree','Скасувати указ Гетьмана']]],['Календар',[['holiday','Встановити державне свято'],['holidaydel','Скасувати державне свято']]],['Надзвичайний стан',[['emergency','Запровадити надзвичайний стан'],['emergencyend','Припинити надзвичайний стан']]],['Церква',[['patriarch','Обрати Патріарха'],['patriarchfire','Усунути Патріарха']]]];
+const LAW_MODES=[['none','Нічого не змінює автоматично'],['Конституція',[['replace','Змінити текст статті'],['add','Додати нову статтю'],['delart','Виключити статтю'],['addch','Створити новий розділ'],['delch','Виключити розділ'],['constfull','Нова редакція Конституції в цілому']]],['Землі',[['ataman','Призначити Крайового Отамана'],['dismiss','Звільнити Крайового Отамана'],['rename','Перейменувати Землю'],['flag','Затвердити новий прапор Землі'],['newland','Утворити нову Землю'],['loseland','Визнати втрату контролю над Землею'],['restoreland','Відновити втрачену Землю']]],['Гравці',[['addplayer','Внести нового гравця до реєстру'],['editplayer','Змінити дані гравця'],['delplayer','Виключити гравця з реєстру']]],['Палата Земель',[['chair','Обрати Голову Палати'],['chairfire','Звільнити Голову Палати'],['committee','Утворити комітет (зокрема ЦВК)'],['committeedel','Розпустити комітет'],['election','Призначити вибори']]],['Гетьман і Канцелярія',[['gov','Призначити на посаду (Гетьман, Писар, Секретарі, Суддя)'],['govfire','Звільнити з посади'],['revokedecree','Скасувати указ Гетьмана']]],['Календар',[['holiday','Встановити державне свято'],['holidaydel','Скасувати державне свято']]],['Надзвичайний стан',[['emergency','Запровадити надзвичайний стан'],['emergencyend','Припинити надзвичайний стан']]],['Церква',[['patriarch','Обрати Патріарха'],['patriarchfire','Усунути Патріарха']]]];
 const MONTHS=['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'];
 const MONTHS_G=['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
 const WD=['неділя','понеділок','вівторок','середа','четвер','п’ятниця','субота'];
@@ -2385,6 +2399,9 @@ function applyLaw(b,st){const am=b.amend;if(!am||!am.mode||am.mode==='none')retu
   if(am.mode==='patriarch'){const c=churchSec(st);if(!c||!am.name)return fail();const ap={mode:'patriarch',prev:c.patriarch||''};c.patriarch=am.name;return ok(ap);}
   if(am.mode==='patriarchfire'){const c=churchSec(st);if(!c||!String(c.patriarch||'').trim())return fail();const ap={mode:'patriarchfire',prev:c.patriarch};c.patriarch='';return ok(ap);}
   if(am.mode==='gov'){const p=gov&&(gov.posts||[]).find(x=>x.id===am.post);if(!p)return fail();const ap={mode:'gov',post:am.post,prevName:p.name||'',prevEmail:p.email||''};p.name=am.name;p.email=am.email||'';if(am.post==='hetman')syncArmyHetman(st,am.name);return ok(ap);}
+  if(am.mode==='committee'){if(!parl||!am.name)return fail();parl.committees=parl.committees||[];const id='c'+String(b.id||Date.now().toString(36)).slice(-10);if(parl.committees.some(x=>x.id===id))return fail();parl.committees.push({id,name:am.name,type:am.ctype==='cvk'?'cvk':'other',head:am.head||'',members:am.members||[],law:b.title||'',at:today()});return ok({mode:'committee',id});}
+  if(am.mode==='committeedel'){const cs=(parl&&parl.committees)||[];const i=cs.findIndex(x=>x.id===am.cid);if(i<0)return fail();const x=cs.splice(i,1)[0];return ok({mode:'committeedel',c:x,i});}
+  if(am.mode==='election')return ok({mode:'election'});
   return 'none';}
 function revertLaw(b,st){const ap=b.applied;if(!ap)return false;
   if(CONST_MODES.includes(ap.mode)){const cs=st.sections.find(x=>x.kind==='doc');return revertAmend(b,cs&&cs.doc);}
@@ -2407,6 +2424,8 @@ function revertLaw(b,st){const ap=b.applied;if(!ap)return false;
   else if(ap.mode==='loseland'){const ls=lostSec(st);const x=ls&&ls.lands.find(l=>l.id===ap.landId);if(!x)return false;ls.lands.splice(ls.lands.indexOf(x),1);delete x.lostFrom;delete x.lostAt;const sec=landSecs(st).find(q=>q.id===ap.from)||landSecs(st)[0];sec.lands.splice(Math.min(ap.idx,sec.lands.length),0,x);}
   else if(ap.mode==='restoreland'){const sec=landSecs(st).find(q=>q.lands.some(l=>l.id===ap.landId));if(!sec)return false;const x=sec.lands.find(l=>l.id===ap.landId);sec.lands.splice(sec.lands.indexOf(x),1);x.lostFrom=ap.from;x.lostAt=ap.lostAt;delete x.restoredAt;lostSec(st,true).lands.push(x);}
   else if(ap.mode==='gov'||ap.mode==='govfire'){const p=gov&&(gov.posts||[]).find(x=>x.id===ap.post);if(!p)return false;p.name=ap.prevName;p.email=ap.prevEmail;if(ap.post==='hetman')syncArmyHetman(st,ap.prevName);}
+  else if(ap.mode==='committee'){if(parl)parl.committees=(parl.committees||[]).filter(x=>x.id!==ap.id);}
+  else if(ap.mode==='committeedel'){if(parl){parl.committees=parl.committees||[];parl.committees.splice(Math.min(ap.i,parl.committees.length),0,ap.c);}}
   delete b.applied;return true;}
 function amendHtml(b){const am=b.amend;if(!am||!am.mode||am.mode==='none')return '';
   const isC=CONST_MODES.includes(am.mode),isK=CODE_MODES.includes(am.mode);let h=`<div class="amend"><div class="amh">${isC?'📜 Зміна до Конституції':isK?'📕 Зміна до кодексу':'⚖ Що змінює закон'}</div>`;
@@ -2488,9 +2507,99 @@ function modeFields(mode){const opts=artOptions();const cs=constSec();const land
   if(mode==='holidaydel'){const hs=holidays();h+=hs.length?`<label class="fl">Свято<select id="np-hdel" data-a="np" data-k="hdel">${hs.map(x=>`<option value="${esc(x.id)}"${x.id===DRAFT.hdel?' selected':''}>${esc(x.name)} — ${+x.day} ${MONTHS_G[(+x.month||1)-1]}</option>`).join('')}</select></label>`:'<p class="hint warn">Державних свят ще немає.</p>';}
   if(mode==='emergency')h+=`<label class="fl">На скільки днів (1–30)<input type="text" inputmode="numeric" id="np-edays" data-a="np" data-k="edays" value="${esc(DRAFT.edays||'7')}" style="max-width:120px"></label><textarea id="np-ereason" data-a="np" data-k="ereason" maxlength="500" placeholder="Причина: її побачать на всіх сторінках сайту">${esc(DRAFT.ereason||'')}</textarea><p class="hint">Поки діє надзвичайний стан, на всіх сторінках висить попередження, а законопроєкти голосуються 12 годин замість 24.</p>${emActive()?'<p class="hint warn">Зараз уже діє надзвичайний стан. Закон замінить його новим строком.</p>':''}`;
   if(mode==='patriarch')h+=who('Хто стане Патріархом',true);
+  if(mode==='committee'){const n=Math.min(9,[0,1,2,3,4,5,6,7,8].filter(i=>DRAFT['cm'+i]).length+1);h+=`<input type="text" id="np-cname" data-a="np" data-k="cname" maxlength="120" value="${esc(DRAFT.cname||'')}" placeholder="Назва комітету, напр. Центральна виборча комісія"><label class="fl">Тип комітету<select id="np-ctype" data-a="np" data-k="ctype"><option value="other"${DRAFT.ctype!=='cvk'?' selected':''}>👥 Звичайний комітет</option><option value="cvk"${DRAFT.ctype==='cvk'?' selected':''}>🗳 Центральна виборча комісія (ЦВК)</option></select></label><div class="hint">Склад комітету (перший — голова):</div><div class="cmsel">${Array.from({length:n},(_,i)=>plSelect('np-cm'+i,`data-a="np" data-k="cm${i}"`,DRAFT['cm'+i]||'',i?'— член комітету —':'— голова комітету —')).join('')}</div>${DRAFT.ctype==='cvk'?'<p class="hint">ЦВК призначає вибори, реєструє кандидатів і може скасувати вибори. Поки ЦВК немає, кандидати реєструються самі.</p>':''}`;}
+  if(mode==='committeedel'){const cs=committees();h+=cs.length?`<label class="fl">Комітет<select id="np-cdel" data-a="np" data-k="cdel">${cs.map(c=>`<option value="${esc(c.id)}"${c.id===DRAFT.cdel?' selected':''}>${esc(c.name)}</option>`).join('')}</select></label>`:'<p class="hint warn">Комітетів ще немає.</p>';}
+  if(mode==='election'){const dsel=k=>`<select id="np-${k}" data-a="np" data-k="${k}">${[1,2,3,4,5,6,7].map(n=>`<option value="${n}"${String(DRAFT[k]||2)===String(n)?' selected':''}>${n} ${dniv(n)}</option>`).join('')}</select>`;h+=`<label class="fl">Посада${elPostSel('np-elpost','data-a="np" data-k="elpost"',DRAFT.elpost||'')}</label>${DRAFT.elpost==='other'?`<input type="text" id="np-elother" data-a="np" data-k="elother" maxlength="120" value="${esc(DRAFT.elother||'')}" placeholder="Назва посади">`:''}<div class="erow"><label class="fl">Реєстрація кандидатів${dsel('elreg')}</label><label class="fl">Голосування${dsel('elvote')}</label></div><p class="hint">Вибори почнуться одразу після прийняття постанови. Голосують усі громадяни, переможця бот призначить на посаду автоматично.</p>`;}
   if(mode==='patriarchfire'){const c=churchSec();h+=c&&String(c.patriarch||'').trim()?`<p class="hint">Зараз Патріарх: <b>${esc(c.patriarch)}</b>. Після прийняття закону престол стане вакантним.</p>`:'<p class="hint warn">Престол і так вакантний.</p>';}
   if(mode==='emergencyend'){const c=EMERG.cur;h+=emActive()?`<p class="hint">Зараз діє надзвичайний стан до ${esc(fmtDT(new Date(+c.untilMs).toISOString()))}: ${esc(c.reason||'')}. Після прийняття закону його буде припинено.</p>`:'<p class="hint warn">Зараз надзвичайного стану немає.</p>';}
   return h;}
+// ---------- Комітети Палати, ЦВК і вибори ----------
+let ELECTIONS=[],CANDS={},MYVOTE={},EL_T='cur',ELM='',EF={post:'',other:'',via:'',reg:'2',vote:'2',note:''},CF={},ELCONF='';
+const RES_MODES=[['none','📋 Звичайна постанова'],['committee','👥 Утворити комітет'],['committeedel','✕ Розпустити комітет'],['election','🗳 Призначити вибори']];
+function committees(st){const p=(st||state).sections.find(x=>x.kind==='parliament');return (p&&p.committees)||[];}
+function cvkList(){return committees().filter(c=>c.type==='cvk');}
+function cvkEmails(){return [...new Set(cvkList().flatMap(c=>[c.head,...(c.members||[])]).map(n=>emailOf(n)).filter(Boolean))];}
+function isCvk(){return !!(AUTH.email&&cvkEmails().includes(AUTH.email));}
+function elPosts(){const o=[];const g=govSec();((g&&g.posts)||[]).forEach(p=>o.push({k:'gov:'+p.id,kind:'gov',key:p.id,title:p.title,cur:p.name||''}));
+  const pa=parlSec();if(pa)o.push({k:'chair',kind:'chair',key:'chair',title:'Голова Палати Земель',cur:pa.chair||''});
+  landList(state).forEach(x=>{const hd=landHead(x.l);const t=hd&&hd.post?String(hd.post.title||'').replace(/^\d+\s*-?\s*[йя]?\s*/,''):'Крайовий Отаман';o.push({k:'land:'+x.name,kind:'land',key:x.name,title:t+' · '+x.name,cur:hd?hd.name:''});});
+  const c=churchSec();if(c)o.push({k:'patriarch',kind:'patriarch',key:'patriarch',title:PATR_TITLE,cur:c.patriarch||''});
+  o.push({k:'other',kind:'other',key:'',title:'Інша посада (вписати назву)'});return o;}
+function elPostSel(id,attrs,cur){const ps=elPosts();const grp=(l,f)=>{const g=ps.filter(f);return g.length?`<optgroup label="${l}">${g.map(p=>`<option value="${esc(p.k)}"${p.k===cur?' selected':''}>${esc(p.title)}${p.cur?' — зараз '+esc(p.cur):''}</option>`).join('')}</optgroup>`:'';};
+  return `<select id="${id}" ${attrs}><option value="">— оберіть посаду —</option>${grp('Гетьман і уряд',p=>p.kind==='gov')}${grp('Палата Земель',p=>p.kind==='chair')}${grp('Землі',p=>p.kind==='land')}${grp('Церква',p=>p.kind==='patriarch')}${grp('Інше',p=>p.kind==='other')}</select>`;}
+function elPostOf(k,other){const p=elPosts().find(x=>x.k===k);if(!p)return null;if(p.kind==='other'){const t=String(other||'').trim();return t?{kind:'other',key:'',title:t}:null;}return {kind:p.kind,key:p.key,title:p.title};}
+function elPhase(e){if(e.status==='cancelled')return 'cancelled';if(e.status==='done')return 'done';const n=Date.now();if(n<(+e.regToMs||0))return 'reg';if(n<(+e.voteToMs||0))return 'vote';return 'count';}
+const EL_PH={reg:['🖊','Реєстрація кандидатів','warn'],vote:['🗳','Триває голосування','ok'],count:['⏳','Підрахунок голосів',''],done:['🏁','Завершено',''],cancelled:['✕','Скасовано','bad']};
+const fms=ms=>fmtDT(new Date(+ms).toISOString());
+function elLeft(ms){const d=+ms-Date.now();if(d<=0)return '';const h=Math.floor(d/3600000),m=Math.floor(d%3600000/60000);return h>=48?Math.round(h/24)+' дн.':h?h+' год '+m+' хв':m+' хв';}
+function elVia(e){return e.via==='decree'?'указом Гетьмана'+(e.by?' '+e.by:''):e.via==='res'?'постановою Палати Земель'+(e.viaRef?' «'+e.viaRef+'»':''):e.via==='cvk'?'Центральною виборчою комісією':'адміністрацією';}
+function canAnnounce(){return !AUTH.bot&&(isHetman()||isCvk()||AUTH.admin);}
+function elActive(){return ELECTIONS.filter(e=>['reg','vote','count'].includes(elPhase(e)));}
+function elBanner(){loadMyVotes();const a=elActive();const es=state.sections.find(x=>x.kind==='elections');if(!a.length||editing||!es)return '';return a.map(e=>{const ph=elPhase(e);return `<button type="button" class="block elban" data-a="gosub" data-p="${esc(es.tab||es.id)}" data-id="${esc(es.id)}"><span class="ebi" aria-hidden="true">🗳</span><span class="ebt"><small>${ph==='reg'?'Триває реєстрація кандидатів':ph==='vote'?'Триває голосування':'Підрахунок голосів'}</small><b>Вибори: ${esc((e.post&&e.post.title)||'')}</b><small>${ph==='reg'?'до '+esc(fms(e.regToMs)):ph==='vote'?'до '+esc(fms(e.voteToMs))+(MYVOTE[e.id]?' · ви вже проголосували':''):''}</small></span><span class="ebgo">${ph==='vote'&&!MYVOTE[e.id]?'Голосувати':'Перейти'} →</span></button>`;}).join('');}
+function committeesBlock(){const cs=committees();if(!cs.length)return '';
+  return `<div class="block comms"><h3>Комітети Палати Земель <small>${cs.length}</small></h3><div class="commgrid">${cs.map(c=>`<article class="comm${c.type==='cvk'?' cvk':''}"><div class="commh"><span class="tag${c.type==='cvk'?' warn':''}">${c.type==='cvk'?'🗳 ЦВК':'👥 Комітет'}</span><b>${esc(c.name)}</b></div>${c.head?`<div class="hint">Голова: ${plink(c.head)}</div>`:''}<div class="mchips">${(c.members||[]).filter(n=>n!==c.head).map(n=>`<span class="mchip">${plink(n)}</span>`).join('')}</div>${c.law?`<div class="hint">Утворено постановою «${esc(c.law)}»${c.at?' · '+esc(c.at):''}</div>`:''}${c.type==='cvk'?'<div class="hint">Призначає вибори, реєструє кандидатів і стежить за голосуванням.</div>':''}</article>`).join('')}</div></div>`;}
+function elCard(e){const ph=elPhase(e);const P=EL_PH[ph];const cands=(CANDS[e.id]||[]).slice().sort((a,b)=>(a.at||0)-(b.at||0));const ok=cands.filter(c=>c.status==='ok');const mine=me();const myC=AUTH.email?cands.find(c=>c.id===AUTH.email):null;
+  const cvk=isCvk()||AUTH.admin;const needCvk=cvkList().length>0;const voted=MYVOTE[e.id];const res=e.result||null;
+  let h=`<article class="elcard ph-${ph}"><div class="elhead"><div><div class="hint">Вибори на посаду</div><h3>${esc(e.post&&e.post.title||e.title||'')}</h3><div class="hint">Призначено ${esc(elVia(e))} · ${esc(fms(e.at||Date.now()))}</div></div><span class="tag ${P[2]}">${P[0]} ${P[1]}</span></div>`;
+  if(e.note)h+=`<p class="pt">${esc(e.note)}</p>`;
+  const st=(lab,ms,on,done)=>`<div class="elstep${on?' on':''}${done?' done':''}"><b>${lab}</b><span>${esc(fms(ms))}</span>${on&&elLeft(ms)?`<small>лишилось ${elLeft(ms)}</small>`:''}</div>`;
+  if(ph!=='cancelled')h+=`<div class="eltl">${st('Реєстрація до',e.regToMs,ph==='reg',ph!=='reg')}${st('Голосування до',e.voteToMs,ph==='vote',['count','done'].includes(ph))}<div class="elstep${ph==='done'?' on':''}"><b>Підсумки</b><span>${ph==='done'?'оголошено':'після голосування'}</span></div></div>`;
+  if(ph==='done'&&res){const tot=res.total||0;const mx=Math.max(1,...(res.rows||[]).map(r=>r.n));
+    h+=`<div class="elres">${res.outcome==='won'?`<div class="elwin">👑 Переміг <b>${plink(res.winner)}</b>${res.applied?' — посаду вже обійнято':e.post&&e.post.kind==='other'?'':' — посаду призначить адміністрація'}</div>`:res.outcome==='tie'?'<div class="elwin tie">⚖️ Нічия — потрібен другий тур</div>':'<div class="elwin tie">Вибори не відбулися: немає голосів за жодного кандидата</div>'}
+      ${(res.rows||[]).map(r=>`<div class="elbar"><div class="elbn">${plink(r.name)}</div><div class="elbt"><i style="width:${Math.round(r.n/mx*100)}%"></i></div><b>${r.n}</b><span class="hint">${tot?Math.round(r.n/tot*100):0}%</span></div>`).join('')}<div class="hint">Проголосувало: ${tot}</div></div>`;}
+  else if(ph!=='cancelled'){
+    h+=`<div class="elcands"><h4>Кандидати <small>${ok.length}${cands.length>ok.length?' · ще '+(cands.length-ok.length)+' на розгляді':''}</small></h4>`;
+    const shown=cands.filter(c=>c.status==='ok'||c.status==='pending'&&(cvk||c.id===AUTH.email)||c.status==='rejected'&&c.id===AUTH.email);
+    h+=shown.length?shown.map(c=>{const isMine=c.id===AUTH.email;const vb=ph==='vote'&&mine&&!voted&&c.status==='ok'&&!AUTH.bot;const conf=ELCONF===e.id+'|'+c.id;
+      return `<div class="elcand${voted&&voted===c.id?' myv':''}"><div class="elcm">${plink(c.name)}${c.status==='pending'?' <span class="tag warn">на розгляді ЦВК</span>':c.status==='rejected'?' <span class="tag bad">відмовлено</span>':''}${voted===c.id?' <span class="tag ok">✓ ваш голос</span>':''}${c.program?`<details><summary>Програма</summary><p class="pt">${esc(c.program)}</p></details>`:''}${c.status==='rejected'&&c.reason?`<div class="hint">Причина: ${esc(c.reason)}</div>`:''}</div><div class="landtools">${vb?`<button class="small${conf?' danger':' primary'}" data-a="elvote" data-e="${esc(e.id)}" data-c="${esc(c.id)}">${conf?'Підтвердити голос':'🗳 Голосувати'}</button>`:''}${cvk&&c.status==='pending'?`<button class="small primary" data-a="elcok" data-e="${esc(e.id)}" data-c="${esc(c.id)}">✓ Зареєструвати</button><button class="small ghost" data-a="elcno" data-e="${esc(e.id)}" data-c="${esc(c.id)}">Відмовити</button>`:''}${isMine&&ph==='reg'?`<button class="small ghost" data-a="elcdel" data-e="${esc(e.id)}" data-c="${esc(c.id)}">Відкликати кандидатуру</button>`:''}${AUTH.admin&&!isMine?`<button class="small ghost" data-a="elcdel" data-e="${esc(e.id)}" data-c="${esc(c.id)}">Видалити</button>`:''}</div></div>`;}).join(''):'<p class="hint">Кандидатів ще немає.</p>';
+    if(ph==='reg'&&mine&&!myC&&!AUTH.bot){const d=CF[e.id]||'';h+=`<details class="elapply"${d?' open':''}><summary>✋ Висунути свою кандидатуру</summary><textarea id="cf-${esc(e.id)}" data-a="cf" data-e="${esc(e.id)}" maxlength="2000" placeholder="Коротка програма: що зробите на посаді (необов’язково)">${esc(d)}</textarea><button class="small primary" data-a="elapply" data-e="${esc(e.id)}" ${busy?'disabled':''}>Подати кандидатуру</button><p class="hint">${needCvk?'Кандидатуру розгляне Центральна виборча комісія.':'ЦВК ще не утворено, тож кандидатура реєструється одразу.'}</p></details>`;}
+    if(ph==='vote'){h+=mine?(voted?'<p class="hint ok">✓ Ви вже проголосували. Голосування таємне: хто за кого голосував, не бачить ніхто.</p>':ok.length?'<p class="hint">Один громадянин — один голос. Змінити голос не можна. Голосування таємне.</p>':''):`<p class="hint">${AUTH.email?'Голосувати можуть лише громадяни з реєстру.':'Увійдіть через Google, щоб проголосувати.'}</p>`;if(e.turnout)h+=`<div class="hint">Уже проголосувало: <b>${e.turnout}</b></div>`;}
+    if(ph==='count')h+='<p class="hint">Голоси підраховує державний бот протягом 15 хвилин.</p>';
+    h+='</div>';}
+  const canCancel=(AUTH.admin||isCvk()||(isHetman()&&e.via==='decree'))&&!AUTH.bot&&['reg','vote'].includes(ph);
+  if(canCancel||AUTH.admin&&!AUTH.bot)h+=`<div class="landtools elmgmt">${canCancel?`<button class="small ghost" data-a="elcancel" data-e="${esc(e.id)}">Скасувати вибори</button>`:''}${AUTH.admin&&!AUTH.bot?`<button class="small danger" data-a="eldel" data-e="${esc(e.id)}">🗑 Видалити</button>`:''}</div>`;
+  return h+'</article>';}
+let MYV_CHK=new Set();function loadMyVotes(){if(!AUTH.email||!me()||!window.FB||!window.FB.myVote)return;ELECTIONS.forEach(e=>{const k=AUTH.email+'|'+e.id;if(MYV_CHK.has(k)||!['vote','count','done'].includes(elPhase(e)))return;MYV_CHK.add(k);window.FB.myVote(e.id).then(v=>{if(v){MYVOTE[e.id]=v;renderSoon();}}).catch(()=>{});});}
+function electionsHtml(s,si){loadMyVotes();const act=ELECTIONS.filter(e=>['reg','vote','count'].includes(elPhase(e))).sort((a,b)=>(+a.voteToMs)-(+b.voteToMs));const past=ELECTIONS.filter(e=>!act.includes(e)).sort((a,b)=>(+b.voteToMs)-(+a.voteToMs));const cs=committees();
+  const tabs=[['cur','🗳 Поточні',act.length],['past','🏁 Завершені',past.length],['cvk','👥 ЦВК і комітети',cs.length]];
+  let h=`<div class="awtop"><div class="afilter">${tabs.map(([k,l,n])=>`<button class="small${EL_T===k?' primary':''}" data-a="elt" data-k="${k}">${l}${n?' · '+n:''}</button>`).join('')}</div>${canAnnounce()?`<div class="landtools"><button class="small primary" data-a="elnew">🗳 Призначити вибори</button></div>`:''}</div>`;
+  if(EL_T==='cur')h+=act.length?act.map(elCard).join(''):`<div class="block"><p class="empty">Зараз виборів немає.</p><p class="hint">Вибори призначає Гетьман указом, Палата Земель постановою або Центральна виборча комісія. Голосувати можуть усі громадяни, один голос на кожних виборах.</p></div>`;
+  else if(EL_T==='past')h+=past.length?past.map(elCard).join(''):'<div class="block"><p class="empty">Завершених виборів ще немає.</p></div>';
+  else h+=(committeesBlock()||'<div class="block"><p class="empty">Комітетів ще немає.</p></div>')+`<div class="block"><p class="hint">Комітети утворює Палата Земель постановою: «Подати до Палати» → «Постанова» → «Утворити комітет». Комітет типу «ЦВК» призначає вибори й реєструє кандидатів.</p></div>`;
+  if(ELM==='new'&&canAnnounce()){const vias=[];if(isHetman())vias.push(['decree','📜 Указом Гетьмана']);if(isCvk())vias.push(['cvk','🗳 Від імені ЦВК']);if(AUTH.admin&&!vias.length)vias.push(['admin','🛠 Як адміністрація']);if(!vias.some(v=>v[0]===EF.via))EF.via=vias[0][0];
+    const dd=k=>`<select id="ef-${k}" data-a="ef" data-k="${k}">${[1,2,3,4,5,6,7].map(n=>`<option value="${n}"${String(EF[k])===String(n)?' selected':''}>${n} ${dniv(n)}</option>`).join('')}</select>`;
+    const pp=elPostOf(EF.post,EF.other);
+    MODALH=`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="elclose" tabindex="-1" aria-label="Закрити"></button><div class="bmbox"><button class="small bmx" data-a="elclose" aria-label="Закрити">✕ Закрити</button><h3>🗳 Призначити вибори</h3>
+      ${vias.length>1?`<div class="afilter">${vias.map(([k,l])=>`<button class="small${EF.via===k?' primary':''}" data-a="efvia" data-k="${k}">${l}</button>`).join('')}</div>`:`<div class="hint">${vias[0][1]}</div>`}
+      <label class="fl">Посада${elPostSel('ef-post','data-a="ef" data-k="post"',EF.post)}</label>${EF.post==='other'?`<input type="text" id="ef-other" data-a="ef" data-k="other" maxlength="120" value="${esc(EF.other)}" placeholder="Назва посади">`:''}
+      <div class="erow"><label class="fl">Реєстрація кандидатів${dd('reg')}</label><label class="fl">Голосування${dd('vote')}</label></div>
+      <textarea id="ef-note" data-a="ef" data-k="note" maxlength="1500" placeholder="Умови й пояснення (необов’язково)">${esc(EF.note)}</textarea>
+      <p class="hint">Реєстрація триватиме до ${esc(fms(Date.now()+(+EF.reg)*86400000))}, голосування — до ${esc(fms(Date.now()+((+EF.reg)+(+EF.vote))*86400000))}. Переможця бот призначить на посаду автоматично${pp&&pp.kind==='other'?' (для «іншої посади» — лише оголосить)':''}.${EF.via==='decree'?' Разом з виборами буде видано указ.':''}</p>
+      <div><button class="primary small" data-a="elcreate" ${busy?'disabled':''}>Призначити вибори</button></div></div></div>`;}
+  return h;}
+function applyElection(e,name,st){st=st||state;const em=emailOf(name,st);const k=e.post&&e.post.kind;
+  if(k==='gov'){const p=govPost(st,e.post.key);if(!p)return false;p.name=name;p.email=em;if(e.post.key==='hetman')syncArmyHetman(st,name);return true;}
+  if(k==='chair'){const pa=st.sections.find(x=>x.kind==='parliament');if(!pa)return false;pa.chair=name;pa.chairEmail=em;return true;}
+  if(k==='patriarch'){const c=churchSec(st);if(!c)return false;c.patriarch=name;return true;}
+  if(k==='land'){const L=findLand(st,e.post.key);if(!L)return false;const l=L.l;l.posts=l.posts||[];const hd=landHead(l);let post=hd&&hd.post;
+    if(!post){post={title:'1-й Крайовий Отаман',holder:''};l.posts.push(post);}
+    else if(String(post.holder||'').trim()&&post.holder!=='0'&&post.holder!==name){const m=/^(\d+)\s*-?\s*[йя]?\s*(.*)$/.exec(String(post.title||'').trim());if(m){const wasHead=l.head!=null&&l.posts[l.head]===post;const np={title:(+m[1]+1)+'-й '+m[2],holder:''};l.posts.push(np);if(wasHead)l.head=l.posts.length-1;post=np;}}
+    post.holder=name;const pa=st.sections.find(x=>x.kind==='parliament');if(pa){(pa.repEmails=pa.repEmails||{})[e.post.key]=em;(pa.repHolder=pa.repHolder||{})[e.post.key]=name;}return true;}
+  return false;}
+async function electionDuties(){const out=[];let changed=false;const p=parlSec();const now=Date.now();if(!window.FB.createElection)return {changed,out};
+  for(const b of ((p&&p.bills)||[])){if(b.status!=='passed'||!b.amend||b.amend.mode!=='election'||b.elDone)continue;const am=b.amend;const id='eb'+String(b.id).replace(/[^\w]/g,'').slice(-18);
+    if(!ELECTIONS.some(e=>e.id===id)){try{const rg=+am.regDays||2,vt=+am.voteDays||2;await window.FB.createElection(id,{post:am.post,title:'Вибори: '+am.post.title,via:'res',viaRef:b.title||'',by:'Палата Земель',role:'',regToMs:now+rg*86400000,voteToMs:now+(rg+vt)*86400000,note:am.note||''});out.push('el-new');}catch(e){out.push('el-new-error');continue;}}
+    b.elDone=true;changed=true;}
+  for(const e of ELECTIONS){if(e.status!=='open')continue;
+    if(now>=+e.voteToMs){let t;try{t=await window.FB.tallyElection(e.id);}catch(_){out.push('el-tally-error');continue;}
+      const rows=(CANDS[e.id]||[]).filter(c=>c.status==='ok').map(c=>({email:c.id,name:c.name,n:t.counts[c.id]||0})).sort((a,b)=>b.n-a.n);
+      const res={total:t.total,rows,at:now};
+      if(!rows.length||!rows[0].n)res.outcome='failed';else if(rows[1]&&rows[1].n===rows[0].n)res.outcome='tie';
+      else{res.outcome='won';res.winner=rows[0].name;res.winnerEmail=rows[0].email;if(e.post&&e.post.kind!=='other'&&applyElection(e,rows[0].name)){res.applied=true;changed=true;}}
+      try{await window.FB.updElection(e.id,{status:'done',result:res});out.push('el-done');}catch(_){out.push('el-done-error');}}
+    else if(now>=+e.regToMs){try{const t=await window.FB.tallyElection(e.id);if(t.total!==(+e.turnout||0))await window.FB.updElection(e.id,{turnout:t.total});}catch(_){}}}
+  return {changed,out};}
+
 // ---------- II: нова форма подання до Палати ----------
 const NP_CATS=[['law','⚖️','Закон','норми, Землі, гравці, свята, надзвичайний стан'],['change','📝','Зміна','кодексу чи Конституції — по статті або в цілому'],['res','📋','Постанова','внутрішні справи Палати'],['post','👤','Посада','призначення, звільнення, недовіра'],['decl','🗣','Резолюція','позиція Палати, без наслідків']];
 const POST_MODES=['ataman','dismiss','chair','chairfire','gov','govfire','patriarch','patriarchfire'];
@@ -2503,7 +2612,8 @@ function lawModeKeys(){const o=[];lawModeGroups().forEach(g=>{if(Array.isArray(g
 function npLands(){const ml=myLands();if(ml.length)return ml;const mp=myPost();if(mp&&(mp.id==='hetman'||mp.perm==='prosecutor'))return ['Канцелярія'];return [];}
 function npDerive(){const cat=NP_CATS.some(c=>c[0]===DRAFT.cat)?DRAFT.cat:'law';DRAFT.cat=cat;
   if(cat==='law'){DRAFT.kind='law';if(!lawModeKeys().includes(DRAFT.mode))DRAFT.mode='none';}
-  else if(cat==='res'||cat==='decl'){DRAFT.kind=cat;DRAFT.mode='none';}
+  else if(cat==='res'){DRAFT.kind='res';if(!RES_MODES.some(x=>x[0]===DRAFT.mode))DRAFT.mode='none';}
+  else if(cat==='decl'){DRAFT.kind='decl';DRAFT.mode='none';}
   else if(cat==='change'){const cs=codes();let d=DRAFT.doc||'const';if(d!=='const'&&d!=='__new'&&!cs.some(c=>c.id===d))d='const';DRAFT.doc=d;
     if(d==='const'){DRAFT.kind='const';if(!CHG_CONST.some(x=>x[0]===DRAFT.mode))DRAFT.mode='replace';}
     else if(d==='__new'){DRAFT.kind='code';DRAFT.mode='codenew';}
@@ -2539,6 +2649,7 @@ function proposeForm(ml){npDerive();const cat=DRAFT.cat,mode=DRAFT.mode||'none',
     if(DRAFT.doc!=='__new')h+=`<div class="afilter npmodes">${(DRAFT.doc==='const'?CHG_CONST:CHG_CODE).map(([k,l])=>`<button type="button" class="small${mode===k?' primary':''}" data-a="npmode" data-k="${k}">${l}</button>`).join('')}</div>`;}
   if(cat==='post'){h+=`<div class="afilter npmodes">${NP_POSTS.map(([k,ic,l])=>`<button type="button" class="small${DRAFT.pt===k?' primary':''}" data-a="nppt" data-k="${k}">${ic} ${l}</button>`).join('')}</div>`;
     if(DRAFT.pt!=='nocon')h+=`<div class="afilter npmodes"><button type="button" class="small${DRAFT.fire!=='1'?' primary':''}" data-a="npfire" data-k="">${DRAFT.pt==='chair'||DRAFT.pt==='patriarch'?'Обрати':'Призначити'}</button><button type="button" class="small${DRAFT.fire==='1'?' primary':''}" data-a="npfire" data-k="1">${DRAFT.pt==='patriarch'?'Усунути':'Звільнити'}</button></div>`;}
+  if(cat==='res')h+=`<div class="afilter npmodes">${RES_MODES.map(([k,l])=>`<button type="button" class="small${mode===k?' primary':''}" data-a="npmode" data-k="${k}">${l}</button>`).join('')}</div>`;
   const nm={law:'закону',change:'закону',res:'постанови',post:kind==='res'?'постанови':'закону',decl:'резолюції'}[cat];
   h+=`<input type="text" id="np-title" data-a="np" data-k="title" maxlength="200" value="${esc(DRAFT.title)}" placeholder="Назва ${nm}${cat==='post'&&DRAFT.pt==='nocon'?', напр. Про недовіру Гетьману':''}"><textarea id="np-text" data-a="np" data-k="text" placeholder="Пояснення, обґрунтування. Кожен пункт з нового рядка.">${esc(DRAFT.text)}</textarea>`;
   if(cat==='law')h+=`<label class="fl">Що закон змінить автоматично, якщо його приймуть<select id="np-mode" data-a="np" data-k="mode">${lawModeGroups().map(x=>Array.isArray(x[1])?`<optgroup label="${esc(x[0])}">${x[1].map(([k,l])=>`<option value="${k}"${mode===k?' selected':''}>${esc(l)}</option>`).join('')}</optgroup>`:`<option value="${x[0]}"${mode===x[0]?' selected':''}>${esc(x[1])}</option>`).join('')}</select></label>`;
@@ -2837,12 +2948,13 @@ function renderInner(){chatMarkSeen();
     editing=ED&&scopeAllows(s);
     html+=`<section class="sec" id="${esc(s.id)}"><h2>${esc(s.title)}${s.note?`<small>${esc(s.note)}</small>`:''}</h2>`;
     if(s.kind==='economy'){html+=(editing?econHtml(s,si):econCompact(econHtml(s,si)))+'</section>';return;}
-    if(s.kind==='parliament'){html+=parlHtml(s,si)+'</section>';return;}
+    if(s.kind==='parliament'){html+=parlHtml(s,si)+(editing?'':committeesBlock())+'</section>';return;}
     if(s.kind==='doc'){html+=constHtml(s,si)+'</section>';return;}
     if(s.kind==='gov'){html+=govHtml(s,si)+'</section>';return;}
     if(s.kind==='home'){html+=homeHtml(s,si)+'</section>';return;}
     if(s.kind==='chat'){html+=chatHtml(s)+'</section>';return;}
     if(s.kind==='awards'){html+=awardsHtml(s,si)+'</section>';return;}
+    if(s.kind==='elections'){html+=electionsHtml(s,si)+'</section>';return;}
     if(s.kind==='players'){html+=playersHtml(s,si)+'</section>';return;}
     if(s.kind==='court'){html+=courtHtml(s,si)+'</section>';return;}
     if(s.kind==='laws'){html+=lawsHtml(s,si)+'</section>';return;}
@@ -2901,6 +3013,8 @@ app.addEventListener('input',e=>{
   if(a==='lq'){LQ=t.value;render();return;}
   if(a==='actas'){ACTAS=t.value;try{localStorage.setItem('ud-actas',ACTAS);}catch(_){}DOSSIER=null;render();return;}
   if(a==='chd'){CHD[t.dataset.k]=t.value;return;}
+  if(a==='ef'){EF[t.dataset.k]=t.value;if(t.tagName==='SELECT')render();return;}
+  if(a==='cf'){CF[t.dataset.e]=t.value;return;}
   if(a==='pd2'){PD2[t.dataset.k]=t.value;if(t.dataset.k!=='qty'||true){if(t.tagName==='SELECT')render();}return;}
   if(a==='chin'){CHAT.draft[CHAT.th]=t.value;const q=mentionQ(t);if(q!==CHAT.mq){CHAT.mq=q;render();}return;}
   if(a==='chnew'){const e=t.value;if(!e)return;CHAT.mview='thread';CHAT.th='d:'+dmPair(AUTH.email,e);CHAT.img=null;render();return;}
@@ -2934,7 +3048,7 @@ app.addEventListener('input',e=>{
   if(a==='td'){TD[t.dataset.k]=t.value;return;}
   if(a==='tdr'){TDR[t.dataset.id]=t.value;return;}
   if(a==='dc'){DC[t.dataset.k]=t.value;if(t.dataset.k==='type'||t.dataset.k==='iss')render();return;}
-  if(a==='np'){const k=t.dataset.k;DRAFT[k]=t.type==='checkbox'?(t.checked?'1':''):t.value;if(k==='art'){DRAFT.find='';render();}if(k==='mode'||k==='nname'||k==='chpos'||k==='chdel'||k==='pl'||k==='hmon'||k==='code'||k==='cart'||k==='ckind'||k==='doc')render();if(k==='full'){clearTimeout(window.__fullT);window.__fullT=setTimeout(()=>{const el=document.activeElement;const st=el&&el.id==='np-full'?[el.selectionStart,el.selectionEnd,el.scrollTop]:null;render();if(st){const e2=document.getElementById('np-full');if(e2){e2.focus();e2.setSelectionRange(st[0],st[1]);e2.scrollTop=st[2];}}},700);}return;}
+  if(a==='np'){const k=t.dataset.k;DRAFT[k]=t.type==='checkbox'?(t.checked?'1':''):t.value;if(k==='art'){DRAFT.find='';render();}if(/^cm\d$/.test(k)||k==='ctype'||k==='elpost'||k==='mode'||k==='nname'||k==='chpos'||k==='chdel'||k==='pl'||k==='hmon'||k==='code'||k==='cart'||k==='ckind'||k==='doc')render();if(k==='full'){clearTimeout(window.__fullT);window.__fullT=setTimeout(()=>{const el=document.activeElement;const st=el&&el.id==='np-full'?[el.selectionStart,el.selectionEnd,el.scrollTop]:null;render();if(st){const e2=document.getElementById('np-full');if(e2){e2.focus();e2.setSelectionRange(st[0],st[1]);e2.scrollTop=st[2];}}},700);}return;}
   if(a==='ap'){AP[t.dataset.k]=t.value;return;}
   if(a==='apr'){APR[t.dataset.id]=t.value;return;}
   if(a==='es'){ES[t.dataset.k]=t.value;return;}
@@ -3029,7 +3143,7 @@ app.addEventListener('change',e=>{
   // re-render a moment later, so a button click that caused this blur still lands
   else if(a==='piq'||a==='pip'||a==='pnm'||a==='dq'||a==='prp'||a==='prn'||a==='ea'||a==='iq'){setTimeout(()=>{const ae=document.activeElement;const keep=ae&&ae.id;render();if(keep){const el=document.getElementById(keep);if(el)el.focus();}},250);}
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&(BILLM||HOMEM||ZOOM||LANDM||PROF||AWTM||AWFORM)){BILLM='';HOMEM='';ZOOM='';LANDM='';PROF='';AWTM='';AWFORM='';render();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&(BILLM||HOMEM||ZOOM||LANDM||PROF||AWTM||AWFORM||ELM)){BILLM='';HOMEM='';ZOOM='';LANDM='';PROF='';AWTM='';AWFORM='';ELM='';render();}
   if(e.key==='Enter'&&e.target&&e.target.dataset&&e.target.dataset.dos){e.target.click();return;}
   if(e.target&&e.target.id==='chin'&&(e.key==='Enter'||e.key==='Tab')&&!e.shiftKey&&!e.isComposing&&CHAT.mq!=null){const L=mentionList();if(L.length){e.preventDefault();mentionPick(L[0].name);return;}}
   if(e.target&&e.target.id==='chin'&&e.key==='Escape'&&CHAT.mq!=null){CHAT.mq=null;render();return;}
@@ -3193,6 +3307,23 @@ app.addEventListener('click',async e=>{
   if(a==='wimg'){const w=weekReport(WREP);showDoc({type:'ВІСНИК',issuer:'ТИЖНЕВИЙ ЗВІТ УКРАЇНСЬКОЇ ДЕРЖАВИ',date:dateLong(),title:w.label,body:w.S.length?w.S.map(x=>`${x.t}:\n`+x.items.map(i=>'• '+i).join('\n')).join('\n\n'):'Цього тижня подій не було.',role:'Гетьманська Канцелярія',name:'',seal:'gov'});return;}
   if(a==='awmode'){AWMODE=b.dataset.k;render();return;}
   if(a==='awt'){AW_T=b.dataset.k;render();return;}
+  if(a==='gosub'){PROF='';active=b.dataset.p;SUB[b.dataset.p]=b.dataset.id;MMORE=false;try{history.replaceState(null,'','#'+b.dataset.id);}catch(_){}render();window.scrollTo(0,0);return;}
+  if(a==='elt'){EL_T=b.dataset.k;render();return;}
+  if(a==='elnew'){ELM='new';EF={post:'',other:'',via:'',reg:'2',vote:'2',note:''};render();return;}
+  if(a==='elclose'){ELM='';render();return;}
+  if(a==='efvia'){EF.via=b.dataset.k;render();return;}
+  if(a==='elcreate'){if(!canAnnounce())return;const pp=elPostOf(EF.post,EF.other);if(!pp){msg='Оберіть посаду';msgErr=true;render();return;}
+    const now=Date.now();const rg=+EF.reg||2,vt=+EF.vote||2;const id='e'+now.toString(36)+Math.random().toString(36).slice(2,5);const mp=myPost();const via=EF.via||'admin';
+    const by=via==='decree'?(mp?mp.name:''):via==='cvk'?((me()||{}).name||''):'Адміністрація';const role=via==='decree'?(mp?mp.title:'Гетьман'):via==='cvk'?'ЦВК':'';const note=String(EF.note||'').trim();
+    busy=true;render();try{await window.FB.createElection(id,{post:pp,title:'Вибори: '+pp.title,via,viaRef:'',by,role,regToMs:now+rg*86400000,voteToMs:now+(rg+vt)*86400000,note});
+      if(via==='decree'){const no=NEWS.filter(n=>n.type==='decree').reduce((m,n)=>Math.max(m,+n.no||0),0)+1;try{await window.FB.postNews({type:'decree',title:'Про призначення виборів: '+pp.title,text:`Призначити вибори на посаду «${pp.title}».\n\nРеєстрація кандидатів — до ${fms(now+rg*86400000)}.\nГолосування — до ${fms(now+(rg+vt)*86400000)}.\nГолосують усі громадяни Української Держави, один громадянин — один голос.${note?'\n\n'+note:''}`,by,role,no});}catch(_){}}
+      ELM='';EL_T='cur';msg='Вибори призначено';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося призначити вибори';msgErr=true;}busy=false;render();return;}
+  if(a==='elapply'){const m=me();if(!m||!AUTH.email)return;const eid=b.dataset.e;busy=true;render();try{await window.FB.applyCand(eid,{name:m.name,program:String(CF[eid]||'').trim(),status:cvkList().length?'pending':'ok'});delete CF[eid];msg='Кандидатуру подано';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося подати кандидатуру';msgErr=true;}busy=false;render();return;}
+  if(a==='elcok'||a==='elcno'){if(a==='elcno'&&b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно відмовити?';return;}busy=true;render();try{await window.FB.setCand(b.dataset.e,b.dataset.c,{status:a==='elcok'?'ok':'rejected',by:(me()||{}).name||'',byAt:Date.now()});msg=a==='elcok'?'Кандидата зареєстровано':'У реєстрації відмовлено';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося зберегти';msgErr=true;}busy=false;render();return;}
+  if(a==='elcdel'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return;}busy=true;render();try{await window.FB.delCand(b.dataset.e,b.dataset.c);msg='Кандидатуру відкликано';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося';msgErr=true;}busy=false;render();return;}
+  if(a==='elvote'){const k=b.dataset.e+'|'+b.dataset.c;if(ELCONF!==k){ELCONF=k;render();return;}ELCONF='';busy=true;render();try{await window.FB.castVote(b.dataset.e,b.dataset.c);MYVOTE[b.dataset.e]=b.dataset.c;msg='Ваш голос враховано';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося проголосувати';msgErr=true;}busy=false;render();return;}
+  if(a==='elcancel'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно скасувати?';return;}busy=true;render();try{await window.FB.updElection(b.dataset.e,{status:'cancelled',cancelBy:isCvk()?'ЦВК':isHetman()?'Гетьман':'Адміністрація'});msg='Вибори скасовано';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося';msgErr=true;}busy=false;render();return;}
+  if(a==='eldel'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно видалити?';return;}try{await window.FB.delElection(b.dataset.e);}catch(e){console.warn(e);}render();return;}
   if(a==='awtm'){AWTM=b.dataset.k;AWFORM='';render();return;}
   if(a==='awform'){AWFORM=b.dataset.k;AWTM='';render();return;}
   if(a==='awclose'){AWFORM='';AWTM='';ATE=null;render();return;}
@@ -3247,6 +3378,9 @@ app.addEventListener('click',async e=>{
     if((mode==='ataman'||mode==='chair'||mode==='gov'||mode==='patriarch')&&!nname){bad('Впишіть ім’я');return;}
     if(mode==='patriarch')amend={mode,name:nname};
     if(mode==='patriarchfire'){const c=churchSec();if(!c||!String(c.patriarch||'').trim()){bad('Престол і так вакантний');return;}amend={mode,who:c.patriarch};}
+    if(mode==='committee'){const nm=String(DRAFT.cname||'').trim();if(!nm){bad('Впишіть назву комітету');return;}const mem=[...new Set([0,1,2,3,4,5,6,7,8].map(i=>String(DRAFT['cm'+i]||'').trim()).filter(Boolean))];if(!mem.length){bad('Оберіть хоча б одного члена комітету');return;}amend={mode,name:nm,ctype:DRAFT.ctype==='cvk'?'cvk':'other',members:mem,head:mem[0]};}
+    if(mode==='committeedel'){const cs=committees();const c=cs.find(x=>x.id===DRAFT.cdel)||cs[0];if(!c){bad('Комітетів немає');return;}amend={mode,cid:c.id,name:c.name};}
+    if(mode==='election'){const pp=elPostOf(DRAFT.elpost,DRAFT.elother);if(!pp){bad('Оберіть посаду, на яку призначаються вибори');return;}amend={mode,post:pp,regDays:+DRAFT.elreg||2,voteDays:+DRAFT.elvote||2};}
 
     if(mode==='rename'&&!String(DRAFT.newName||'').trim()){bad('Впишіть нову назву Землі');return;}
     if(mode==='flag'&&!DRAFT.img){bad('Виберіть картинку прапора');return;}
@@ -3510,6 +3644,7 @@ async function stateDuties(){if(!AUTH.admin||!window.FB||busy||editing)return ''
       if(o.t==='exile'){const pp=plByName(nm);if(pp){pp.email='';pp.exiled={at:iso,why};}}
       ls.exec[o.key]=iso;changed=true;out.push('sanction '+o.t);}catch(_){out.push('sanction-error');}}
     if(todo.length)SANC_CACHE={};}}
+  try{const r=await electionDuties();if(r.changed)changed=true;out.push(...r.out);}catch(e){out.push('el-error');}
   if(changed){try{await window.FB.save(state);saved=JSON.stringify(state);out.push('state');}catch(_){state=JSON.parse(saved);}}
   return out.join(',');}
 function botReady(){if(AUTH.bot&&AUTH.admin&&votesLoaded&&sigsLoaded)window.__BOT_READY=true;}
@@ -3534,6 +3669,12 @@ window.__tgFeed=()=>{const H=x=>String(x==null?'':x).replace(/&/g,'&amp;').repla
   PARDONS.forEach(d=>add('pard:'+(d.id||d.name+vms(d.at)),vms(d.at),`🕊 Гетьман помилував ${H(d.name)}`));
   TREATIES.forEach(t=>{if(t.signedAt)add('tr:'+(t.id||t.title),t.signedAt,`🤝 Укладено угоду «${H(t.title)}» з ${H(t.partner)}`);});
   PETS.filter(pt=>pt.status==='passed').forEach(pt=>add('pet:'+(pt.id||pt.title),vms(pt.at),`✍️ Петиція «${H(pt.title)}» набрала підписи й стала законопроєктом`+lnk('parl')));
+  {const f2=d=>new Date(+d).toLocaleString('uk-UA',{timeZone:'Europe/Kiev',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+   ELECTIONS.forEach(e=>{const t=(e.post&&e.post.title)||'';if(e.status==='cancelled')return;
+    if(e.at)add('el:'+e.id,vms(e.at),`🗳 <b>Призначено вибори</b>\nПосада: ${H(t)}\nПризначено ${H(elVia(e))}${e.note?'\n\n'+H(clip(e.note,500)):''}\n\n🖊 Реєстрація кандидатів — до ${f2(e.regToMs)}\n🗳 Голосування — до ${f2(e.voteToMs)} (Київ)\nГолосують усі громадяни.`+lnk('elections','Висунутися або переглянути'));
+    const ph=elPhase(e);if(+e.regToMs<=now&&e.status==='open'){const ok=(CANDS[e.id]||[]).filter(c=>c.status==='ok');add('elv:'+e.id,+e.regToMs,`🗳 <b>Почалось голосування на виборах</b>\nПосада: ${H(t)}\nКандидати: ${ok.length?ok.map(c=>H(c.name)).join(', '):'немає'}\nГолосування до ${f2(e.voteToMs)} (Київ)`+lnk('elections','Голосувати на сайті'),'remind');}
+    if(ph==='vote'&&+e.voteToMs-now<=6*3600000)add('elr:'+e.id,now,`⏰ <b>Вибори: ${H(t)}</b>\nГолосування закінчується ${f2(e.voteToMs)} (Київ). Ще не проголосували — встигніть!`+lnk('elections','Голосувати'),'remind');
+    if(e.status==='done'&&e.result&&e.result.at)add('elres:'+e.id,+e.result.at,(e.result.outcome==='won'?`👑 <b>Підсумки виборів: ${H(t)}</b>\nПереміг <b>${H(e.result.winner)}</b>\n\n`:`🏁 <b>Підсумки виборів: ${H(t)}</b>\n${e.result.outcome==='tie'?'Нічия — потрібен другий тур.':'Вибори не відбулися.'}\n\n`)+(e.result.rows||[]).map(r=>H(r.name)+' — '+r.n).join('\n')+`\nПроголосувало: ${e.result.total||0}`+lnk('elections'));});}
   // дрібні події — одним дайджестом
   const minor=[];const seenTx=new Set(out.map(x=>x.text));
   {const rs=ranksSec();((rs&&rs.log)||[]).forEach(x=>{if(x.at)minor.push({id:'rk:'+x.at+x.name,at:x.at,tx:`🎗 ${x.name}: ${rankVerb(x)}`});});((rs&&rs.slog)||[]).forEach(x=>{if(x.at)minor.push({id:'sl:'+x.at+x.tx,at:x.at,tx:'🛡 '+x.tx});});}
@@ -3552,7 +3693,7 @@ app.addEventListener('toggle',e=>{const d=e.target;if(d&&d.dataset&&d.dataset.o)
 let COMMENTS=[],PETS=[],PSIGNS={},CASES=[],CMD={},PD={title:'',text:''},CD={title:'',def:'',text:'',bill:'',kind:'civil',arts:[],art:'',closed:false,asPros:false},VD={},PETF='open';
 const PET_MS=7*24*3600*1000;
 const SW_KINDS=['laws','gov','players','ranks'];const SUB={};
-const SUB_LABEL={parliament:'Палата',laws:'Кодекси й акти',doc:'Конституція',economy:'Економіка',awards:'Відзнаки',gov:'Канцелярія',players:'Гравці',units:'Курені',ranks:'Звання'};
+const SUB_LABEL={parliament:'Палата',laws:'Кодекси й акти',doc:'Конституція',economy:'Економіка',awards:'Відзнаки',elections:'Вибори',gov:'Канцелярія',players:'Гравці',units:'Курені',ranks:'Звання'};
 let EMERG={cur:null,hist:[]},APPS=[],AP={name:'',profile:'',land:'',about:'',kind:'citizen'},APR={},RK={name:'',ladder:'mil',rank:'',reason:''},CAL={y:0,m:0,d:0},ES={hours:'48'};
 function emActive(){const c=EMERG&&EMERG.cur;return !!(c&&+c.untilMs>Date.now());}
 function voteHours(){return emActive()?12:24;}
@@ -3787,6 +3928,7 @@ function lawShort(am){if(!am||!am.mode)return '';if(CODE_MODES.includes(am.mode)
   case 'gov':return `${am.name} — ${am.postTitle||'посада'}`;case 'govfire':return `звільнено: ${am.postTitle||'посада'}${am.who?' ('+am.who+')':''}`;
   case 'holiday':return `встановлено державне свято «${am.name}» (${+am.day} ${MONTHS_G[(+am.month||1)-1]})`;case 'holidaydel':return `скасовано державне свято «${am.name}»`;
   case 'emergency':return `запроваджено надзвичайний стан на ${+am.days} ${dniv(+am.days)}`;case 'emergencyend':return 'припинено надзвичайний стан';
+  case 'committee':return `утворено ${am.ctype==='cvk'?'Центральну виборчу комісію':'комітет'} «${am.name}»`;case 'committeedel':return `розпущено комітет «${am.name}»`;case 'election':return `призначено вибори: ${(am.post&&am.post.title)||''}`;
   case 'patriarch':return `${am.name} — ${PATR_TITLE}`;case 'patriarchfire':return `усунуто Патріарха${am.who?' '+am.who:''}`;
   case 'replace':return `змінено ${am.artTitle?String(am.artTitle).split('.')[0]:'статтю'} Конституції`;case 'add':return 'додано нову статтю Конституції';}return '';}
 function chronicle(){const ev=[];
@@ -3810,12 +3952,13 @@ function chronicle(){const ev=[];
   {const rs=ranksSec();((rs&&rs.log)||[]).forEach(x=>{if(x.at)ev.push({at:x.at,ic:'🎗',tx:`${x.name}: ${rankVerb(x)}`});});}
   emPeriods().forEach(({p,from,to})=>{ev.push({at:new Date(from).toISOString(),ic:'🚨',tx:`Запроваджено надзвичайний стан${p.source==='law'?' законом':' указом Гетьмана'}: ${p.reason||''}`});if(to<=Date.now())ev.push({at:new Date(to).toISOString(),ic:'🕊',tx:p.endedBy?`Надзвичайний стан припинено (${p.endedBy})`:'Надзвичайний стан завершився'});});
   AWARDS.forEach(a=>{ev.push({at:msIso(a.at),ic:'🎖',tx:`${a.recipient} нагороджено відзнакою «${a.title}»`});if(a.revoked)ev.push({at:a.revoked.at||'',ic:'🚫',tx:`${a.recipient} позбавлено відзнаки «${a.title}»`});});
+  ELECTIONS.forEach(e=>{const t=(e.post&&e.post.title)||'';if(e.at)ev.push({at:msIso(e.at),ic:'🗳',tx:`Призначено вибори: ${t} (${elVia(e)})`});if(e.status==='done'&&e.result&&e.result.at)ev.push({at:new Date(e.result.at).toISOString(),ic:'👑',tx:e.result.outcome==='won'?`${e.result.winner} переміг на виборах: ${t}`:`Вибори «${t}» не визначили переможця`});});
   return ev.filter(e=>e.at).sort((x,y)=>y.at.localeCompare(x.at));}
 function homeHtml(s,si){const mp=myPost();const het=isHetman();
   const laws=allBills().filter(b=>phase(b)==='passed'&&b.closesAt).map(b=>({kind:'law',at:new Date(Date.parse(b.closesAt)).toISOString(),b}));
   const items=[...NEWS.map(n=>({kind:n.type,at:msIso(n.at),n})),...laws].sort((x,y)=>y.at.localeCompare(x.at));
   const shown=items.filter(x=>FEED_F==='all'||x.kind===FEED_F);
-  let h=(editing?'':homeTop())+'<div class="home"><div class="feed">';
+  let h=(editing?'':homeTop())+'<div class="home"><div class="feed">'+elBanner();
   const th=todayHolidays();if(th.length)h+=th.map(x=>`<div class="block holtoday"><span class="hti" aria-hidden="true">${x.church?'✝':'🎉'}</span><div><div class="hint">Сьогодні ${x.church?'церковне':'державне'} свято</div><div class="htn">${esc(x.name)}</div>${x.text?`<p>${esc(x.text)}</p>`:''}</div></div>`).join('');
   if(het&&!editing&&ND.type==='emerg'){h+=`<div class="block compose emcompose"><h3>🚨 Запровадити надзвичайний стан <small>указом Гетьмана</small></h3><div class="afilter">${[['decree','📜 Указ'],['news','📰 Новина'],['emerg','🚨 Надзвичайний стан']].map(([k,l])=>`<button class="small${ND.type===k?' primary':''}" data-a="ntype" data-k="${k}">${l}</button>`).join('')}</div>${emActive()?'<p class="hint warn">Надзвичайний стан уже діє.</p>':`<textarea id="nd-text" data-a="nd" data-k="text" maxlength="500" placeholder="Причина: її побачать на всіх сторінках сайту">${esc(ND.text)}</textarea><label class="fl">Строк<select id="es-hours" data-a="es" data-k="hours">${[24,48,72,120,168].map(x=>`<option value="${x}"${+ES.hours===x?' selected':''}>${hrsLabel(x)}</option>`).join('')}</select></label><p class="hint">Поки діє надзвичайний стан, на всіх сторінках висить попередження, а законопроєкти в Палаті голосуються 12 годин замість 24. Указом — щонайбільше на 7 діб; довше або повторно може запровадити Палата законом. Разом із запровадженням буде видано указ.</p><div><button class="primary small danger" data-a="emstart" ${busy?'disabled':''}>Запровадити надзвичайний стан</button></div>`}</div>`;}
   else if(mp&&!editing){h+=`<div class="block compose"><h3>${ND.type==='decree'?'Новий указ Гетьмана':'Нова публікація'} <small>від імені: ${esc(mp.title)} ${esc(mp.name)}</small></h3>${het?`<div class="afilter">${[['decree','📜 Указ'],['news','📰 Новина'],['emerg','🚨 Надзвичайний стан']].map(([k,l])=>`<button class="small${ND.type===k?' primary':''}" data-a="ntype" data-k="${k}">${l}</button>`).join('')}</div>`:''}<input type="text" id="nd-title" data-a="nd" data-k="title" maxlength="200" value="${esc(ND.title)}" placeholder="${ND.type==='decree'?'Про що указ':'Заголовок'}"><textarea id="nd-text" data-a="nd" data-k="text" placeholder="Текст">${esc(ND.text)}</textarea><div><button class="primary small" data-a="npost" ${busy?'disabled':''}>${ND.type==='decree'?'Видати указ':'Опублікувати'}</button></div></div>`;}
@@ -3902,6 +4045,7 @@ function ensureSections(s){ensureGov(s);ensurePlayers(s);
   if(!s.sections.some(x=>x.kind==='home'))s.sections.unshift({id:'home',kind:'home',nav:'Головна',title:'Головна',note:'Укази, новини та літопис держави'});
   if(!s.sections.some(x=>x.kind==='court')){const i=s.sections.findIndex(x=>x.kind==='gov');s.sections.splice(i<0?s.sections.length:i+1,0,{id:'court',kind:'court',nav:'Суд',title:'Генеральний Суд',note:'Судова влада Української Держави'});}
   if(!s.sections.some(x=>x.kind==='awards')){const i=s.sections.findIndex(x=>x.kind==='gov');s.sections.splice(i<0?s.sections.length:i+1,0,{id:'awards',kind:'awards',nav:'Відзнаки',title:'Державні відзнаки',note:'Нагороди та ордени Української Держави'});}
+  if(!s.sections.some(x=>x.kind==='elections')){const i=s.sections.findIndex(x=>x.kind==='awards');s.sections.splice(i<0?s.sections.length:i+1,0,{id:'elections',kind:'elections',nav:'Вибори',title:'Вибори',note:'Вибори на державні посади, ЦВК і комітети Палати'});}
   if(!s.sections.some(x=>x.kind==='calendar')){const i=s.sections.findIndex(x=>x.kind==='home');s.sections.splice(i+1,0,{id:'calendar',kind:'calendar',nav:'Календар',title:'Календар держави',note:'Державні свята, строки та пам’ятні дати',holidays:[]});}
   if(!s.sections.some(x=>x.kind==='ranks')){const i=s.sections.findIndex(x=>x.kind==='awards');s.sections.splice(i<0?s.sections.length:i+1,0,defaultRanks());}
   {const pa=s.sections.find(x=>x.kind==='parliament'),ar=s.sections.find(x=>x.kind==='units');
@@ -3941,6 +4085,8 @@ window.APP={sigs(m){SIGS=m||{};sigsLoaded=true;botReady();renderSoon();finalizeE
   cnotes(l){CNOTES=l||[];renderSoon();},
   awards(l){AWARDS=l||[];renderSoon();},
   awt(l){AWT=l||[];renderSoon();},
+  elections(l){ELECTIONS=l||[];renderSoon();},
+  cands(m){CANDS=m||{};renderSoon();},
   treaties(l){TREATIES=l||[];renderSoon();},
   apps(l){APPS=l||[];renderSoon();},
   emerg(d){EMERG=d?{cur:d.cur||null,hist:d.hist||[]}:{cur:null,hist:[]};renderSoon();},
@@ -4051,7 +4197,8 @@ function rolesOf(copy){
   return { econ: em(p => p.perm === "econ"), lands: em(p => p.perm === "lands"), hetman: em(p => p.id === "hetman"), court: em(p => p.perm === "court"), arbiter: em(p => p.perm === "arbiter"), prosecutor: em(p => p.perm === "prosecutor"), genjudge: em(p => p.id === "judge"),
     patriarch: (() => { const c = copy.sections.find(x => x.kind === "church"); const e = c ? mail(c.patriarch) : ""; return e && !banned.has(e) ? [e] : []; })(),
     clergy: (() => { const c = copy.sections.find(x => x.kind === "church"); if (!c) return []; return [...new Set([mail(c.patriarch), ...(c.priests || []).map(q => mail(q.name))].filter(e => e && !banned.has(e)))]; })(),
-    foreign: em(p => p.perm === "foreign"), def: em(p => p.id === "def"), interior: em(p => p.perm === "interior"), gov: em(p => p.perm !== "court" && p.perm !== "arbiter"), citizens: [...new Set(reg.filter(q => !q.tourist).map(q => String(q.email || "").trim().toLowerCase()).filter(Boolean))], tourists: [...new Set(reg.filter(q => q.tourist).map(q => String(q.email || "").trim().toLowerCase()).filter(Boolean))] };
+    foreign: em(p => p.perm === "foreign"), def: em(p => p.id === "def"), interior: em(p => p.perm === "interior"), gov: em(p => p.perm !== "court" && p.perm !== "arbiter"), citizens: [...new Set(reg.filter(q => !q.tourist).map(q => String(q.email || "").trim().toLowerCase()).filter(Boolean))], tourists: [...new Set(reg.filter(q => q.tourist).map(q => String(q.email || "").trim().toLowerCase()).filter(Boolean))],
+    cvk: (() => { const pa = copy.sections.find(x => x.kind === "parliament"); return [...new Set(((pa && pa.committees) || []).filter(c => c.type === "cvk").flatMap(c => [c.head, ...(c.members || [])]).map(mail).filter(e => e && !banned.has(e)))]; })() };
 }
 async function save(state){
   try { window.APP_LANDLOG && window.APP_LANDLOG(state); } catch (e) {}
@@ -4116,6 +4263,16 @@ function votesFrom(snap){
 function signsFrom(snap){ const out = {}; snap.forEach(d => { const pt = d.ref.parent.parent; if (!pt) return; (out[pt.id] = out[pt.id] || []).push({ ...d.data(), at: ms(d.data().at) }); }); return out; }
 function sigsFrom(snap){ const out = {}; snap.forEach(d => { const v = d.data(); out[d.id] = { ...v, at: ms(v.at) }; }); return out; }
 async function loadVotes(){ const r = votesFrom(await getDocs(collectionGroup(db, "votes"))); window.APP.ovotes(r.o); return r.v; }
+async function createElection(id, e){ await setDoc(doc(db, "elections", id), { post: e.post, title: e.title || "", via: e.via, viaRef: e.viaRef || "", by: e.by || "", role: e.role || "", regToMs: e.regToMs, voteToMs: e.voteToMs, note: e.note || "", status: "open", turnout: 0, email: (auth.currentUser.email || "").toLowerCase(), at: serverTimestamp() }); }
+async function updElection(id, v){ await updateDoc(doc(db, "elections", id), v); }
+async function delElection(id){ await deleteDoc(doc(db, "elections", id)); }
+async function applyCand(eid, c){ const em = (auth.currentUser.email || "").toLowerCase(); await setDoc(doc(db, "elections", eid, "cands", em), { name: c.name, program: c.program || "", status: c.status, email: em, at: serverTimestamp() }); }
+async function setCand(eid, em, v){ await updateDoc(doc(db, "elections", eid, "cands", em), v); }
+async function delCand(eid, em){ await deleteDoc(doc(db, "elections", eid, "cands", em)); }
+async function castVote(eid, cand){ const em = (auth.currentUser.email || "").toLowerCase(); await setDoc(doc(db, "elections", eid, "ebal", em), { cand, at: serverTimestamp() }); }
+async function myVote(eid){ const em = (auth.currentUser.email || "").toLowerCase(); const s = await getDoc(doc(db, "elections", eid, "ebal", em)); return s.exists() ? (s.data().cand || "") : ""; }
+async function tallyElection(eid){ const s = await getDocs(collection(db, "elections", eid, "ebal")); const counts = {}; let total = 0; s.forEach(d => { const c = d.data().cand; counts[c] = (counts[c] || 0) + 1; total++; }); return { counts, total }; }
+function candsFrom(snap){ const out = {}; snap.forEach(d => { const e = d.ref.parent.parent; if (!e) return; const v = d.data(); (out[e.id] = out[e.id] || []).push({ id: d.id, ...v, at: ms(v.at) }); }); return out; }
 async function closeProposal(id, msv){ await updateDoc(doc(db, "proposals", id), { closedAt: new Date(msv), closedAtMs: msv }); }
 function watchMsgs(path, n, cb){ const q = query(collection(db, path), orderBy("at", "desc"), limit(n)); return onSnapshot(q, s => { const out = []; s.forEach(d => out.push({ id: d.id, ...d.data() })); out.sort((a, b) => (ms(a.at) || Date.now()) - (ms(b.at) || Date.now())); cb(out); }, e => { console.warn(e); cb(null, e); }); }
 function watchDms(email, cb){ const q = query(collection(db, "dms"), where("members", "array-contains", email)); return onSnapshot(q, s => { const out = []; s.forEach(d => out.push({ id: d.id, ...d.data() })); cb(out); }, e => { console.warn(e); cb([]); }); }
@@ -4223,6 +4380,8 @@ function watch(){
   onSnapshot(collection(db, "news"), snap => window.APP.news(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "awards"), snap => window.APP.awards(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "awardTypes"), snap => window.APP.awt(listFrom(snap)), e => console.warn(e));
+  onSnapshot(collection(db, "elections"), snap => window.APP.elections(listFrom(snap)), e => console.warn(e));
+  onSnapshot(collectionGroup(db, "cands"), snap => window.APP.cands(candsFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "treaties"), snap => window.APP.treaties(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "comments"), snap => window.APP.comments(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "petitions"), snap => window.APP.pets(listFrom(snap)), e => console.warn(e));
@@ -4254,6 +4413,7 @@ window.FB = {
   postNews, delNews, giveAward, revokeAward, delAward,
   postComment, delComment, createPetition, signPetition, delPetition, petitionToBill, fileCase, decideCase, delCase, revokeNews, updCase, postNote, delNote,
   postSealed, delSealed, postProtocol, updProtocol, saveProfile, closeProposal, watchMsgs, watchDms, sendMsg, delMsg, watchPings, sendPings, delPings, chatBan, chatCleanup, setAdvocate, updAdvocate, delAdvocate, pardon, watchSealed,
+  createElection, updElection, delElection, applyCand, setCand, delCand, castVote, myVote, tallyElection,
   applyCitizen, delApp, decideApp, saveRanks, setEmergency, foundAward, updAwardType, delAwardType, saveChurch, postTreaty, updTreaty, delTreaty,
   login: () => { const p = new GoogleAuthProvider(); if (p.setCustomParameters) p.setCustomParameters({ prompt: 'select_account' }); return signInWithPopup(auth, p); },
   logout: () => signOut(auth),
