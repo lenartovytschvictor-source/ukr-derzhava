@@ -1550,7 +1550,7 @@ const NAV_ICONS={"ud": "<path d=\"M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-1
 let VOTES={},PROPS=[],DRAFT={land:'',title:'',text:''},votesLoaded=false;
 const VOTE_MS=24*3600*1000;
 
-function tally(b){const vs=(b.id&&VOTES[b.id])||[];if(vs.length)return{f:vs.filter(v=>v.choice==='for').length,a:vs.filter(v=>v.choice==='against').length,z:vs.filter(v=>v.choice==='abstain').length,vs};return{f:+b.vfor||0,a:+b.vagainst||0,z:+b.vabstain||0,vs};}
+function tally(b){const vs=(b.id&&VOTES[b.id]&&VOTES[b.id].length?VOTES[b.id]:b.votesBy)||[];if(vs.length)return{f:vs.filter(v=>v.choice==='for').length,a:vs.filter(v=>v.choice==='against').length,z:vs.filter(v=>v.choice==='abstain').length,vs};return{f:+b.vfor||0,a:+b.vagainst||0,z:+b.vabstain||0,vs};}
 function expired(b){return !!(b.voting&&b.closesAt&&Date.parse(b.closesAt)<=Date.now());}
 function isOpen(b){return !!b.voting&&!expired(b);}
 const VETO_MS=12*3600*1000,OV_MS=24*3600*1000,FINAL=['passed','rejected','veto'];
@@ -1795,7 +1795,7 @@ function profileHtml(name){const p=plByName(name);if(!p)return `<div class="bloc
     if(am.mode==='govfire'&&am.who===name)hist.push({at:t,tx:lawShort(am)+' (закон «'+b.title+'»)'});});
   const aw=AWARDS.filter(a=>a.recipient===name);const laws=allBills().filter(b=>String(b.author||'').startsWith(name));
   const em=lc(p.email);const titles={};allBills().forEach(b=>titles[b.id]=b.title);
-  const votes=[];Object.entries(VOTES).forEach(([bid,vs])=>vs.forEach(v=>{if(em&&lc(v.email)===em)votes.push({bid,choice:v.choice,land:v.land});}));const vc=k=>votes.filter(v=>v.choice===k).length;
+  const votes=[];allBills().forEach(b=>(tally(b).vs||[]).forEach(v=>{if(em&&lc(v.email)===em)votes.push({bid:b.id,choice:v.choice,land:v.land});}));const vc=k=>votes.filter(v=>v.choice===k).length;
   const econ=state.sections.find(x=>x.kind==='economy');let weeks=0,don=0;if(econ){const mi=(econ.members||[]).findIndex(m=>m.name===name);if(mi>=0)weeks=(econ.weeks||[]).filter(w=>(w.done||[])[mi]).length;(econ.patronList||[]).filter(q=>q.name===name).forEach(q=>(q.items||[]).forEach(it=>{don+=itemSilver(econ,it)||0;}));}
   const docs=NEWS.filter(n=>n.by===name);const cases=CASES.filter(c=>c.plaintiff===name||c.defendant===name);
   const u=profUrl(p.profile);const mine=!!(AUTH.email&&em===AUTH.email);const pr=PROFILES[em];const sv=serviceOf(name);const lands=landLeaders().filter(r=>r.name===name).map(r=>r.land);
@@ -2158,7 +2158,7 @@ function dossierHtml(name){const p=plByName(name);if(!p)return `<div class="bloc
   const aw=AWARDS.filter(a=>a.recipient===name);
   const laws=allBills().filter(b=>String(b.author||'').startsWith(name));
   const em=lc(p.email);const titles={};allBills().forEach(b=>titles[b.id]=b.title);
-  const votes=[];Object.entries(VOTES).forEach(([bid,vs])=>vs.forEach(v=>{if(em&&lc(v.email)===em)votes.push({bid,choice:v.choice,land:v.land});}));
+  const votes=[];allBills().forEach(b=>(tally(b).vs||[]).forEach(v=>{if(em&&lc(v.email)===em)votes.push({bid:b.id,choice:v.choice,land:v.land});}));
   const vc=k=>votes.filter(v=>v.choice===k).length;
   const econ=state.sections.find(x=>x.kind==='economy');let weeks=0,don=0;
   if(econ){const mi=(econ.members||[]).findIndex(m=>m.name===name);if(mi>=0)weeks=(econ.weeks||[]).filter(w=>(w.done||[])[mi]).length;(econ.patronList||[]).filter(q=>q.name===name).forEach(q=>(q.items||[]).forEach(it=>{don+=itemSilver(econ,it)||0;}));}
@@ -3612,7 +3612,7 @@ async function finalizeExpired(){
   if(!liveDone.length&&!stDone.length)return 'nothing';
   busy=true;
   try{VOTES=await window.FB.loadVotes();}catch(_){busy=false;return 'votes-error';}
-  const close=(b,ph)=>{const t=tally(b);const sg=SIGS[b.id];b.voting=false;b.autoClosed=true;b.final=true;b.status=ph;b.vfor=String(t.f);b.vagainst=String(t.a);b.vabstain=String(t.z);
+  const close=(b,ph)=>{const t=tally(b);if(t.vs&&t.vs.length)b.votesBy=t.vs.map(v=>({land:v.land||'',choice:v.choice||'',email:lc(v.email||'')}));const sg=SIGS[b.id];b.voting=false;b.autoClosed=true;b.final=true;b.status=ph;b.vfor=String(t.f);b.vagainst=String(t.a);b.vabstain=String(t.z);
     if(sg){b.sig={decision:sg.decision,reason:sg.reason||'',by:sg.by||'',at:new Date(sg.at||Date.now()).toISOString()};if(sg.decision==='veto'){const o=ovTally(b);b.ov={f:o.f,a:o.a,z:o.z};if(ph==='passed')b.overridden=true;}}
     if(ph==='passed'&&b.amend&&b.amend.mode&&!b.applied)applyLaw(b,state);};
   const stPh=stDone.map(b=>phase(b));stDone.forEach((b,k)=>close(b,stPh[k]));
@@ -3644,9 +3644,12 @@ async function stateDuties(){if(!AUTH.admin||!window.FB||busy||editing)return ''
       if(o.t==='exile'){const pp=plByName(nm);if(pp){pp.email='';pp.exiled={at:iso,why};}}
       ls.exec[o.key]=iso;changed=true;out.push('sanction '+o.t);}catch(_){out.push('sanction-error');}}
     if(todo.length)SANC_CACHE={};}}
+  if(p&&!p.votesMig&&window.FB.loadAllVotes){try{const all=await window.FB.loadAllVotes();(p.bills||[]).forEach(b=>{if(!b.votesBy&&b.id&&all[b.id]&&all[b.id].length)b.votesBy=all[b.id].map(v=>({land:v.land||'',choice:v.choice||'',email:lc(v.email||'')}));});p.votesMig=true;changed=true;out.push('votes-mig');}catch(_){out.push('votes-mig-error');}}
   try{const r=await electionDuties();if(r.changed)changed=true;out.push(...r.out);}catch(e){out.push('el-error');}
   if(changed){try{await window.FB.save(state);saved=JSON.stringify(state);out.push('state');}catch(_){state=JSON.parse(saved);}}
   return out.join(',');}
+window.APP_BALLOTIDS=()=>{const ids=PROPS.map(p=>p.id);const p=parlSec&&state&&state.sections?parlSec():null;((p&&p.bills)||[]).forEach(b=>{if(b.voting&&!b.final&&b.id)ids.push(b.id);});return ids;};
+function syncBal(){try{if(window.FB&&window.FB.syncBallots)window.FB.syncBallots(window.APP_BALLOTIDS());}catch(_){}}
 function botReady(){if(AUTH.bot&&AUTH.admin&&votesLoaded&&sigsLoaded)window.__BOT_READY=true;}
 window.__tgFeed=()=>{const H=x=>String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');const site=location.origin+'/';const now=Date.now();const out=[];const cut=now-48*3600000;
   const lnk=(hash,l)=>`\n<a href="${site}#${hash}">${l||'Відкрити на сайті'}</a>`;const clip=(t,n)=>{t=String(t||'').trim();return t.length>n?t.slice(0,n-1)+'…':t;};
@@ -4096,9 +4099,9 @@ window.APP={sigs(m){SIGS=m||{};sigsLoaded=true;botReady();renderSoon();finalizeE
   remote(s){ensureSections(s);const p=s.sections.find(x=>x.kind==='parliament');const es=s.sections.find(x=>x.kind==='economy');if(es)freezePrices(es);
     const js=JSON.stringify(s);if(js===saved)return;
     if(editing||busy){REMOTE=s;msg='Хтось щойно змінив дані на сайті. Після збереження або скасування ви побачите свіжу версію.';msgErr=false;renderSoon();return;}
-    state=s;saved=js;renderSoon();},
-  votes(v){VOTES=v||{};votesLoaded=true;botReady();renderSoon();finalizeExpired();},props(l){PROPS=l||[];renderSoon();},load(s){const p=s.sections.find(x=>x.kind==='parliament');if(p)(p.bills||[]).forEach((b,i)=>{if(!b.id)b.id='b'+i+'x'+Date.now().toString(36);});state=s;
-  if(p&&p.repEmails&&!p.repHolder){p.repHolder={};landLeaders().forEach(r=>{if(String(p.repEmails[r.land]||'').trim()&&r.name)p.repHolder[r.land]=r.name;});}{const es=s.sections.find(x=>x.kind==='economy');if(es)freezePrices(es);}ensureSections(s);saved=JSON.stringify(s);msg='';if(INV_IN){const es=s.sections.find(x=>x.kind==='economy');if(es)active=es.tab||es.id;}renderSoon();},fail(t){msg=t;msgErr=true;renderSoon();},auth(a){const keep=editing&&EDIT_SCOPE&&a.email===AUTH.email;AUTH=a;if(window.FB&&window.FB.watchSealed)window.FB.watchSealed(CASES);if(!a.admin&&!keep){editing=false;EDIT_SCOPE='';}botReady();renderSoon();finalizeExpired();}};
+    state=s;saved=js;syncBal();renderSoon();},
+  votes(v){VOTES=v||{};votesLoaded=true;botReady();renderSoon();finalizeExpired();},props(l){PROPS=l||[];syncBal();renderSoon();},load(s){const p=s.sections.find(x=>x.kind==='parliament');if(p)(p.bills||[]).forEach((b,i)=>{if(!b.id)b.id='b'+i+'x'+Date.now().toString(36);});state=s;
+  if(p&&p.repEmails&&!p.repHolder){p.repHolder={};landLeaders().forEach(r=>{if(String(p.repEmails[r.land]||'').trim()&&r.name)p.repHolder[r.land]=r.name;});}{const es=s.sections.find(x=>x.kind==='economy');if(es)freezePrices(es);}ensureSections(s);saved=JSON.stringify(s);msg='';syncBal();if(INV_IN){const es=s.sections.find(x=>x.kind==='economy');if(es)active=es.tab||es.id;}renderSoon();},fail(t){msg=t;msgErr=true;renderSoon();},auth(a){const keep=editing&&EDIT_SCOPE&&a.email===AUTH.email;AUTH=a;if(window.FB&&window.FB.watchSealed)window.FB.watchSealed(CASES);if(!a.admin&&!keep){editing=false;EDIT_SCOPE='';}botReady();renderSoon();finalizeExpired();}};
 window.APP_CANSEE=c=>canSeeSealed(c);window.APP_POSTBANS=()=>[...bans().post];
 if(window.APP_READY)window.APP_READY();
 })();
@@ -4117,7 +4120,7 @@ const firebaseConfig = {
 };
 // ========================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, collectionGroup, getDocs, writeBatch, serverTimestamp, onSnapshot, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, collectionGroup, getDocs, writeBatch, serverTimestamp, onSnapshot, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithCustomToken, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // Власний домен: якщо на сайті є помічник входу (/__/auth/…), вхід через Google іде через наш домен,
@@ -4126,7 +4129,9 @@ const OWN_AUTH = /(^|\.)ukr-derzhava\.in\.ua$/.test(location.hostname)
   && await fetch("/__/firebase/init.json", { cache: "no-store" }).then(r => r.ok).catch(() => false);
 if (OWN_AUTH) firebaseConfig.authDomain = location.hostname;
 const fbApp = initializeApp(firebaseConfig);
-const db = getFirestore(fbApp);
+const BOTMODE = /[?&]bot=1/.test(location.search);
+// Кеш у браузері: при повторному відкритті сайту протягом ~30 хв база рахує лише змінені документи, а не все заново.
+let db; try { db = BOTMODE ? getFirestore(fbApp) : initializeFirestore(fbApp, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) }); } catch (e) { console.warn(e); db = getFirestore(fbApp); }
 const auth = getAuth(fbApp);
 const known = new Set();          // image ids already stored in Firestore
 const IMGS = {};
@@ -4156,6 +4161,7 @@ const IDB = (() => { let p = null; const open = () => p || (p = new Promise((res
   const tx = (mode, fn) => open().then(db0 => new Promise((res, rej) => { const t = db0.transaction("img", mode); const st = t.objectStore("img"); const out = fn(st); t.oncomplete = () => res(out && typeof out === 'object' && 'result' in out ? out.result : undefined); t.onerror = () => rej(t.error); }));
   return { get: id => tx("readonly", st => st.get(id)).catch(() => undefined), set: (id, v) => tx("readwrite", st => st.put(v, id)).catch(() => {}) }; })();
 async function resolveImages(st){
+  if (BOTMODE) { walkImages(st, f => { if (f.img && f.img.startsWith("img:")) known.add(f.img.slice(4)); }); return st; }   // боту картинки не потрібні
   const refs = []; walkImages(st, f => { if (f.img && f.img.startsWith("img:")) refs.push(f); });
   const ids = [...new Set(refs.map(f => f.img.slice(4)))].filter(id => !(id in IMGS));
   await Promise.all(ids.map(async id => {
@@ -4262,7 +4268,18 @@ function votesFrom(snap){
 }
 function signsFrom(snap){ const out = {}; snap.forEach(d => { const pt = d.ref.parent.parent; if (!pt) return; (out[pt.id] = out[pt.id] || []).push({ ...d.data(), at: ms(d.data().at) }); }); return out; }
 function sigsFrom(snap){ const out = {}; snap.forEach(d => { const v = d.data(); out[d.id] = { ...v, at: ms(v.at) }; }); return out; }
-async function loadVotes(){ const r = votesFrom(await getDocs(collectionGroup(db, "votes"))); window.APP.ovotes(r.o); return r.v; }
+// Голоси читаємо лише для законопроєктів, що зараз голосуються (а не всю історію щоразу).
+const BAL = { ids: [], subs: {}, data: {}, ready: new Set(), first: true };
+function balEmit(){ const need = BAL.ids.length * 2; if (BAL.ready.size < need) return; const v = {}, o = {}; BAL.ids.forEach(id => { if (BAL.data["b|" + id] && BAL.data["b|" + id].length) v[id] = BAL.data["b|" + id]; if (BAL.data["o|" + id] && BAL.data["o|" + id].length) o[id] = BAL.data["o|" + id]; }); window.APP.ovotes(o); window.APP.votes(v); }
+function syncBallots(ids){ ids = [...new Set(ids.filter(Boolean).map(String))]; const key = ids.slice().sort().join(","); if (!BAL.first && key === BAL.ids.slice().sort().join(",")) return; BAL.first = false;
+  Object.keys(BAL.subs).forEach(k => { const id = k.slice(2); if (!ids.includes(id)) { try { BAL.subs[k](); } catch (_) {} delete BAL.subs[k]; delete BAL.data[k]; BAL.ready.delete(k); } });
+  BAL.ids = ids;
+  ids.forEach(id => [["b", "ballots"], ["o", "overrides"]].forEach(([p, col]) => { const k = p + "|" + id; if (BAL.subs[k]) return;
+    BAL.subs[k] = onSnapshot(collection(db, col, id, "votes"), snap => { const out = []; snap.forEach(d => out.push({ land: d.id, ...d.data() })); BAL.data[k] = out; BAL.ready.add(k); balEmit(); }, e => { console.warn(e); BAL.data[k] = []; BAL.ready.add(k); balEmit(); }); }));
+  balEmit(); }
+async function loadVotes(){ const v = {}, o = {}; await Promise.all(BAL.ids.map(async id => { const [a, b] = await Promise.all([getDocs(collection(db, "ballots", id, "votes")), getDocs(collection(db, "overrides", id, "votes"))]); const fa = [], fo = []; a.forEach(d => fa.push({ land: d.id, ...d.data() })); b.forEach(d => fo.push({ land: d.id, ...d.data() })); if (fa.length) v[id] = fa; if (fo.length) o[id] = fo; })); window.APP.ovotes(o); return v; }
+// одноразово: уся історія голосів (щоб зберегти розклад голосів старих законів у самих законах)
+async function loadAllVotes(){ return votesFrom(await getDocs(collectionGroup(db, "votes"))).v; }
 async function createElection(id, e){ await setDoc(doc(db, "elections", id), { post: e.post, title: e.title || "", via: e.via, viaRef: e.viaRef || "", by: e.by || "", role: e.role || "", regToMs: e.regToMs, voteToMs: e.voteToMs, note: e.note || "", status: "open", turnout: 0, email: (auth.currentUser.email || "").toLowerCase(), at: serverTimestamp() }); }
 async function updElection(id, v){ await updateDoc(doc(db, "elections", id), v); }
 async function delElection(id){ await deleteDoc(doc(db, "elections", id)); }
@@ -4375,7 +4392,7 @@ async function revokeNews(id, r){ await updateDoc(doc(db, "news", id), { revoked
 // live updates: new bills, votes, decisions and edits appear without reloading the page
 function watch(){
   onSnapshot(collection(db, "proposals"), snap => window.APP.props(listFrom(snap)), e => console.warn(e));
-  onSnapshot(collectionGroup(db, "votes"), snap => { const r = votesFrom(snap); window.APP.ovotes(r.o); window.APP.votes(r.v); }, e => console.warn(e));
+  syncBallots((window.APP_BALLOTIDS && window.APP_BALLOTIDS()) || []);
   onSnapshot(collection(db, "signatures"), snap => window.APP.sigs(sigsFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "news"), snap => window.APP.news(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "awards"), snap => window.APP.awards(listFrom(snap)), e => console.warn(e));
@@ -4383,7 +4400,7 @@ function watch(){
   onSnapshot(collection(db, "elections"), snap => window.APP.elections(listFrom(snap)), e => console.warn(e));
   onSnapshot(collectionGroup(db, "cands"), snap => window.APP.cands(candsFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "treaties"), snap => window.APP.treaties(listFrom(snap)), e => console.warn(e));
-  onSnapshot(collection(db, "comments"), snap => window.APP.comments(listFrom(snap)), e => console.warn(e));
+  if (!BOTMODE) onSnapshot(collection(db, "comments"), snap => window.APP.comments(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "petitions"), snap => window.APP.pets(listFrom(snap)), e => console.warn(e));
   onSnapshot(collectionGroup(db, "signs"), snap => window.APP.psigns(signsFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "cases"), snap => window.APP.cases(listFrom(snap)), e => console.warn(e));
@@ -4392,8 +4409,8 @@ function watch(){
   onSnapshot(collection(db, "protocols"), snap => window.APP.prots(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "advocates"), snap => window.APP.advs(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "pardons"), snap => window.APP.pardons(listFrom(snap)), e => console.warn(e));
-  onSnapshot(collection(db, "profiles"), snap => window.APP.profiles(listFrom(snap)), e => console.warn(e));
-  onSnapshot(doc(db, "chatmod", "bans"), snap => window.APP.chatbans(snap.exists() ? (snap.data().bans || {}) : {}), e => console.warn(e));
+  if (!BOTMODE) onSnapshot(collection(db, "profiles"), snap => window.APP.profiles(listFrom(snap)), e => console.warn(e));
+  if (!BOTMODE) onSnapshot(doc(db, "chatmod", "bans"), snap => window.APP.chatbans(snap.exists() ? (snap.data().bans || {}) : {}), e => console.warn(e));
   onSnapshot(doc(db, "site", "emergency"), snap => window.APP.emerg(snap.exists() ? snap.data() : null), e => console.warn(e));
   const part = (name, setter) => { let first = true; onSnapshot(doc(db, "site", name), async snap => {
     if (first) { first = false; return; }
@@ -4413,7 +4430,7 @@ window.FB = {
   postNews, delNews, giveAward, revokeAward, delAward,
   postComment, delComment, createPetition, signPetition, delPetition, petitionToBill, fileCase, decideCase, delCase, revokeNews, updCase, postNote, delNote,
   postSealed, delSealed, postProtocol, updProtocol, saveProfile, closeProposal, watchMsgs, watchDms, sendMsg, delMsg, watchPings, sendPings, delPings, chatBan, chatCleanup, setAdvocate, updAdvocate, delAdvocate, pardon, watchSealed,
-  createElection, updElection, delElection, applyCand, setCand, delCand, castVote, myVote, tallyElection,
+  syncBallots, loadAllVotes, createElection, updElection, delElection, applyCand, setCand, delCand, castVote, myVote, tallyElection,
   applyCitizen, delApp, decideApp, saveRanks, setEmergency, foundAward, updAwardType, delAwardType, saveChurch, postTreaty, updTreaty, delTreaty,
   login: () => { const p = new GoogleAuthProvider(); if (p.setCustomParameters) p.setCustomParameters({ prompt: 'select_account' }); return signInWithPopup(auth, p); },
   logout: () => signOut(auth),
