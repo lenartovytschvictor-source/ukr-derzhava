@@ -1309,7 +1309,9 @@ const cur=l=>l.flags[l.flags.length-1]||{img:'',name:'Нова земля',date:
 const uid=()=>'l'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 
 // ---------- II: Землі — новий вигляд і літопис ----------
-function landHead(l){const posts=(l.posts||[]).filter(q=>String(q.holder||'').trim()&&q.holder!=='0');const ota=(l.posts||[]).filter(q=>otaNum(q)>0).sort((a,b)=>otaNum(b)-otaNum(a));
+function landHead(l){{const hp=(l.posts||[])[l.head];if(hp&&l.head!=null){const nm=String(hp.holder||'').trim()&&hp.holder!=='0'?hp.holder:'';const base=String(hp.title||'').replace(/^\d+\s*-?\s*[йя]?\s*/,'');const N=q=>{const m=/^(\d+)/.exec(String(q.title||'').trim());return m?+m[1]:0;};const past=(l.posts||[]).filter(q=>q!==hp&&String(q.title||'').replace(/^\d+\s*-?\s*[йя]?\s*/,'')===base&&N(q)<N(hp)&&String(q.holder||'').trim()&&q.holder!=='0');return {post:hp,name:nm,past};}}
+  {const N=q=>{const m=/^(\d+)\s*-?\s*[йя]?\s*(.*)$/.exec(String(q.title||'').trim());return m?+m[1]:0;};const st=(l.posts||[]).filter(q=>/старост/i.test(q.title||''));if(st.length){const srt=st.slice().sort((a,b)=>N(b)-N(a));const t=srt[0];return {post:t,name:String(t.holder||'').trim()&&t.holder!=='0'?t.holder:'',past:srt.slice(1).filter(q=>String(q.holder||'').trim()&&q.holder!=='0')};}}
+  const posts=(l.posts||[]).filter(q=>String(q.holder||'').trim()&&q.holder!=='0');const ota=(l.posts||[]).filter(q=>otaNum(q)>0).sort((a,b)=>otaNum(b)-otaNum(a));
   if(ota.length){const t=ota[0];return {post:t,name:String(t.holder||'').trim()&&t.holder!=='0'?t.holder:'',past:ota.slice(1).filter(q=>String(q.holder||'').trim()&&q.holder!=='0')};}
   const h=posts.find(q=>/отаман|сотник|командир|голова|писар|намісник/i.test(q.title||''))||posts[0];return {post:h||null,name:h?h.holder:'',past:[]};}
 function landLogSec(st){return (st||state).sections.find(x=>!x.kind&&x.lands)||null;}
@@ -1435,7 +1437,7 @@ function viewLand(l,kind){
 }
 function editLand(l,si,li,n,kind){
   const c=cur(l);const U=kind==='units';
-  const posts=l.posts.map((p,pi)=>`<div class="erow"><input type="text" id="pt-${l.id}-${pi}" data-a="pt" data-s="${si}" data-l="${li}" data-p="${pi}" value="${esc(p.title)}" placeholder="Посада">${plSelect(`ph-${l.id}-${pi}`,`data-a="ph" data-s="${si}" data-l="${li}" data-p="${pi}"`,p.holder)}<button class="small danger" data-a="pdel" data-s="${si}" data-l="${li}" data-p="${pi}">Прибрати</button></div>`).join('');
+  const posts=l.posts.map((p,pi)=>`<div class="erow"><input type="text" id="pt-${l.id}-${pi}" data-a="pt" data-s="${si}" data-l="${li}" data-p="${pi}" value="${esc(p.title)}" placeholder="Посада">${plSelect(`ph-${l.id}-${pi}`,`data-a="ph" data-s="${si}" data-l="${li}" data-p="${pi}"`,p.holder)}${U?'':`<button class="small${l.head===pi?' primary':' ghost'}" data-a="lhead" data-s="${si}" data-l="${li}" data-p="${pi}" title="${l.head===pi?'Очільник Землі (натисніть, щоб зняти)':'Зробити цю посаду очільником Землі'}">👑</button>`}<button class="small danger" data-a="pdel" data-s="${si}" data-l="${li}" data-p="${pi}">Прибрати</button></div>`).join('');
   const flags=l.flags.map((f,fi)=>`<div class="fver${U?' unit':''}"><img src="${f.img}" alt=""><input type="text" id="fn-${l.id}-${fi}" data-a="fn" data-s="${si}" data-l="${li}" data-f="${fi}" value="${esc(f.name)}" placeholder="${U?'Назва куреня':'Назва землі'}"><input type="text" id="fd-${l.id}-${fi}" data-a="fd" data-s="${si}" data-l="${li}" data-f="${fi}" value="${esc(f.date)}" placeholder="Дата"><button class="small danger" data-a="fdel" data-s="${si}" data-l="${li}" data-f="${fi}" ${l.flags.length<2?'disabled':''}>Прибрати</button></div>`).join('');
   return `<article class="land edit${U?' unit':''}"><div class="flagbox"><img src="${c.img}" alt=""></div>
   <div class="info">
@@ -1504,7 +1506,7 @@ function landLeaders(){
     // Крайові Отамани йдуть по черзі (1-й, 2-й, 3-й…): чинний — той, у кого найбільший номер
     const num=q=>{const m=/^(\d+)\s*-?\s*[йя]?\s*Крайов/i.exec(String(q.title||'').trim());return m?+m[1]:0;};
     const ota=posts.filter(q=>num(q)>0).sort((a,b)=>num(b)-num(a));
-    const p=ota[0]||posts.find(p=>/Отаман|Старшина|Намісник|Писар/i.test(p.title))||posts[0]||{title:'',holder:''};
+    const hd=landHead(l);const p=(hd.post&&(l.head!=null||/старост/i.test(hd.post.title||'')))?hd.post:(ota[0]||posts.find(p=>/Отаман|Староста|Старшина|Намісник|Писар/i.test(p.title))||posts[0]||{title:'',holder:''});
     const h=String(p.holder||'').trim();
     const prev=ota.length>1?String(ota[1].holder||'').trim():'';
     out.push({land:name,name:h==='0'?'':h,post:p.title,prev:prev==='0'?'':prev});
@@ -3399,7 +3401,8 @@ app.addEventListener('click',async e=>{
   else if(a==='padd'){l.posts.push({title:s.kind==='units'?'Сотник':'1-й Крайовий Отаман',holder:''});}
   else if(a==='ldradd'){s.leaders.push({title:'',holder:''});}
   else if(a==='ldrdel'){s.leaders.splice(+b.dataset.p,1);}
-  else if(a==='pdel'){l.posts.splice(+b.dataset.p,1);}
+  else if(a==='pdel'){const pi=+b.dataset.p;l.posts.splice(pi,1);if(l.head===pi)delete l.head;else if(l.head>pi)l.head--;}
+  else if(a==='lhead'){const pi=+b.dataset.p;if(l.head===pi)delete l.head;else l.head=pi;}
   else if(a==='fdel'){l.flags.splice(+b.dataset.f,1);}
   else if(a==='fadd'){pickImage(img=>{l.flags.push({img,name:cur(l).name,date:today()});render();},s.kind==='units');return;}
   else if(a==='ladd'){const U=s.kind==='units';pickImage(img=>{s.lands.push({id:uid(),flags:[{img,name:U?'Новий курінь':'Нова земля',date:''}],posts:[{title:U?'Сотник':'1-й Крайовий Отаман',holder:''}]});render();},U);return;}
@@ -3414,7 +3417,7 @@ app.addEventListener('click',async e=>{
     {const cs=churchSec();if(cs){const pc=churchSec(JSON.parse(saved));const cp=myPost();churchLog(pc,cs,isPatriarch()?'Патріарх '+cs.patriarch:(cp?cp.title+' '+cp.name:'Адміністрація'));}}busy=true;msg='Зберігаю…';render();
     const d=new Date();state.updated=String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+d.getFullYear();
     try{if(finOnly){const es=state.sections.find(x=>x.kind==='economy');await window.FB.saveEcon(es);}else if(landsOnly){landLogDiff(saved?JSON.parse(saved):null,state);await window.FB.saveLands(state.sections.filter(isLandsSec));await window.FB.savePlayers(plSec());}else if(plOnly){await window.FB.savePlayers(plSec());}else if(rkOnly){await window.FB.saveRanks(ranksSec());}else if(chOnly){await window.FB.saveChurch(churchSec());}else await window.FB.save(state);saved=JSON.stringify(state);busy=false;editing=false;EDIT_SCOPE='';RECON_DONE=false;REMOTE=null;msg='Збережено';}
-    catch(err){busy=false;const c=err&&err.code;
+    catch(err){console.warn(err);busy=false;const c=err&&err.code;
       if(c==='permission-denied'){msg='Немає прав на збереження. Увійдіть акаунтом адміна.';msgErr=true;}
       else if(c==='not_writer'||c==='not_granted'||c==='consent_required'||c==='capability_disabled'){readOnly=true;editing=false;state=JSON.parse(saved);msg='У вас лише перегляд, зберігати зміни не можна';msgErr=true;}
       else if(c==='too_large'){msg='Сторінка завелика: приберіть кілька старих прапорів';msgErr=true;}
@@ -3849,30 +3852,31 @@ function ensureGov(s){let g=s.sections.find(x=>x.kind==='gov');
   {const mv=g.posts.find(p=>p.id==='mvs');if(mv&&!mv.perm)mv.perm='interior';}
   const py=g.posts.find(p=>p.id==='pysar');if(py&&!py.perm)py.perm='lands';
   if(g.note==='Уряд Української Держави')g.note='Гетьман та уряд Української Держави';}
-window.APP={sigs(m){SIGS=m||{};sigsLoaded=true;botReady();render();finalizeExpired();},
+let _RS=0;function renderSoon(){if(_RS)return;_RS=requestAnimationFrame(()=>{_RS=0;render();});}
+window.APP={sigs(m){SIGS=m||{};sigsLoaded=true;botReady();renderSoon();finalizeExpired();},
   ovotes(o){OVOTES=o||{};},
-  news(l){NEWS=l||[];render();},
-  comments(l){COMMENTS=l||[];render();},
-  pets(l){PETS=l||[];render();},
-  psigns(m){PSIGNS=m||{};render();},
-  cases(l){CASES=l||[];if(window.FB&&window.FB.watchSealed)window.FB.watchSealed(CASES);render();},
-  prots(l){PROTS=l||[];render();},advs(l){ADVS=l||[];render();},pardons(l){PARDONS=l||[];render();},chatbans(m){CHATBANS=m||{};render();},profiles(l){Object.keys(PROFILES).forEach(k=>delete PROFILES[k]);(l||[]).forEach(x=>{PROFILES[lc(x.id)]=x;});render();},
-  sealed(cid,l){SEALED[cid]=(l||[]).map(n=>Object.assign({},n,{sealed:true}));render();},
-  cnotes(l){CNOTES=l||[];render();},
-  awards(l){AWARDS=l||[];render();},
-  awt(l){AWT=l||[];render();},
-  treaties(l){TREATIES=l||[];render();},
-  apps(l){APPS=l||[];render();},
-  emerg(d){EMERG=d?{cur:d.cur||null,hist:d.hist||[]}:{cur:null,hist:[]};render();},
+  news(l){NEWS=l||[];renderSoon();},
+  comments(l){COMMENTS=l||[];renderSoon();},
+  pets(l){PETS=l||[];renderSoon();},
+  psigns(m){PSIGNS=m||{};renderSoon();},
+  cases(l){CASES=l||[];if(window.FB&&window.FB.watchSealed)window.FB.watchSealed(CASES);renderSoon();},
+  prots(l){PROTS=l||[];renderSoon();},advs(l){ADVS=l||[];renderSoon();},pardons(l){PARDONS=l||[];renderSoon();},chatbans(m){CHATBANS=m||{};renderSoon();},profiles(l){Object.keys(PROFILES).forEach(k=>delete PROFILES[k]);(l||[]).forEach(x=>{PROFILES[lc(x.id)]=x;});renderSoon();},
+  sealed(cid,l){SEALED[cid]=(l||[]).map(n=>Object.assign({},n,{sealed:true}));renderSoon();},
+  cnotes(l){CNOTES=l||[];renderSoon();},
+  awards(l){AWARDS=l||[];renderSoon();},
+  awt(l){AWT=l||[];renderSoon();},
+  treaties(l){TREATIES=l||[];renderSoon();},
+  apps(l){APPS=l||[];renderSoon();},
+  emerg(d){EMERG=d?{cur:d.cur||null,hist:d.hist||[]}:{cur:null,hist:[]};renderSoon();},
   remoteEcon(sec){const i=state.sections.findIndex(x=>x.kind==='economy');if(i<0)return;freezePrices(sec);const cur=JSON.stringify(state.sections[i]);if(JSON.stringify(sec)===cur)return;
-    if(editing||busy){msg='Хтось щойно змінив Економіку. Після збереження або скасування ви побачите свіжу версію.';msgErr=false;render();return;}
-    state.sections[i]=sec;saved=JSON.stringify(state);render();},
+    if(editing||busy){msg='Хтось щойно змінив Економіку. Після збереження або скасування ви побачите свіжу версію.';msgErr=false;renderSoon();return;}
+    state.sections[i]=sec;saved=JSON.stringify(state);renderSoon();},
   remote(s){ensureSections(s);const p=s.sections.find(x=>x.kind==='parliament');const es=s.sections.find(x=>x.kind==='economy');if(es)freezePrices(es);
     const js=JSON.stringify(s);if(js===saved)return;
-    if(editing||busy){REMOTE=s;msg='Хтось щойно змінив дані на сайті. Після збереження або скасування ви побачите свіжу версію.';msgErr=false;render();return;}
-    state=s;saved=js;render();},
-  votes(v){VOTES=v||{};votesLoaded=true;botReady();render();finalizeExpired();},props(l){PROPS=l||[];render();},load(s){const p=s.sections.find(x=>x.kind==='parliament');if(p)(p.bills||[]).forEach((b,i)=>{if(!b.id)b.id='b'+i+'x'+Date.now().toString(36);});state=s;
-  if(p&&p.repEmails&&!p.repHolder){p.repHolder={};landLeaders().forEach(r=>{if(String(p.repEmails[r.land]||'').trim()&&r.name)p.repHolder[r.land]=r.name;});}{const es=s.sections.find(x=>x.kind==='economy');if(es)freezePrices(es);}ensureSections(s);saved=JSON.stringify(s);msg='';if(INV_IN){const es=s.sections.find(x=>x.kind==='economy');if(es)active=es.tab||es.id;}render();},fail(t){msg=t;msgErr=true;render();},auth(a){const keep=editing&&EDIT_SCOPE&&a.email===AUTH.email;AUTH=a;if(window.FB&&window.FB.watchSealed)window.FB.watchSealed(CASES);if(!a.admin&&!keep){editing=false;EDIT_SCOPE='';}botReady();render();finalizeExpired();}};
+    if(editing||busy){REMOTE=s;msg='Хтось щойно змінив дані на сайті. Після збереження або скасування ви побачите свіжу версію.';msgErr=false;renderSoon();return;}
+    state=s;saved=js;renderSoon();},
+  votes(v){VOTES=v||{};votesLoaded=true;botReady();renderSoon();finalizeExpired();},props(l){PROPS=l||[];renderSoon();},load(s){const p=s.sections.find(x=>x.kind==='parliament');if(p)(p.bills||[]).forEach((b,i)=>{if(!b.id)b.id='b'+i+'x'+Date.now().toString(36);});state=s;
+  if(p&&p.repEmails&&!p.repHolder){p.repHolder={};landLeaders().forEach(r=>{if(String(p.repEmails[r.land]||'').trim()&&r.name)p.repHolder[r.land]=r.name;});}{const es=s.sections.find(x=>x.kind==='economy');if(es)freezePrices(es);}ensureSections(s);saved=JSON.stringify(s);msg='';if(INV_IN){const es=s.sections.find(x=>x.kind==='economy');if(es)active=es.tab||es.id;}renderSoon();},fail(t){msg=t;msgErr=true;renderSoon();},auth(a){const keep=editing&&EDIT_SCOPE&&a.email===AUTH.email;AUTH=a;if(window.FB&&window.FB.watchSealed)window.FB.watchSealed(CASES);if(!a.admin&&!keep){editing=false;EDIT_SCOPE='';}botReady();renderSoon();finalizeExpired();}};
 window.APP_CANSEE=c=>canSeeSealed(c);window.APP_POSTBANS=()=>[...bans().post];
 if(window.APP_READY)window.APP_READY();
 })();
@@ -3919,19 +3923,25 @@ function walkImages(state, fn){
 async function storeImages(st){
   const flags = []; walkImages(st, f => flags.push(f));
   for (const f of flags) {
-    if (!f.img || !f.img.startsWith("data:")) continue;
+    if (!f.img || typeof f.img !== "string" || !f.img.startsWith("data:")) continue;
     const id = await hashId(f.img);
-    if (!known.has(id)) { await setDoc(doc(db, "images", id), { data: f.img }); known.add(id); }
+    if (!known.has(id)) { let ex = false; try { ex = (await getDoc(doc(db, "images", id))).exists(); } catch (_) {} if (!ex) await setDoc(doc(db, "images", id), { data: f.img }); known.add(id); IMGS[id] = f.img; }
     f.img = "img:" + id;
   }
 }
+// картинки адресуються хешем, тож не змінюються: кешуємо їх у браузері (IndexedDB) і більше не тягнемо з бази
+const IDB = (() => { let p = null; const open = () => p || (p = new Promise((res, rej) => { try { const r = indexedDB.open("ud-img", 1); r.onupgradeneeded = () => r.result.createObjectStore("img"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); } catch (e) { rej(e); } }));
+  const tx = (mode, fn) => open().then(db0 => new Promise((res, rej) => { const t = db0.transaction("img", mode); const st = t.objectStore("img"); const out = fn(st); t.oncomplete = () => res(out && typeof out === 'object' && 'result' in out ? out.result : undefined); t.onerror = () => rej(t.error); }));
+  return { get: id => tx("readonly", st => st.get(id)).catch(() => undefined), set: (id, v) => tx("readwrite", st => st.put(v, id)).catch(() => {}) }; })();
 async function resolveImages(st){
   const refs = []; walkImages(st, f => { if (f.img && f.img.startsWith("img:")) refs.push(f); });
-  for (const f of refs) {
-    const id = f.img.slice(4);
-    if (!(id in IMGS)) { try { const d = await getDoc(doc(db, "images", id)); IMGS[id] = d.exists() ? d.data().data : ""; known.add(id); } catch (_) { IMGS[id] = ""; } }
-    f.img = IMGS[id] || "";
-  }
+  const ids = [...new Set(refs.map(f => f.img.slice(4)))].filter(id => !(id in IMGS));
+  await Promise.all(ids.map(async id => {
+    let v = await IDB.get(id); if (typeof v !== 'string') v = '';
+    if (!v) { try { const d = await getDoc(doc(db, "images", id)); v = d.exists() ? d.data().data : ""; if (v) IDB.set(id, v); } catch (_) { v = ""; } }
+    IMGS[id] = v || ""; if (v) known.add(id);
+  }));
+  refs.forEach(f => { f.img = IMGS[f.img.slice(4)] || ""; });
   return st;
 }
 // The state is kept in three documents: site/state (everything), site/econ (Economy, editable by the
@@ -3950,13 +3960,9 @@ function buildState(){
 async function loadAll(){
   const snap = await getDoc(doc(db, "site", "state"));
   if (!snap.exists()) return await (await fetch("seed.json", {cache:"no-store"})).json();   // first run
-  (await getDocs(collection(db, "images"))).forEach(d => { IMGS[d.id] = d.data().data; known.add(d.id); });
   STATE_JSON = snap.data().json;
-  try { const e = await getDoc(doc(db, "site", "econ")); if (e.exists()) ECON_JSON = e.data().json; } catch (_) {}
-  try { const l = await getDoc(doc(db, "site", "lands")); if (l.exists()) LANDS_JSON = l.data().json; } catch (_) {}
-  try { const q = await getDoc(doc(db, "site", "players")); if (q.exists()) PLAYERS_JSON = q.data().json; } catch (_) {}
-  try { const q = await getDoc(doc(db, "site", "ranks")); if (q.exists()) RANKS_JSON = q.data().json; } catch (_) {}
-  try { const q = await getDoc(doc(db, "site", "church")); if (q.exists()) CHURCH_JSON = q.data().json; } catch (_) {}
+  const part0 = n => getDoc(doc(db, "site", n)).then(d => d.exists() ? d.data().json : null).catch(() => null);
+  [ECON_JSON, LANDS_JSON, PLAYERS_JSON, RANKS_JSON, CHURCH_JSON] = await Promise.all(["econ", "lands", "players", "ranks", "church"].map(part0));
   return buildState();
 }
 function rolesOf(copy){
@@ -4186,26 +4192,7 @@ function start(){
     window.APP.auth({ ready:true, email: bot ? "bot" : email, bot, admin: bot || (!!email && ADMINS.map(a=>a.toLowerCase()).includes(email)) });
   });
   loadAll()
-    .then(s => { window.APP.load(s); return Promise.all([
-      loadProposals().then(l => window.APP.props(l)).catch(e => console.warn(e)),
-      getDocs(collection(db, "signatures")).then(s => window.APP.sigs(sigsFrom(s))).catch(e => { console.warn(e); window.APP.sigs({}); }),
-      getDocs(collection(db, "news")).then(s => window.APP.news(listFrom(s))).catch(e => console.warn(e)),
-      getDocs(collection(db, "awards")).then(s => window.APP.awards(listFrom(s))).catch(e => console.warn(e)),
-      getDocs(collection(db, "awardTypes")).then(s => window.APP.awt(listFrom(s))).catch(e => console.warn(e)),
-      getDocs(collection(db, "treaties")).then(s => window.APP.treaties(listFrom(s))).catch(e => console.warn(e)),
-      getDocs(collection(db, "comments")).then(s => window.APP.comments(listFrom(s))).catch(e => console.warn(e)),
-      getDocs(collection(db, "petitions")).then(s => window.APP.pets(listFrom(s))).catch(e => console.warn(e)),
-      getDocs(collectionGroup(db, "signs")).then(s => window.APP.psigns(signsFrom(s))).catch(e => console.warn(e)),
-      getDocs(collection(db, "cases")).then(s => window.APP.cases(listFrom(s))).catch(e => console.warn(e)),
-      getDocs(collection(db, "casenotes")).then(s => window.APP.cnotes(listFrom(s))).catch(e => console.warn(e)),
-      getDocs(collection(db, "applications")).then(s => window.APP.apps(listFrom(s))).catch(e => console.warn(e)),
-      getDocs(collection(db, "protocols")).then(s => window.APP.prots(listFrom(s))).catch(e => console.warn(e)),
-      getDocs(collection(db, "advocates")).then(s => window.APP.advs(listFrom(s))).catch(e => console.warn(e)),
-      getDocs(collection(db, "pardons")).then(s => window.APP.pardons(listFrom(s))).catch(e => console.warn(e)),
-      getDocs(collection(db, "profiles")).then(s => window.APP.profiles(listFrom(s))).catch(e => console.warn(e)),
-      getDoc(doc(db, "site", "emergency")).then(d => window.APP.emerg(d.exists() ? d.data() : null)).catch(e => console.warn(e)),
-    ]); })
-    .then(() => loadVotes()).then(v => { window.APP.votes(v); watch(); })
+    .then(s => { window.APP.load(s); watch(); })
     .catch(e => { console.error(e); window.APP.fail("Не вдалося завантажити дані: " + (e.code || e.message)); });
 }
 if (window.APP) start(); else window.APP_READY = start;
