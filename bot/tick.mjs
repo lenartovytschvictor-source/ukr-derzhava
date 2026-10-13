@@ -47,9 +47,15 @@ async function telegram(page) {
   const mark = e => { sent[hid(e.id)] = now; };
 
   if (first) {
-    // Перший запуск: не засипаємо гілку старими подіями, лише вітаємось.
-    fresh.forEach(mark);
+    // Перший запуск: вітаємось і постимо лише свіже (за останні 6 годин), старе позначаємо як надіслане.
+    const recent = fresh.filter(e => e.kind !== "minor" && now - e.at < 6 * 3600000).slice(-8);
+    fresh.forEach(e => { if (!recent.includes(e)) mark(e); });
     await tgSend("🤖 <b>Бот «Українська Держава» підключено</b>\n\nТут з’являтимуться укази, закони, рішення Суду, відзнаки й нагадування про голосування в Палаті Земель.\n\n" + `<a href="${SITE}">${SITE.replace(/^https?:\/\//, "").replace(/\/$/, "")}</a>`, TG.thread);
+    for (const e of recent) {
+      const th = e.kind === "remind" && TG.remindThread ? TG.remindThread : TG.thread;
+      try { await sleep(1200); await tgSend(e.text, th); mark(e); } catch (err) { console.log("Не вдалося надіслати:", err.message); break; }
+    }
+    console.log(`Telegram: привітання надіслано, свіжих подій ${recent.length}`);
   } else {
     const main = fresh.filter(e => e.kind !== "minor");
     const minor = fresh.filter(e => e.kind === "minor");
