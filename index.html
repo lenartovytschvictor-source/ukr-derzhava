@@ -2532,7 +2532,7 @@ function modeFields(mode){const opts=artOptions();const cs=constSec();const land
   return h;}
 // ---------- Карта держави (регіони DragPolit) ----------
 let MAP_L='lands',MAPSEL='',MAPEDIT=false,MAPZ=null;const GAME_REGION='https://dragpolit.com/region/';
-function loadMapGeo(){if(window.MAPGEO||window.__mapLoading)return;window.__mapLoading=true;const sc=document.createElement('script');sc.src='mapgeo.js?v=3';sc.onload=()=>{window.__mapLoading=false;renderSoon();};sc.onerror=()=>{window.__mapLoading=false;window.__mapErr=true;renderSoon();};document.head.appendChild(sc);}
+function loadMapGeo(){if(window.MAPGEO||window.__mapLoading)return;window.__mapLoading=true;const sc=document.createElement('script');sc.src='mapgeo.js?v=k1';sc.onload=()=>{window.__mapLoading=false;renderSoon();};sc.onerror=()=>{window.__mapLoading=false;window.__mapErr=true;renderSoon();};document.head.appendChild(sc);}
 function udilSec(){return landSecs()[0]||null;}
 function mapLandIdx(){const out=[];landSecs().forEach(sec=>(sec.lands||[]).forEach(l=>out.push({l,sec,lost:false})));((lostSec()||{}).lands||[]).forEach(l=>out.push({l,sec:lostSec(),lost:true}));return out;}
 const mapNorm=t=>String(t||'').toLowerCase().replace(/[’ʼ`']/g,'').replace(/днепр/g,'дніпро').replace(/священий/g,'священний').replace(/\s+/g,' ').trim();
