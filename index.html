@@ -3728,10 +3728,12 @@ async function finalizeExpired0(){
   const close=(b,ph)=>{const t=tally(b);if(t.vs&&t.vs.length)b.votesBy=t.vs.map(v=>({land:v.land||'',choice:v.choice||'',email:lc(v.email||'')}));const sg=SIGS[b.id];b.voting=false;b.autoClosed=true;b.final=true;b.status=ph;b.vfor=String(t.f);b.vagainst=String(t.a);b.vabstain=String(t.z);
     if(sg){b.sig={decision:sg.decision,reason:sg.reason||'',by:sg.by||'',at:new Date(sg.at||Date.now()).toISOString()};if(sg.decision==='veto'){const o=ovTally(b);b.ov={f:o.f,a:o.a,z:o.z};if(ph==='passed')b.overridden=true;}}
     if(ph==='passed'&&b.amend&&b.amend.mode&&!b.applied)applyLaw(b,state);};
-  const stPh=stDone.map(b=>phase(b));stDone.forEach((b,k)=>close(b,stPh[k]));
-  liveDone.sort((x,y)=>x.closesAt.localeCompare(y.closesAt)).forEach(lb=>{const ph=phase(lb);const nb={id:lb.id,no:'№'+(p.bills.length+1),date:lb.date||'',title:lb.title||'',author:lb.author||'',text:lb.text||'',amend:lb.amend||null,kind:lb.kind||'',status:'review',voting:true,closesAt:lb.closesAt,vfor:'',vagainst:'',vabstain:'',who:''};close(nb,ph);p.bills.push(nb);});
-  let res='saved '+(liveDone.length+stDone.length);
-  try{await window.FB.save(state);saved=JSON.stringify(state);for(const lb of liveDone){try{await window.FB.delProposal(lb.id);}catch(_){}}PROPS=await window.FB.loadProposals();msg='Голосування завершилося, результат збережено';msgErr=false;}catch(e){state=JSON.parse(saved);res='save-error '+(e&&e.code||'');}
+  const stPh=stDone.map(b=>phase(b));stDone.forEach((b,k)=>{if(FINAL.includes(stPh[k]))close(b,stPh[k]);});
+  // після свіжого перерахунку голосів закриваємо лише ті, що справді завершені (решта, напр. «на підписі», чекають далі)
+  const liveFin=liveDone.filter(lb=>FINAL.includes(phase(lb)));
+  liveFin.sort((x,y)=>x.closesAt.localeCompare(y.closesAt)).forEach(lb=>{const ph=phase(lb);const nb={id:lb.id,no:'№'+(p.bills.length+1),date:lb.date||'',title:lb.title||'',author:lb.author||'',text:lb.text||'',amend:lb.amend||null,kind:lb.kind||'',status:'review',voting:true,closesAt:lb.closesAt,vfor:'',vagainst:'',vabstain:'',who:''};close(nb,ph);p.bills.push(nb);});
+  let res='saved '+(liveFin.length+stDone.length);if(!liveFin.length&&!stDone.some((b,k)=>FINAL.includes(stPh[k]))){busy=false;return 'nothing';}
+  try{await window.FB.save(state);saved=JSON.stringify(state);for(const lb of liveFin){try{await window.FB.delProposal(lb.id);}catch(_){}}PROPS=await window.FB.loadProposals();msg='Голосування завершилося, результат збережено';msgErr=false;}catch(e){state=JSON.parse(saved);res='save-error '+(e&&e.code||'');}
   busy=false;render();return res;
 }
 async function stateDuties(){if(!AUTH.admin||!window.FB||busy||editing)return '';const out=[];try{if(window.FB.chatCleanup){const n=await window.FB.chatCleanup();if(n)out.push('chat-img '+n);}}catch(_){}const min=petMin();
@@ -3758,6 +3760,7 @@ async function stateDuties(){if(!AUTH.admin||!window.FB||busy||editing)return ''
       if(o.t==='exile'){const pp=plByName(nm);if(pp){pp.email='';pp.exiled={at:iso,why};}}
       ls.exec[o.key]=iso;changed=true;out.push('sanction '+o.t);}catch(_){out.push('sanction-error');}}
     if(todo.length)SANC_CACHE={};}}
+  if(p&&window.FB.reopenBallot){for(const b of (p.bills||[])){if((b.status==='sign'||b.status==='override')&&!b.voting&&b.id&&b.closesAt&&!PROPS.some(pr=>pr.id===b.id)){try{await window.FB.reopenBallot(b.id,Date.parse(b.closesAt));b.voting=true;b.final=false;b.autoClosed=false;b.status='review';changed=true;out.push('reopen '+b.id);}catch(_){out.push('reopen-error');}}}}
   if(p&&!p.votesMig&&window.FB.loadAllVotes){try{const all=await window.FB.loadAllVotes();(p.bills||[]).forEach(b=>{if(!b.votesBy&&b.id&&all[b.id]&&all[b.id].length)b.votesBy=all[b.id].map(v=>({land:v.land||'',choice:v.choice||'',email:lc(v.email||'')}));});p.votesMig=true;changed=true;out.push('votes-mig');}catch(_){out.push('votes-mig-error');}}
   try{const r=await electionDuties();if(r.changed)changed=true;out.push(...r.out);}catch(e){out.push('el-error');}
   if(changed){try{await window.FB.save(state);saved=JSON.stringify(state);out.push('state');}catch(_){state=JSON.parse(saved);}}
@@ -4405,6 +4408,7 @@ async function castVote(eid, cand){ const em = (auth.currentUser.email || "").to
 async function myVote(eid){ const em = (auth.currentUser.email || "").toLowerCase(); const s = await getDoc(doc(db, "elections", eid, "ebal", em)); return s.exists() ? (s.data().cand || "") : ""; }
 async function tallyElection(eid){ const s = await getDocs(collection(db, "elections", eid, "ebal")); const counts = {}; let total = 0; s.forEach(d => { const c = d.data().cand; counts[c] = (counts[c] || 0) + 1; total++; }); return { counts, total }; }
 function candsFrom(snap){ const out = {}; snap.forEach(d => { const e = d.ref.parent.parent; if (!e) return; const v = d.data(); (out[e.id] = out[e.id] || []).push({ id: d.id, ...v, at: ms(v.at) }); }); return out; }
+async function reopenBallot(id, ms){ await setDoc(doc(db, "ballots", id), { open: false, closesAt: new Date(ms) }, { merge: true }); }
 async function closeProposal(id, msv){ await updateDoc(doc(db, "proposals", id), { closedAt: new Date(msv), closedAtMs: msv }); }
 function watchMsgs(path, n, cb){ const q = query(collection(db, path), orderBy("at", "desc"), limit(n)); return onSnapshot(q, s => { const out = []; s.forEach(d => out.push({ id: d.id, ...d.data() })); out.sort((a, b) => (ms(a.at) || Date.now()) - (ms(b.at) || Date.now())); cb(out); }, e => { console.warn(e); cb(null, e); }); }
 function watchDms(email, cb){ const q = query(collection(db, "dms"), where("members", "array-contains", email)); return onSnapshot(q, s => { const out = []; s.forEach(d => out.push({ id: d.id, ...d.data() })); cb(out); }, e => { console.warn(e); cb([]); }); }
@@ -4545,7 +4549,7 @@ window.FB = {
   postNews, delNews, giveAward, revokeAward, delAward,
   postComment, delComment, createPetition, signPetition, delPetition, petitionToBill, fileCase, decideCase, delCase, revokeNews, updCase, postNote, delNote,
   postSealed, delSealed, postProtocol, updProtocol, saveProfile, closeProposal, watchMsgs, watchDms, sendMsg, delMsg, watchPings, sendPings, delPings, chatBan, chatCleanup, setAdvocate, updAdvocate, delAdvocate, pardon, watchSealed,
-  syncBallots, loadAllVotes, createElection, updElection, delElection, applyCand, setCand, delCand, castVote, myVote, tallyElection,
+  syncBallots, loadAllVotes, reopenBallot, createElection, updElection, delElection, applyCand, setCand, delCand, castVote, myVote, tallyElection,
   applyCitizen, delApp, decideApp, saveRanks, setEmergency, foundAward, updAwardType, delAwardType, saveChurch, postTreaty, updTreaty, delTreaty,
   login: () => { const p = new GoogleAuthProvider(); if (p.setCustomParameters) p.setCustomParameters({ prompt: 'select_account' }); return signInWithPopup(auth, p); },
   logout: () => signOut(auth),
