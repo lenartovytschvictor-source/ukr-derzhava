@@ -2486,7 +2486,7 @@ function viewState(){const pend=allBills().filter(b=>b.amend&&b.amend.mode&&b.am
   VIEW_CACHE={key,st:c};return c;}
 // live bills submitted by representatives (Firestore "proposals"), voting 12h from submission
 function liveBills(){return PROPS.filter(pr=>pr.at).map(pr=>{const end=pr.at+(+pr.hours||24)*3600000;const conf=+pr.closedAtMs||0;const ec=conf||earlyClose(pr.id,end);const eff=ec&&ec<end?ec:end;return {early:eff<end,earlyOk:!!conf&&conf<end,id:pr.id,live:true,email:pr.email,title:pr.title,text:pr.text,date:pr.date,author:pr.petition?pr.author:(pr.author?pr.author+' ('+pr.land+')':pr.land),amend:pr.amend||null,kind:pr.kind||'',voting:true,status:'review',closesAt:new Date(eff).toISOString(),hours:+pr.hours||24,at0:pr.at};});}
-function allBills(){const p=parlSec();return [...liveBills(),...((p&&p.bills)||[])];}
+function allBills(){const p=parlSec();const st=(p&&p.bills)||[];const seen=new Set();const out=[];st.forEach(b=>{if(b.id&&seen.has(b.id))return;if(b.id)seen.add(b.id);out.push(b);});return [...liveBills().filter(b=>!seen.has(b.id)),...out];}
 function artOptions(){const cs=constSec();const out=[];if(cs)cs.doc.chapters.forEach((c,ci)=>c.articles.forEach((a,ai)=>out.push({v:ci+':'+ai,t:a.title,ci,ai,a})));return out;}
 function modeFields(mode){const opts=artOptions();const cs=constSec();const lands=landList(state).map(x=>x.name);const gov=govSec();
   const landSel=(k='land2')=>`<label class="fl">Земля<select id="np-${k}" data-a="np" data-k="${k}">${lands.map(n=>`<option${n===DRAFT[k]?' selected':''}>${esc(n)}</option>`).join('')}</select></label>`;
@@ -3713,11 +3713,15 @@ app.addEventListener('click',async e=>{
 render();
 window.APP_STATE=()=>state;
 window.APP_PROPS=()=>PROPS.map(p=>({id:p.id}));
-async function finalizeExpired(){
+let FIN_LOCK=false;
+// одночасно може працювати лише один підсумок голосувань (інакше закони дублюються)
+async function finalizeExpired(){if(FIN_LOCK)return 'busy';FIN_LOCK=true;try{return await finalizeExpired0();}finally{FIN_LOCK=false;}}
+async function finalizeExpired0(){
   const p=parlSec();if(!p||!AUTH.admin||editing||busy||!votesLoaded||!sigsLoaded||!window.FB)return 'not-ready';
   p.bills=p.bills||[];
   for(const lb of liveBills()){if(lb.early&&!lb.earlyOk&&window.FB.closeProposal){try{await window.FB.closeProposal(lb.id,Date.parse(lb.closesAt));const pr=PROPS.find(x=>x.id===lb.id);if(pr)pr.closedAtMs=Date.parse(lb.closesAt);}catch(_){}}}
-  const liveDone=liveBills().filter(b=>FINAL.includes(phase(b)));const stDone=p.bills.filter(b=>b.voting&&expired(b)&&FINAL.includes(phase(b)));
+  const already=new Set((p.bills||[]).map(b=>b.id));for(const lb of liveBills().filter(b=>already.has(b.id))){try{await window.FB.delProposal(lb.id);}catch(_){}}
+  const liveDone=liveBills().filter(b=>!already.has(b.id)&&FINAL.includes(phase(b)));const stDone=p.bills.filter(b=>b.voting&&expired(b)&&FINAL.includes(phase(b)));
   if(!liveDone.length&&!stDone.length)return 'nothing';
   busy=true;
   try{VOTES=await window.FB.loadVotes();}catch(_){busy=false;return 'votes-error';}
@@ -3734,6 +3738,7 @@ async function stateDuties(){if(!AUTH.admin||!window.FB||busy||editing)return ''
   for(const pt of PETS){if(pt.status==='passed')continue;if(pt.at&&Date.now()>pt.at+PET_MS)continue;const n=(PSIGNS[pt.id]||[]).length;if(n<min)continue;
     try{const signers=(PSIGNS[pt.id]||[]).map(x=>x.by).join(', ');await window.FB.petitionToBill(pt,`${pt.text||''}\n\n— Петиція громадян. Ініціатор: ${pt.by}. Підписали: ${signers}.`,voteHours());out.push('petition '+pt.id);}catch(e){out.push('petition-error');}}
   const p=parlSec();let changed=false;
+  if(p&&p.bills){const seen=new Set();const n0=p.bills.length;p.bills=p.bills.filter(b=>{if(!b.id)return true;if(seen.has(b.id))return false;seen.add(b.id);return true;});if(p.bills.length!==n0){changed=true;out.push('dedupe '+(n0-p.bills.length));}}
   ((p&&p.bills)||[]).forEach(b=>{if(b.status==='passed'&&voidedBy(b.id)){if(b.applied)revertLaw(b,state);b.status='void';b.voidedBy=voidedBy(b.id).id;changed=true;}});
   for(const b of ((p&&p.bills)||[])){if(b.status==='passed'&&b.amend&&b.amend.mode==='revokedecree'&&!b.newsDone){const n=NEWS.find(x=>x.id===b.amend.newsId);if(n&&!n.revoked){window.FB.revokeNews(n.id,{by:'Палата Земель',reason:'закон «'+(b.title||'')+'»'}).catch(()=>{});}if(n&&emActive()&&EMERG.cur.source!=='law'&&+EMERG.cur.decreeNo===+n.no){try{await window.FB.setEmergency({cur:null,hist:emArchive('Палата Земель скасувала указ')});}catch(_){}}b.newsDone=true;changed=true;}}
   for(const b of ((p&&p.bills)||[])){const md=b.amend&&b.amend.mode;if(md!=='emergency'&&md!=='emergencyend')continue;
@@ -3796,7 +3801,7 @@ window.__tgFeed=()=>{const H=x=>String(x==null?'':x).replace(/&/g,'&amp;').repla
   AWT.forEach(t=>{if(t.at)minor.push({id:'awt:'+t.id,at:msIso(t.at),tx:`✨ Засновано нагороду «${t.name}»`});});
   minor.forEach(m=>{const t=Date.parse(m.at)||0;if(t>=cut&&t<=now+60000)out.push({id:m.id,at:t,text:H(m.tx),kind:'minor'});});
   return out.sort((a,b)=>a.at-b.at);};
-window.__botTick=async()=>{for(let i=0;i<60&&busy;i++)await new Promise(r=>setTimeout(r,500));const r=await finalizeExpired();const d=await stateDuties();let a='access ok';try{await window.FB.syncAccess(state);}catch(e){a='access error '+(e&&e.code||'');}return r+(d?' · '+d:'')+' · '+a;};
+window.__botTick=async()=>{for(let i=0;i<60&&(busy||FIN_LOCK);i++)await new Promise(r=>setTimeout(r,500));const r=await finalizeExpired();const d=await stateDuties();let a='access ok';try{await window.FB.syncAccess(state);}catch(e){a='access error '+(e&&e.code||'');}return r+(d?' · '+d:'')+' · '+a;};
 async function refreshLive(){if(!window.FB||busy||editing||document.visibilityState!=='visible')return;try{PROPS=await window.FB.loadProposals();VOTES=await window.FB.loadVotes();}catch(_){}}
 setInterval(async()=>{if(editing)return;const ae=document.activeElement;if(ae&&ae.id&&ae.id.startsWith('np-'))return;render();finalizeExpired();},60000);
 let REMOTE=null,EDIT_SCOPE='';
