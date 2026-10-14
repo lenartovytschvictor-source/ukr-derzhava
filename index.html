@@ -3044,7 +3044,7 @@ function renderInner(){chatMarkSeen();
     editing=ED&&scopeAllows(s);
     html+=`<section class="sec" id="${esc(s.id)}"><h2>${esc(s.title)}${s.note?`<small>${esc(s.note)}</small>`:''}</h2>`;
     if(s.kind==='economy'){html+=(editing?econHtml(s,si):econCompact(econHtml(s,si)))+'</section>';return;}
-    if(s.kind==='parliament'){html+=parlHtml(s,si)+(editing?'':committeesBlock())+'</section>';return;}
+    if(s.kind==='parliament'){html+=(AUTH.admin&&!editing&&!AUTH.bot?`<div class="landtools" style="justify-content:flex-end;margin:-6px 0 8px"><button class="small ghost" data-a="admtick" ${busy?'disabled':''} title="Те саме, що робить бот раз на 15 хвилин">🔄 Підбити підсумки зараз</button></div>`:'')+parlHtml(s,si)+(editing?'':committeesBlock())+'</section>';return;}
     if(s.kind==='doc'){html+=constHtml(s,si)+'</section>';return;}
     if(s.kind==='gov'){html+=govHtml(s,si)+'</section>';return;}
     if(s.kind==='home'){html+=homeHtml(s,si)+'</section>';return;}
@@ -3415,6 +3415,7 @@ app.addEventListener('click',async e=>{
   if(a==='mapsel'){MAPSEL=b.dataset.u||'';render();return;}
   if(a==='mapz'){const k=b.dataset.k;if(k==='0'){MAPZ=null;render();}else mapZoom(k==='in'?1/1.4:1.4);return;}
   if(a==='mapreset'){const us=udilSec();if(!us||!(isPysar()||AUTH.admin)||editing)return;us.udils=us.udils||{};delete us.udils[b.dataset.u];busy=true;render();try{await window.FB.saveLands(state.sections.filter(isLandsSec));saved=JSON.stringify(state);msg='Уділ повернуто як у Конституції';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося зберегти';msgErr=true;state=JSON.parse(saved);}busy=false;render();return;}
+  if(a==='admtick'){if(!AUTH.admin)return;msg='Перевіряю голосування…';msgErr=false;render();try{const r=await window.__botTick();msg='Готово: '+String(r).replace(/ · access ok/,'');}catch(e){console.warn(e);msg='Не вдалося: '+(e&&e.code||e);msgErr=true;}render();return;}
   if(a==='gosub'){PROF='';active=b.dataset.p;SUB[b.dataset.p]=b.dataset.id;MMORE=false;try{history.replaceState(null,'','#'+b.dataset.id);}catch(_){}render();window.scrollTo(0,0);return;}
   if(a==='elt'){EL_T=b.dataset.k;render();return;}
   if(a==='elnew'){ELM='new';EF={post:'',other:'',via:'',reg:'2',vote:'2',note:''};render();return;}
@@ -3713,10 +3714,15 @@ app.addEventListener('click',async e=>{
 render();
 window.APP_STATE=()=>state;
 window.APP_PROPS=()=>PROPS.map(p=>({id:p.id}));
+// закони, які помилково потрапили в архів «на підписі» без законопроєкту — відкриваємо знову для підпису Гетьмана
+async function repairStuck(){const p=parlSec();if(!p||!AUTH.admin||!window.FB||!window.FB.reopenBallot)return 0;let n=0;
+  for(const b of (p.bills||[])){if((b.status==='sign'||b.status==='override')&&!b.voting&&b.id&&b.closesAt&&!PROPS.some(pr=>pr.id===b.id)){try{await window.FB.reopenBallot(b.id,Date.parse(b.closesAt));b.voting=true;b.final=false;b.autoClosed=false;b.status='review';n++;}catch(e){console.warn(e);}}}
+  return n;}
 let FIN_LOCK=false;
 // одночасно може працювати лише один підсумок голосувань (інакше закони дублюються)
 async function finalizeExpired(){if(FIN_LOCK)return 'busy';FIN_LOCK=true;try{return await finalizeExpired0();}finally{FIN_LOCK=false;}}
 async function finalizeExpired0(){
+  {const p0=parlSec();if(p0&&AUTH.admin&&!editing&&!busy&&window.FB){const n=await repairStuck();if(n){try{await window.FB.save(state);saved=JSON.stringify(state);msg='Відновлено законів на підпис: '+n;msgErr=false;}catch(e){console.warn(e);state=JSON.parse(saved);}}}}
   const p=parlSec();if(!p||!AUTH.admin||editing||busy||!votesLoaded||!sigsLoaded||!window.FB)return 'not-ready';
   p.bills=p.bills||[];
   for(const lb of liveBills()){if(lb.early&&!lb.earlyOk&&window.FB.closeProposal){try{await window.FB.closeProposal(lb.id,Date.parse(lb.closesAt));const pr=PROPS.find(x=>x.id===lb.id);if(pr)pr.closedAtMs=Date.parse(lb.closesAt);}catch(_){}}}
@@ -3760,7 +3766,7 @@ async function stateDuties(){if(!AUTH.admin||!window.FB||busy||editing)return ''
       if(o.t==='exile'){const pp=plByName(nm);if(pp){pp.email='';pp.exiled={at:iso,why};}}
       ls.exec[o.key]=iso;changed=true;out.push('sanction '+o.t);}catch(_){out.push('sanction-error');}}
     if(todo.length)SANC_CACHE={};}}
-  if(p&&window.FB.reopenBallot){for(const b of (p.bills||[])){if((b.status==='sign'||b.status==='override')&&!b.voting&&b.id&&b.closesAt&&!PROPS.some(pr=>pr.id===b.id)){try{await window.FB.reopenBallot(b.id,Date.parse(b.closesAt));b.voting=true;b.final=false;b.autoClosed=false;b.status='review';changed=true;out.push('reopen '+b.id);}catch(_){out.push('reopen-error');}}}}
+  {const n=await repairStuck();if(n){changed=true;out.push('reopen '+n);}}
   if(p&&!p.votesMig&&window.FB.loadAllVotes){try{const all=await window.FB.loadAllVotes();(p.bills||[]).forEach(b=>{if(!b.votesBy&&b.id&&all[b.id]&&all[b.id].length)b.votesBy=all[b.id].map(v=>({land:v.land||'',choice:v.choice||'',email:lc(v.email||'')}));});p.votesMig=true;changed=true;out.push('votes-mig');}catch(_){out.push('votes-mig-error');}}
   try{const r=await electionDuties();if(r.changed)changed=true;out.push(...r.out);}catch(e){out.push('el-error');}
   if(changed){try{await window.FB.save(state);saved=JSON.stringify(state);out.push('state');}catch(_){state=JSON.parse(saved);}}
