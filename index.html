@@ -90,6 +90,8 @@
 div.fhead{cursor:default}
 .frep{display:flex;gap:8px;align-items:center}.frep>span{display:grid;min-width:0}.frep small{color:var(--muted);font-size:12px}
 .hav.sm{width:28px;height:28px;font-size:12px}
+.factbtn{cursor:pointer;font:inherit;font-weight:700}.factbtn:hover{filter:brightness(1.15)}
+.bmbox .factions{border:0;padding:0;background:none}
 .fvotes{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin-top:8px;font-size:13px}
 .fv{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:2px 10px}.fv i{width:8px;height:8px;border-radius:50%;background:var(--pc)}.fv em{font-style:normal;font-weight:700}.fv em.f{color:var(--ok)}.fv em.a{color:var(--danger)}.fv em.z{color:var(--muted)}
 /* ===== Економіка 2.0 ===== */
@@ -1929,8 +1931,8 @@ function parlView(s,si){const reps=landLeaders();const lead={};reps.forEach(r=>l
   const arch=all.filter(b=>!active.includes(b)).sort((x,y)=>String(y.closesAt||y.date||'').localeCompare(String(x.closesAt||x.date||'')));
   const passed=all.filter(b=>phase(b)==='passed'&&!voidedBy(b.id)).length;const signN=all.filter(b=>phase(b)==='sign').length;
   let h='<div class="parl">';
-  h+=`<div class="block chamber"><div class="doors left">${L.map(p=>doorHtml(p,'l')).join('')}</div><div class="hallc">${hemicycle(sortRepsByParty(reps),chair,all.find(b=>isOpen(b)))}<div class="kpis"><span class="pill review">🗳 На голосуванні: ${active.filter(b=>phase(b)==='voting').length}</span>${signN?`<span class="pill sign">✍️ Чекає підпису: ${signN}</span>`:''}<span class="pill passed">📜 Чинних законів: ${passed}</span></div><p class="hint">Двері ведуть до кабінетів уряду й до Генерального Суду. Наведіть на крісло, щоб побачити Представника.</p></div><div class="doors right">${R.map(p=>doorHtml(p,'r')).join('')}</div></div>`;
-  h+=factionsHtml();
+  h+=`<div class="block chamber"><div class="doors left">${L.map(p=>doorHtml(p,'l')).join('')}</div><div class="hallc">${hemicycle(sortRepsByParty(reps),chair,all.find(b=>isOpen(b)))}<div class="kpis"><span class="pill review">🗳 На голосуванні: ${active.filter(b=>phase(b)==='voting').length}</span>${signN?`<span class="pill sign">✍️ Чекає підпису: ${signN}</span>`:''}<span class="pill passed">📜 Чинних законів: ${passed}</span>${partiesActive().length?`<button type="button" class="pill factbtn" data-a="factm" data-k="1">🎨 Фракції Палати</button>`:''}</div><p class="hint">Двері ведуть до кабінетів уряду й до Генерального Суду. Наведіть на крісло, щоб побачити Представника.</p></div><div class="doors right">${R.map(p=>doorHtml(p,'r')).join('')}</div></div>`;
+  if(FACTM){const fh=factionsHtml();if(fh)MODALH=`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="factm" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide"><button class="small bmx" data-a="factm" data-k="">✕ Закрити</button>${fh}</div></div>`;else FACTM='';}
   const ord=active.slice().reverse();
   h+=`<div class="pgrid"><div class="block vbox"><h3>На голосуванні <small>${ord.length>3?'гортайте список · ':''}${ord.length?'новіші зверху':''}</small></h3>${ord.length?`<div class="vlist">${ord.map(billRow).join('')}</div>`:'<p class="empty">Зараз немає актів на голосуванні.</p>'}</div>`;
   h+=npLands().length&&!AUTH.bot?`<div class="propbox">${proposeForm(npLands())}</div></div>`:`<div class="block propbox"><h3>Подати акт</h3>${`<p class="hint">${AUTH.email?'Подавати акти до Палати можуть лише Представники Земель.':'Представники Земель: увійдіть через Google, щоб подати акт.'} Громадяни можуть подати петицію на Головній — набравши підписи, вона стає законопроєктом.</p><div><button class="small" data-a="tab" data-id="${esc((sectionByKind('home')||{}).id||'home')}">✍️ Петиції на Головній</button></div>`}</div></div>`;
@@ -3375,7 +3377,7 @@ function econDebts(s,si){
 }
 
 // ===================== Партії =====================
-let PARTIES=[],COALS=[],PARTYM='',PF=null,PSTMT={t:'',x:''},PEDIT=null,PINV='',PINVSEL='',PADDSEL='';
+let FACTM='',PARTIES=[],COALS=[],PARTYM='',PF=null,PSTMT={t:'',x:''},PEDIT=null,PINV='',PINVSEL='',PADDSEL='';
 const P_COLORS=['#e0574a','#3987e5','#f2b544','#199e70','#9085e9','#d55181','#e07b30','#2bb3b3','#8a7a63','#6aa84f'];
 function partiesActive(){return PARTIES.filter(p=>p.status==='active');}
 function partyById(id){return PARTIES.find(p=>p.id===id)||null;}
@@ -4228,8 +4230,9 @@ app.addEventListener('click',async e=>{
   if(a==='cabprop'){DRAFT.cat=b.dataset.k;CAB='';const ps=sectionByKind('parliament');if(ps)active=ps.id;DOSSIER=null;try{history.replaceState(null,'','#'+active);}catch(_){}render();setTimeout(()=>{const el=document.querySelector('.propbox');if(el)el.scrollIntoView({block:'start'});},30);return;}
   if(a==='econt'){ECON_T=b.dataset.k;render();return;}
   if(a==='ecv'){ECV=b.dataset.k;render();return;}
+  if(a==='factm'){FACTM=b.dataset.k||'';render();return;}
   if(a==='partym'){PARTYM=b.dataset.k||'';render();return;}
-  if(a==='partygo'){const ps=sectionByKind('parties');if(!ps)return;PROF='';DOSSIER=null;CAB='';if(ps.tab){active=ps.tab;SUB[ps.tab]=ps.id;}else active=ps.id;PARTYM=b.dataset.k||'';try{history.replaceState(null,'','#'+active);}catch(_){}render();window.scrollTo(0,0);return;}
+  if(a==='partygo'){const ps=sectionByKind('parties');if(!ps)return;FACTM='';PROF='';DOSSIER=null;CAB='';if(ps.tab){active=ps.tab;SUB[ps.tab]=ps.id;}else active=ps.id;PARTYM=b.dataset.k||'';try{history.replaceState(null,'','#'+active);}catch(_){}render();window.scrollTo(0,0);return;}
   if(a==='pfound'){const me=meAny();if(!me)return;PF={name:'',short:'',color:P_COLORS[PARTIES.length%P_COLORS.length],img:'',program:''};render();return;}
   if(a==='pedit'){const pt=partyById(b.dataset.k);if(!pt||!(isPLeader(pt)||pAdmin()))return;PF={id:pt.id,name:pt.name||'',short:pt.short||'',color:pt.color||P_COLORS[0],img:pt.img||'',program:pt.program||''};PARTYM='';render();setTimeout(()=>{const el=document.querySelector('.pform');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},30);return;}
   if(a==='pfimg'){if(!PF)return;pickImage(img=>{PF.img=img;render();},true);return;}
