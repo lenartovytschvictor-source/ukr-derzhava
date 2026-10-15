@@ -44,6 +44,54 @@
 .reqt{max-width:560px;margin:6px 0 4px;overflow:visible}.reqt table.exp{min-width:0!important;width:100%;table-layout:auto}.reqt th,.reqt td{white-space:nowrap}
 @media (max-width:640px){.srow3{grid-template-columns:1fr;gap:4px}}
 
+
+/* ===== Партії ===== */
+.parties{display:grid;gap:14px}
+.phero{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;background:radial-gradient(120% 160% at 0% 0%,rgba(242,181,68,.14),transparent 60%),var(--panel)}.phero h3{margin:0 0 4px}.phero p{margin:0;max-width:640px}
+.pemb{width:44px;height:44px;border-radius:12px;object-fit:contain;flex:none;display:inline-grid;place-items:center;background:rgba(0,0,0,.2)}
+.pemb.none{color:#fff;font:800 15px var(--f-display);text-transform:uppercase}
+.pemb.sm{width:30px;height:30px;border-radius:8px;font-size:11px}.pemb.lg{width:64px;height:64px;border-radius:16px;font-size:20px}.pemb.xl{width:96px;height:96px;border-radius:20px;font-size:28px}
+.ptag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;border:1px solid color-mix(in srgb,var(--pc) 55%,transparent);background:color-mix(in srgb,var(--pc) 16%,transparent);color:var(--cream,#f7ecd6);white-space:nowrap}
+.ptag i{width:8px;height:8px;border-radius:50%;background:var(--pc)}
+.ptagb{font:inherit;font-size:13px;color:var(--muted);background:none;border:0;padding:0;cursor:pointer;display:inline-flex;gap:6px;align-items:center;margin-top:4px}
+.seatsbar{display:grid;gap:8px}
+.sbline{position:relative;display:flex;height:22px;border-radius:999px;overflow:hidden;border:1px solid var(--line);background:repeating-linear-gradient(45deg,transparent 0 6px,rgba(255,255,255,.04) 6px 12px)}
+.sbline span{display:block;min-width:4px;border-right:2px solid var(--panel)}.sbline span:last-of-type{border-right:0}
+.sbline .mid{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--cream,#f7ecd6);opacity:.8}
+.seatsbar.compact .sbline{height:14px}
+.sbleg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted)}.sbleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}.sbleg i.vac{border:1px dashed var(--muted)}.sbleg b{color:var(--cream,#f7ecd6)}
+.sbst{font-weight:700;color:var(--gold-hi,#ffdc8a);font-size:14px}
+.pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.pcard{position:relative;text-align:left;font:inherit;color:inherit;display:grid;grid-template-columns:64px minmax(0,1fr);gap:6px 14px;align-items:center;background:linear-gradient(135deg,color-mix(in srgb,var(--pc) 18%,transparent),var(--panel) 65%);border:1px solid color-mix(in srgb,var(--pc) 45%,var(--line));border-radius:16px;padding:14px;cursor:pointer;overflow:hidden}
+.pcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--pc)}
+.pcard:hover{border-color:var(--pc)}
+.pcard .pemb{grid-row:span 2}
+.pcn{display:grid;min-width:0}.pcn b{font:800 16px var(--f-display);line-height:1.2}.pcn small{color:var(--muted);font-weight:700}
+.pcs{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;color:var(--muted)}.pcs b{color:var(--cream,#f7ecd6)}
+.pcl,.pcc,.pcme{grid-column:1/-1;font-size:12.5px;color:var(--muted)}.pcme{color:var(--gold-hi,#ffdc8a);font-weight:700}
+.ppend .ppr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:start;padding:10px 0;border-bottom:1px solid var(--line)}.ppend .ppr:last-child{border-bottom:0}
+.pprog{margin:6px 0 0;color:var(--muted);font-size:13px}
+.pform .pfgrid{display:grid;grid-template-columns:140px minmax(0,1fr);gap:16px}@media (max-width:600px){.pform .pfgrid{grid-template-columns:1fr}}
+.pfimg{display:grid;gap:8px;justify-items:start;align-content:start}.pfimg img{width:120px;height:120px;object-fit:contain;border-radius:16px;background:rgba(0,0,0,.2)}
+.pffields{display:grid;gap:10px}.pffields input[type=text],.pffields textarea{width:100%}
+.pcolors{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}.pcolors button{width:28px;height:28px;border-radius:8px;border:2px solid transparent;cursor:pointer}.pcolors button.on{border-color:var(--cream,#f7ecd6);box-shadow:0 0 0 2px rgba(0,0,0,.5)}.pcolors input[type=color]{width:36px;height:30px;padding:0;border:1px solid var(--line);border-radius:8px;background:none}
+.pdet .pdh{display:flex;gap:16px;align-items:center;padding-bottom:12px;border-bottom:3px solid var(--pc);margin-bottom:12px}.pdet .pdh h3{margin:2px 0 6px}.pdet .pdh h3 small{color:var(--muted)}
+.pdstat{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13.5px;color:var(--muted)}.pdstat b{color:var(--cream,#f7ecd6)}
+.pdet .dsec{margin-top:14px}.pdet .dsec h4{margin:0 0 8px}
+.pstf{display:grid;gap:8px;margin-bottom:10px}.pstf input,.pstf textarea{width:100%}.pstf button{justify-self:end}
+.ppost{position:relative;border-left:3px solid var(--pc);padding:6px 30px 6px 12px;margin:8px 0;background:rgba(0,0,0,.12);border-radius:0 10px 10px 0}.ppost .hint{display:block}.ppost p{margin:4px 0 0}.ppost .chx{position:absolute;right:6px;top:6px}
+.pmems{display:grid;gap:4px}
+.pmem{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}.pmem:last-child{border-bottom:0}.pmem>span{display:grid}.pmem small{color:var(--muted)}.pmb{display:flex!important;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.coal1{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}.coal1:last-child{border-bottom:0}
+.hseat.hasp .hav{box-shadow:0 0 0 3px var(--pc),0 0 12px color-mix(in srgb,var(--pc) 60%,transparent)}
+.factions .fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;align-items:start}
+.fcol{display:grid;gap:6px;align-content:start;border:1px solid color-mix(in srgb,var(--pc) 45%,var(--line));border-top:4px solid var(--pc);border-radius:12px;padding:10px 12px;background:color-mix(in srgb,var(--pc) 7%,var(--panel))}
+.fhead{display:flex;gap:10px;align-items:center;font:inherit;color:inherit;background:none;border:0;padding:0 0 6px;text-align:left;cursor:pointer;border-bottom:1px solid var(--line)}.fhead span{display:grid}.fhead small{color:var(--muted)}
+div.fhead{cursor:default}
+.frep{display:flex;gap:8px;align-items:center}.frep>span{display:grid;min-width:0}.frep small{color:var(--muted);font-size:12px}
+.hav.sm{width:28px;height:28px;font-size:12px}
+.fvotes{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin-top:8px;font-size:13px}
+.fv{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:2px 10px}.fv i{width:8px;height:8px;border-radius:50%;background:var(--pc)}.fv em{font-style:normal;font-weight:700}.fv em.f{color:var(--ok)}.fv em.a{color:var(--danger)}.fv em.z{color:var(--muted)}
 /* ===== Економіка 2.0 ===== */
 .eco2{display:grid;gap:14px}
 .etabs2{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:14px;background:var(--panel);overflow-x:auto}
@@ -1796,8 +1844,8 @@ function hemicycle(reps,chair,bill){const n=reps.length;if(!n)return '';
   const pos=[];rows.forEach((cnt,ri)=>{const R0=17+ri*(19/Math.max(1,rows.length-1));for(let j=0;j<cnt;j++){const a=Math.PI-(cnt===1?Math.PI/2:j*Math.PI/(cnt-1));pos.push({a,x:50+R0*1.22*Math.cos(a),y:84-R0*Math.sin(a)*2.05,ri});}});
   pos.sort((p1,p2)=>p2.a-p1.a||p1.ri-p2.ri);
   let html='';
-  reps.forEach((r,i)=>{const q=pos[i];const v=!r.name;const ch=vmap[r.land];
-    html+=`<div class="hseat${v?' vac':''}${ch?' v-'+ch:''}" style="left:${q.x.toFixed(2)}%;top:${q.y.toFixed(2)}%">${seatLink(r.name,seatAv(r.name,'hav'),r.land+' — '+(v?'вакантно':r.name)+(ch?' · '+CH[ch][0]:''))}<span class="hl">${esc(r.land.replace(/\s*Земля$/,''))}</span></div>`;});
+  reps.forEach((r,i)=>{const q=pos[i];const v=!r.name;const ch=vmap[r.land];const pp=v?null:partyOfName(r.name);
+    html+=`<div class="hseat${v?' vac':''}${ch?' v-'+ch:''}${pp?' hasp':''}" style="left:${q.x.toFixed(2)}%;top:${q.y.toFixed(2)}%${pp?';--pc:'+esc(pp.color||'#8a7a63'):''}">${seatLink(r.name,seatAv(r.name,'hav'),r.land+' — '+(v?'вакантно':r.name)+(pp?' · '+pp.name:'')+(ch?' · '+CH[ch][0]:''))}<span class="hl">${esc(r.land.replace(/\s*Земля$/,''))}</span></div>`;});
   const legend=bill?`<div class="hlegend"><span class="lg v-for">За</span><span class="lg v-against">Проти</span><span class="lg v-abstain">Утримався</span><span class="lg none">Ще не голосував</span><span class="hint">· «${esc(bill.title||'')}»</span></div>`:'';
   const trib=cls=>`<div class="tribune ${cls}"><span class="tk">Голова Палати</span>${chair?seatLink(chair,seatAv(chair,'hav'),'Голова Палати: '+chair)+`<span class="tn">${plink(chair)}</span>`:'<span class="tn vacn">Вакантно</span>'}</div>`;
   return `<div class="hemi" role="group" aria-label="Зал Палати Земель"><div class="hall">${html}${trib('in')}</div>${trib('out')}${legend}</div>`;}
@@ -1837,7 +1885,7 @@ function restructure(s){const S=s.sections;const by=k=>S.find(x=>x.kind===k);con
   const parl=by('parliament'),laws=by('laws'),doc=by('doc'),pl=by('players'),gov=by('gov'),econ=by('economy'),aw=by('awards'),court=by('court'),units=by('units'),church=by('church'),home=by('home');
   if(ud){ud.navTop='Держава';S.filter(x=>!x.kind&&x.lands&&x!==ud).forEach(x=>{x.tab=ud.id;x.sw=true;});if(econ){econ.tab=ud.id;econ.sw=true;}if(aw){aw.tab=ud.id;aw.sw=true;}{const el=by('elections');if(el){el.tab=ud.id;el.sw=true;}const mp=by('map');if(mp){mp.tab=ud.id;mp.sw=true;}const hs=by('history');if(hs){hs.tab=ud.id;hs.sw=true;}}}
   if(laws){delete laws.tab;laws.nav='Законодавство';if(doc){doc.tab=laws.id;doc.sw=false;doc.hideView=true;}}
-  const cs0=by('court');if(cs0&&parl){cs0.tab=parl.id;cs0.sw=true;parl.noSub=true;}if(pl){pl.nav='Гравці';if(ud){pl.tab=ud.id;pl.sw=true;}else delete pl.tab;}
+  const cs0=by('court');if(cs0&&parl){cs0.tab=parl.id;cs0.sw=true;parl.noSub=true;}{const pt=by('parties');if(pt&&ud){pt.tab=ud.id;pt.sw=true;}}if(pl){pl.nav='Гравці';if(ud){pl.tab=ud.id;pl.sw=true;}else delete pl.tab;}
   if(gov&&parl){gov.tab=parl.id;gov.sw=false;gov.hideView=true;}
   const chs=by('chat');const top=[home,chs,ud,parl,laws,units,church].filter(Boolean);const order=[...top,...S.filter(x=>!x.tab&&!top.includes(x))];const out=[];
   order.forEach(t=>{out.push(t);S.forEach(c=>{if(c.tab===t.id&&!out.includes(c))out.push(c);});});S.forEach(c=>{if(!out.includes(c))out.push(c);});s.sections=out;}
@@ -1881,7 +1929,8 @@ function parlView(s,si){const reps=landLeaders();const lead={};reps.forEach(r=>l
   const arch=all.filter(b=>!active.includes(b)).sort((x,y)=>String(y.closesAt||y.date||'').localeCompare(String(x.closesAt||x.date||'')));
   const passed=all.filter(b=>phase(b)==='passed'&&!voidedBy(b.id)).length;const signN=all.filter(b=>phase(b)==='sign').length;
   let h='<div class="parl">';
-  h+=`<div class="block chamber"><div class="doors left">${L.map(p=>doorHtml(p,'l')).join('')}</div><div class="hallc">${hemicycle(reps,chair,all.find(b=>isOpen(b)))}<div class="kpis"><span class="pill review">🗳 На голосуванні: ${active.filter(b=>phase(b)==='voting').length}</span>${signN?`<span class="pill sign">✍️ Чекає підпису: ${signN}</span>`:''}<span class="pill passed">📜 Чинних законів: ${passed}</span></div><p class="hint">Двері ведуть до кабінетів уряду й до Генерального Суду. Наведіть на крісло, щоб побачити Представника.</p></div><div class="doors right">${R.map(p=>doorHtml(p,'r')).join('')}</div></div>`;
+  h+=`<div class="block chamber"><div class="doors left">${L.map(p=>doorHtml(p,'l')).join('')}</div><div class="hallc">${hemicycle(sortRepsByParty(reps),chair,all.find(b=>isOpen(b)))}<div class="kpis"><span class="pill review">🗳 На голосуванні: ${active.filter(b=>phase(b)==='voting').length}</span>${signN?`<span class="pill sign">✍️ Чекає підпису: ${signN}</span>`:''}<span class="pill passed">📜 Чинних законів: ${passed}</span></div><p class="hint">Двері ведуть до кабінетів уряду й до Генерального Суду. Наведіть на крісло, щоб побачити Представника.</p></div><div class="doors right">${R.map(p=>doorHtml(p,'r')).join('')}</div></div>`;
+  h+=factionsHtml();
   const ord=active.slice().reverse();
   h+=`<div class="pgrid"><div class="block vbox"><h3>На голосуванні <small>${ord.length>3?'гортайте список · ':''}${ord.length?'новіші зверху':''}</small></h3>${ord.length?`<div class="vlist">${ord.map(billRow).join('')}</div>`:'<p class="empty">Зараз немає актів на голосуванні.</p>'}</div>`;
   h+=npLands().length&&!AUTH.bot?`<div class="propbox">${proposeForm(npLands())}</div></div>`:`<div class="block propbox"><h3>Подати акт</h3>${`<p class="hint">${AUTH.email?'Подавати акти до Палати можуть лише Представники Земель.':'Представники Земель: увійдіть через Google, щоб подати акт.'} Громадяни можуть подати петицію на Головній — набравши підписи, вона стає законопроєктом.</p><div><button class="small" data-a="tab" data-id="${esc((sectionByKind('home')||{}).id||'home')}">✍️ Петиції на Головній</button></div>`}</div></div>`;
@@ -1975,7 +2024,7 @@ function profileHtml(name){const p=plByName(name);if(!p)return `<div class="bloc
   const u=profUrl(p.profile);const mine=!!(AUTH.email&&em===AUTH.email);const pr=PROFILES[em];const sv=serviceOf(name);const lands=landLeaders().filter(r=>r.name===name).map(r=>r.land);
   const sec=(t,body)=>`<div class="dsec"><h4>${t}</h4>${body}</div>`;const ul=a=>a.length?'<ul>'+a.map(x=>`<li>${x}</li>`).join('')+'</ul>':'<p class="hint">—</p>';
   const rs=ranksSec();
-  let h=`<div class="block prof"><button class="small" data-a="dosback">${PROF?'✕ Закрити':'← До реєстру гравців'}</button><div class="phead">${avImg(p,'avhuge')}<div class="pmain"><div class="dtag">${p.exiled?'Позбавлений громадянства':p.tourist?'🧳 Турист':'Громадянин Української Держави'}${p.since&&!p.exiled?' з '+esc(p.since):''}</div><h3 class="dname">${esc(name)}</h3><div class="ptags">${rankBadges(name)}${now.slice(0,4).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div><div class="hint">${[...lands.map(l=>'Представник: '+l),sv&&sv.uid?unitName(sv.uid):''].filter(Boolean).map(esc).join(' · ')}</div></div>
+  let h=`<div class="block prof"><button class="small" data-a="dosback">${PROF?'✕ Закрити':'← До реєстру гравців'}</button><div class="phead">${avImg(p,'avhuge')}<div class="pmain"><div class="dtag">${p.exiled?'Позбавлений громадянства':p.tourist?'🧳 Турист':'Громадянин Української Держави'}${p.since&&!p.exiled?' з '+esc(p.since):''}</div><h3 class="dname">${esc(name)}</h3>${(()=>{const pp=partyOfName(name);return pp?`<button type="button" class="ptagb" data-a="partygo" data-k="${esc(pp.id)}">${pTag(pp)} ${esc(pp.name)}</button>`:'';})()}<div class="ptags">${rankBadges(name)}${now.slice(0,4).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div><div class="hint">${[...lands.map(l=>'Представник: '+l),sv&&sv.uid?unitName(sv.uid):''].filter(Boolean).map(esc).join(' · ')}</div></div>
     <div class="pside">${u?`<a class="gamebtn" href="${esc(u)}" target="_blank" rel="noopener">🎮 Профіль у грі ↗</a><div class="hint">${esc(u.replace(/^https?:\/\//,''))}</div>`:'<span class="hint">профіль у грі не вказано</span>'}${p.email?'<span class="tag ok">✓ акаунт прив’язано</span>':''}${meAny()&&!mine&&!editing&&p.email?`<button class="small" data-a="dmto" data-k="${esc(lc(p.email))}">✉️ Написати</button>`:''}${meAny()&&!mine&&!editing?`<button class="small" data-a="sue" data-n="${esc(name)}">⚖️ Подати позов</button>`:''}</div></div>
     <div class="dstats"><div><b>${now.length}</b><span>посад зараз</span></div><div><b>${aw.filter(a=>!a.revoked).length}</b><span>відзнак</span></div><div><b>${laws.length}</b><span>законопроєктів</span></div><div><b>${votes.length}</b><span>голосів у Палаті</span></div>${rs&&rs.v3&&(sv||rs.pts&&rs.pts[name])?`<div><b>${svcDays(name)}</b><span>днів служби</span></div><div><b>${merit(name)} ⭐</b><span>заслуг</span></div>`:''}</div></div>`;
   const tabs=[['over','Огляд'],['serv','Служба'],['aw','Відзнаки'+(aw.length?' · '+aw.length:'')],['pol','Політика'],['just','Правосуддя'],['econ','Економіка']];if(PTAB==='laws')PTAB='pol';
@@ -2339,7 +2388,7 @@ function dossierHtml(name){const p=plByName(name);if(!p)return `<div class="bloc
   const docs=NEWS.filter(n=>n.by===name);const cases=CASES.filter(c=>c.plaintiff===name||c.defendant===name);
   const u=profUrl(p.profile);
   const sec=(t,body)=>`<div class="dsec"><h4>${t}</h4>${body}</div>`;const ul=a=>a.length?'<ul>'+a.map(x=>`<li>${x}</li>`).join('')+'</ul>':'<p class="hint">—</p>';
-  return `<div class="block dossier"><button class="small" data-a="dosback">← До реєстру</button><div class="dhead">${avImg(p,'avhuge')}<div><div class="dtag">Особова справа</div><h3 class="dname">${esc(name)}</h3>${rankBadges(name)?`<div class="rkbs">${rankBadges(name)}</div>`:''}<div class="plmeta">${p.since?`<span class="hint">громадянин з ${esc(p.since)}</span>`:''}${u?`<a href="${esc(u)}" target="_blank" rel="noopener">Профіль у грі ↗</a>`:''}${p.email?'<span class="tag ok">✓ акаунт прив’язано</span>':''}${p.exiled?'<span class="tag warn">⛔ позбавлений громадянства</span>':''}</div></div></div>
+  return `<div class="block dossier"><button class="small" data-a="dosback">← До реєстру</button><div class="dhead">${avImg(p,'avhuge')}<div><div class="dtag">Особова справа</div><h3 class="dname">${esc(name)}</h3>${(()=>{const pp=partyOfName(name);return pp?`<button type="button" class="ptagb" data-a="partygo" data-k="${esc(pp.id)}">${pTag(pp)} ${esc(pp.name)}</button>`:'';})()}${rankBadges(name)?`<div class="rkbs">${rankBadges(name)}</div>`:''}<div class="plmeta">${p.since?`<span class="hint">громадянин з ${esc(p.since)}</span>`:''}${u?`<a href="${esc(u)}" target="_blank" rel="noopener">Профіль у грі ↗</a>`:''}${p.email?'<span class="tag ok">✓ акаунт прив’язано</span>':''}${p.exiled?'<span class="tag warn">⛔ позбавлений громадянства</span>':''}</div></div></div>
     <div class="dstats"><div><b>${now.length}</b><span>посад зараз</span></div><div><b>${aw.filter(a=>!a.revoked).length}</b><span>відзнак</span></div><div><b>${laws.length}</b><span>законопроєктів</span></div><div><b>${votes.length}</b><span>голосів у Палаті</span></div>${weeks?`<div><b>${weeks}</b><span>тижневих внесків</span></div>`:''}${don?`<div><b>${fmt(don)}</b><span>срібла пожертв</span></div>`:''}</div>
     <div class="dgrid">${sec('Посади зараз',ul(now.map(esc)))}${sec('Колишні посади',ul(past.map(esc)))}
     ${sec('Відзнаки',aw.length?'<div class="dawards">'+aw.map(a=>`<div class="daw${a.revoked?' revoked':''}">${awImg(a)?`<img src="${esc(awImg(a))}" alt="">`:'🎖'}<div><b>${esc(awName(a))}</b><div class="hint">${esc(a.reason||'')}${a.revoked?' · позбавлено':''}</div></div></div>`).join('')+'</div>':'<p class="hint">—</p>')}
@@ -3013,7 +3062,7 @@ function billCard(b,lead,me,compact){const T=tally(b),vs=T.vs;const f=T.f,a=T.a,
   const open=isOpen(b);
   const br=b.closesAt&&!open&&(expired(b)||b.autoClosed||b.live)?baseRes(b):'';const ended=br?`<div class="bm">Голосування завершилося ${b.early?'достроково — більшість призначених Представників, ':''}${fmtDT(b.closesAt)}${br==='passed'?' · більшість «За»':' · «За» не більше, ніж «Проти»'}</div>`:'';
   const voteUi=open?`<div class="vote"><span class="live">Голосування триває${b.hours===12?' · 12 год (надзвичайний стан)':''}</span>${b.closesAt?`<span class="hint">до ${fmtDT(b.closesAt)} · залишилось ${timeLeft(b.closesAt)}</span>`:''}${me.length?me.map(land=>{const mine=vs.find(v=>v.land===land);return `<div class="vrow">${me.length>1?`<span class="vland">${esc(land)}</span>`:''}${Object.keys(CH).map(k=>`<button class="small ${CH[k][1]}${mine&&mine.choice===k?' on':''}" data-a="vote" data-b="${esc(b.id)}" data-c="${k}" data-l="${esc(land)}" ${busy?'disabled':''}>${CH[k][0]}</button>`).join('')}${mine?'<span class="hint">голос враховано, можна змінити</span>':''}</div>`}).join(''):(AUTH.email?'<span class="hint">Голосують лише Представники Земель</span>':'<span class="hint">Представники Земель: увійдіть через Google, щоб проголосувати</span>')}</div>`:'';
-  const who=vs.length?`<div class="votes-who">${vs.map(v=>`<span>${esc(v.land)}${lead[v.land]?' ('+plink(lead[v.land])+')':''}: <b>${CH[v.choice]?CH[v.choice][0]:'—'}</b></span>`).join('')}</div>`:'';
+  const who=vs.length?`<div class="votes-who">${vs.map(v=>`<span>${esc(v.land)}${lead[v.land]?' ('+plink(lead[v.land])+')':''}: <b>${CH[v.choice]?CH[v.choice][0]:'—'}</b></span>`).join('')}</div>`+factionVotesHtml(vs,lead):'';
   const canWithdraw=b.live&&b.email===AUTH.email&&Date.now()<(b.at0||0)+600000;
   const tools=(b.live&&(AUTH.admin||canWithdraw)&&open?`<div class="landtools"><button class="small danger" data-a="prej" data-id="${esc(b.id)}">${AUTH.admin?'Зняти з голосування':'Відкликати'}</button></div>`:'')+(b.live&&AUTH.admin&&!AUTH.bot&&!editing&&['voting','sign','override'].includes(phase(b))?`<div class="admdec"><div class="hint">🛡 Адміністрація: вирішити зараз, не чекаючи кінця голосування</div><div class="landtools"><input type="text" class="hvin" id="adr-${esc(b.id)}" data-a="hvr" data-id="a${esc(b.id)}" value="${esc(HV['a'+b.id]||'')}" maxlength="500" placeholder="Причина (для відхилення чи вето)"><button class="small primary" data-a="admdec" data-k="passed" data-id="${esc(b.id)}" ${busy?'disabled':''}>✓ Прийняти</button><button class="small" data-a="admdec" data-k="rejected" data-id="${esc(b.id)}" ${busy?'disabled':''}>✕ Відхилити</button><button class="small danger" data-a="admdec" data-k="veto" data-id="${esc(b.id)}" ${busy?'disabled':''}>⛔ Ветувати</button></div></div>`:'');
   const body=`<div class="bm">${[b.date&&esc(b.date),b.author&&'Вніс: '+plinkAuthor(b.author)].filter(Boolean).join(' · ')}</div>${t?`<div class="vbar" role="img" aria-label="За ${f}, проти ${a}, утрималися ${z}">${f?`<i class="f" style="width:${f/t*100}%"></i>`:''}${a?`<i class="a" style="width:${a/t*100}%"></i>`:''}${z?`<i class="z" style="width:${z/t*100}%"></i>`:''}</div><div class="vleg"><span>За: <b>${f}</b></span><span>Проти: <b>${a}</b></span><span>Утрималися: <b>${z}</b></span></div>`:''}${voteUi}${ended}${b.byAdmin?`<div class="bm">🛡 Рішення адміністрації: <b>${b.byAdmin.res==='passed'?'прийнято':b.byAdmin.res==='veto'?'ветовано':'відхилено'}</b> · ${esc(fmtDT(b.byAdmin.at))}${b.byAdmin.reason?' · '+esc(b.byAdmin.reason):''}</div>`:''}${b.byAdmin?'':signHtml(b,me)}${amendHtml(b)}${who}${b.who&&!vs.length?`<div class="bm">${esc(b.who)}</div>`:''}${b.text?`<details${compact?'':' open'}><summary>Текст законопроєкту</summary><p>${esc(b.text)}</p></details>`:''}${tools}`;
@@ -3325,6 +3374,81 @@ function econDebts(s,si){
   return h;
 }
 
+// ===================== Партії =====================
+let PARTIES=[],COALS=[],PARTYM='',PF=null,PSTMT={t:'',x:''},PEDIT=null,PINV='',PINVSEL='',PADDSEL='';
+const P_COLORS=['#e0574a','#3987e5','#f2b544','#199e70','#9085e9','#d55181','#e07b30','#2bb3b3','#8a7a63','#6aa84f'];
+function partiesActive(){return PARTIES.filter(p=>p.status==='active');}
+function partyById(id){return PARTIES.find(p=>p.id===id)||null;}
+function partyOfName(n){n=String(n||'').trim();if(!n)return null;return partiesActive().find(p=>(p.members||[]).some(m=>m.name===n))||null;}
+function partyOfEmail(e){e=lc(e||'');if(!e)return null;return partiesActive().find(p=>(p.memEmails||[]).includes(e))||null;}
+function myParty(){return AUTH.email?partyOfEmail(AUTH.email):null;}
+function myPendingParty(){return AUTH.email?PARTIES.find(p=>p.status==='active'&&(p.pending||[]).some(x=>lc(x.email)===AUTH.email)):null;}
+function myFounding(){return AUTH.email?PARTIES.find(p=>p.status==='pending'&&lc(p.leaderEmail)===AUTH.email):null;}
+function isPLeader(p){return !!(p&&AUTH.email&&lc(p.leaderEmail)===AUTH.email&&!AUTH.bot);}
+function pAdmin(){return !!(AUTH.admin&&!AUTH.bot);}
+function coalOf(pid){return COALS.find(c=>(c.parties||[]).includes(pid))||null;}
+function pEmblem(p,cls){return p&&p.img?`<img class="${cls||'pemb'}" src="${esc(p.img)}" alt="Герб: ${esc(p.name)}">`:`<span class="${cls||'pemb'} none" style="background:${esc((p&&p.color)||'#8a7a63')}">${esc(((p&&(p.short||p.name))||'?').slice(0,2))}</span>`;}
+function pTag(p){return p?`<span class="ptag" style="--pc:${esc(p.color||'#8a7a63')}"><i></i>${esc(p.short||p.name)}</span>`:'';}
+function parlSeats(){const reps=landLeaders();const filled=reps.filter(r=>String(r.name||'').trim());const by={};filled.forEach(r=>{const p=partyOfName(r.name);const k=p?p.id:'';(by[k]=by[k]||[]).push(r);});
+  const total=reps.length;const need=Math.floor(total/2)+1;return {reps,filled,by,total,need};}
+// порядок крісел: коаліції, далі партії за кількістю місць, далі позафракційні, далі вакантні
+function sortRepsByParty(reps){const S=parlSeats();const rank=r=>{if(!String(r.name||'').trim())return [9,0,''];const p=partyOfName(r.name);if(!p)return [8,0,''];const c=coalOf(p.id);const sz=(S.by[p.id]||[]).length;return [c?0:1,-(c?(c.parties||[]).reduce((a,id)=>a+((S.by[id]||[]).length),0):sz),(c?c.id:'')+'|'+String(100-sz).padStart(3,'0')+p.id];};
+  return reps.slice().sort((a,b)=>{const x=rank(a),y=rank(b);return x[0]-y[0]||x[1]-y[1]||String(x[2]).localeCompare(String(y[2]));});}
+function seatsBarHtml(compact){const S=parlSeats();const ps=partiesActive().map(p=>({p,n:(S.by[p.id]||[]).length})).filter(x=>x.n).sort((a,b)=>b.n-a.n);const ind=(S.by['']||[]).length;const vac=S.total-S.filled.length;
+  if(!S.total)return '';
+  const seg=(n,col,t)=>n?`<span style="flex:${n};background:${col}" title="${esc(t)}: ${n}"></span>`:'';
+  const leaderP=ps[0];const coal=COALS.map(c=>({c,n:(c.parties||[]).reduce((a,id)=>a+((S.by[id]||[]).length),0)})).sort((a,b)=>b.n-a.n)[0];
+  let status='';if(coal&&coal.n>=S.need)status=`🤝 Більшість у коаліції «${esc(coal.c.name)}»: ${coal.n} з ${S.total}`;else if(leaderP&&leaderP.n>=S.need)status=`👑 Більшість у партії «${esc(leaderP.p.name)}»: ${leaderP.n} з ${S.total}`;else status=`Більшості немає · для неї потрібно ${S.need} з ${S.total} місць`;
+  return `<div class="seatsbar${compact?' compact':''}"><div class="sbline">${ps.map(x=>seg(x.n,x.p.color||'#8a7a63',x.p.name)).join('')}${seg(ind,'#6b5a45','Позафракційні')}${seg(vac,'transparent','Вакантні')}<i class="mid" style="left:${(S.need-0.5)/S.total*100}%" title="Більшість: ${S.need}"></i></div>
+    <div class="sbleg">${ps.map(x=>`<span><i style="background:${esc(x.p.color||'#8a7a63')}"></i>${esc(x.p.name)} <b>${x.n}</b></span>`).join('')}${ind?`<span><i style="background:#6b5a45"></i>Позафракційні <b>${ind}</b></span>`:''}${vac?`<span><i class="vac"></i>Вакантні <b>${vac}</b></span>`:''}</div><div class="sbst">${status}</div></div>`;}
+function factionsHtml(){const S=parlSeats();if(!partiesActive().length)return '';const groups=partiesActive().map(p=>({p,rs:S.by[p.id]||[]})).filter(g=>g.rs.length).sort((a,b)=>b.rs.length-a.rs.length);const ind=S.by['']||[];
+  const row=r=>`<span class="frep"><span><b>${plink(r.name)}</b><small>${esc(r.land)}</small></span></span>`;
+  const pts=sectionByKind('parties');return `<div class="block factions"><div class="ehead"><h3>Фракції Палати <small>представники Земель за партіями</small></h3>${pts?`<button class="small" data-a="partygo" data-k="">Усі партії →</button>`:''}</div>${seatsBarHtml(true)}<div class="fgrid">${groups.map(g=>{const c=coalOf(g.p.id);return `<div class="fcol" style="--pc:${esc(g.p.color||'#8a7a63')}"><button type="button" class="fhead" data-a="partym" data-k="${esc(g.p.id)}">${pEmblem(g.p,'pemb sm')}<span><b>${esc(g.p.name)}</b><small>${g.rs.length} місц${g.rs.length===1?'е':g.rs.length<5?'я':'ь'}${c?' · 🤝 '+esc(c.name):''}</small></span></button>${g.rs.map(row).join('')}</div>`;}).join('')}${ind.length?`<div class="fcol" style="--pc:#6b5a45"><div class="fhead"><span class="pemb sm none" style="background:#6b5a45">—</span><span><b>Позафракційні</b><small>${ind.length}</small></span></div>${ind.map(row).join('')}</div>`:''}</div></div>`;}
+function factionVotesHtml(vs,lead){if(!partiesActive().length||!vs.length)return '';const m={};vs.forEach(v=>{const p=partyOfName(lead[v.land]);const k=p?p.id:'';(m[k]=m[k]||{for:0,against:0,abstain:0,n:0});if(m[k][v.choice]!=null)m[k][v.choice]++;m[k].n++;});
+  const keys=Object.keys(m).sort((a,b)=>(a?0:1)-(b?0:1)||m[b].n-m[a].n);
+  return `<div class="fvotes"><span class="hint">За фракціями:</span>${keys.map(k=>{const p=partyById(k);const x=m[k];return `<span class="fv" style="--pc:${esc(p?p.color:'#6b5a45')}"><i></i><b>${esc(p?(p.short||p.name):'Позафракційні')}</b> ${x.for?`<em class="f">за ${x.for}</em>`:''}${x.against?`<em class="a">проти ${x.against}</em>`:''}${x.abstain?`<em class="z">утр. ${x.abstain}</em>`:''}</span>`;}).join('')}</div>`;}
+
+function partiesHtml(s,si){
+  const act=partiesActive().slice().sort((a,b)=>(b.members||[]).length-(a.members||[]).length);const pend=PARTIES.filter(p=>p.status==='pending');const S=parlSeats();
+  const me=meAny();const mine=myParty();const canFound=!!(me&&!me.tourist&&!me.exiled&&!mine&&!myFounding()&&!AUTH.bot&&!editing);
+  let h='<div class="parties">';
+  h+=`<div class="block phero"><div><h3>Партії Української Держави</h3><p class="hint">Партії об’єднують гравців і представників Земель. Колір партії — це колір місць її представників у Палаті Земель. Заснувати партію може будь-який громадянин; реєстрацію підтверджує Гетьман або адміністрація.</p></div>${canFound?`<button class="primary" data-a="pfound">✨ Заснувати партію</button>`:''}${myFounding()?`<span class="tag warn">Ваша партія «${esc(myFounding().name)}» чекає на реєстрацію</span>`:''}</div>`;
+  h+=`<div class="block"><h3>Палата Земель за партіями</h3>${seatsBarHtml(false)}</div>`;
+  if(PF)h+=partyFormHtml();
+  if(pend.length&&pAdmin())h+=`<div class="block ppend"><h3>Заявки на реєстрацію партій · ${pend.length}</h3>${pend.map(p=>`<div class="ppr">${pEmblem(p,'pemb')}<div><b>${esc(p.name)}</b>${p.short?` (${esc(p.short)})`:''}<div class="hint">засновник ${plink(p.leader)} · ${p.at?esc(fmtDT(new Date(p.at).toISOString())):''}</div>${p.program?`<p class="pprog">${esc(String(p.program).slice(0,300))}</p>`:''}</div><div class="row2"><button class="small primary" data-a="papprove" data-k="${esc(p.id)}">✓ Зареєструвати</button><button class="small danger" data-a="preject" data-k="${esc(p.id)}">Відхилити</button></div></div>`).join('')}</div>`;
+  if(!act.length&&!PF)h+='<p class="empty">Зареєстрованих партій ще немає.</p>';
+  h+=`<div class="pcards">${act.map(p=>{const seats=(S.by[p.id]||[]).length;const c=coalOf(p.id);return `<button type="button" class="pcard" style="--pc:${esc(p.color||'#8a7a63')}" data-a="partym" data-k="${esc(p.id)}">${pEmblem(p,'pemb lg')}<span class="pcn"><b>${esc(p.name)}</b>${p.short?`<small>${esc(p.short)}</small>`:''}</span><span class="pcs"><span><b>${(p.members||[]).length}</b> учасн.</span><span><b>${seats}</b> місць у Палаті</span></span><span class="pcl">Лідер: ${esc(p.leader||'—')}</span>${c?`<span class="pcc">🤝 ${esc(c.name)}</span>`:''}${mine&&mine.id===p.id?'<span class="pcme">ваша партія</span>':''}</button>`;}).join('')}</div>`;
+  if(COALS.length)h+=`<div class="block"><h3>Коаліції</h3>${COALS.map(c=>{const n=(c.parties||[]).reduce((a,id)=>a+((S.by[id]||[]).length),0);return `<div class="coal1"><b>🤝 ${esc(c.name)}</b><span>${(c.parties||[]).map(id=>pTag(partyById(id))).join(' ')}</span><span class="${n>=S.need?'tag ok':'tag'}">${n} з ${S.total} місць${n>=S.need?' · більшість':''}</span>${(c.invites||[]).length?`<span class="hint">запрошено: ${(c.invites||[]).map(id=>esc((partyById(id)||{}).name||'')).join(', ')}</span>`:''}</div>`;}).join('')}</div>`;
+  h+='</div>';
+  if(PARTYM){const p=partyById(PARTYM);if(p)MODALH=`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="partym" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide"><button class="small bmx" data-a="partym" data-k="">✕ Закрити</button>${partyDetail(p)}</div></div>`;else PARTYM='';}
+  return h;}
+function partyFormHtml(){const f=PF;return `<div class="block pform"><h3>${f.id?'Редагувати партію':'✨ Заснувати партію'}</h3><div class="pfgrid"><div class="pfimg">${f.img?`<img src="${esc(f.img)}" alt="Герб партії">`:`<span class="pemb lg none" style="background:${esc(f.color)}">${esc((f.short||f.name||'?').slice(0,2))}</span>`}<button type="button" class="small" data-a="pfimg">${f.img?'Змінити герб':'Завантажити герб'}</button>${f.img?'<button type="button" class="small ghost" data-a="pfimgdel">Прибрати</button>':''}</div>
+  <div class="pffields"><label class="fl">Назва партії<input type="text" id="pf-name" data-a="pff" data-k="name" value="${esc(f.name)}" maxlength="60" placeholder="напр. Українська Народна Партія"></label><label class="fl">Скорочення<input type="text" id="pf-short" data-a="pff" data-k="short" value="${esc(f.short)}" maxlength="8" placeholder="УНП"></label>
+  <div class="fl">Колір партії<div class="pcolors">${P_COLORS.map(c=>`<button type="button" class="${f.color===c?'on':''}" style="background:${c}" data-a="pfcol" data-k="${c}" aria-label="Колір ${c}"></button>`).join('')}<input type="color" id="pf-color" data-a="pff" data-k="color" value="${esc(f.color)}" title="Свій колір"></div></div>
+  <label class="fl">Програма партії<textarea id="pf-prog" data-a="pff" data-k="program" maxlength="3000" placeholder="Цінності, цілі, що партія обіцяє зробити">${esc(f.program)}</textarea></label></div></div>
+  <div class="row2"><button class="ghost" data-a="pfcancel">Скасувати</button><button class="primary" data-a="pfsave" ${busy?'disabled':''}>${f.id?'Зберегти':'Подати на реєстрацію'}</button></div></div>`;}
+function partyDetail(p){const lead=isPLeader(p),adm=pAdmin();const mine=myParty();const me=meAny();const S=parlSeats();const seats=S.by[p.id]||[];const c=coalOf(p.id);
+  const canJoin=!!(me&&!me.tourist&&!me.exiled&&!mine&&!(p.pending||[]).some(x=>lc(x.email)===AUTH.email)&&!myPendingParty()&&!AUTH.bot);
+  const iAmMember=mine&&mine.id===p.id;
+  let h=`<div class="pdet" style="--pc:${esc(p.color||'#8a7a63')}"><div class="pdh">${pEmblem(p,'pemb xl')}<div><div class="hint">${p.founded?'заснована '+esc(fmtDT(new Date(p.founded).toISOString()).split(' о ')[0]):'партія'}</div><h3>${esc(p.name)}${p.short?` <small>${esc(p.short)}</small>`:''}</h3><div class="pdstat"><span>Лідер: ${plink(p.leader)}</span><span><b>${(p.members||[]).length}</b> учасників</span><span><b>${seats.length}</b> з ${S.total} місць у Палаті</span>${c?`<span>🤝 ${esc(c.name)}</span>`:''}</div></div></div>
+    <div class="row2">${canJoin?`<button class="primary small" data-a="pjoin" data-k="${esc(p.id)}">Подати заявку на вступ</button>`:''}${(p.pending||[]).some(x=>lc(x.email)===AUTH.email)?'<span class="tag warn">Ваша заявка на розгляді</span>':''}${iAmMember&&!lead?`<button class="small danger" data-a="pleave" data-k="${esc(p.id)}">Вийти з партії</button>`:''}${lead||adm?`<button class="small" data-a="pedit" data-k="${esc(p.id)}">✏️ Редагувати партію</button>`:''}${adm?`<button class="small danger" data-a="pdissolve" data-k="${esc(p.id)}">Розпустити партію</button>`:''}</div>`;
+  if(p.program)h+=`<div class="dsec"><h4>Програма</h4>${String(p.program).split('\n').filter(x=>x.trim()).map(x=>`<p>${esc(x)}</p>`).join('')}</div>`;
+  // заяви
+  const posts=(p.posts||[]).slice().reverse();
+  h+=`<div class="dsec"><h4>Заяви партії</h4>${lead||adm?`<div class="pstf"><input type="text" id="pst-t" data-a="pst" data-k="t" value="${esc(PSTMT.t)}" maxlength="120" placeholder="Заголовок заяви"><textarea id="pst-x" data-a="pst" data-k="x" maxlength="2000" placeholder="Текст заяви">${esc(PSTMT.x)}</textarea><button class="small primary" data-a="ppost" data-k="${esc(p.id)}" ${busy?'disabled':''}>Опублікувати заяву</button></div>`:''}${posts.length?posts.slice(0,10).map((x,i)=>`<div class="ppost"><b>${esc(x.t||'Заява')}</b><span class="hint">${x.at?esc(fmtDT(new Date(x.at).toISOString())):''}${x.by?' · '+esc(x.by):''}</span>${String(x.x||'').split('\n').filter(y=>y.trim()).map(y=>`<p>${esc(y)}</p>`).join('')}${lead||adm?`<button class="chx" data-a="ppostdel" data-k="${esc(p.id)}" data-i="${(p.posts||[]).length-1-i}" title="Видалити заяву">✕</button>`:''}</div>`).join(''):'<p class="hint">Заяв ще немає.</p>'}</div>`;
+  // учасники
+  const mem=(p.members||[]).slice().sort((a,b)=>(b.name===p.leader)-(a.name===p.leader));
+  h+=`<div class="dsec"><h4>Учасники · ${mem.length}</h4><div class="pmems">${mem.map(m=>{const seat=seats.find(r=>r.name===m.name);return `<div class="pmem"><span><b>${plink(m.name)}</b><small>${m.name===p.leader?'👑 лідер':''}${seat?(m.name===p.leader?' · ':'')+'🏛 '+esc(seat.land):''}</small></span>${(lead||adm)&&m.name!==p.leader?`<span class="pmb"><button class="small ghost" data-a="plead" data-k="${esc(p.id)}" data-n="${esc(m.name)}" title="Передати лідерство">👑</button><button class="small danger" data-a="pkick" data-k="${esc(p.id)}" data-n="${esc(m.name)}">Виключити</button></span>`:''}</div>`;}).join('')}</div>`;
+  if((lead||adm)&&(p.pending||[]).length)h+=`<h4 style="margin-top:12px">Заявки на вступ · ${(p.pending||[]).length}</h4>${(p.pending||[]).map(x=>`<div class="pmem"><span><b>${plink(x.name)}</b><small>${x.at?esc(fmtDT(new Date(x.at).toISOString())):''}</small></span><span class="pmb"><button class="small primary" data-a="paccept" data-k="${esc(p.id)}" data-e="${esc(x.email)}">Прийняти</button><button class="small danger" data-a="pdecline" data-k="${esc(p.id)}" data-e="${esc(x.email)}">Відхилити</button></span></div>`).join('')}`;
+  if(adm){const free=players().filter(x=>x.email&&!x.tourist&&!x.exiled&&!partyOfEmail(x.email));h+=`<div class="row2" style="margin-top:10px"><select id="padd" data-a="paddsel"><option value="">— додати гравця —</option>${free.map(x=>`<option value="${esc(lc(x.email))}">${esc(x.name)}</option>`).join('')}</select><button class="small" data-a="padd" data-k="${esc(p.id)}">Додати</button></div>`;}
+  h+='</div>';
+  // коаліція
+  if(lead||adm){const others=partiesActive().filter(x=>x.id!==p.id&&!coalOf(x.id));const inv=COALS.filter(cc=>(cc.invites||[]).includes(p.id));
+    h+=`<div class="dsec"><h4>Коаліція</h4>${inv.map(cc=>`<div class="row2"><span>Запрошення до коаліції «${esc(cc.name)}»</span><button class="small primary" data-a="pcacc" data-k="${esc(cc.id)}" data-p="${esc(p.id)}">Приєднатися</button><button class="small ghost" data-a="pcdec" data-k="${esc(cc.id)}" data-p="${esc(p.id)}">Відмовити</button></div>`).join('')}
+    ${c?`<p>Партія в коаліції «${esc(c.name)}»: ${(c.parties||[]).map(id=>pTag(partyById(id))).join(' ')}</p><div class="row2">${others.length?`<select id="pinv" data-a="pinvsel"><option value="">— запросити партію —</option>${others.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select><button class="small" data-a="pcinv" data-k="${esc(c.id)}" data-p="${esc(p.id)}">Запросити</button>`:''}<button class="small danger" data-a="pcleave" data-k="${esc(c.id)}" data-p="${esc(p.id)}">Вийти з коаліції</button></div>`
+      :`<div class="row2"><input type="text" id="pcname" data-a="pcnm" value="${esc(PINV)}" placeholder="Назва нової коаліції" maxlength="60"><button class="small" data-a="pcnew" data-p="${esc(p.id)}">Створити коаліцію</button></div>`}</div>`;}
+  return h+'</div>';}
+
 function econHtml(s,si){
   const mem=s.members||(s.members=[]), isVac=m=>!String(m.name||'').trim()||/^вакант/i.test(m.name);
   s.weeks=s.weeks||[];
@@ -3503,6 +3627,7 @@ function renderInner(){chatMarkSeen();
     if(s.kind==='home'){html+=homeHtml(s,si)+'</section>';return;}
     if(s.kind==='chat'){html+=chatHtml(s)+'</section>';return;}
     if(s.kind==='awards'){html+=awardsHtml(s,si)+'</section>';return;}
+    if(s.kind==='parties'){html+=partiesHtml(s,si)+'</section>';return;}
     if(s.kind==='elections'){html+=electionsHtml(s,si)+'</section>';return;}
     if(s.kind==='map'){html+=mapHtml(s,si)+'</section>';return;}
     if(s.kind==='history'){html+=historyHtml(s,si)+'</section>';return;}
@@ -3569,6 +3694,11 @@ app.addEventListener('input',e=>{
   if(a==='mapas'){const us=udilSec();if(!us||!(isPysar()||AUTH.admin)||editing)return;us.udils=us.udils||{};us.udils[t.dataset.u]=t.value;busy=true;render();(async()=>{try{await window.FB.saveLands(state.sections.filter(isLandsSec));saved=JSON.stringify(state);msg='Розподіл уділів збережено';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося зберегти';msgErr=true;state=JSON.parse(saved);}busy=false;render();})();return;}
   if(a==='ef'){EF[t.dataset.k]=t.value;if(t.tagName==='SELECT')render();return;}
   if(a==='cf'){CF[t.dataset.e]=t.value;return;}
+  if(a==='pff'){if(PF){PF[t.dataset.k]=t.value;if(t.type==='color')render();}return;}
+  if(a==='pst'){PSTMT[t.dataset.k]=t.value;return;}
+  if(a==='pcnm'){PINV=t.value;return;}
+  if(a==='pinvsel'){PINVSEL=t.value;return;}
+  if(a==='paddsel'){PADDSEL=t.value;return;}
   if(a==='ecorz'){ECORZ=t.value;const bt=document.querySelector('button[data-a=ecoreset]');if(bt)bt.disabled=ECORZ.trim().toUpperCase()!=='ОБНУЛИТИ';return;}
   if(a==='exf'){const k=t.dataset.k;if(k==='what')EXF.what=t.value;else{const r=EXF.rows[+t.dataset.i];if(r){r[k]=t.value;}if(t.tagName==='SELECT')render();else{const sp=t.closest('.exform');}}return;}
   if(a==='pd2'){PD2[t.dataset.k]=t.value;if(t.dataset.k!=='qty'||true){if(t.tagName==='SELECT')render();}return;}
@@ -4098,6 +4228,49 @@ app.addEventListener('click',async e=>{
   if(a==='cabprop'){DRAFT.cat=b.dataset.k;CAB='';const ps=sectionByKind('parliament');if(ps)active=ps.id;DOSSIER=null;try{history.replaceState(null,'','#'+active);}catch(_){}render();setTimeout(()=>{const el=document.querySelector('.propbox');if(el)el.scrollIntoView({block:'start'});},30);return;}
   if(a==='econt'){ECON_T=b.dataset.k;render();return;}
   if(a==='ecv'){ECV=b.dataset.k;render();return;}
+  if(a==='partym'){PARTYM=b.dataset.k||'';render();return;}
+  if(a==='partygo'){const ps=sectionByKind('parties');if(!ps)return;PROF='';DOSSIER=null;CAB='';if(ps.tab){active=ps.tab;SUB[ps.tab]=ps.id;}else active=ps.id;PARTYM=b.dataset.k||'';try{history.replaceState(null,'','#'+active);}catch(_){}render();window.scrollTo(0,0);return;}
+  if(a==='pfound'){const me=meAny();if(!me)return;PF={name:'',short:'',color:P_COLORS[PARTIES.length%P_COLORS.length],img:'',program:''};render();return;}
+  if(a==='pedit'){const pt=partyById(b.dataset.k);if(!pt||!(isPLeader(pt)||pAdmin()))return;PF={id:pt.id,name:pt.name||'',short:pt.short||'',color:pt.color||P_COLORS[0],img:pt.img||'',program:pt.program||''};PARTYM='';render();setTimeout(()=>{const el=document.querySelector('.pform');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},30);return;}
+  if(a==='pfimg'){if(!PF)return;pickImage(img=>{PF.img=img;render();},true);return;}
+  if(a==='pfimgdel'){if(PF){PF.img='';render();}return;}
+  if(a==='pfcol'){if(PF){PF.color=b.dataset.k;render();}return;}
+  if(a==='pfcancel'){PF=null;render();return;}
+  {const PACTS=['pfsave','papprove','preject','pjoin','paccept','pdecline','pkick','pleave','plead','pdissolve','padd','ppost','ppostdel','pcnew','pcinv','pcacc','pcdec','pcleave'];
+  if(PACTS.includes(a)){const pt=b.dataset.k?partyById(b.dataset.k):null;const me=meAny();const nowI=new Date().toISOString();let fn=null,ok='';
+    const confirm2=txt=>{if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent=txt;b.classList.add('cfm');return false;}return true;};
+    const err=t=>{msg=t;msgErr=true;render();};
+    if(a==='pfsave'){if(!PF)return;const name=String(PF.name||'').trim().slice(0,60),short=String(PF.short||'').trim().slice(0,8);if(!name)return err('Вкажіть назву партії');
+      if(PARTIES.some(x=>x.id!==PF.id&&x.status!=='dissolved'&&lc(x.name)===lc(name)))return err('Партія з такою назвою вже є');
+      const v={name,short,color:/^#[0-9a-f]{6}$/i.test(PF.color)?PF.color:P_COLORS[0],img:PF.img||'',program:String(PF.program||'').slice(0,3000)};
+      if(PF.id){const cur=partyById(PF.id);if(!cur||!(isPLeader(cur)||pAdmin()||(cur.status==='pending'&&lc(cur.leaderEmail)===AUTH.email)))return;fn=()=>window.FB.updParty(PF.id,v);ok='Партію оновлено';}
+      else{if(!me||me.tourist||me.exiled)return err('Заснувати партію може лише громадянин');if(myParty())return err('Ви вже в партії. Спершу вийдіть із неї.');const id='p'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+        fn=()=>window.FB.createParty(id,{...v,status:'pending',leader:me.name,leaderEmail:AUTH.email,members:[{name:me.name,email:AUTH.email}],memEmails:[AUTH.email],pending:[],posts:[],founded:''});ok='Заявку на реєстрацію партії подано. Її розгляне Гетьман або адміністрація.';}
+      const after=()=>{PF=null;};fn=(f=>async()=>{await f();after();})(fn);}
+    else if(a==='papprove'){if(!pAdmin()||!pt)return;const busyE=pt.memEmails&&pt.memEmails[0];if(busyE&&partyOfEmail(busyE))return err('Засновник уже став учасником іншої партії');fn=()=>window.FB.updParty(pt.id,{status:'active',founded:nowI});ok='Партію «'+pt.name+'» зареєстровано';}
+    else if(a==='preject'){if(!pAdmin()||!pt)return;if(!confirm2('Точно відхилити?'))return;fn=()=>window.FB.delParty(pt.id);ok='Заявку відхилено';}
+    else if(a==='pjoin'){if(!pt||!me||me.tourist||me.exiled||myParty())return;fn=()=>window.FB.updParty(pt.id,{pending:[...(pt.pending||[]),{name:me.name,email:AUTH.email,at:nowI}]});ok='Заявку на вступ надіслано лідеру партії';}
+    else if(a==='paccept'||a==='pdecline'){if(!pt||!(isPLeader(pt)||pAdmin()))return;const e=lc(b.dataset.e);const x=(pt.pending||[]).find(y=>lc(y.email)===e);if(!x)return;const rest=(pt.pending||[]).filter(y=>lc(y.email)!==e);
+      if(a==='paccept'){if(partyOfEmail(e))return err(x.name+' уже в іншій партії');fn=()=>window.FB.updParty(pt.id,{members:[...(pt.members||[]),{name:x.name,email:e}],memEmails:[...(pt.memEmails||[]),e],pending:rest});ok=x.name+' — тепер у партії';}
+      else{fn=()=>window.FB.updParty(pt.id,{pending:rest});ok='Заявку відхилено';}}
+    else if(a==='pkick'||a==='pleave'){if(!pt)return;const nm=a==='pleave'?(me&&me.name):b.dataset.n;if(!nm)return;if(a==='pkick'&&!(isPLeader(pt)||pAdmin()))return;if(nm===pt.leader)return err('Лідера не можна виключити. Спершу передайте лідерство.');
+      if(!confirm2(a==='pleave'?'Точно вийти?':'Точно виключити?'))return;const m=(pt.members||[]).find(y=>y.name===nm);const e=m?lc(m.email):'';
+      fn=()=>window.FB.updParty(pt.id,{members:(pt.members||[]).filter(y=>y.name!==nm),memEmails:(pt.memEmails||[]).filter(y=>y!==e)});ok=a==='pleave'?'Ви вийшли з партії':nm+' виключено з партії';}
+    else if(a==='plead'){if(!pt||!(isPLeader(pt)||pAdmin()))return;const m=(pt.members||[]).find(y=>y.name===b.dataset.n);if(!m)return;if(!confirm2('Передати лідерство?'))return;fn=()=>window.FB.updParty(pt.id,{leader:m.name,leaderEmail:lc(m.email)});ok='Новий лідер партії: '+m.name;}
+    else if(a==='pdissolve'){if(!pt||!pAdmin())return;if(!confirm2('Точно розпустити партію?'))return;fn=async()=>{for(const c of COALS.filter(cc=>(cc.parties||[]).includes(pt.id)||(cc.invites||[]).includes(pt.id))){const left=(c.parties||[]).filter(x=>x!==pt.id);if(left.length)await window.FB.updCoal(c.id,{parties:left,invites:(c.invites||[]).filter(x=>x!==pt.id),by:left[0]});else await window.FB.delCoal(c.id);}await window.FB.delParty(pt.id);PARTYM='';};ok='Партію розпущено';}
+    else if(a==='padd'){if(!pt||!pAdmin())return;const e=lc(PADDSEL);const pl=plByEmail(e);if(!pl)return err('Оберіть гравця');if(partyOfEmail(e))return err(pl.name+' уже в іншій партії');fn=()=>window.FB.updParty(pt.id,{members:[...(pt.members||[]),{name:pl.name,email:e}],memEmails:[...(pt.memEmails||[]),e],pending:(pt.pending||[]).filter(y=>lc(y.email)!==e)});ok=pl.name+' доданий до партії';PADDSEL='';}
+    else if(a==='ppost'){if(!pt||!(isPLeader(pt)||pAdmin()))return;const t=String(PSTMT.t||'').trim().slice(0,120),x=String(PSTMT.x||'').trim().slice(0,2000);if(!t&&!x)return err('Напишіть заяву');const by=me?me.name:'Адміністрація';
+      fn=async()=>{await window.FB.updParty(pt.id,{posts:[...(pt.posts||[]),{t,x,at:nowI,by}].slice(-50)});PSTMT={t:'',x:''};};ok='Заяву опубліковано';}
+    else if(a==='ppostdel'){if(!pt||!(isPLeader(pt)||pAdmin()))return;if(!confirm2('?'))return;const arr=(pt.posts||[]).slice();arr.splice(+b.dataset.i,1);fn=()=>window.FB.updParty(pt.id,{posts:arr});ok='Заяву видалено';}
+    else{const pid=b.dataset.p;const own=partyById(pid);if(!own||!(isPLeader(own)||pAdmin()))return;const c=b.dataset.k?COALS.find(x=>x.id===b.dataset.k):null;
+      if(a==='pcnew'){const name=String(PINV||'').trim().slice(0,60);if(!name)return err('Вкажіть назву коаліції');if(coalOf(pid))return err('Партія вже в коаліції');const id='c'+Date.now().toString(36);fn=async()=>{await window.FB.createCoal(id,{name,parties:[pid],invites:[],by:pid});PINV='';};ok='Коаліцію «'+name+'» створено';}
+      else if(!c)return;
+      else if(a==='pcinv'){const t=PINVSEL;if(!t||coalOf(t)||(c.invites||[]).includes(t))return err('Оберіть партію, яка ще не в коаліції');fn=()=>window.FB.updCoal(c.id,{invites:[...(c.invites||[]),t],by:pid});ok='Запрошення надіслано';PINVSEL='';}
+      else if(a==='pcacc'){if(coalOf(pid))return err('Партія вже в іншій коаліції');fn=()=>window.FB.updCoal(c.id,{parties:[...(c.parties||[]),pid],invites:(c.invites||[]).filter(x=>x!==pid),by:pid});ok='Партія приєдналася до коаліції «'+c.name+'»';}
+      else if(a==='pcdec'){fn=()=>window.FB.updCoal(c.id,{invites:(c.invites||[]).filter(x=>x!==pid),by:pid});ok='Запрошення відхилено';}
+      else if(a==='pcleave'){if(!confirm2('Точно вийти?'))return;const left=(c.parties||[]).filter(x=>x!==pid);fn=()=>left.length?window.FB.updCoal(c.id,{parties:left,by:pid}):window.FB.delCoal(c.id);ok='Партія вийшла з коаліції';}}
+    if(!fn)return;busy=true;render();try{await fn();msg=ok;msgErr=false;}catch(e2){console.warn(e2);msg=e2&&e2.code==='permission-denied'?'Немає прав на цю дію (права оновлюються протягом 15 хвилин після змін).':'Не вдалося: '+(e2&&e2.code||'помилка мережі');msgErr=true;}busy=false;render();return;}}
+
   if(a==='ecoreset'){if(!AUTH.admin||ECORZ.trim().toUpperCase()!=='ОБНУЛИТИ')return;const s=state.sections.find(x=>x.kind==='economy');if(!s)return;const before=JSON.stringify(s);const now=new Date().toISOString();
     const tr=s.treasury=s.treasury||{};invItems(tr).forEach(it=>{it.qty='';});
     s.patronList=[];s.expenses=[];s.weeks=[];s.members=[];
@@ -4686,6 +4859,7 @@ function ensureSections(s){ensureGov(s);ensurePlayers(s);
   if(!s.sections.some(x=>x.kind==='chat')){const i=s.sections.findIndex(x=>x.kind==='home');s.sections.splice(i+1,0,{id:'chat',kind:'chat',nav:'Чат',title:'Чат',note:'Кімнати держави й особисті повідомлення'});}
   if(!s.sections.some(x=>x.kind==='home'))s.sections.unshift({id:'home',kind:'home',nav:'Головна',title:'Головна',note:'Укази, новини та літопис держави'});
   if(!s.sections.some(x=>x.kind==='court')){const i=s.sections.findIndex(x=>x.kind==='gov');s.sections.splice(i<0?s.sections.length:i+1,0,{id:'court',kind:'court',nav:'Суд',title:'Генеральний Суд',note:'Судова влада Української Держави'});}
+  if(!s.sections.some(x=>x.kind==='parties')){const i=s.sections.findIndex(x=>x.kind==='court');s.sections.splice(i<0?s.sections.length:i+1,0,{id:'parties',kind:'parties',nav:'Партії',title:'Партії',note:'Партії, фракції та коаліції Палати Земель'});}
   if(!s.sections.some(x=>x.kind==='awards')){const i=s.sections.findIndex(x=>x.kind==='gov');s.sections.splice(i<0?s.sections.length:i+1,0,{id:'awards',kind:'awards',nav:'Відзнаки',title:'Державні відзнаки',note:'Нагороди та ордени Української Держави'});}
   {const hs=s.sections.find(x=>x.kind==='history');if(hs&&!hs.relMig){(hs.tree||[]).forEach(n=>{const df=HIST_DEFAULT.tree.find(x=>x.id===n.id&&x.name===n.name);if(df){if(df.rel&&!n.rel)n.rel=df.rel;if(df.via&&!n.via)n.via=df.via;if(n.id==='t5'||n.id==='t6')n.note=df.note;}});hs.relMig=true;}}
   if(!s.sections.some(x=>x.kind==='history')){const i=s.sections.findIndex(x=>x.id==='ud');s.sections.splice(i<0?1:i+1,0,{id:'history',kind:'history',nav:'Історія',title:'Історія Української Держави',note:'Родовід держави та хроніка подій',...JSON.parse(JSON.stringify(HIST_DEFAULT))});}
@@ -4733,6 +4907,8 @@ window.APP={sigs(m){SIGS=m||{};sigsLoaded=true;botReady();renderSoon();finalizeE
   elections(l){ELECTIONS=l||[];renderSoon();},
   cands(m){CANDS=m||{};renderSoon();},
   treaties(l){TREATIES=l||[];renderSoon();},
+  parties(l){PARTIES=l||[];renderSoon();},
+  coals(l){COALS=l||[];renderSoon();},
   wkpay(l){WKPAY=l||[];renderSoon();},
   apps(l){APPS=l||[];renderSoon();},
   emerg(d){EMERG=d?{cur:d.cur||null,hist:d.hist||[]}:{cur:null,hist:[]};renderSoon();},
@@ -4997,6 +5173,13 @@ async function delTreaty(id){ await deleteDoc(doc(db, "treaties", id)); }
 // Тижневий внесок Землі: один документ на Землю й тиждень (повторна позначка неможлива)
 async function markWk(d){ const id = d.wk + "_" + d.lid; await setDoc(doc(db, "wkpay", id), { wk: d.wk, lid: d.lid, land: d.land, grp: d.grp, name: d.name || "", items: d.items || "", email: (auth.currentUser.email || "").toLowerCase(), at: serverTimestamp() }); }
 async function unmarkWk(id){ await deleteDoc(doc(db, "wkpay", id)); }
+// Партії та коаліції
+async function createParty(id, d){ await setDoc(doc(db, "parties", id), { ...d, at: serverTimestamp() }); }
+async function updParty(id, v){ await updateDoc(doc(db, "parties", id), v); }
+async function delParty(id){ await deleteDoc(doc(db, "parties", id)); }
+async function createCoal(id, d){ await setDoc(doc(db, "coalitions", id), d); }
+async function updCoal(id, v){ await updateDoc(doc(db, "coalitions", id), v); }
+async function delCoal(id){ await deleteDoc(doc(db, "coalitions", id)); }
 async function saveChurch(sec){ const cp = JSON.parse(JSON.stringify(sec)); await storeImages({ sections: [cp] }); if (cp.emblem) sec.emblem = cp.emblem; (cp.eparchies || []).forEach((e, i) => { if (sec.eparchies && sec.eparchies[i]) sec.eparchies[i].img = e.img; }); const pick = { priests: cp.priests || [], charter: cp.charter || {}, holidays: cp.holidays || [], log: cp.log || [], emblem: cp.emblem || null, eparchies: cp.eparchies || [], decrees: cp.decrees || [] }; CHURCH_JSON = JSON.stringify(pick); await setDoc(doc(db, "site", "church"), { json: CHURCH_JSON, updatedBy: who(), updatedAt: nowIso() }); }
 const uid8 = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const myMail = () => (auth.currentUser.email || "").toLowerCase();
@@ -5048,6 +5231,8 @@ function watch(){
   onSnapshot(collectionGroup(db, "cands"), snap => window.APP.cands(candsFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "treaties"), snap => window.APP.treaties(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "wkpay"), snap => window.APP.wkpay(listFrom(snap)), e => console.warn(e));
+  onSnapshot(collection(db, "parties"), snap => window.APP.parties(listFrom(snap)), e => console.warn(e));
+  onSnapshot(collection(db, "coalitions"), snap => window.APP.coals(listFrom(snap)), e => console.warn(e));
   if (!BOTMODE) onSnapshot(collection(db, "comments"), snap => window.APP.comments(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "petitions"), snap => window.APP.pets(listFrom(snap)), e => console.warn(e));
   onSnapshot(collectionGroup(db, "signs"), snap => window.APP.psigns(signsFrom(snap)), e => console.warn(e));
@@ -5079,7 +5264,7 @@ window.FB = {
   postComment, delComment, createPetition, signPetition, delPetition, petitionToBill, fileCase, decideCase, delCase, revokeNews, updCase, postNote, delNote,
   postSealed, delSealed, postProtocol, updProtocol, saveProfile, closeProposal, watchMsgs, watchDms, sendMsg, delMsg, watchPings, sendPings, delPings, chatBan, chatCleanup, setAdvocate, updAdvocate, delAdvocate, pardon, watchSealed,
   syncBallots, loadAllVotes, reopenBallot, createElection, updElection, delElection, applyCand, setCand, delCand, castVote, myVote, tallyElection,
-  applyCitizen, delApp, decideApp, saveRanks, setEmergency, foundAward, updAwardType, delAwardType, saveChurch, postTreaty, updTreaty, delTreaty, markWk, unmarkWk,
+  applyCitizen, delApp, decideApp, saveRanks, setEmergency, foundAward, updAwardType, delAwardType, saveChurch, postTreaty, updTreaty, delTreaty, markWk, unmarkWk, createParty, updParty, delParty, createCoal, updCoal, delCoal,
   login: () => { const p = new GoogleAuthProvider(); if (p.setCustomParameters) p.setCustomParameters({ prompt: 'select_account' }); return signInWithPopup(auth, p); },
   logout: () => signOut(auth),
 };
