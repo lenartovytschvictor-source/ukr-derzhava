@@ -43,6 +43,99 @@
 .srows{display:grid;gap:0;margin-top:10px}.srow3{display:grid;grid-template-columns:minmax(180px,1.3fr) minmax(200px,1.4fr) 1.6fr;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
 .reqt{max-width:560px;margin:6px 0 4px;overflow:visible}.reqt table.exp{min-width:0!important;width:100%;table-layout:auto}.reqt th,.reqt td{white-space:nowrap}
 @media (max-width:640px){.srow3{grid-template-columns:1fr;gap:4px}}
+
+/* ===== Економіка 2.0 ===== */
+.eco2{display:grid;gap:14px}
+.etabs2{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:14px;background:var(--panel);overflow-x:auto}
+.etabs2 button{flex:1 0 auto;font:700 14px var(--f-body);color:var(--muted);background:transparent;border:0;border-radius:10px;padding:10px 16px;cursor:pointer;white-space:nowrap}
+.etabs2 button.on{background:linear-gradient(180deg,var(--gold-hi,#ffdc8a),var(--gold,#f2b544));color:#2a1a08}
+.etabs2 button:not(.on):hover{color:var(--cream,#f7ecd6);background:var(--panel2)}
+.ebadge{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--danger,#ef6a5a);color:#fff;font-size:12px;margin-left:4px}
+.eco-hero{display:grid;grid-template-columns:1fr auto;gap:14px 18px;background:radial-gradient(120% 140% at 0% 0%,rgba(242,181,68,.16),transparent 60%),var(--panel)}
+.eco-hero .k,.inc-hero .k,.es .k,.imine .k{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.eco-hero .v{display:block;font:800 clamp(34px,6vw,54px)/1.05 var(--f-display);color:var(--gold-hi,#ffdc8a);margin:6px 0 4px;font-variant-numeric:tabular-nums}
+.eco-hero .v small{font-size:16px;font-weight:600;color:var(--muted)}
+.eco-hero .s{color:var(--muted);font-size:14px}.eco-hero .s b{color:var(--cream,#f7ecd6)}
+.eh-side a{color:var(--gold-hi,#ffdc8a);font-size:13px}
+.eh-res{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}
+.eh-res>div{display:flex;gap:8px;align-items:baseline;border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:rgba(0,0,0,.18)}
+.eh-res span{color:var(--muted);font-size:13px}.eh-res b{font-variant-numeric:tabular-nums}.eh-res .neg b{color:var(--danger)}
+.eco-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.es{display:block;text-align:left;font:inherit;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.es b{display:block;font:800 26px/1.15 var(--f-display);margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.es .s{color:var(--muted);font-size:13px}
+.es.in b{color:var(--ok)}.es.out b{color:var(--danger)}.es.debt b{color:var(--vacant,#e9c76b)}
+button.es{cursor:pointer}button.es:hover{border-color:var(--line2,rgba(242,181,68,.32))}
+.ehead{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}.ehead h3{margin:0}
+.mvlist{display:grid}
+.mv1{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line)}
+.mv1:last-child{border-bottom:0}
+.mvic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:18px;background:var(--panel2)}
+.mv1.in .mvic{background:rgba(121,209,122,.12)}.mv1.out .mvic{background:rgba(239,106,90,.12)}
+.mvt{display:grid;min-width:0}.mvt span{color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.mvr{display:flex;flex-wrap:wrap;gap:4px 8px;justify-content:flex-end;align-items:center;text-align:right}
+.mvd{flex-basis:100%;color:var(--muted);font-size:12px}
+.eamt{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}.eamt.in{color:var(--ok)}.eamt.out{color:var(--danger)}
+.epager{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:6px;color:var(--muted);font-variant-numeric:tabular-nums}
+.eprices{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);padding:0 4px}.eprices b{color:var(--cream,#f7ecd6);font-weight:600}
+.esub{display:flex;gap:8px;flex-wrap:wrap}
+.egroups{display:flex;gap:0;border:1px solid var(--line);border-radius:999px;padding:3px;width:max-content;max-width:100%;overflow-x:auto}
+.egroups button{font:600 13px var(--f-body);color:var(--muted);background:transparent;border:0;border-radius:999px;padding:7px 16px;cursor:pointer;white-space:nowrap}
+.egroups button.on{background:var(--panel2);color:var(--gold-hi,#ffdc8a);box-shadow:inset 0 0 0 1px var(--line2,rgba(242,181,68,.32))}
+.inc-hero{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:center;background:radial-gradient(120% 160% at 0% 50%,rgba(242,181,68,.14),transparent 60%),var(--panel)}
+.ering{width:128px;height:128px}
+.ering .trk{fill:none;stroke:var(--panel2);stroke-width:12}
+.ering .val{fill:none;stroke:var(--gold,#f2b544);stroke-width:12;stroke-linecap:round;transition:stroke-dasharray .6s}
+.ering .r1{font:800 26px var(--f-display);fill:var(--cream,#f7ecd6)}.ering .r2{font:500 11px var(--f-body);fill:var(--muted)}
+.inc-hero .v{display:block;font:800 clamp(24px,4.4vw,36px)/1.1 var(--f-display);color:var(--gold-hi,#ffdc8a);margin:6px 0 10px;font-variant-numeric:tabular-nums}
+.inc-hero .v small{font-size:15px;color:var(--muted);font-weight:600}
+.ih-facts{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--muted);font-size:13.5px}.ih-facts b{color:var(--cream,#f7ecd6)}
+@media (max-width:560px){.inc-hero{grid-template-columns:1fr;justify-items:center;text-align:center}.ih-facts{justify-content:center}}
+.imine{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;border:1px solid rgba(242,181,68,.45);border-radius:14px;padding:14px 16px;background:linear-gradient(90deg,rgba(242,181,68,.14),rgba(242,181,68,.04))}
+.imine b{font:800 18px var(--f-display);color:var(--gold-hi,#ffdc8a)}
+.imine.ok{border-color:rgba(121,209,122,.45);background:linear-gradient(90deg,rgba(121,209,122,.12),rgba(121,209,122,.03))}
+.im-btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ecards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.ecards>.ecard{position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:6px;align-content:start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px 12px 16px;overflow:hidden}
+.ecard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--muted)}
+.ecard.paid::before{background:var(--ok)}.ecard.debt::before{background:var(--danger)}.ecard.wait::before{background:var(--vacant,#e9c76b)}
+.ecard.mine{box-shadow:0 0 0 1px rgba(242,181,68,.55)}
+.ecard.gold{background:linear-gradient(135deg,rgba(242,181,68,.16),var(--panel) 60%)}
+.lc-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.lc-top b{line-height:1.25}
+.lchip{flex:none;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap;border:1px solid var(--line);color:var(--muted)}
+.ecard.paid .lchip{color:var(--ok);border-color:rgba(121,209,122,.45);background:rgba(121,209,122,.1)}
+.ecard.debt .lchip{color:var(--danger);border-color:rgba(239,106,90,.45);background:rgba(239,106,90,.1)}
+.ecard.wait .lchip{color:var(--vacant,#e9c76b);border-color:rgba(233,199,107,.4)}
+.lc-rep{font-size:13px;color:var(--muted)}
+.lc-amt{font:700 15px var(--f-display);color:var(--cream,#f7ecd6);font-variant-numeric:tabular-nums}
+.lc-hist{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.dots{display:flex;gap:4px}.dots i{width:12px;height:12px;border-radius:4px;background:var(--panel2);display:block}
+.dots i.ok{background:var(--ok)}.dots i.late{background:var(--vacant,#e9c76b)}.dots i.miss{background:var(--danger)}.dots i.now{background:transparent;box-shadow:inset 0 0 0 1.5px var(--muted)}.dots i.skip{background:var(--panel2)}
+.lstreak{font-size:12px;color:var(--gold-hi,#ffdc8a);font-weight:600}
+.lc-mk{justify-self:start}
+.lc-rest{margin-top:-4px}
+.ichart .chartwrap{overflow-x:auto}.ichart svg{width:100%;min-width:600px;height:auto;display:block}
+.ichart .ax{stroke:var(--line);stroke-width:1}
+.ichart .cv{font:600 13px var(--f-body);fill:var(--cream,#f7ecd6)}.ichart .cl{font:500 13px var(--f-body);fill:var(--muted)}.ichart .cl.now{fill:var(--gold-hi,#ffdc8a);font-weight:700}
+.clegend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted)}.clegend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.prank{display:grid}
+.pr1{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 2px;border-bottom:1px solid var(--line)}.pr1:last-child{border-bottom:0}
+.prn{font-size:18px;text-align:center;color:var(--muted)}.prt{display:grid;min-width:0}.prt span{font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.pra{font:800 16px var(--f-display);color:var(--ok);font-variant-numeric:tabular-nums}
+.exform input[type=text]{width:100%}
+.excats{display:flex;flex-wrap:wrap;gap:6px}
+.excats button{font:600 13px var(--f-body);color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer}
+.excats button.on{color:#2a1a08;background:var(--gold,#f2b544);border-color:var(--gold,#f2b544)}
+.exrow{display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr) auto;gap:8px}
+.row2{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.row2 .primary{margin-left:auto}
+.exgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;align-items:start}
+.dlist2{display:grid}
+.dr1{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto;gap:10px 14px;align-items:center;padding:11px 2px;border-bottom:1px solid var(--line)}.dr1:last-child{border-bottom:0}
+.drt{display:grid;min-width:0}.drt span{font-size:12.5px;color:var(--muted)}
+.drm{display:flex;flex-wrap:wrap;gap:4px 10px}
+.drb{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+@media (max-width:640px){.dr1{grid-template-columns:1fr}.drb{justify-content:flex-start}.mv1{grid-template-columns:36px minmax(0,1fr)}.mvr{grid-column:2;justify-content:flex-start;text-align:left}.mvic{width:36px;height:36px}}
+.nodebt{text-align:center;justify-items:center;padding:34px 16px}.nodebt>span{font-size:40px}.nodebt h3{margin:0}
 </style>
 <style id="page-style">
 /* Layout: one column registry; each land is a row — current flag, name + offices, then the flag history strip */
@@ -125,6 +218,14 @@ table.wkt tr.wkoff th,table.wkt tr.wkoff td,table.wkt tr.wkvac td{opacity:.55}
 .wkme.ok{color:var(--ok);font-weight:600}
 .wkland{display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0}
 table.wkt tr.wkgold th b{color:var(--gold)}
+.wkme.bad{border-color:rgba(224,87,74,.5);background:rgba(224,87,74,.1);color:var(--danger)}
+.st.mk.debt{color:var(--danger);border-color:rgba(224,87,74,.55)}
+.wklate{font-size:11px;margin-top:4px}
+details.wkdebts{border:1px solid rgba(224,87,74,.4);border-radius:12px;padding:10px 14px;margin:0 0 12px;background:rgba(224,87,74,.05)}
+details.wkdebts>summary{cursor:pointer}
+details.wkdebts .tblwrap{margin-top:10px}
+table.wkdt{min-width:520px}
+table.wkdt tbody th .need{display:block;font-weight:500;color:var(--muted);font-size:12px}
 details.wkold>summary{cursor:pointer;list-style:none}
 details.wkold>summary::-webkit-details-marker{display:none}
 details.wkold>summary h3{display:inline}
@@ -1867,7 +1968,7 @@ function profileHtml(name){const p=plByName(name);if(!p)return `<div class="bloc
   const aw=AWARDS.filter(a=>a.recipient===name);const laws=allBills().filter(b=>String(b.author||'').startsWith(name));
   const em=lc(p.email);const titles={};allBills().forEach(b=>titles[b.id]=b.title);
   const votes=[];allBills().forEach(b=>(tally(b).vs||[]).forEach(v=>{if(em&&lc(v.email)===em)votes.push({bid:b.id,choice:v.choice,land:v.land});}));const vc=k=>votes.filter(v=>v.choice===k).length;
-  const econ=state.sections.find(x=>x.kind==='economy');let weeks=0,don=0;if(econ){(econ.weeks||[]).forEach(w=>{(econ.members||[]).forEach((m,j)=>{if((w.done||[])[j]&&wkWho(w,j,m)===name)weeks++;});});weeks+=WKPAY.filter(d=>d.name===name).length;(econ.patronList||[]).filter(q=>q.name===name).forEach(q=>(q.items||[]).forEach(it=>{don+=itemSilver(econ,it)||0;}));}
+  const econ=state.sections.find(x=>x.kind==='economy');let weeks=0,don=0;if(econ){(econ.weeks||[]).forEach(w=>{(econ.members||[]).forEach((m,j)=>{if((w.done||[])[j]&&wkWho(w,j,m)===name)weeks++;});});weeks+=WKPAY.filter(d=>d.name===name&&!String(d.lid||'').startsWith('fine_')).length;(econ.patronList||[]).filter(q=>q.name===name).forEach(q=>(q.items||[]).forEach(it=>{don+=itemSilver(econ,it)||0;}));}
   const docs=NEWS.filter(n=>n.by===name);const cases=CASES.filter(c=>c.plaintiff===name||c.defendant===name);
   const u=profUrl(p.profile);const mine=!!(AUTH.email&&em===AUTH.email);const pr=PROFILES[em];const sv=serviceOf(name);const lands=landLeaders().filter(r=>r.name===name).map(r=>r.land);
   const sec=(t,body)=>`<div class="dsec"><h4>${t}</h4>${body}</div>`;const ul=a=>a.length?'<ul>'+a.map(x=>`<li>${x}</li>`).join('')+'</ul>':'<p class="hint">—</p>';
@@ -2232,7 +2333,7 @@ function dossierHtml(name){const p=plByName(name);if(!p)return `<div class="bloc
   const votes=[];allBills().forEach(b=>(tally(b).vs||[]).forEach(v=>{if(em&&lc(v.email)===em)votes.push({bid:b.id,choice:v.choice,land:v.land});}));
   const vc=k=>votes.filter(v=>v.choice===k).length;
   const econ=state.sections.find(x=>x.kind==='economy');let weeks=0,don=0;
-  if(econ){(econ.weeks||[]).forEach(w=>{(econ.members||[]).forEach((m,j)=>{if((w.done||[])[j]&&wkWho(w,j,m)===name)weeks++;});});weeks+=WKPAY.filter(d=>d.name===name).length;(econ.patronList||[]).filter(q=>q.name===name).forEach(q=>(q.items||[]).forEach(it=>{don+=itemSilver(econ,it)||0;}));}
+  if(econ){(econ.weeks||[]).forEach(w=>{(econ.members||[]).forEach((m,j)=>{if((w.done||[])[j]&&wkWho(w,j,m)===name)weeks++;});});weeks+=WKPAY.filter(d=>d.name===name&&!String(d.lid||'').startsWith('fine_')).length;(econ.patronList||[]).filter(q=>q.name===name).forEach(q=>(q.items||[]).forEach(it=>{don+=itemSilver(econ,it)||0;}));}
   const docs=NEWS.filter(n=>n.by===name);const cases=CASES.filter(c=>c.plaintiff===name||c.defendant===name);
   const u=profUrl(p.profile);
   const sec=(t,body)=>`<div class="dsec"><h4>${t}</h4>${body}</div>`;const ul=a=>a.length?'<ul>'+a.map(x=>`<li>${x}</li>`).join('')+'</ul>':'<p class="hint">—</p>';
@@ -2983,10 +3084,10 @@ function movements(s){const out=[];const tr=s.treasury||{};
   (s.daily||[]).forEach(it=>{const h=it.hist||[];h.forEach((seg,i)=>{const q=+seg.qty||0;if(!q)return;const from=Date.parse(seg.from);const to=i+1<h.length?Date.parse(h[i+1].from):Date.now();
     dailyTicks(from,to).forEach(t=>out.push({kind:'daily',at:new Date(t).toISOString(),date:'',who:'',what:it.what||'Щоденне списання',items:[{res:it.res||'Срібло',qty:-q}]}));});});
   (s.weeks||[]).forEach((w,wi)=>(s.members||[]).forEach((m,mi)=>{if(!(w.done||[])[mi])return;const txt=(w.got&&w.got[mi])||m.needs;out.push({kind:'week',at:(w.at||[])[mi]||null,date:w.label,who:wkWho(w,mi,m)||'Вакантно',what:'Тижневий внесок',items:parseNeeds(txt)});}));
-  {const c=wkCfg(s);const tg={};c.groups.forEach(g=>{tg[g.sec]=g;});WKPAY.forEach(d=>{const g=tg[d.grp];if(!g||!g.treasury)return;out.push({kind:'week',at:d.at?new Date(d.at).toISOString():null,date:wkLabelOf(d.wk),who:d.name||d.land,what:'Тижневий внесок · '+(d.land||''),items:parseNeeds(d.items||'')});});}
+  {const c=wkCfg(s);const tg={};c.groups.forEach(g=>{tg[g.sec]=g;});WKPAY.forEach(d=>{const g=tg[d.grp];if(!g||!g.treasury)return;if(String(d.lid||'').startsWith('fine_')){out.push({kind:'fine',at:d.at?new Date(d.at).toISOString():null,date:'',who:d.name||d.land,what:'Штраф за несплату внеску · '+(d.land||'')+' · '+wkLabelOf(d.wk),items:parseNeeds(d.items||'')});return;}out.push({kind:'week',at:d.at?new Date(d.at).toISOString():null,date:wkLabelOf(d.wk),who:d.name||d.land,what:'Тижневий внесок · '+(d.land||''),items:parseNeeds(d.items||'')});});}
   (s.patronList||[]).forEach(p=>(p.items||[]).forEach(it=>{if(+it.qty)out.push({kind:'patron',at:it.at||null,date:it.date||'',who:p.name,what:'Пожертва',items:[{res:it.res,qty:+it.qty}]});}));
   Object.entries(s.fines||{}).forEach(([k,f])=>{if(+f.amount)out.push({kind:'fine',at:f.at||null,date:'',who:f.who||'',what:'Штраф ('+(f.ref||'')+')',items:[{res:'Срібло',qty:+f.amount}]});});
-  (s.expenses||[]).forEach(e=>{if(+e.amount)out.push({kind:'expense',at:e.at||null,date:e.date,who:e.by,what:e.what||'Витрата',items:[{res:e.unit||'Срібло',qty:-(+e.amount)}]});});
+  (s.expenses||[]).forEach(e=>{const its=exItems(e).filter(i=>i.qty);if(its.length)out.push({kind:'expense',at:e.at||null,date:e.date,who:e.by,what:e.what||'Витрата',items:its.map(i=>({res:i.res,qty:-i.qty}))});});
   out.forEach(o=>{o.counted=true;o.items.forEach(i=>{i.canon=canonRes(s,i.res);});});
   return out;}
 function treasuryNow(s){const items=invItems(s.treasury=s.treasury||{});const cur={},delta={};items.forEach(it=>{cur[it.name]=+it.qty||0;});
@@ -3013,10 +3114,12 @@ function econCompact(html){try{const t=document.createElement('template');t.inne
 function wkWho(w,mi,m){return (w&&w.who&&w.who[mi])||((m&&m.name)||'');}
 // ===== Тижневі внески від Земель: кожна Земля здає свою частку, представник сам ставить галочку (колекція wkpay)
 let WKPAY=[];
-const WK_DEF={start:'2026-10-12',groups:[{sec:'ud',title:'Українська Держава',silver:5096000,gold:728,goldBy:'hetman',treasury:true},{sec:'ck',title:'Червоний Клин',silver:1176000,gold:168,goldBy:'pysar',treasury:false}],off:{}};
-function wkCfg(s){if(!s.wkcfg)s.wkcfg=JSON.parse(JSON.stringify(WK_DEF));const c=s.wkcfg;c.groups=c.groups||[];c.off=c.off||{};if(!c.start)c.start=WK_DEF.start;
+const WK_DEF={start:'2026-10-12',fineStart:'2026-10-19',finePct:10,groups:[{sec:'ud',title:'Українська Держава',silver:5096000,gold:728,goldBy:'hetman',treasury:true},{sec:'ck',title:'Червоний Клин',silver:1176000,gold:168,goldBy:'pysar',treasury:false}],off:{}};
+function wkCfg(s){if(!s.wkcfg)s.wkcfg=JSON.parse(JSON.stringify(WK_DEF));const c=s.wkcfg;c.groups=c.groups||[];c.off=c.off||{};if(!c.start)c.start=WK_DEF.start;if(!c.fineStart)c.fineStart=WK_DEF.fineStart;if(c.finePct==null)c.finePct=WK_DEF.finePct;
   c.groups.forEach(g=>{const d=WK_DEF.groups.find(x=>x.sec===g.sec)||{};if(g.silver==null)g.silver=d.silver||0;if(g.gold==null)g.gold=d.gold||0;if(!g.goldBy)g.goldBy=d.goldBy||'hetman';delete g.quota;});return c;}
-function kyivToday(){try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Kiev',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());}catch(_){return new Date().toISOString().slice(0,10);}}
+function wkNowMs(){return window.__FAKENOW||Date.now();}
+function kyivDate(ms){try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Kiev',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(ms));}catch(_){return new Date(ms).toISOString().slice(0,10);}}
+function kyivToday(){return kyivDate(wkNowMs());}
 function wkMonday(iso){const d=new Date(String(iso).slice(0,10)+'T00:00:00Z');if(isNaN(d))return wkMonday(kyivToday());d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7));return d.toISOString().slice(0,10);}
 function wkLabelOf(key){const d=new Date(key+'T00:00:00Z'),e=new Date(d);e.setUTCDate(e.getUTCDate()+6);const f=x=>String(x.getUTCDate()).padStart(2,'0')+'.'+String(x.getUTCMonth()+1).padStart(2,'0');return f(d)+' - '+f(e);}
 function wkNext(k){const d=new Date(k+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+7);return d.toISOString().slice(0,10);}
@@ -3034,6 +3137,14 @@ function wkPayMap(){const m={};WKPAY.forEach(d=>{m[d.id]=d;});return m;}
 function wkSilverTxt(s,txt){return parseNeeds(txt).reduce((x,i)=>x+(silverOf(s,i.res,i.qty)||0),0);}
 function wkCanMark(row){return !!(!AUTH.bot&&!editing&&AUTH.email&&row.on&&(AUTH.admin||isFin()||(row.rep&&emailOf(row.rep)===AUTH.email)));}
 function wkItemsOf(g,rows,row){return row.gold?fmt(+g.gold||0)+' золота':wkShareTxt(g,rows);}
+// ===== Штрафи: якщо внесок не здано до кінця тижня (неділя 23:59 за Києвом) — борг = частка + штраф (% від частки)
+function wkFineTxt(c,items){const it=parseNeeds(items)[0];if(!it)return '';const q=Math.round(it.qty*(+c.finePct||0)/100);return q?fmt(q)+' '+it.res:'';}
+function wkDebts(s,g,c,row,PM){const out=[];if(!row.on||!row.rep)return out;const today=kyivToday();const rows=wkRows(g,c);
+  wkKeys(c).forEach(k=>{if(k<wkMonday(c.fineStart))return;const end=wkNext(k);if(today<end)return;const d=PM[k+'_'+row.lid];const fd=PM[k+'_fine_'+row.lid];
+    const late=!d||(d.at&&kyivDate(d.at)>=end);if(!late)return;const items=d?(d.items||wkItemsOf(g,rows,row)):wkItemsOf(g,rows,row);const fine=wkFineTxt(c,items);
+    out.push({wk:k,paid:!!d,items,fine,finePaid:!!fd,fineDoc:fd||null});});
+  return out;}
+function wkDebtOpen(x){return !x.paid||(x.fine&&!x.finePaid);}
 function wkCanUndo(d){if(AUTH.bot||editing||!AUTH.email||!d)return false;if(AUTH.admin||isFin())return true;return lc(d.email)===AUTH.email&&d.at&&Date.now()-d.at<24*3600e3;}
 function wkGroupHtml(s,si,g,gi){const c=wkCfg(s);const rows=wkRows(g,c);if(!rows.length)return '';const PM=wkPayMap();
   const keys=wkKeys(c).slice().reverse();const lim=MORE['wk'+gi]?keys:keys.slice(0,7);const act=rows.filter(r=>r.on&&r.rep);const share=wkShare(g,rows);const gr=wkGold(g,c);
@@ -3044,15 +3155,171 @@ function wkGroupHtml(s,si,g,gi){const c=wkCfg(s);const rows=wkRows(g,c);if(!rows
   let h=`<div class="block wkg"><h3>${esc(g.title)} <small>за тиждень: ${fmt(+g.silver||0)} срібла${+g.gold?' + '+fmt(+g.gold)+' золота':''}${g.treasury?' · іде в казну УД':''}</small></h3>`;
   h+=`<div class="wksum"><div><b>${act.length?fmt(share):'—'}</b><span>${act.length?'':'немає зайнятих посад губернаторів · '}срібла з кожної Землі: ${fmt(+g.silver||0)} ÷ ${act.length} губернатор${act.length%10===1&&act.length%100!==11?'':act.length%10>=2&&act.length%10<=4&&(act.length%100<10||act.length%100>=20)?'и':'ів'}</span></div><div><b>${paidNow} з ${act.length}</b><span>Земель здали за ${cw?esc(wkLabelOf(cw)):'—'} · ${fmt(sumNow)} срібла</span></div>${gr?`<div><b>${goldNow?'✓ ':''}${fmt(+g.gold)} золота</b><span>${goldNow?'здано':'здає'} ${esc(gr.post==='Гетьман'?'Гетьман':gr.post)}${gr.rep?' '+esc(gr.rep):''}</span></div>`:''}</div>`;
   if(mine.length&&cw)h+=mine.map(r=>{const it=wkItemsOf(g,rows,r);return PM[cw+'_'+r.lid]?`<p class="wkme ok">✓ ${esc(r.gold?r.title:r.land)}: внесок за цей тиждень позначено.</p>`:`<div class="wkme"><span>${r.gold?`Ви здаєте золото: <b>${esc(it)}</b> щотижня.`:`Ви представник: <b>${esc(r.land)}</b>. Ваша частка — <b>${esc(it)}</b>.`} Скинули в казну?</span><button class="primary small" data-a="wkmark" data-s="${si}" data-g="${gi}" data-wk="${cw}" data-l="${esc(r.lid)}">✓ Я здав за ${esc(wkLabelOf(cw))}</button></div>`;}).join('');
+  {const debts=[];all.forEach(r=>wkDebts(s,g,c,r,PM).filter(wkDebtOpen).forEach(x=>debts.push({r,x})));
+    const myd=debts.filter(o=>AUTH.email&&o.r.rep&&emailOf(o.r.rep)===AUTH.email);
+    if(myd.length)h+=`<div class="wkme bad"><span>⚠ У вас є борг: ${myd.map(o=>`${esc(wkLabelOf(o.x.wk))} — ${o.x.paid?'':esc(o.x.items)+' + '}штраф ${esc(o.x.fine||'0')}`).join('; ')}. Внесок позначайте в таблиці, штраф — кнопкою «Сплатити штраф» нижче.</span></div>`;
+    if(debts.length){const fineTot={};debts.forEach(o=>{if(o.x.fine&&!o.x.finePaid){const it=parseNeeds(o.x.fine)[0];if(it)fineTot[it.res]=(fineTot[it.res]||0)+it.qty;}});
+      h+=`<details class="wkdebts" open><summary><b>Борги і штрафи · ${debts.length}</b> <span class="hint">несплачено штрафів: ${Object.entries(fineTot).map(([k,v])=>fmt(v)+' '+esc(k)).join(' + ')||'0'}</span></summary><div class="tblwrap"><table class="bud wkdt"><thead><tr><th>Земля</th><th>Тиждень</th><th>Внесок</th><th>Штраф ${esc(String(c.finePct))}%</th></tr></thead><tbody>`+
+        debts.map(({r,x})=>`<tr><th><b>${esc(r.gold?r.title:r.land)}</b><span class="need">${plink(r.rep)}</span></th><td>${esc(wkLabelOf(x.wk))}</td><td>${x.paid?'<span class="st y">✓ здано із запізненням</span>':`<span class="st n">✕ ${esc(x.items)}</span>`}</td><td>${x.finePaid?(parseNeeds(x.fineDoc&&x.fineDoc.items).length?'<span class="st y">✓ сплачено</span>':'<span class="st y">✓ прощено</span>'):`<b>${esc(x.fine||'—')}</b>${x.fine&&wkCanMark(r)?` <button class="small" data-a="wkfine" data-s="${si}" data-g="${gi}" data-wk="${x.wk}" data-l="${esc(r.lid)}">Сплатити штраф</button>`:''}${x.fine&&!AUTH.bot&&!editing&&(AUTH.admin||isFin())?` <button class="small ghost" data-a="wkfine" data-forgive="1" data-s="${si}" data-g="${gi}" data-wk="${x.wk}" data-l="${esc(r.lid)}" title="Скасувати штраф без оплати (наприклад, якщо внесок насправді здали вчасно)">Пробачити</button>`:''}`}</td></tr>`).join('')+`</tbody></table></div></details>`;}}
   h+=`<div class="tblwrap"><table class="bud wkt"><thead><tr><th>Земля</th>${lim.map(k=>`<th class="wk">${esc(wkLabelOf(k))}${k===cw?'<span class="need">цей тиждень</span>':k===nw?'<span class="need">наступний</span>':''}</th>`).join('')}</tr></thead><tbody>`;
   h+=all.map(r=>{const vac=!r.rep;return `<tr class="${r.gold?'wkgold ':''}${!r.on?'wkoff':vac?'wkvac':''}"><th><b>${esc(r.gold?r.title:r.land)}</b><span class="need">${!r.on?'не здає срібла'+(r.post?' ('+esc(r.post)+')':''):vac?'немає '+(r.gold?'посадовця':'представника'):plink(r.rep)+' · '+esc(wkItemsOf(g,rows,r))}</span></th>`+lim.map(k=>{const d=PM[k+'_'+r.lid];
-    if(d)return `<td><span class="st y" title="${esc((d.items||'')+(d.at?' · '+fmtDT(new Date(d.at).toISOString()):''))}">✓ Так</span>${d.name&&d.name!==r.rep?`<div class="wkwho">${esc(d.name)}</div>`:''}${wkCanUndo(d)?`<div><button class="linkbtn wkun" data-a="wkun" data-id="${esc(d.id)}">скасувати</button></div>`:''}</td>`;
+    const ended=k>=wkMonday(c.fineStart)&&kyivToday()>=wkNext(k);const lateP=d&&ended&&d.at&&kyivDate(d.at)>=wkNext(k);
+    if(d)return `<td><span class="st y" title="${esc((d.items||'')+(d.at?' · '+fmtDT(new Date(d.at).toISOString()):''))}">✓ Так</span>${lateP&&r.on&&r.rep?'<div><span class="tag warn wklate">із запізненням</span></div>':''}${d.name&&d.name!==r.rep?`<div class="wkwho">${esc(d.name)}</div>`:''}${wkCanUndo(d)?`<div><button class="linkbtn wkun" data-a="wkun" data-id="${esc(d.id)}">скасувати</button></div>`:''}</td>`;
     if(!r.on||vac)return '<td><span class="wkdash">—</span></td>';
-    return `<td>${wkCanMark(r)?`<button class="st n mk" data-a="wkmark" data-s="${si}" data-g="${gi}" data-wk="${k}" data-l="${esc(r.lid)}" title="Позначити, що внесок здано">☐ Позначити</button>`:'<span class="st n">✕ Ні</span>'}</td>`;}).join('')+'</tr>';}).join('');
+    return `<td>${wkCanMark(r)?`<button class="st n mk${ended?' debt':''}" data-a="wkmark" data-s="${si}" data-g="${gi}" data-wk="${k}" data-l="${esc(r.lid)}" title="Позначити, що внесок здано">☐ ${ended?'Борг · позначити':'Позначити'}</button>`:`<span class="st n">✕ ${ended?'Борг':'Ні'}</span>`}</td>`;}).join('')+'</tr>';}).join('');
   h+=`</tbody><tfoot><tr><th>Здано срібла</th>${lim.map(k=>`<td>${act.filter(r=>PM[k+'_'+r.lid]).length} з ${act.length}</td>`).join('')}</tr></tfoot></table></div>`;
   if(keys.length>7)h+=moreBtn('wk'+gi,keys.length);
-  h+=`<p class="hint">Срібло ділиться порівну між зайнятими посадами губернаторів і перераховується саме, коли посаду займають чи звільняють. Галочку ставить сам представник (або Скарбник чи адміністрація); помилкову позначку можна скасувати протягом 24 годин.</p></div>`;
+  h+=`<p class="hint">Срібло ділиться порівну між зайнятими посадами губернаторів і перераховується саме, коли посаду займають чи звільняють. Галочку ставить сам представник (або Скарбник чи адміністрація); помилкову позначку можна скасувати протягом 24 годин. Не здали до кінця тижня (неділя, 23:59 за Києвом) — борг і штраф ${esc(String(c.finePct))}% від частки; штрафи рахуються з тижня ${esc(wkLabelOf(wkMonday(c.fineStart)))}.</p></div>`;
   return h;}
+// ===================== Економіка: Огляд · Доходи · Витрати · Боржники =====================
+let ECV='ov',INCV='wk',INCG=0,JPG=0,JFL='all',EXPG=0,EXF={what:'',cat:'army',rows:[{res:'Срібло',qty:''}]};
+const EXCATS=[['army','🛡','Армія'],['build','🏗','Будівництво'],['church','⛪','Церква'],['diplo','🤝','Дипломатія'],['awards','🎖','Нагороди'],['other','📦','Інше']];
+const exCat=k=>EXCATS.find(c=>c[0]===k)||EXCATS[EXCATS.length-1];
+function exItems(e){return (e.items&&e.items.length)?e.items.map(i=>({res:i.res,qty:+i.qty||0})):[{res:e.unit||'Срібло',qty:+e.amount||0}];}
+function exSilver(s,e){return exItems(e).reduce((a,i)=>a+(silverOf(s,i.res,i.qty)||0),0);}
+function mvSilver(s,o){return o.items.reduce((a,i)=>a+(silverOf(s,i.res,i.qty)||0),0);}
+function mvWeek(o){return o.at?wkMonday(kyivDate(Date.parse(o.at))):'';}
+function ecoPager(act,page,pages){if(pages<=1)return '';return `<div class="epager"><button class="small" data-a="${act}" data-k="${page-1}" ${page<=0?'disabled':''} aria-label="Новіші">←</button><span>${page+1} / ${pages}</span><button class="small" data-a="${act}" data-k="${page+1}" ${page>=pages-1?'disabled':''} aria-label="Старіші">→</button></div>`;}
+function ecoItemsHtml(s,items,sign){return items.filter(i=>+i.qty).map(i=>`<span class="eamt ${i.qty<0||sign<0?'out':'in'}">${i.qty<0||sign<0?'−':'+'}${fmt(Math.abs(i.qty))} ${esc(resWord(s,i.res))}</span>`).join('');}
+const MVICON={week:'📅',patron:'🎁',fine:'⚖️',expense:'💸',daily:'🕘'};
+const MVIN=k=>k==='week'||k==='patron'||k==='fine';
+
+function econView(s,si){
+  const tabs=[['ov','Огляд'],['inc','Доходи'],['exp','Витрати'],['debt','Боржники']];
+  const debtN=ecoDebtList(s).length;
+  let h=`<div class="econ eco2"><div class="etabs2" role="tablist">${tabs.map(([k,l])=>`<button role="tab" aria-selected="${ECV===k}" class="${ECV===k?'on':''}" data-a="ecv" data-k="${k}">${l}${k==='debt'&&debtN?` <span class="ebadge">${debtN}</span>`:''}</button>`).join('')}</div>`;
+  h+=ECV==='inc'?econIncome(s,si):ECV==='exp'?econExpenses(s,si):ECV==='debt'?econDebts(s,si):econOverview(s,si);
+  return h+'</div>';
+}
+
+// ---------- 1. Огляд ----------
+function econOverview(s,si){
+  const tr=s.treasury||(s.treasury={balance:'',checked:'',link:'https://dragpolit.com/economy/country/193'});
+  const items=invItems(tr);const {cur}=treasuryNow(s);const main=items[0]||{name:'Срібло'};
+  const shown=items.filter(it=>cur[it.name]);let total=0;shown.forEach(it=>{const v=silverOf(s,it.name,cur[it.name]);if(v!=null)total+=v;});
+  const link=/^https:\/\//.test(tr.link||'')?`<a href="${esc(tr.link)}" target="_blank" rel="noopener">Казна в грі ↗</a>`:'';
+  const mv=movements(s);const cw=wkMonday(kyivToday());
+  const wIn=mv.filter(o=>mvWeek(o)===cw&&MVIN(o.kind)).reduce((a,o)=>a+mvSilver(s,o),0);
+  const wOut=mv.filter(o=>mvWeek(o)===cw&&!MVIN(o.kind)).reduce((a,o)=>a+mvSilver(s,o),0);
+  const debts=ecoDebtList(s);const debtSum=debts.reduce((a,d)=>a+d.silver,0);
+  let h=`<div class="block eco-hero"><div class="eh-main"><span class="k">У казні зараз</span><span class="v">${fmt(cur[main.name]||0)}<small> ${esc(resWord(s,main.name))}</small></span><span class="s">усе разом ≈ <b>${fmt(total)}</b> срібла за ринковими цінами</span></div><div class="eh-side">${link}</div>
+    ${shown.length>1?`<div class="eh-res">${shown.slice(1).map(it=>`<div class="${cur[it.name]>0?'':'neg'}"><span>${esc(it.name)}</span><b>${fmt(cur[it.name])}</b></div>`).join('')}</div>`:''}</div>`;
+  h+=`<div class="eco-stats"><div class="es in"><span class="k">Надійшло за тиждень</span><b>+${fmt(wIn)}</b><span class="s">срібла · ${esc(wkLabelOf(cw))}</span></div><div class="es out"><span class="k">Витрачено за тиждень</span><b>${wOut?'−':''}${fmt(Math.abs(wOut))}</b><span class="s">срібла, разом зі списаннями</span></div><button type="button" class="es debt" data-a="ecv" data-k="debt"><span class="k">Борги перед казною</span><b>${debts.length?fmt(debtSum):'0'}</b><span class="s">${debts.length?debts.length+' борг'+(debts.length%10===1&&debts.length%100!==11?'':debts.length%10>=2&&debts.length%10<=4&&(debts.length%100<10||debts.length%100>=20)?'и':'ів')+' · переглянути →':'боржників немає'}</span></button></div>`;
+  // хід ресурсів
+  const ord=mv.map((o,i)=>({o,i})).sort((a,b)=>(b.o.at||'').localeCompare(a.o.at||'')||b.i-a.i).map(x=>x.o);
+  const fl=ord.filter(o=>JFL==='all'||(JFL==='in'?MVIN(o.kind):!MVIN(o.kind)));
+  const pages=Math.max(1,Math.ceil(fl.length/10));if(JPG>=pages)JPG=pages-1;const page=fl.slice(JPG*10,JPG*10+10);
+  h+=`<div class="block"><div class="ehead"><h3>Хід ресурсів</h3><div class="afilter">${[['all','Усе'],['in','Надходження'],['out','Витрати']].map(([k,l])=>`<button class="small${JFL===k?' primary':''}" data-a="jfl" data-k="${k}">${l}</button>`).join('')}</div></div>`;
+  h+=page.length?`<div class="mvlist">${page.map(o=>`<div class="mv1 ${MVIN(o.kind)?'in':'out'}"><span class="mvic" aria-hidden="true">${MVICON[o.kind]||'•'}</span><div class="mvt"><b>${o.kind==='daily'?'Держава':(o.who?plink(o.who):'—')}</b><span>${esc(o.what)}</span></div><div class="mvr">${ecoItemsHtml(s,o.items,0)}<span class="mvd">${o.at?esc(fmtDT(o.at)):esc(o.date||'раніше')}</span></div></div>`).join('')}</div>${ecoPager('jpg',JPG,pages)}`:'<p class="empty">Записів ще немає.</p>';
+  h+='</div>';
+  const pr=(s.prices||[]).filter(p=>String(p.price||'').trim());
+  if(pr.length)h+=`<div class="eprices"><span class="hint">Ринкові ціни${s.pricesDate?' на '+esc(s.pricesDate):''}, срібла за 1 шт.:</span>${pr.map(p=>`<span><b>${esc(p.name)}</b> ${fmt(p.price)}</span>`).join('')}</div>`;
+  return h;
+}
+
+// ---------- 2. Доходи ----------
+function lcHistory(g,c,row,PM){const today=kyivToday();const cw=wkMonday(today);const keys=wkKeys(c).filter(k=>k<=cw).slice(-8);
+  const st=keys.map(k=>{const d=PM[k+'_'+row.lid];const end=wkNext(k);if(k===cw)return d?'ok':'now';if(!d)return k>=wkMonday(c.fineStart)?'miss':'skip';return d.at&&kyivDate(d.at)>=end&&k>=wkMonday(c.fineStart)?'late':'ok';});
+  let streak=0;for(let i=st.length-1;i>=0;i--){if(st[i]==='now')continue;if(st[i]==='ok')streak++;else break;}
+  return {keys,st,streak};}
+function econIncome(s,si){
+  const c=wkCfg(s);
+  let h=`<div class="esub">${[['wk','📅 Тижневі внески'],['pat','🎁 Меценати']].map(([k,l])=>`<button class="small${INCV===k?' primary':''}" data-a="incv" data-k="${k}">${l}</button>`).join('')}</div>`;
+  if(INCV==='pat')return h+econPatrons(s,si);
+  const groups=c.groups.filter(g=>wkRows(g,c).length);if(!groups.length)return h+'<p class="empty">Немає Земель для внесків.</p>';
+  if(INCG>=groups.length)INCG=0;const g=groups[INCG];const gi=c.groups.indexOf(g);
+  if(groups.length>1)h+=`<div class="egroups">${groups.map((x,i)=>`<button class="${i===INCG?'on':''}" data-a="incg" data-k="${i}">${esc(x.title)}</button>`).join('')}</div>`;
+  const rows=wkRows(g,c);const act=rows.filter(r=>r.on&&r.rep);const share=wkShare(g,rows);const gr=wkGold(g,c);const PM=wkPayMap();
+  const cw=wkMonday(kyivToday());const nw=wkNext(cw);
+  const got=act.reduce((a,r)=>{const d=PM[cw+'_'+r.lid];return d?a+wkSilverTxt(s,d.items||''):a;},0);const need=share*act.length;const paidN=act.filter(r=>PM[cw+'_'+r.lid]).length;
+  const pct=need?Math.min(1,got/need):0;const goldDone=gr&&PM[cw+'_'+gr.lid];
+  const daysLeft=Math.round((Date.parse(nw+'T00:00:00Z')-Date.parse(kyivToday()+'T00:00:00Z'))/864e5);
+  const R=52,C=2*Math.PI*R;
+  h+=`<div class="block inc-hero"><svg class="ering" viewBox="0 0 128 128" role="img" aria-label="Зібрано ${Math.round(pct*100)}%"><circle cx="64" cy="64" r="${R}" class="trk"/>${pct>0?`<circle cx="64" cy="64" r="${R}" class="val" stroke-dasharray="${(C*pct).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 64 64)"/>`:''}<text x="64" y="62" text-anchor="middle" class="r1">${Math.round(pct*100)}%</text><text x="64" y="80" text-anchor="middle" class="r2">зібрано</text></svg>
+    <div class="ih-txt"><span class="k">${esc(g.title)} · тиждень ${esc(wkLabelOf(cw))}</span><span class="v">${fmt(got)} <small>з ${fmt(need)} срібла</small></span>
+    <div class="ih-facts"><span><b>${paidN} з ${act.length}</b> Земель здали</span><span><b>${act.length?fmt(share):'—'}</b> срібла з кожної</span><span>⏳ <b>${daysLeft<=1?'останній день':'ще '+daysLeft+' дн.'}</b> до кінця тижня</span>${gr?`<span>${goldDone?'✓':'🪙'} <b>${fmt(+g.gold)} золота</b> · ${esc(gr.post)}${goldDone?' здав':''}</span>`:''}</div></div></div>`;
+  // мій рядок
+  const all=gr?[...rows,gr]:rows;
+  const mine=all.filter(r=>r.on&&r.rep&&AUTH.email&&emailOf(r.rep)===AUTH.email&&!AUTH.bot);
+  mine.forEach(r=>{const it=wkItemsOf(g,rows,r);const d=PM[cw+'_'+r.lid],dn=PM[nw+'_'+r.lid];
+    h+=`<div class="imine${d?' ok':''}"><div><span class="k">${r.gold?'Ви здаєте золото':'Ви представник: '+esc(r.land)}</span><b>${esc(it)}</b> щотижня</div><div class="im-btns">${d?`<span class="st y">✓ За цей тиждень здано</span>`:`<button class="primary" data-a="wkmark" data-s="${si}" data-g="${gi}" data-wk="${cw}" data-l="${esc(r.lid)}">✓ Я здав за ${esc(wkLabelOf(cw))}</button>`}${dn?'<span class="st y">✓ наперед здано</span>':`<button class="small" data-a="wkmark" data-s="${si}" data-g="${gi}" data-wk="${nw}" data-l="${esc(r.lid)}">Здати наперед за ${esc(wkLabelOf(nw))}</button>`}</div></div>`;});
+  // картки Земель
+  const card=r=>{const d=PM[cw+'_'+r.lid];const hs=lcHistory(g,c,r,PM);const debts=wkDebts(s,g,c,r,PM).filter(wkDebtOpen);const isMine=mine.includes(r);
+    const stc=d?'paid':debts.length?'debt':'wait';const chip=d?'✓ Здано':debts.length?'⚠ Борг':'⏳ Чекаємо';
+    const canM=wkCanMark(r)&&!isMine;
+    return `<div class="ecard ${stc}${r.gold?' gold':''}${isMine?' mine':''}"><div class="lc-top"><b>${esc(r.gold?r.title:r.land)}</b><span class="lchip">${chip}</span></div><div class="lc-rep">${plink(r.rep)}</div><div class="lc-amt">${esc(wkItemsOf(g,rows,r))}</div>
+      <div class="lc-hist"><span class="dots" title="Останні тижні: зелений — вчасно, жовтий — із запізненням, червоний — не здано">${hs.st.map((x,i)=>`<i class="${x}" title="${esc(wkLabelOf(hs.keys[i]))}"></i>`).join('')}</span>${hs.streak>=2?`<span class="lstreak">🔥 ${hs.streak} поспіль</span>`:''}</div>
+      ${d&&wkCanUndo(d)?`<button class="linkbtn wkun" data-a="wkun" data-id="${esc(d.id)}">скасувати позначку</button>`:''}${!d&&canM?`<button class="small lc-mk" data-a="wkmark" data-s="${si}" data-g="${gi}" data-wk="${cw}" data-l="${esc(r.lid)}">☐ Позначити здачу</button>`:''}</div>`;};
+  const live=act.slice().sort((a,b)=>(PM[cw+'_'+a.lid]?1:0)-(PM[cw+'_'+b.lid]?1:0));
+  h+=`<div class="ecards">${(gr?[gr]:[]).concat(live).map(card).join('')}</div>`;
+  const vac=rows.filter(r=>r.on&&!r.rep),off=rows.filter(r=>!r.on);
+  if(vac.length||off.length)h+=`<p class="hint lc-rest">${vac.length?'Без представника (не ділять суму): '+vac.map(r=>esc(r.land)).join(', ')+'. ':''}${off.length?'Не здають срібла: '+off.map(r=>esc(r.land)+(r.post?' ('+esc(r.post)+')':'')).join(', ')+'.':''}</p>`;
+  // діаграма надходжень
+  h+=incomeChart(s,c);
+  h+=`<p class="hint">Срібло ділиться порівну між зайнятими посадами губернаторів. Галочку ставить сам представник, Скарбник або адміністрація; не здали до неділі 23:59 — борг і штраф ${esc(String(c.finePct))}% (див. «Боржники»).</p>`;
+  return h;
+}
+function incomeChart(s,c){const mv=movements(s).filter(o=>MVIN(o.kind)&&o.at);const cw=wkMonday(kyivToday());
+  const keys=[];let k=cw;for(let i=0;i<8;i++){keys.unshift(k);const d=new Date(k+'T00:00:00Z');d.setUTCDate(d.getUTCDate()-7);k=d.toISOString().slice(0,10);}
+  const kinds=[['week','Внески Земель','var(--gold)'],['patron','Меценати','#4fa3e0'],['fine','Штрафи','#e0574a']];
+  const data=keys.map(k=>{const r={k};kinds.forEach(([kd])=>{r[kd]=mv.filter(o=>o.kind===kd&&mvWeek(o)===k).reduce((a,o)=>a+mvSilver(s,o),0);});r.t=kinds.reduce((a,[kd])=>a+r[kd],0);return r;});
+  const mx=Math.max(1,...data.map(r=>r.t));if(!data.some(r=>r.t))return '';
+  const W=1000,H=230,pl=8,pb=28,bw=(W-pl*2)/keys.length;const sc=v=>v/mx*(H-pb-22);
+  let bars='';data.forEach((r,i)=>{let y=H-pb;const x=pl+i*bw+bw*.18,w=bw*.64;kinds.forEach(([kd,,col])=>{const hh=sc(r[kd]);if(hh>0){y-=hh;bars+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${hh.toFixed(1)}" rx="3" fill="${col}"><title>${esc(wkLabelOf(r.k))}: ${fmt(r[kd])} срібла</title></rect>`;}});
+    if(r.t)bars+=`<text x="${(x+w/2).toFixed(1)}" y="${(y-6).toFixed(1)}" text-anchor="middle" class="cv">${r.t>=1e6?(r.t/1e6).toFixed(1)+'M':r.t>=1e3?Math.round(r.t/1e3)+'k':r.t}</text>`;
+    bars+=`<text x="${(x+w/2).toFixed(1)}" y="${H-8}" text-anchor="middle" class="cl${r.k===cw?' now':''}">${esc(wkLabelOf(r.k).slice(0,5))}</text>`;});
+  return `<div class="block ichart"><h3>Надходження по тижнях <small>у сріблі, останні 8 тижнів</small></h3><div class="chartwrap"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Надходження до казни по тижнях"><line x1="${pl}" x2="${W-pl}" y1="${H-pb}" y2="${H-pb}" class="ax"/>${bars}</svg></div><div class="clegend">${kinds.map(([,l,col])=>`<span><i style="background:${col}"></i>${l}</span>`).join('')}</div></div>`;}
+function econPatrons(s,si){
+  const tr=s.treasury||{};const resOpts=invItems(tr).map(it=>it.name);const pl=s.patronList||[];
+  const pv=p=>(p.items||[]).reduce((x,it)=>x+(itemSilver(s,it)||0),0);const tot=pl.reduce((a,p)=>a+pv(p),0);
+  let h=`<div class="block"><h3>Меценати <small>разом ${fmt(tot)} срібла · кожна пожертва одразу йде в казну</small></h3>`;
+  if((isFin()||AUTH.admin)&&!AUTH.bot){const q=PD2.qty&&PD2.res?silverOf(s,PD2.res,+String(PD2.qty).replace(/\s/g,'')||0):null;h+=`<div class="pdform"><b>➕ Нова пожертва</b>${plSelect('pd2-name','data-a="pd2" data-k="name"',PD2.name,'— хто вніс —')}<select id="pd2-res" data-a="pd2" data-k="res">${resOpts.map(o=>`<option${o===(PD2.res||'Срібло')?' selected':''}>${esc(o)}</option>`).join('')}</select><input type="text" inputmode="numeric" id="pd2-qty" data-a="pd2" data-k="qty" value="${esc(PD2.qty||'')}" placeholder="Кількість"><span class="hint">${q!=null&&PD2.qty?'≈ '+fmt(q)+' срібла':''}</span><button class="small primary" data-a="pd2add" ${busy?'disabled':''}>Додати</button></div>`;}
+  if(!tot)return h+'<p class="empty">Пожертв ще немає.</p></div>';
+  h+=donutHtml(pl.map(p=>({name:p.name,amount:pv(p)})),tot);
+  const rank=pl.slice().sort((a,b)=>pv(b)-pv(a));const medal=['🥇','🥈','🥉'];
+  h+=`<div class="prank">${rank.map((p,i)=>`<div class="pr1"><span class="prn">${medal[i]||(i+1)+'.'}</span><div class="prt"><b>${plink(p.name)}</b><span>${(p.items||[]).map((it,ii)=>`${fmt(it.qty)} ${esc(resWord(s,it.res))}${it.date?` <span class="hint">${esc(it.date)}</span>`:''}${(isFin()||AUTH.admin)&&!AUTH.bot?`<button class="chx" data-a="pd2del" data-n="${esc(p.name)}" data-i="${ii}" title="Видалити цю пожертву">✕</button>`:''}`).join(' · ')}</span></div><b class="pra">${fmt(pv(p))}</b></div>`).join('')}</div>`;
+  return h+'</div>';
+}
+
+// ---------- 3. Витрати ----------
+function econExpenses(s,si){
+  const tr=s.treasury||{};const resOpts=invItems(tr).map(it=>it.name);const ex=s.expenses||[];const dl=s.daily||[];
+  const cw=wkMonday(kyivToday());const mv=movements(s);
+  const wOut=mv.filter(o=>mvWeek(o)===cw&&!MVIN(o.kind)).reduce((a,o)=>a+mvSilver(s,o),0);
+  const perDay=dl.reduce((a,it)=>a+(silverOf(s,it.res||'Срібло',dailyRate(it))||0),0);const allEx=ex.reduce((a,e)=>a+exSilver(s,e),0);
+  let h=`<div class="eco-stats"><div class="es out"><span class="k">Витрачено за тиждень</span><b>${wOut?'−':''}${fmt(Math.abs(wOut))}</b><span class="s">срібла, разом зі списаннями</span></div><div class="es out"><span class="k">Щоденні списання</span><b>${perDay?'−':''}${fmt(perDay)}</b><span class="s">срібла на день · ${fmt(perDay*7)} на тиждень</span></div><div class="es out"><span class="k">Усі разові витрати</span><b>${allEx?'−':''}${fmt(allEx)}</b><span class="s">срібла · ${ex.length} запис${ex.length%10===1&&ex.length%100!==11?'':ex.length%10>=2&&ex.length%10<=4&&(ex.length%100<10||ex.length%100>=20)?'и':'ів'}</span></div></div>`;
+  if((isFin()||AUTH.admin)&&!AUTH.bot){const sv=EXF.rows.reduce((a,r)=>a+(silverOf(s,r.res,+String(r.qty).replace(/\s/g,'')||0)||0),0);
+    h+=`<div class="block exform"><h3>➕ Нова витрата</h3><input type="text" id="exf-what" data-a="exf" data-k="what" value="${esc(EXF.what)}" placeholder="На що пішло, напр. «Закупівля 20 танків для 3-го куреня»" maxlength="160">
+      <div class="excats">${EXCATS.map(([k,ic,l])=>`<button type="button" class="${EXF.cat===k?'on':''}" data-a="excat" data-k="${k}">${ic} ${l}</button>`).join('')}</div>
+      ${EXF.rows.map((r,i)=>`<div class="exrow"><select id="exf-res-${i}" data-a="exf" data-k="res" data-i="${i}">${resOpts.map(o=>`<option${o===r.res?' selected':''}>${esc(o)}</option>`).join('')}</select><input type="text" inputmode="numeric" id="exf-qty-${i}" data-a="exf" data-k="qty" data-i="${i}" value="${esc(r.qty)}" placeholder="Скільки">${EXF.rows.length>1?`<button class="small danger" data-a="exrowdel" data-k="${i}" aria-label="Прибрати ресурс">✕</button>`:''}</div>`).join('')}
+      <div class="row2"><button class="small" data-a="exrowadd">+ Ще ресурс</button><span class="hint">${sv?'≈ '+fmt(sv)+' срібла':''}</span><button class="primary" data-a="exsave" ${busy?'disabled':''}>Записати витрату</button></div></div>`;}
+  // категорії + щоденні
+  const byCat={};ex.forEach(e=>{const k=e.cat||'other';byCat[k]=(byCat[k]||0)+exSilver(s,e);});const catList=EXCATS.filter(c=>byCat[c[0]]).map(c=>({name:c[1]+' '+c[2],amount:byCat[c[0]]}));
+  h+=`<div class="exgrid">${catList.length?`<div class="block"><h3>На що йдуть гроші <small>разові витрати за весь час</small></h3>${donutHtml(catList,allEx)}</div>`:''}<div class="block daily"><h3>Щоденні списання <small>щодня о ${DAILY_H}:00 · наступне ${esc(fmtDT(new Date(nextTick()).toISOString()))}</small></h3>${dl.length?`<div class="dlist">${dl.map(it=>{const q=dailyRate(it);return `<div class="dl1${q?'':' zero'}"><span>🕘 ${esc(it.what||'Списання')}</span><b class="mv out">${q?'−'+fmt(q)+' '+esc(resWord(s,it.res||'Срібло')):'0'}</b><span class="hint">на день</span></div>`;}).join('')}</div>`:'<p class="empty">Щоденних списань немає.</p>'}<p class="hint">Змінюються в режимі «Редагувати».</p></div></div>`;
+  // список
+  const list=ex.map((e,i)=>({e,i})).reverse();const pages=Math.max(1,Math.ceil(list.length/10));if(EXPG>=pages)EXPG=pages-1;
+  const fe=(isFin()||AUTH.admin)&&!AUTH.bot;
+  h+=`<div class="block"><h3>Разові витрати</h3>${list.length?`<div class="mvlist">${list.slice(EXPG*10,EXPG*10+10).map(({e,i})=>{const c=exCat(e.cat);return `<div class="mv1 out"><span class="mvic" aria-hidden="true">${c[1]}</span><div class="mvt"><b>${esc(e.what||'Витрата')}</b><span>${esc(c[2])}${e.by?' · погодив '+esc(e.by):''}</span></div><div class="mvr">${ecoItemsHtml(s,exItems(e),-1)}<span class="mvd">${e.at?esc(fmtDT(e.at)):esc(e.date||'')}</span>${fe?`<button class="chx" data-a="exdelv" data-k="${i}" title="Видалити витрату">✕</button>`:''}</div></div>`;}).join('')}</div>${ecoPager('expg',EXPG,pages)}`:'<p class="empty">Витрат ще не записано.</p>'}</div>`;
+  return h;
+}
+
+// ---------- 4. Боржники ----------
+function ecoDebtList(s){const out=[];const c=wkCfg(s);const PM=wkPayMap();
+  c.groups.forEach((g,gi)=>{const rows=wkRows(g,c);const gr=wkGold(g,c);(gr?[...rows,gr]:rows).forEach(r=>wkDebts(s,g,c,r,PM).filter(wkDebtOpen).forEach(x=>{const sv=(x.paid?0:wkSilverTxt(s,x.items))+(x.fine&&!x.finePaid?wkSilverTxt(s,x.fine):0);out.push({kind:'land',g,gi,r,x,silver:sv,who:r.rep});}));});
+  try{allSanctions().filter(o=>o.t==='fine'&&o.state==='due').forEach(o=>out.push({kind:'court',o,silver:+o.amount||0,who:o.who}));}catch(_){}
+  return out;}
+function econDebts(s,si){
+  const L=ecoDebtList(s);const fe=(isFin()||AUTH.admin)&&!AUTH.bot;
+  if(!L.length)return `<div class="block nodebt"><span>🎉</span><h3>Боржників немає</h3><p class="hint">Усі Землі здали внески вчасно, а штрафи за рішеннями Суду сплачено.</p></div>`;
+  const tot=L.reduce((a,d)=>a+d.silver,0);const people=new Set(L.map(d=>d.who).filter(Boolean));
+  let h=`<div class="eco-stats"><div class="es debt"><span class="k">Разом винні казні</span><b>${fmt(tot)}</b><span class="s">срібла (золото перераховано за ціною)</span></div><div class="es"><span class="k">Боржників</span><b>${people.size}</b><span class="s">${L.length} несплачених позицій</span></div></div>`;
+  const lands=L.filter(d=>d.kind==='land'),court=L.filter(d=>d.kind==='court');
+  if(lands.length){h+=`<div class="block"><h3>Землі: несплачені внески та штрафи <small>штраф ${esc(String(wkCfg(s).finePct))}% за кожен прострочений тиждень</small></h3><div class="dlist2">${lands.map(({g,gi,r,x})=>{const can=wkCanMark(r);
+    return `<div class="dr1"><div class="drt"><b>${esc(r.gold?r.title:r.land)}</b><span>${plink(r.rep)} · ${esc(g.title)} · тиждень ${esc(wkLabelOf(x.wk))}</span></div><div class="drm">${x.paid?'<span class="st y">✓ внесок здано із запізненням</span>':`<span class="eamt out">${esc(x.items)}</span>`}${x.fine?(x.finePaid?'':`<span class="eamt out">штраф ${esc(x.fine)}</span>`):''}</div><div class="drb">${!x.paid&&can?`<button class="small primary" data-a="wkmark" data-s="${si}" data-g="${gi}" data-wk="${x.wk}" data-l="${esc(r.lid)}">✓ Внесок здано</button>`:''}${x.fine&&!x.finePaid&&can?`<button class="small" data-a="wkfine" data-s="${si}" data-g="${gi}" data-wk="${x.wk}" data-l="${esc(r.lid)}">Сплатити штраф</button>`:''}${x.fine&&!x.finePaid&&fe?`<button class="small ghost" data-a="wkfine" data-forgive="1" data-s="${si}" data-g="${gi}" data-wk="${x.wk}" data-l="${esc(r.lid)}">Пробачити</button>`:''}</div></div>`;}).join('')}</div></div>`;}
+  if(court.length){h+=`<div class="block"><h3>Штрафи за рішеннями Суду</h3><div class="dlist2">${court.map(({o})=>`<div class="dr1"><div class="drt"><b>${plink(o.who)}</b><span>${o.src==='case'?'справа №':'протокол №'}${esc(String(o.no||''))}${o.arts?' · '+esc(o.arts):''}${o.from?' · '+esc(fmtDT(new Date(o.from).toISOString())):''}</span></div><div class="drm"><span class="eamt out">${fmt(o.amount)} срібла</span></div><div class="drb">${fe?`<button class="small primary" data-a="fpaid" data-k="${esc(o.key)}">✓ Сплачено</button>`:''}</div></div>`).join('')}</div><p class="hint">Коли боржник сплатив у грі, Скарбник натискає «Сплачено», і штраф зараховується в казну.</p></div>`;}
+  return h;
+}
+
 function econHtml(s,si){
   const mem=s.members||(s.members=[]), isVac=m=>!String(m.name||'').trim()||/^вакант/i.test(m.name);
   s.weeks=s.weeks||[];
@@ -3090,7 +3357,7 @@ function econHtml(s,si){
   }
   // ===== weekly contributions (від Земель)
   {const c=wkCfg(s);
-  if(editing){h+=`<div class="block"><h3>Тижневі внески Земель <small>налаштування</small></h3><div class="erow"><label class="fl">Перший тиждень нової системи<input type="date" id="wks" data-a="wks" data-s="${si}" value="${esc(c.start)}"></label></div>`+c.groups.map((g,gi)=>`<div class="artedit"><div class="erow"><b>${esc(g.title)}</b><label class="fl">Срібла за тиждень (ділиться між губернаторами)<input type="text" inputmode="numeric" id="wksv-${gi}" data-a="wksv" data-s="${si}" data-g="${gi}" value="${esc(g.silver)}"></label><label class="fl">Золота за тиждень (здає ${g.goldBy==='pysar'?'Писар':'Гетьман'})<input type="text" inputmode="numeric" id="wkgd-${gi}" data-a="wkgd" data-s="${si}" data-g="${gi}" value="${esc(g.gold)}"></label><label class="chk"><input type="checkbox" data-a="wkt" data-s="${si}" data-g="${gi}"${g.treasury?' checked':''}> іде в казну УД</label></div><div class="wkland">${wkRows(g,c).map(r=>`<label class="chk"><input type="checkbox" data-a="wkon" data-s="${si}" data-l="${esc(r.lid)}"${r.on?' checked':''}> ${esc(r.land)}${r.rep?'':' <span class="hint">(немає представника)</span>'}</label>`).join('')}</div><p class="hint">Срібло ділять лише Землі з галочкою і з представником. Землю, де сидить Писар, за замовчуванням знято: Писар здає золото.</p></div>`).join('')+'</div>';}
+  if(editing){h+=`<div class="block"><h3>Тижневі внески Земель <small>налаштування</small></h3><div class="erow"><label class="fl">Перший тиждень нової системи<input type="date" id="wks" data-a="wks" data-s="${si}" value="${esc(c.start)}"></label><label class="fl">Штрафи рахуються з тижня<input type="date" id="wkfs" data-a="wkfs" data-s="${si}" value="${esc(c.fineStart)}"></label><label class="fl">Штраф за несплату, % від частки<input type="text" inputmode="numeric" id="wkfp" data-a="wkfp" data-s="${si}" value="${esc(String(c.finePct))}"></label></div>`+c.groups.map((g,gi)=>`<div class="artedit"><div class="erow"><b>${esc(g.title)}</b><label class="fl">Срібла за тиждень (ділиться між губернаторами)<input type="text" inputmode="numeric" id="wksv-${gi}" data-a="wksv" data-s="${si}" data-g="${gi}" value="${esc(g.silver)}"></label><label class="fl">Золота за тиждень (здає ${g.goldBy==='pysar'?'Писар':'Гетьман'})<input type="text" inputmode="numeric" id="wkgd-${gi}" data-a="wkgd" data-s="${si}" data-g="${gi}" value="${esc(g.gold)}"></label><label class="chk"><input type="checkbox" data-a="wkt" data-s="${si}" data-g="${gi}"${g.treasury?' checked':''}> іде в казну УД</label></div><div class="wkland">${wkRows(g,c).map(r=>`<label class="chk"><input type="checkbox" data-a="wkon" data-s="${si}" data-l="${esc(r.lid)}"${r.on?' checked':''}> ${esc(r.land)}${r.rep?'':' <span class="hint">(немає представника)</span>'}</label>`).join('')}</div><p class="hint">Срібло ділять лише Землі з галочкою і з представником. Землю, де сидить Писар, за замовчуванням знято: Писар здає золото.</p></div>`).join('')+'</div>';}
   h+=c.groups.map((g,gi)=>wkGroupHtml(s,si,g,gi)).join('');}
   const hasOld=s.weeks.some(w=>(w.done||[]).some(Boolean));
   if(editing||hasOld){h+=`<details class="block wkold"${editing?' open':''}><summary><h3>Архів: внески до ${esc(wkLabelOf(wkMonday(wkCfg(s).start)).slice(0,5))} <small>стара система «за учасниками»; позначки й далі враховані в казні</small></h3></summary>`;
@@ -3109,7 +3376,7 @@ function econHtml(s,si){
   const exTot2=ex.reduce((a,e)=>a+(silverOf(s,e.unit||'Срібло',+e.amount||0)||0),0);
   h+=`<div class="block"><h3>Витрати <small>Разом ≈ ${fmt(exTot2)} срібла · кожна витрата віднімається з казни</small></h3>`;
   if(editing){
-    h+=ex.map((e,ei)=>{const c=canonRes(s,e.unit||'Срібло');return `<div class="erow ex"><input type="text" id="ed-${ei}" data-a="ed" data-s="${si}" data-p="${ei}" value="${esc(e.date)}" placeholder="Дата"><input type="text" id="ew-${ei}" data-a="ew" data-s="${si}" data-p="${ei}" value="${esc(e.what)}" placeholder="На що"><input type="text" inputmode="numeric" id="ea-${ei}" data-a="ea" data-s="${si}" data-p="${ei}" value="${esc(e.amount)}" placeholder="Кількість"><select id="eu-${ei}" data-a="eu" data-s="${si}" data-p="${ei}">${resOpts.map(o=>`<option${o===c?' selected':''}>${esc(o)}</option>`).join('')}${c?'':`<option selected>${esc(e.unit||'')}</option>`}</select><input type="text" id="eb-${ei}" data-a="eb" data-s="${si}" data-p="${ei}" value="${esc(e.by)}" placeholder="Хто погодив" list="plist"><button class="small danger" data-a="exdel" data-s="${si}" data-p="${ei}">Прибрати</button></div>`}).join('')+`<div><button class="small" data-a="exadd" data-s="${si}">+ Витрата</button></div>`;
+    h+=ex.map((e,ei)=>{if(e.items&&e.items.length)return `<div class="erow ex"><span>${esc(e.date||'')}</span><span>${esc(e.what||'')}</span><span class="mv out">${exItems(e).map(i=>'−'+fmt(i.qty)+' '+esc(resWord(s,i.res))).join(' + ')}</span><span>${esc(e.by||'')}</span><button class="small danger" data-a="exdel" data-s="${si}" data-p="${ei}">Прибрати</button></div>`;const c=canonRes(s,e.unit||'Срібло');return `<div class="erow ex"><input type="text" id="ed-${ei}" data-a="ed" data-s="${si}" data-p="${ei}" value="${esc(e.date)}" placeholder="Дата"><input type="text" id="ew-${ei}" data-a="ew" data-s="${si}" data-p="${ei}" value="${esc(e.what)}" placeholder="На що"><input type="text" inputmode="numeric" id="ea-${ei}" data-a="ea" data-s="${si}" data-p="${ei}" value="${esc(e.amount)}" placeholder="Кількість"><select id="eu-${ei}" data-a="eu" data-s="${si}" data-p="${ei}">${resOpts.map(o=>`<option${o===c?' selected':''}>${esc(o)}</option>`).join('')}${c?'':`<option selected>${esc(e.unit||'')}</option>`}</select><input type="text" id="eb-${ei}" data-a="eb" data-s="${si}" data-p="${ei}" value="${esc(e.by)}" placeholder="Хто погодив" list="plist"><button class="small danger" data-a="exdel" data-s="${si}" data-p="${ei}">Прибрати</button></div>`}).join('')+`<div><button class="small" data-a="exadd" data-s="${si}">+ Витрата</button></div>`;
   } else if(!ex.length){
     h+='<p class="empty">Витрат ще не внесено. Щоб додати, натисніть «Редагувати», а потім «+ Витрата».</p>';
   } else {
@@ -3223,7 +3490,7 @@ function renderInner(){chatMarkSeen();
     if(swSel&&s.id!==swSel&&!(swSel===active&&s.tab===active&&!isSw(s)))return;
     editing=ED&&scopeAllows(s);
     html+=`<section class="sec" id="${esc(s.id)}"><h2>${esc(s.title)}${s.note?`<small>${esc(s.note)}</small>`:''}</h2>`;
-    if(s.kind==='economy'){html+=(editing?econHtml(s,si):econCompact(econHtml(s,si)))+'</section>';return;}
+    if(s.kind==='economy'){html+=(editing?econHtml(s,si):econView(s,si))+'</section>';return;}
     if(s.kind==='parliament'){html+=(AUTH.admin&&!editing&&!AUTH.bot?`<div class="landtools" style="justify-content:flex-end;margin:-6px 0 8px"><button class="small ghost" data-a="admtick" ${busy?'disabled':''} title="Те саме, що робить бот раз на 15 хвилин">🔄 Підбити підсумки зараз</button></div>`:'')+parlHtml(s,si)+(editing?'':committeesBlock())+'</section>';return;}
     if(s.kind==='doc'){html+=constHtml(s,si)+'</section>';return;}
     if(s.kind==='gov'){html+=govHtml(s,si)+'</section>';return;}
@@ -3296,6 +3563,7 @@ app.addEventListener('input',e=>{
   if(a==='mapas'){const us=udilSec();if(!us||!(isPysar()||AUTH.admin)||editing)return;us.udils=us.udils||{};us.udils[t.dataset.u]=t.value;busy=true;render();(async()=>{try{await window.FB.saveLands(state.sections.filter(isLandsSec));saved=JSON.stringify(state);msg='Розподіл уділів збережено';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося зберегти';msgErr=true;state=JSON.parse(saved);}busy=false;render();})();return;}
   if(a==='ef'){EF[t.dataset.k]=t.value;if(t.tagName==='SELECT')render();return;}
   if(a==='cf'){CF[t.dataset.e]=t.value;return;}
+  if(a==='exf'){const k=t.dataset.k;if(k==='what')EXF.what=t.value;else{const r=EXF.rows[+t.dataset.i];if(r){r[k]=t.value;}if(t.tagName==='SELECT')render();else{const sp=t.closest('.exform');}}return;}
   if(a==='pd2'){PD2[t.dataset.k]=t.value;if(t.dataset.k!=='qty'||true){if(t.tagName==='SELECT')render();}return;}
   if(a==='chin'){CHAT.draft[CHAT.th]=t.value;const q=mentionQ(t);if(q!==CHAT.mq){CHAT.mq=q;render();}return;}
   if(a==='chnew'){const e=t.value;if(!e)return;CHAT.mview='thread';CHAT.th='d:'+dmPair(AUTH.email,e);CHAT.img=null;render();return;}
@@ -3376,6 +3644,7 @@ app.addEventListener('input',e=>{
   if(a==='ab'){sec.doc.chapters[+t.dataset.c].articles[+t.dataset.r].body=t.value;return;}
   if(a==='mn'){const mi=+t.dataset.p;const old=String(sec.members[mi].name||'').trim();if(old&&old!==t.value&&!/^вакант/i.test(old)){(sec.weeks||[]).forEach(w=>{w.who=w.who||[];if(!w.who[mi])w.who[mi]=old;});}sec.members[mi].name=t.value;render();return;}
   if(a==='mq'){sec.members[+t.dataset.p].needs=t.value;return;}
+  if(a==='wkfp'){wkCfg(sec).finePct=Math.min(500,+t.value.replace(/\D/g,'')||0);return;}
   if(a==='wksv'){wkCfg(sec).groups[+t.dataset.g].silver=+t.value.replace(/\D/g,'')||0;return;}
   if(a==='wkgd'){wkCfg(sec).groups[+t.dataset.g].gold=+t.value.replace(/\D/g,'')||0;return;}
   if(a==='wl'){sec.weeks[+t.dataset.w].label=t.value;return;}
@@ -3418,7 +3687,8 @@ app.addEventListener('change',e=>{
   else if(a==='wkon'){const c=wkCfg(sec);c.off[t.dataset.l]=!t.checked;render();}
   else if(a==='wkt'){wkCfg(sec).groups[+t.dataset.g].treasury=t.checked;render();}
   else if(a==='wks'){if(/^\d{4}-\d{2}-\d{2}$/.test(t.value))wkCfg(sec).start=t.value;render();}
-  else if(a==='wksv'||a==='wkgd'){render();}
+  else if(a==='wksv'||a==='wkgd'||a==='wkfp'){render();}
+  else if(a==='wkfs'){if(/^\d{4}-\d{2}-\d{2}$/.test(t.value))wkCfg(sec).fineStart=t.value;render();}
   else if(a==='pln'){const nv=t.value.trim();const ov=t.dataset.old||'';if(ov&&nv&&ov!==nv){if(players().filter(x=>x.name===nv).length>1){msg='Гравець з таким ім’ям уже є';msgErr=true;}else{renameEverywhere(ov,nv);t.dataset.old=nv;msg='Ім’я змінено всюди на сайті';msgErr=false;setTimeout(()=>render(),250);}}}
   else if(a==='madd'){const l=sec.lands[+t.dataset.l];if(t.value&&!(l.members||[]).includes(t.value)){(l.members=l.members||[]).push(t.value);}render();}
   else if(a==='dr2'){sec.daily[+t.dataset.p].res=t.value;}
@@ -3445,6 +3715,11 @@ app.addEventListener('click',async e=>{
   if(a==='wkmark'){const s=state.sections[+b.dataset.s];if(!s)return;const c=wkCfg(s);const g=c.groups[+b.dataset.g];if(!g)return;const rows=wkRows(g,c);const gr=wkGold(g,c);const r=(gr&&gr.lid===b.dataset.l)?gr:rows.find(x=>x.lid===b.dataset.l);if(!r||!wkCanMark(r))return;
     busy=true;render();try{await window.FB.markWk({wk:b.dataset.wk,lid:r.lid,land:r.land,grp:g.sec,name:r.rep,items:wkItemsOf(g,rows,r)});msg=`✓ ${r.gold?r.title:r.land}: внесок за ${wkLabelOf(b.dataset.wk)} позначено`;msgErr=false;}
     catch(err){console.warn(err);msg=err&&err.code==='permission-denied'?'Сервер ще не бачить вас представником цієї Землі. Права оновлюються автоматично протягом 15 хвилин після зміни представника — спробуйте трохи згодом.':'Не вдалося позначити: '+(err&&err.code||'помилка мережі');msgErr=true;}busy=false;render();return;}
+  if(a==='wkfine'){const s=state.sections[+b.dataset.s];if(!s)return;const c=wkCfg(s);const g=c.groups[+b.dataset.g];if(!g)return;const rows=wkRows(g,c);const gr=wkGold(g,c);const r=(gr&&gr.lid===b.dataset.l)?gr:rows.find(x=>x.lid===b.dataset.l);if(!r||!wkCanMark(r))return;
+    const x=wkDebts(s,g,c,r,wkPayMap()).find(y=>y.wk===b.dataset.wk);if(!x||!x.fine||x.finePaid)return;
+    const forgive=b.dataset.forgive==='1';if(forgive&&!(AUTH.admin||isFin()))return;
+    busy=true;render();try{await window.FB.markWk({wk:x.wk,lid:'fine_'+r.lid,land:r.land,grp:g.sec,name:r.rep,items:forgive?'прощено':x.fine});msg=forgive?`Штраф за ${wkLabelOf(x.wk)} прощено`:`✓ Штраф ${x.fine} за ${wkLabelOf(x.wk)} позначено як сплачений`;msgErr=false;}
+    catch(err){console.warn(err);msg=err&&err.code==='permission-denied'?'Сервер ще не бачить вас представником цієї Землі. Спробуйте за 15 хвилин.':'Не вдалося: '+(err&&err.code||'помилка мережі');msgErr=true;}busy=false;render();return;}
   if(a==='wkun'){const d=WKPAY.find(x=>x.id===b.dataset.id);if(!d||!wkCanUndo(d))return;if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='точно скасувати?';return;}
     busy=true;render();try{await window.FB.unmarkWk(d.id);msg='Позначку скасовано';msgErr=false;}catch(err){console.warn(err);msg='Не вдалося скасувати: '+(err&&err.code||'помилка мережі');msgErr=true;}busy=false;render();return;}
   if(a==='hsign'||a==='hveto'){if(!isHetman())return;const id=b.dataset.id;const reason=a==='hveto'?String(HV[id]||'').trim():'';if(a==='hveto'&&!reason){msg='Вкажіть причину вето';msgErr=true;render();return;}
@@ -3815,6 +4090,22 @@ app.addEventListener('click',async e=>{
   if(a==='chdpub'){const c=churchSec();if(!c||!isPatriarch()||editing)return;const tt=CHD.title.trim();if(!tt){msg='Впишіть назву постанови';msgErr=true;render();return;}const before=JSON.stringify(c);const ds=c.decrees=c.decrees||[];const no=(ds.reduce((m,d)=>Math.max(m,+d.no||0),0))+1;const by=PATR_TITLE+' '+(c.patriarch||'');const at=new Date().toISOString();ds.push({id:'cd'+Date.now().toString(36),no,title:tt,text:CHD.text.trim(),at,by});(c.log=c.log||[]).push({at,tx:`Видано постанову Церкви №${no} «${tt}»`,by});busy=true;render();try{await window.FB.saveChurch(c);saved=JSON.stringify(state);CHD={title:'',text:''};msg='Постанову видано';msgErr=false;}catch(e){const i=state.sections.indexOf(c);if(i>=0)state.sections[i]=JSON.parse(before);msg='Не вдалося видати постанову';msgErr=true;}busy=false;render();return;}
   if(a==='cabprop'){DRAFT.cat=b.dataset.k;CAB='';const ps=sectionByKind('parliament');if(ps)active=ps.id;DOSSIER=null;try{history.replaceState(null,'','#'+active);}catch(_){}render();setTimeout(()=>{const el=document.querySelector('.propbox');if(el)el.scrollIntoView({block:'start'});},30);return;}
   if(a==='econt'){ECON_T=b.dataset.k;render();return;}
+  if(a==='ecv'){ECV=b.dataset.k;render();return;}
+  if(a==='incv'){INCV=b.dataset.k;render();return;}
+  if(a==='incg'){INCG=+b.dataset.k||0;render();return;}
+  if(a==='jfl'){JFL=b.dataset.k;JPG=0;render();return;}
+  if(a==='jpg'){JPG=Math.max(0,+b.dataset.k||0);render();return;}
+  if(a==='expg'){EXPG=Math.max(0,+b.dataset.k||0);render();return;}
+  if(a==='excat'){EXF.cat=b.dataset.k;render();return;}
+  if(a==='exrowadd'){EXF.rows.push({res:'Срібло',qty:''});render();return;}
+  if(a==='exrowdel'){EXF.rows.splice(+b.dataset.k,1);if(!EXF.rows.length)EXF.rows.push({res:'Срібло',qty:''});render();return;}
+  if(a==='exsave'||a==='exdelv'){if(!(isFin()||AUTH.admin))return;const es=state.sections.find(x=>x.kind==='economy');if(!es)return;const before=JSON.stringify(es);es.expenses=es.expenses||[];
+    if(a==='exsave'){const what=String(EXF.what||'').trim();const its=EXF.rows.map(r=>({res:r.res||'Срібло',qty:+String(r.qty||'').replace(/\s/g,'').replace(',','.')})).filter(i=>i.qty>0);
+      if(!what){msg='Напишіть, на що витрата';msgErr=true;render();return;}if(!its.length){msg='Вкажіть, скільки ресурсів пішло';msgErr=true;render();return;}
+      const mp=myPost();es.expenses.push({date:today(),what,cat:EXF.cat||'other',items:its.map(i=>({res:i.res,qty:String(i.qty)})),by:mp?mp.name:((plByEmail(AUTH.email)||{}).name||(isHetman()?hetmanName(state):'Адміністрація')),at:new Date().toISOString()});}
+    else{if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Видалити?';return;}es.expenses.splice(+b.dataset.k,1);}
+    busy=true;render();try{await window.FB.saveEcon(es);saved=JSON.stringify(state);if(a==='exsave'){msg='Витрату записано: '+EXF.what;EXF={what:'',cat:EXF.cat,rows:[{res:'Срібло',qty:''}]};}else msg='Витрату видалено';msgErr=false;}
+    catch(e){console.warn(e);const i=state.sections.indexOf(es);if(i>=0)state.sections[i]=JSON.parse(before);msg='Не вдалося зберегти';msgErr=true;}busy=false;render();return;}
   if(a==='billm'){BILLM=b.dataset.k||'';render();return;}
   if(a==='archf'){const k=b.dataset.k;if(ARCH_OPEN&&ARCH_F===k)ARCH_OPEN=false;else{ARCH_F=k;ARCH_OPEN=true;}render();return;}
   if(a==='lawjump'){LAWT='constdoc';LQ='';render();setTimeout(()=>{const el=document.getElementById(b.dataset.to);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},30);return;}
