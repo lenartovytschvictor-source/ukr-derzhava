@@ -101,7 +101,7 @@ button.es{cursor:pointer}button.es:hover{border-color:var(--line2,rgba(242,181,6
 .ecard.paid::before{background:var(--ok)}.ecard.debt::before{background:var(--danger)}.ecard.wait::before{background:var(--vacant,#e9c76b)}
 .ecard.mine{box-shadow:0 0 0 1px rgba(242,181,68,.55)}
 .ecard.gold{background:linear-gradient(135deg,rgba(242,181,68,.16),var(--panel) 60%)}
-.lc-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.lc-top b{line-height:1.25}
+.lc-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 8px;align-items:flex-start}.lc-top b{min-width:0;overflow-wrap:anywhere}.lc-top b{line-height:1.25}
 .lchip{flex:none;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap;border:1px solid var(--line);color:var(--muted)}
 .ecard.paid .lchip{color:var(--ok);border-color:rgba(121,209,122,.45);background:rgba(121,209,122,.1)}
 .ecard.debt .lchip{color:var(--danger);border-color:rgba(239,106,90,.45);background:rgba(239,106,90,.1)}
@@ -3127,7 +3127,9 @@ function wkMonday(iso){const d=new Date(String(iso).slice(0,10)+'T00:00:00Z');if
 function wkLabelOf(key){const d=new Date(key+'T00:00:00Z'),e=new Date(d);e.setUTCDate(e.getUTCDate()+6);const f=x=>String(x.getUTCDate()).padStart(2,'0')+'.'+String(x.getUTCMonth()+1).padStart(2,'0');return f(d)+' - '+f(e);}
 function wkNext(k){const d=new Date(k+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+7);return d.toISOString().slice(0,10);}
 // тижні від початку системи до НАСТУПНОГО тижня включно (щоб можна було здати наперед)
-function wkKeys(c){const out=[];let k=wkMonday(c.start);const end=wkNext(wkMonday(kyivToday()));while(k<=end&&out.length<400){out.push(k);const d=new Date(k+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+7);k=d.toISOString().slice(0,10);}return out;}
+// тиждень збору: поточний, або перший тиждень системи, якщо він ще попереду
+function wkCur(c){const a=wkMonday(kyivToday()),b=wkMonday(c.start);return b>a?b:a;}
+function wkKeys(c){const out=[];let k=wkMonday(c.start);const end=wkNext(wkCur(c));while(k<=end&&out.length<400){out.push(k);const d=new Date(k+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+7);k=d.toISOString().slice(0,10);}return out;}
 function wkRows(g,c){const sec=state.sections.find(x=>x.id===g.sec&&x.lands);if(!sec)return [];const L=landLeaders();
   return sec.lands.map(l=>{const nm=cur(l).name||'Земля';const lid=l.id||('n'+nm);const r=L.find(x=>x.lid===l.id)||L.find(x=>x.land===nm)||{};const def=/писар/i.test(r.post||'');const off=c.off[lid]!=null?!!c.off[lid]:def;return {lid,land:nm,rep:r.name||'',post:r.post||'',on:!off};});}
 // частка срібла кожної Землі = тижнева сума ÷ кількість зайнятих посад губернаторів
@@ -3221,7 +3223,7 @@ function econOverview(s,si){
 }
 
 // ---------- 2. Доходи ----------
-function lcHistory(g,c,row,PM){const today=kyivToday();const cw=wkMonday(today);const keys=wkKeys(c).filter(k=>k<=cw).slice(-8);
+function lcHistory(g,c,row,PM){const today=kyivToday();const cw=wkCur(c);const keys=wkKeys(c).filter(k=>k<=cw).slice(-8);
   const st=keys.map(k=>{const d=PM[k+'_'+row.lid];const end=wkNext(k);if(k===cw)return d?'ok':'now';if(!d)return k>=wkMonday(c.fineStart)?'miss':'skip';return d.at&&kyivDate(d.at)>=end&&k>=wkMonday(c.fineStart)?'late':'ok';});
   let streak=0;for(let i=st.length-1;i>=0;i--){if(st[i]==='now')continue;if(st[i]==='ok')streak++;else break;}
   return {keys,st,streak};}
@@ -3233,14 +3235,14 @@ function econIncome(s,si){
   if(INCG>=groups.length)INCG=0;const g=groups[INCG];const gi=c.groups.indexOf(g);
   if(groups.length>1)h+=`<div class="egroups">${groups.map((x,i)=>`<button class="${i===INCG?'on':''}" data-a="incg" data-k="${i}">${esc(x.title)}</button>`).join('')}</div>`;
   const rows=wkRows(g,c);const act=rows.filter(r=>r.on&&r.rep);const share=wkShare(g,rows);const gr=wkGold(g,c);const PM=wkPayMap();
-  const cw=wkMonday(kyivToday());const nw=wkNext(cw);
+  const cw=wkCur(c);const nw=wkNext(cw);const future=cw>wkMonday(kyivToday());
   const got=act.reduce((a,r)=>{const d=PM[cw+'_'+r.lid];return d?a+wkSilverTxt(s,d.items||''):a;},0);const need=share*act.length;const paidN=act.filter(r=>PM[cw+'_'+r.lid]).length;
   const pct=need?Math.min(1,got/need):0;const goldDone=gr&&PM[cw+'_'+gr.lid];
-  const daysLeft=Math.round((Date.parse(nw+'T00:00:00Z')-Date.parse(kyivToday()+'T00:00:00Z'))/864e5);
+  const daysLeft=Math.round((Date.parse((future?cw:nw)+'T00:00:00Z')-Date.parse(kyivToday()+'T00:00:00Z'))/864e5);
   const R=52,C=2*Math.PI*R;
   h+=`<div class="block inc-hero"><svg class="ering" viewBox="0 0 128 128" role="img" aria-label="Зібрано ${Math.round(pct*100)}%"><circle cx="64" cy="64" r="${R}" class="trk"/>${pct>0?`<circle cx="64" cy="64" r="${R}" class="val" stroke-dasharray="${(C*pct).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 64 64)"/>`:''}<text x="64" y="62" text-anchor="middle" class="r1">${Math.round(pct*100)}%</text><text x="64" y="80" text-anchor="middle" class="r2">зібрано</text></svg>
-    <div class="ih-txt"><span class="k">${esc(g.title)} · тиждень ${esc(wkLabelOf(cw))}</span><span class="v">${fmt(got)} <small>з ${fmt(need)} срібла</small></span>
-    <div class="ih-facts"><span><b>${paidN} з ${act.length}</b> Земель здали</span><span><b>${act.length?fmt(share):'—'}</b> срібла з кожної</span><span>⏳ <b>${daysLeft<=1?'останній день':'ще '+daysLeft+' дн.'}</b> до кінця тижня</span>${gr?`<span>${goldDone?'✓':'🪙'} <b>${fmt(+g.gold)} золота</b> · ${esc(gr.post)}${goldDone?' здав':''}</span>`:''}</div></div></div>`;
+    <div class="ih-txt"><span class="k">${esc(g.title)} · ${future?'перший тиждень збору':'тиждень'} ${esc(wkLabelOf(cw))}</span><span class="v">${fmt(got)} <small>з ${fmt(need)} срібла</small></span>
+    <div class="ih-facts"><span><b>${paidN} з ${act.length}</b> Земель здали</span><span><b>${act.length?fmt(share):'—'}</b> срібла з кожної</span><span>⏳ ${future?`збір починається з понеділка <b>${esc(wkLabelOf(cw).slice(0,5))}</b> (через ${daysLeft} дн.) — можна здати наперед`:`<b>${daysLeft<=1?'останній день':'ще '+daysLeft+' дн.'}</b> до кінця тижня`}</span>${gr?`<span>${goldDone?'✓':'🪙'} <b>${fmt(+g.gold)} золота</b> · ${esc(gr.post)}${goldDone?' здав':''}</span>`:''}</div></div></div>`;
   // мій рядок
   const all=gr?[...rows,gr]:rows;
   const mine=all.filter(r=>r.on&&r.rep&&AUTH.email&&emailOf(r.rep)===AUTH.email&&!AUTH.bot);
@@ -3251,7 +3253,7 @@ function econIncome(s,si){
     const stc=d?'paid':debts.length?'debt':'wait';const chip=d?'✓ Здано':debts.length?'⚠ Борг':'⏳ Чекаємо';
     const canM=wkCanMark(r)&&!isMine;
     return `<div class="ecard ${stc}${r.gold?' gold':''}${isMine?' mine':''}"><div class="lc-top"><b>${esc(r.gold?r.title:r.land)}</b><span class="lchip">${chip}</span></div><div class="lc-rep">${plink(r.rep)}</div><div class="lc-amt">${esc(wkItemsOf(g,rows,r))}</div>
-      <div class="lc-hist"><span class="dots" title="Останні тижні: зелений — вчасно, жовтий — із запізненням, червоний — не здано">${hs.st.map((x,i)=>`<i class="${x}" title="${esc(wkLabelOf(hs.keys[i]))}"></i>`).join('')}</span>${hs.streak>=2?`<span class="lstreak">🔥 ${hs.streak} поспіль</span>`:''}</div>
+      ${hs.st.length>1||hs.streak>=2?`<div class="lc-hist"><span class="dots" title="Останні тижні: зелений — вчасно, жовтий — із запізненням, червоний — не здано">${hs.st.map((x,i)=>`<i class="${x}" title="${esc(wkLabelOf(hs.keys[i]))}"></i>`).join('')}</span>${hs.streak>=2?`<span class="lstreak">🔥 ${hs.streak} поспіль</span>`:''}</div>`:''}
       ${d&&wkCanUndo(d)?`<button class="small ghost lc-mk" data-a="wkun" data-id="${esc(d.id)}">✕ Скасувати позначку</button>`:''}${!d&&canM?`<button class="small lc-mk" data-a="wkmark" data-s="${si}" data-g="${gi}" data-wk="${cw}" data-l="${esc(r.lid)}">☐ Позначити здачу</button>`:''}</div>`;};
   const live=act.slice().sort((a,b)=>(PM[cw+'_'+a.lid]?1:0)-(PM[cw+'_'+b.lid]?1:0));
   h+=`<div class="ecards">${(gr?[gr]:[]).concat(live).map(card).join('')}</div>`;
