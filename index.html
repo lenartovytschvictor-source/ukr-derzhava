@@ -53,15 +53,19 @@
 .hsec:hover{fill-opacity:.34}
 .hall:has(.hsec:hover) .hsec:not(:hover){opacity:.35}
 .hdiv{stroke:var(--bg,#0d0905);stroke-width:.6}
-.hcoal{fill:none;stroke:var(--gold-hi,#ffdc8a);stroke-width:.35;stroke-opacity:.8}
+.harc{fill:none;stroke:rgba(240,176,48,.28);stroke-width:.25}
+.hcoal{fill:none;stroke:var(--gold-hi,#ffdc8a);stroke-width:1;stroke-linecap:round}
+.hcoalt{stroke:var(--gold-hi,#ffdc8a);stroke-width:.6;stroke-linecap:round}
+.hemi.v2 .hall::before{display:none}
 .hmaj{stroke:var(--cream,#f7ecd6);stroke-width:.3;stroke-dasharray:1 .8;opacity:.8}
 .hmajl{position:absolute;transform:translate(-50%,-50%);font:700 10px var(--f-body);color:var(--cream,#f7ecd6);opacity:.85;background:rgba(0,0,0,.45);padding:1px 5px;border-radius:6px;white-space:nowrap;pointer-events:none}
-.hslab{position:absolute;transform:translate(-50%,-100%);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px;max-width:160px;padding:3px 8px;border-radius:999px;background:color-mix(in srgb,var(--sc) 22%,rgba(0,0,0,.55));border:1px solid color-mix(in srgb,var(--sc) 70%,transparent);font-size:12px;white-space:nowrap;cursor:pointer;z-index:2}
+.hslab{position:absolute;transform:translate(-50%,-50%);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px;max-width:160px;padding:3px 8px;border-radius:999px;background:color-mix(in srgb,var(--sc) 22%,rgba(0,0,0,.55));border:1px solid color-mix(in srgb,var(--sc) 70%,transparent);font-size:12px;white-space:nowrap;cursor:pointer;z-index:2}
 .hslab.ind{cursor:default;opacity:.8}
 .hslab b{color:var(--cream,#f7ecd6)}.hslab .hsn{font-weight:800;color:var(--gold-hi,#ffdc8a)}
 .hslab .hse{width:18px;height:18px;border-radius:5px;font-size:8px}
 .hsv{flex-basis:100%;display:flex;gap:6px;justify-content:center;font-size:10.5px}.hsv em{font-style:normal;font-weight:700}.hsv .f{color:var(--ok)}.hsv .a{color:var(--danger)}.hsv .z{color:var(--muted)}
-.hclab{position:absolute;transform:translate(-50%,-100%);font:700 12px var(--f-body);color:var(--gold-hi,#ffdc8a);white-space:nowrap;text-shadow:0 1px 3px #000;pointer-events:none}
+.hcrow{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:-14px;position:relative;z-index:3}
+.hclab{display:inline-block;font:700 12px var(--f-body);color:#2a1a08;background:linear-gradient(180deg,var(--gold-hi,#ffdc8a),var(--gold,#f2b544));padding:3px 10px;border-radius:999px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.6);z-index:3}.hclab b{font-weight:800}
 .hemi.v2 .hseat{z-index:1;width:auto}.hemi.v2 .hav{width:38px;height:38px}.hemi.v2 .hseat .hl{display:none}.hemi.v2 .hseat:hover .hl{display:block;position:absolute;top:100%;white-space:nowrap;background:rgba(0,0,0,.75);padding:1px 6px;border-radius:6px;color:var(--cream,#f7ecd6);z-index:6}
 .hemi.v2 .hall{margin-top:26px}.hemi.v2 .hseat.hjump{z-index:5}
 .hemi.v2 .hseat.hjump .hav{box-shadow:0 0 0 3px var(--pc,#ffdc8a),0 0 24px var(--pc,#ffdc8a)}
@@ -1878,8 +1882,9 @@ function hemicycle(reps,chair,bill){const N=reps.length;if(!N)return '';
   ps.filter(x=>!groups.some(g=>g.p===x.p)).sort((a,b)=>b.rs.length-a.rs.length).forEach(x=>groups.push({p:x.p,rs:x.rs}));
   if(ind.length)groups.push({ind:true,rs:ind});if(vac.length)groups.push({vac:true,rs:vac});
   // геометрія (координати в % залу; центр дуги внизу посередині)
-  const nRows=N<=10?2:N<=24?3:4;const Rin=13.5,Rstep=nRows>=4?5.2:6.4;const rowR=[...Array(nRows)].map((_,i)=>Rin+4+i*Rstep);const Rout=rowR[nRows-1]+4.2;
-  const X=(R,a)=>50+R*1.18*Math.cos(a),Y=(R,a)=>97-R*2.05*Math.sin(a);
+  const nRows=N<=10?2:N<=24?3:4;const Rin=14,Rstep=nRows>=4?5.2:6.6;const rowR=[...Array(nRows)].map((_,i)=>Rin+4.2+i*Rstep);const Rout=rowR[nRows-1]+4.2;const Rarc=Rout+2.2;
+  // справжнє півколо: 1% ширини по X = 2.05% висоти по Y (зал має пропорції 2.05:1)
+  const X=(R,a)=>50+R*Math.cos(a),Y=(R,a)=>97-R*2.05*Math.sin(a);
   let acc=0;const pos={};let svg='',labels='';
   groups.forEach((g,gi)=>{const k=g.rs.length;const a0=Math.PI*(1-acc/N),a1=Math.PI*(1-(acc+k)/N);g.a0=a0;g.a1=a1;acc+=k;
     // скільки крісел у кожному ряду: пропорційно довжині дуги
@@ -1892,15 +1897,18 @@ function hemicycle(reps,chair,bill){const N=reps.length;if(!N)return '';
     const tip=g.ind?`Позафракційні · ${k} місц${k===1?'е':k<5?'я':'ь'}`:`${g.p.name} · ${k} місц${k===1?'е':k<5?'я':'ь'} · лідер ${g.p.leader||'—'}${g.coal?' · 🤝 '+g.coal.name:''}`;
     svg+=`<polygon class="hsec${g.ind?' ind':''}" ${g.p?`data-a="partym" data-k="${esc(g.p.id)}"`:''} points="${out.join(' ')} ${inn.reverse().join(' ')}" style="--sc:${col}"><title>${esc(tip)}</title></polygon>`;
     // підпис над сектором
-    const am=(a0+a1)/2;const lx=X(Rout+1.2,am),ly=Y(Rout+1.2,am);const vs=bill?g.rs.reduce((o,r)=>{const ch=vmap[r.land];if(ch)o[ch]=(o[ch]||0)+1;return o;},{}):null;
+    const am=(a0+a1)/2;const lx=X(Rarc+4.4,am),ly=Y(Rarc+4.4,am);const vs=bill?g.rs.reduce((o,r)=>{const ch=vmap[r.land];if(ch)o[ch]=(o[ch]||0)+1;return o;},{}):null;
     const vtxt=vs&&(vs.for||vs.against||vs.abstain)?`<span class="hsv">${vs.for?`<em class="f">${vs.for} за</em>`:''}${vs.against?`<em class="a">${vs.against} проти</em>`:''}${vs.abstain?`<em class="z">${vs.abstain} утр.</em>`:''}</span>`:'';
     labels+=`<div class="hslab${g.ind?' ind':''}" style="left:${lx.toFixed(2)}%;top:${ly.toFixed(2)}%;--sc:${col}" ${g.p?`data-a="partym" data-k="${esc(g.p.id)}" role="button" tabindex="0"`:''} title="${esc(tip)}">${g.p?pEmblem(g.p,'hse'):''}<b>${esc(g.ind?'Позафр.':(g.p.short||g.p.name))}</b><span class="hsn">${k}</span>${vtxt}</div>`;});
   // межі між секторами
   groups.forEach((g,gi)=>{if(gi===0||g.vac&&groups[gi-1].vac)return;const a=g.a0;svg+=`<line class="hdiv" x1="${X(Rin,a).toFixed(2)}" y1="${Y(Rin,a).toFixed(2)}" x2="${X(Rout,a).toFixed(2)}" y2="${Y(Rout,a).toFixed(2)}"/>`;});
   // дужки коаліцій
-  coals.forEach(c=>{const gs=groups.filter(g=>g.coal===c);if(gs.length<2)return;const a0=gs[0].a0-0.01,a1=gs[gs.length-1].a1+0.01;const R=Rout+6.4;const pts=[];for(let m=0;m<=40;m++){const a=a0+(a1-a0)*m/40;pts.push(X(R,a).toFixed(2)+','+Y(R,a).toFixed(2));}
-    svg+=`<polyline class="hcoal" points="${X(R-2.4,a0).toFixed(2)},${Y(R-2.4,a0).toFixed(2)} ${pts.join(' ')} ${X(R-2.4,a1).toFixed(2)},${Y(R-2.4,a1).toFixed(2)}"/>`;const am=(a0+a1)/2;
-    labels+=`<div class="hclab" style="left:${X(R+0.6,am).toFixed(2)}%;top:${Y(R+0.6,am).toFixed(2)}%">🤝 ${esc(c.name)} · ${coalSize(c)}</div>`;});
+  // зовнішнє півколо залу; дужка коаліції лягає просто на нього
+  {const pts=[];for(let m=0;m<=90;m++){const a=Math.PI*m/90;pts.push(X(Rarc,a).toFixed(2)+','+Y(Rarc,a).toFixed(2));}svg+=`<polyline class="harc" points="${pts.join(' ')}"/>`;}
+  let crow='';coals.forEach(c=>{const gs=groups.filter(g=>g.coal===c);if(gs.length<2)return;const a0=gs[0].a0,a1=gs[gs.length-1].a1;const pts=[];for(let m=0;m<=60;m++){const a=a0+(a1-a0)*m/60;pts.push(X(Rarc,a).toFixed(2)+','+Y(Rarc,a).toFixed(2));}
+    svg+=`<polyline class="hcoal" points="${pts.join(' ')}"/>`;[a0,a1].forEach(a=>{svg+=`<line class="hcoalt" x1="${X(Rarc-1.6,a).toFixed(2)}" y1="${Y(Rarc-1.6,a).toFixed(2)}" x2="${X(Rarc+1.6,a).toFixed(2)}" y2="${Y(Rarc+1.6,a).toFixed(2)}"/>`;});
+    const am=(a0+a1)/2;
+    crow+=`<div class="hclab" title="Коаліція: ${esc((c.parties||[]).map(id=>(partyById(id)||{}).name||'').join(', '))}">🤝 ${esc(c.name)} · <b>${coalSize(c)}</b></div>`;});
   // лінія більшості
   const need=Math.floor(N/2)+1;if(groups.some(g=>g.p)){const a=Math.PI*(1-(need-0.5)/N);svg+=`<line class="hmaj" x1="${X(Rin-2,a).toFixed(2)}" y1="${Y(Rin-2,a).toFixed(2)}" x2="${X(Rout+1.5,a).toFixed(2)}" y2="${Y(Rout+1.5,a).toFixed(2)}"/>`;labels+=`<div class="hmajl" style="left:${X(Rin-4.5,a).toFixed(2)}%;top:${Y(Rin-4.5,a).toFixed(2)}%" title="Більшість: ${need} з ${N}">50%+1</div>`;}
   let html=`<svg class="hsect2" viewBox="0 0 100 100" preserveAspectRatio="none">${svg}</svg>${labels}`;
@@ -1908,7 +1916,7 @@ function hemicycle(reps,chair,bill){const N=reps.length;if(!N)return '';
     html+=`<div class="hseat${v?' vac':''}${ch?' v-'+ch:''}${pp?' hasp':''}" data-land="${esc(r.land)}" style="left:${q.x.toFixed(2)}%;top:${q.y.toFixed(2)}%${pp?';--pc:'+esc(pp.color||'#8a7a63'):''}">${seatLink(r.name,seatAv(r.name,'hav'),r.land+' — '+(v?'вакантно':r.name)+(pp?' · '+pp.name:'')+(ch?' · '+CH[ch][0]:''))}<span class="hl">${esc(r.land.replace(/\s*Земля$/,''))}</span></div>`;});
   const legend=bill?`<div class="hlegend"><span class="lg v-for">За</span><span class="lg v-against">Проти</span><span class="lg v-abstain">Утримався</span><span class="lg none">Ще не голосував</span><span class="hint">· «${esc(bill.title||'')}»</span></div>`:'';
   const trib=cls=>`<div class="tribune ${cls}"><span class="tk">Голова Палати</span>${chair?seatLink(chair,seatAv(chair,'hav'),'Голова Палати: '+chair)+`<span class="tn">${plink(chair)}</span>`:'<span class="tn vacn">Вакантно</span>'}</div>`;
-  return `<div class="hemi v2" role="group" aria-label="Зал Палати Земель"><div class="hall">${html}${trib('in')}</div>${trib('out')}${legend}</div>`;}
+  return `<div class="hemi v2" role="group" aria-label="Зал Палати Земель">${crow?`<div class="hcrow">${crow}</div>`:''}<div class="hall">${html}${trib('in')}</div>${trib('out')}${legend}</div>`;}
 // крісла плавно перелітають, коли представник змінює партію або Земля — представника
 function hallAnim(){const seats=document.querySelectorAll('.hemi.v2 .hseat[data-land]');if(!seats.length)return;const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;const now={};
   seats.forEach(el=>{const k=el.dataset.land;const l=parseFloat(el.style.left),t=parseFloat(el.style.top);now[k]={l,t};const o=HALLPOS[k];
