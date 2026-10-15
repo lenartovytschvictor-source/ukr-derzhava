@@ -127,6 +127,31 @@ div.fhead{cursor:default}
 .bmbox .factions{border:0;padding:0;background:none}
 .fvotes{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin-top:8px;font-size:13px}
 .fv{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:2px 10px}.fv i{width:8px;height:8px;border-radius:50%;background:var(--pc)}.fv em{font-style:normal;font-weight:700}.fv em.f{color:var(--ok)}.fv em.a{color:var(--danger)}.fv em.z{color:var(--muted)}
+
+/* ===== Хелловін ===== */
+html.hw{--bg:#0b0710;--bg2:#130a19;--panel:#1a0f21;--panel2:#24142e;--line:rgba(255,128,32,.18);--line2:rgba(255,128,32,.36);--gold:#ff8a1f;--gold-hi:#ffc46b;--gold-soft:#e0782a;--cream:#f5eaff;--muted:#b49ccb;--vacant:#ffb35c}
+html.hw body{background:radial-gradient(1100px 520px at 50% -200px,rgba(255,128,32,.22),transparent 70%),radial-gradient(800px 600px at 0% 40%,rgba(130,50,190,.16),transparent 70%),radial-gradient(800px 600px at 100% 80%,rgba(255,90,20,.10),transparent 70%),var(--bg);background-attachment:fixed}
+html.hw .block,html.hw .kpi,html.hw .bill,html.hw .tblwrap,html.hw .cons article.doc,html.hw .patrons,html.hw .ecard,html.hw .es,html.hw .etabs2{background:linear-gradient(180deg,rgba(38,20,48,.93),rgba(20,11,26,.96));box-shadow:var(--shadow),inset 0 1px 0 rgba(255,170,90,.06)}
+html.hw nav.toc{background:rgba(18,9,24,.88)}
+html.hw section.sec>h2::before{box-shadow:0 0 14px rgba(255,128,32,.6)}
+html.hw h1,html.hw .brand2 h1{background:linear-gradient(180deg,#ffd27a,#ff8a1f 60%,#d2560c);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 16px rgba(255,120,20,.35))}
+.hwpump{display:inline-block;margin-left:.25em;-webkit-text-fill-color:initial;color:initial;filter:drop-shadow(0 0 10px rgba(255,140,30,.7));animation:hwbob 3s ease-in-out infinite}
+@keyframes hwbob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-4px) rotate(4deg)}}
+#hwfx{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.hwbat{position:absolute;display:block;width:46px;opacity:.85;filter:drop-shadow(0 0 8px rgba(255,130,30,.55))}
+.hwbat svg{width:100%;fill:#0a0410;stroke:rgba(255,150,60,.6);stroke-width:.7}
+.hwbat.b0{top:12%;animation:hwfly 26s linear infinite}
+.hwbat.b1{top:34%;width:30px;animation:hwfly 34s linear -9s infinite}
+.hwbat.b2{top:58%;width:38px;animation:hwfly 30s linear -18s infinite reverse}
+.hwbat.b3{top:22%;width:26px;animation:hwfly 40s linear -25s infinite reverse}
+.hwbat.b4{top:76%;width:34px;animation:hwfly 36s linear -5s infinite}
+@keyframes hwfly{0%{left:-8%;transform:translateY(0)}25%{transform:translateY(-30px)}50%{transform:translateY(10px)}75%{transform:translateY(-20px)}100%{left:108%;transform:translateY(0)}}
+.hwbat svg{animation:hwflap .35s ease-in-out infinite alternate;transform-origin:50% 40%}
+@keyframes hwflap{from{transform:scaleY(1)}to{transform:scaleY(.55)}}
+.hwweb{position:absolute;top:0;width:180px;height:180px;opacity:.22;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23ffb46b' stroke-width='.6'%3E%3Cpath d='M0 0L100 100M0 0L100 40M0 0L40 100M0 0L100 0M0 0L0 100'/%3E%3Cpath d='M20 0Q16 8 0 20M40 0Q32 16 22 22Q16 32 0 40M62 0Q50 24 38 30Q30 42 26 50Q22 56 0 62M86 0Q70 30 56 38Q44 52 38 60Q30 74 0 86'/%3E%3C/svg%3E") no-repeat;background-size:contain}
+.hwweb.l{left:0}.hwweb.r{right:0;transform:scaleX(-1)}
+@media (prefers-reduced-motion:reduce){.hwbat,.hwbat svg,.hwpump{animation:none}.hwbat{display:none}}
+@media (max-width:640px){.hwweb{width:110px;height:110px}.hwbat{width:28px}}
 /* ===== Економіка 2.0 ===== */
 .eco2{display:grid;gap:14px}
 .etabs2{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:14px;background:var(--panel);overflow-x:auto}
@@ -3453,6 +3478,15 @@ function econDebts(s,si){
   return h;
 }
 
+
+// ===== Святкове оформлення: Хелловін (автоматично 25.10–01.11 за Києвом; адмін може ввімкнути/вимкнути) =====
+function seasonMode(){const g=govSec();return (g&&g.season)||'auto';}
+function hwOn(){const m=seasonMode();if(m==='on')return true;if(m==='off')return false;let d='';try{d=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Kiev',month:'2-digit',day:'2-digit'}).format(new Date());}catch(_){d=new Date().toISOString().slice(5,10);}return (d>='10-25'&&d<='10-31')||d==='11-01';}
+const BAT='<svg viewBox="0 0 64 28" aria-hidden="true"><path d="M32 9c1.6-3 3-4 3-4l1 3c2.5-.6 4.2.2 4.2.2 3.2-5 9.8-7 16.6-5.4-4.4 1.6-6.4 4.6-6.4 4.6 4.6-.6 9.2 1.4 11.6 5-4-.4-7.4.4-9.4 2.4 1.8 2 2.2 4.8 2.2 4.8-3.6-2.6-8.4-2.6-11 .2C42 15 38 13.6 32 22c-6-8.4-10-7-11.8-3.6-2.6-2.8-7.4-2.8-11-.2 0 0 .4-2.8 2.2-4.8-2-2-5.4-2.8-9.4-2.4 2.4-3.6 7-5.6 11.6-5 0 0-2-3-6.4-4.6C14 -.2 20.6 1.8 23.8 6.8c0 0 1.7-.8 4.2-.2l1-3s1.4 1 3 4z"/></svg>';
+function hwApply(){const on=hwOn();document.documentElement.classList.toggle('hw',on);let fx=document.getElementById('hwfx');
+  if(on&&!fx){fx=document.createElement('div');fx.id='hwfx';fx.setAttribute('aria-hidden','true');fx.innerHTML=[0,1,2,3,4].map(i=>`<i class="hwbat b${i}">${BAT}</i>`).join('')+'<i class="hwweb l"></i><i class="hwweb r"></i>';document.body.appendChild(fx);}
+  else if(!on&&fx)fx.remove();}
+
 // ===================== Партії =====================
 let FACTM='',PARTIES=[],COALS=[],PARTYM='',PF=null,PSTMT={t:'',x:''},PEDIT=null,PINV='',PINVSEL='',PADDSEL='';
 const P_COLORS=['#e0574a','#3987e5','#f2b544','#199e70','#9085e9','#d55181','#e07b30','#2bb3b3','#8a7a63','#6aa84f'];
@@ -3667,7 +3701,7 @@ function syncHetAdmin(){if(!AUTH||AUTH.bot)return;let h=false;try{h=!!(state&&st
 function render0(){syncHetAdmin();const cm0=document.getElementById('chmsgs');const cmS=cm0?{top:cm0.scrollTop,bot:cm0.scrollHeight-cm0.scrollTop-cm0.clientHeight<60}:null;const ae=document.activeElement;const fid=ae&&ae.id&&app.contains(ae)?ae.id:null;let s0=null,s1=null;try{s0=ae.selectionStart;s1=ae.selectionEnd;}catch(_){}
   renderInner();document.documentElement.lang=LANG==='en'?'en':'uk';if(LANG==='en')trTree(app);app.querySelectorAll('nav.toc,.subnav').forEach(nv=>{if(nv.scrollWidth>nv.clientWidth){const c=nv.querySelector('[aria-current]');if(c)nv.scrollLeft=Math.max(0,c.offsetLeft-nv.clientWidth/2+c.offsetWidth/2);}});
   if(fid){const el=document.getElementById(fid);if(el&&el!==document.activeElement){el.focus({preventScroll:true});try{if(s0!=null)el.setSelectionRange(s0,s1);}catch(_){}}}
-  mapFit();hcLayout();try{hallAnim();}catch(_){}{const ht=document.querySelector('.hcwrap:not(.editing)');if(ht&&ht.scrollWidth>ht.clientWidth+4)ht.scrollLeft=(ht.scrollWidth-ht.clientWidth)/2;}{const cm=document.getElementById('chmsgs');if(cm){const st=CHAT.stick||Date.now()<(CHAT.stickUntil||0)||!cmS||cmS.bot;
+  mapFit();hcLayout();try{hallAnim();}catch(_){}try{hwApply();}catch(_){}{const ht=document.querySelector('.hcwrap:not(.editing)');if(ht&&ht.scrollWidth>ht.clientWidth+4)ht.scrollLeft=(ht.scrollWidth-ht.clientWidth)/2;}{const cm=document.getElementById('chmsgs');if(cm){const st=CHAT.stick||Date.now()<(CHAT.stickUntil||0)||!cmS||cmS.bot;
     if(st){cm.scrollTop=cm.scrollHeight;if(CHAT.msgs&&CHAT.stick){CHAT.stick=false;CHAT.stickUntil=Date.now()+3000;}}else cm.scrollTop=cmS.top;
     cm.querySelectorAll('img').forEach(im=>{if(!im.complete)im.addEventListener('load',()=>{const near=cm.scrollHeight-cm.scrollTop-cm.clientHeight<260;if(Date.now()<(CHAT.stickUntil||0)||near)cm.scrollTop=cm.scrollHeight;},{once:true});});}}
   setTimeout(()=>{try{chatEnsure();}catch(e){console.warn(e);}try{setFavicon();}catch(_){}},0);
@@ -3690,7 +3724,7 @@ function renderInner(){chatMarkSeen();
   const rp=landLeaders();const passedN=allBills().filter(b=>effStatus(b)==='passed').length;
   const chips=[['Земель',lands],['Представників',rp.filter(r=>r.name).length+' з '+rp.length],['Законів прийнято',passedN],['Оновлено',esc(state.updated),1]];
   window.__BAR=bar;const gerbImg=emblemSrc();
-  let html=`<header class="top top2"><div class="brand2">${gerbImg?`<img class="gerb" src="${esc(gerbImg)}" alt="Герб">`:'<span class="gerb none" aria-hidden="true"></span>'}<div><h1>Українська Держава</h1><a class="bsub" href="https://dragpolit.com" target="_blank" rel="noopener">Доповнення до гри DragPolit <span aria-hidden="true">↗</span></a></div></div><div class="bar">${status}${dupSel()}${bar}</div></header>`;
+  let html=`<header class="top top2"><div class="brand2">${gerbImg?`<img class="gerb" src="${esc(gerbImg)}" alt="Герб">`:'<span class="gerb none" aria-hidden="true"></span>'}<div><h1>Українська Держава${hwOn()?'<span class="hwpump" aria-hidden="true">🎃</span>':''}</h1><a class="bsub" href="https://dragpolit.com" target="_blank" rel="noopener">Доповнення до гри DragPolit <span aria-hidden="true">↗</span></a></div></div><div class="bar">${status}${dupSel()}${bar}</div></header>`;
   if(emActive()){const c=EMERG.cur;const end=new Date(+c.untilMs).toISOString();html+=`<div class="emerg" role="status"><span class="emi" aria-hidden="true">🚨</span><div class="emt"><b>Надзвичайний стан</b>${c.reason?`<div>${esc(c.reason)}</div>`:''}<div class="hint">Запроваджено ${c.source==='law'?'законом'+(c.law?' «'+esc(c.law)+'»':''):'указом Гетьмана'+(c.decreeNo?' №'+esc(c.decreeNo):'')} · до ${esc(fmtDT(end))} · залишилось ${esc(timeLeft(end))} · законопроєкти голосуються 12 годин</div></div>${isHetman()&&c.source!=='law'?`<button class="small" data-a="emend" ${busy?'disabled':''}>Припинити</button>`:''}</div>`;}
   html+='<nav class="toc" aria-label="Розділи">'+state.sections.filter(s=>!s.tab).map(s=>`<button data-a="tab" data-id="${esc(s.id)}" ${s.id===active?'aria-current="page"':''}>${NAV_ICONS[s.id]?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${NAV_ICONS[s.id]}</svg>`:''}<span>${esc(s.navTop||s.nav||s.title)}</span>${s.kind==='chat'&&AUTH.email&&chatUnread()?`<i class="nbadge">${chatUnread()}</i>`:''}</button>`).join('')+'</nav>';
   html+=mobNav();
@@ -3903,6 +3937,7 @@ app.addEventListener('input',e=>{
 app.addEventListener('change',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;const sec=state.sections[+t.dataset.s];
   if(a==='dr'){sec.donations[+t.dataset.p].res=t.value;render();}
+  else if(a==='season'){sec.season=t.value;render();}
   else if(a==='wkon'){const c=wkCfg(sec);c.off[t.dataset.l]=!t.checked;render();}
   else if(a==='wkt'){wkCfg(sec).groups[+t.dataset.g].treasury=t.checked;render();}
   else if(a==='wks'){if(/^\d{4}-\d{2}-\d{2}$/.test(t.value))wkCfg(sec).start=t.value;render();}
@@ -4940,6 +4975,7 @@ function awardsHtml(s,si){const mp=myPost();const gov=!!mp&&!editing&&!AUTH.bot;
 function isFin(){const g=govSec();return !!(AUTH.email&&!postBan()&&g&&(g.posts||[]).some(p=>p.perm==='econ'&&String(p.name||'').trim()&&emailOf(p.name)===AUTH.email));}
 function govHtml(s,si){const posts=s.posts||(s.posts=[]);let h='<div class="gov">';
   if(editing){h+='<div class="block"><h3>Посади Канцелярії <small>можна також призначати законом через Палату</small></h3>'+posts.map((p,pi)=>`<div class="artedit"><div class="erow gp"><input type="text" id="gpt-${pi}" data-a="gpt" data-s="${si}" data-p="${pi}" value="${esc(p.title)}" placeholder="Назва посади">${plSelect(`gpn-${pi}`,`data-a="gpn" data-s="${si}" data-p="${pi}"`,p.name)}${['hetman','pysar','fin','def'].includes(p.id)?'':`<button class="small danger" data-a="gpdel" data-s="${si}" data-p="${pi}">Прибрати</button>`}</div>${p.id==='hetman'?'<p class="hint">Гетьман: підписує або ветує закони (24 години після голосування), видає укази, вручає відзнаки.</p>':`<label class="fl">Права на сайті<select id="gpp-${pi}" data-a="gpp" data-s="${si}" data-p="${pi}">${[['','Лише новини та відзнаки'],['econ','+ редагує Економіку'],['lands','+ редагує Землі та Військо'],['foreign','+ укладає міжнародні угоди'],['interior','+ громадянство, реєстр гравців, протоколи, ліцензії адвокатів'],['court','Суддя (розглядає справи в Суді)'],['arbiter','Суддя-арбітр (вирішує, коли судді розійшлися)'],['prosecutor','+ Генеральний Прокурор (позови від імені держави)']].map(([k,l])=>`<option value="${k}"${(p.perm||'')===k?' selected':''}>${l}</option>`).join('')}</select></label>`}</div>`).join('')+`<div><button class="small" data-a="gpadd" data-s="${si}">+ Посада</button></div></div>`;}
+  if(editing&&AUTH.admin){h+=`<div class="block"><h3>Святкове оформлення <small>🎃 Хелловін</small></h3><label class="fl">Коли показувати<select id="season" data-a="season" data-s="${si}"><option value="auto"${(s.season||'auto')==='auto'?' selected':''}>Автоматично: 25 жовтня – 1 листопада</option><option value="on"${s.season==='on'?' selected':''}>Увімкнути зараз</option><option value="off"${s.season==='off'?' selected':''}>Вимкнути</option></select></label><p class="hint">Після вибору натисніть «Зберегти». В автоматичному режимі оформлення само зникне 2 листопада.</p></div>`;}
   if(editing&&AUTH.admin){const g=s;h+=`<div class="block"><h3>Герб на документах <small>друкується вгорі кожного документа-картинки</small></h3><div class="landtools"><img class="embprev" src="${esc(emblemSrc())}" alt="Герб"><button class="small" data-a="embpick" data-s="${si}">Завантажити інший герб</button></div></div>`;}
   else{h+=`<div class="block rtwrap">${roundTable(posts.filter(p=>p.perm!=='court'&&p.perm!=='arbiter'))}</div>`;h+=treatiesHtml();if(!AUTH.bot)h+=docForm();h+='<div class="leaders govposts rtlist">'+posts.map(p=>{const v=!String(p.name||'').trim();return `<div class="post${v?' vac':''}"><span class="t">${esc(p.title)}</span><span class="h">${v?'Вакантно':plink(p.name)}</span>${p.perm==='foreign'?'<span class="t perm">🤝 готує міжнародні угоди</span>':p.perm==='interior'?'<span class="t perm">🪪 громадянство, реєстр, протоколи</span>':p.perm==='court'?'<span class="t perm">⚖️ розглядає справи в Суді</span>':p.perm==='arbiter'?'<span class="t perm">⚖️ вирішує спори суддів</span>':p.perm==='prosecutor'?'<span class="t perm">🛡 обвинувачення від імені держави</span>':p.perm==='econ'?'<span class="t perm">💰 веде Економіку</span>':p.perm==='lands'?'<span class="t perm">🗺 веде Землі та Військо</span>':p.id==='hetman'?'<span class="t perm">✍️ підписує закони, видає укази</span>':''}</div>`}).join('')+'</div>';}
   return h+'</div>';}
