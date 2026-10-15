@@ -76,6 +76,7 @@
 .pblist{display:grid;gap:6px}.pbrow{display:grid;grid-template-columns:56px minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:rgba(0,0,0,.14)}.pbno{font-weight:800;color:var(--gold-hi,#ffdc8a)}.pbt{display:grid;min-width:0}.pbt small{color:var(--muted);font-size:12px}.pbopen{border:1px solid var(--line2,rgba(242,181,68,.32));border-radius:12px;padding:10px;display:grid;gap:8px}@media (max-width:640px){.pbrow{grid-template-columns:44px minmax(0,1fr)}.pbrow .pill,.pbrow button{grid-column:2;justify-self:start}}
 .block.ecol>h3{cursor:pointer;user-select:none;display:flex!important;justify-content:flex-start!important;align-items:baseline;gap:8px;flex-wrap:wrap;text-align:left}.block.ecol>h3 small{margin-left:auto}
 #pbq{width:100%;background:rgba(0,0,0,.28);color:inherit;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit}.block.ecol>h3::before{content:'▾';color:var(--gold-hi,#ffdc8a);font-size:14px}.block.ecol.eclosed>h3::before{content:'▸'}.block.ecol.eclosed>:not(h3){display:none!important}.block.ecol.eclosed{padding-block:12px}
+.bcalc .bcgrid{display:grid;gap:10px}.bcalc input[type=text],.bcalc select{width:100%}.bcrows{display:grid;gap:8px;justify-items:start}.bcrow{display:grid;grid-template-columns:minmax(0,260px) 14px 90px auto;justify-content:start;gap:8px;align-items:center;width:100%}.bcrow button{justify-self:start}.bcx{color:var(--muted);font-weight:700}.bctbl td,.bctbl th{padding:6px 10px}.bcsum{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}.bcbad{color:var(--danger);font-weight:700}.bcok{color:var(--ok);font-weight:700}.bldr{flex-wrap:wrap}.fl.sm{font-size:12px;max-width:110px}
 /* ===== Партії ===== */
 .parties{display:grid;gap:14px}
 .phero{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;background:radial-gradient(120% 160% at 0% 0%,rgba(242,181,68,.14),transparent 60%),var(--panel)}.phero h3{margin:0 0 4px}.phero p{margin:0;max-width:640px}
@@ -3464,6 +3465,30 @@ function econPatrons(s,si){
   return h+'</div>';
 }
 
+
+// ---------- Калькулятор будівництва ----------
+const BLD_DEF=[{id:'hosp',ic:'🏥',name:'Госпіталь',cost:{'Золото':300,'Срібло':200000,'Нафта':50,'Руда':60,'Вугілля':100}},
+  {id:'base',ic:'🪖',name:'Військова база',cost:{'Золото':100,'Срібло':100000,'Нафта':50,'Руда':50,'Вугілля':150}},
+  {id:'school',ic:'🏫',name:'Школа',cost:{'Золото':50,'Срібло':150000,'Нафта':10,'Руда':100,'Вугілля':200}},
+  {id:'house',ic:'🏢',name:'ЖК',cost:{'Золото':50,'Срібло':100000,'Нафта':10,'Руда':10,'Вугілля':150}}];
+const BLD_RES=['Золото','Срібло','Нафта','Руда','Вугілля'];
+let BC={region:'',rows:[{b:'hosp',n:1}]};
+function bldList(s){if(!s.buildings||!s.buildings.length)s.buildings=JSON.parse(JSON.stringify(BLD_DEF));return s.buildings;}
+function bldRegions(){const out=new Set();try{const M=window.MAPGEO;if(M&&M.regs){const ours=(M.ours||[]).map(String);(Array.isArray(M.regs)?M.regs:Object.values(M.regs)).forEach(r=>{if(ours.includes(String(r[2])))out.add(r[1]);});}}catch(_){}landLeaders().forEach(r=>out.add(r.land));return [...out].sort((a,b)=>a.localeCompare(b,'uk'));}
+function bldTotals(s){const L=bldList(s);const tot={};const lines=[];BC.rows.forEach(r=>{const b=L.find(x=>x.id===r.b);const n=Math.max(0,Math.floor(+r.n||0));if(!b||!n)return;lines.push({b,n});Object.entries(b.cost||{}).forEach(([k,v])=>{tot[k]=(tot[k]||0)+(+v||0)*n;});});return {tot,lines};}
+function bldCalcHtml(s){const L=bldList(s);const {tot,lines}=bldTotals(s);const {cur}=treasuryNow(s);const res=BLD_RES.concat(Object.keys(tot).filter(k=>!BLD_RES.includes(k)));
+  const have=k=>{const c=canonRes(s,k);return c&&c in cur?cur[c]:0;};const silv=Object.entries(tot).reduce((a,[k,v])=>a+(silverOf(s,k,v)||0),0);const short=res.filter(k=>tot[k]&&have(k)<tot[k]);
+  let h=`<div class="block bcalc"><h3>🏗 Калькулятор будівництва <small>скільки ресурсів треба на будівлі в регіоні</small></h3>
+    <div class="bcgrid"><label class="fl">Регіон<input type="text" id="bc-reg" data-a="bcf" data-k="region" list="bcregs" value="${esc(BC.region)}" placeholder="Почніть вводити назву регіону"><datalist id="bcregs">${bldRegions().map(r=>`<option value="${esc(r)}">`).join('')}</datalist></label></div>
+    <div class="bcrows">${BC.rows.map((r,i)=>`<div class="bcrow"><select id="bc-b-${i}" data-a="bcf" data-k="b" data-i="${i}">${L.map(b=>`<option value="${esc(b.id)}"${b.id===r.b?' selected':''}>${esc((b.ic?b.ic+' ':'')+b.name)}</option>`).join('')}</select><span class="bcx">×</span><input type="text" inputmode="numeric" id="bc-n-${i}" data-a="bcf" data-k="n" data-i="${i}" value="${esc(String(r.n))}" aria-label="Кількість">${BC.rows.length>1?`<button class="small danger" data-a="bcdel" data-k="${i}" aria-label="Прибрати">✕</button>`:''}</div>`).join('')}<button class="small" data-a="bcadd">+ Ще будівля</button></div>`;
+  if(lines.length){h+=`<div class="tblwrap keep"><table class="exp bctbl"><thead><tr><th>Ресурс</th><th class="num">Потрібно</th><th class="num">Є в казні</th><th class="num">Не вистачає</th></tr></thead><tbody>${res.filter(k=>tot[k]).map(k=>{const hv=have(k),d=tot[k]-hv;return `<tr><td>${esc(k)}</td><td class="num"><b>${fmt(tot[k])}</b></td><td class="num">${fmt(hv)}</td><td class="num">${d>0?`<span class="mv out">−${fmt(d)}</span>`:'<span class="mv in">✓</span>'}</td></tr>`;}).join('')}</tbody></table></div>
+    <div class="bcsum"><span>Разом ≈ <b>${fmt(silv)}</b> срібла за ринковими цінами</span><span class="${short.length?'bcbad':'bcok'}">${short.length?'⚠ У казні не вистачає: '+short.map(esc).join(', '):'✓ У казні вистачає всього'}</span></div>
+    <div class="row2"><button class="primary" data-a="bcdoc">📄 Документ-кошторис</button><button class="small" data-a="bccopy">Скопіювати текстом</button>${(isFin()||AUTH.admin)&&!AUTH.bot?`<button class="small" data-a="bcexp" ${busy?'disabled':''}>Записати як витрату</button>`:''}</div>`;}
+  else h+='<p class="hint">Оберіть будівлю й кількість.</p>';
+  return h+'</div>';}
+function bldText(s){const {tot,lines}=bldTotals(s);const reg=String(BC.region||'').trim();const silv=Object.entries(tot).reduce((a,[k,v])=>a+(silverOf(s,k,v)||0),0);
+  return {title:'Будівництво'+(reg?' в регіоні «'+reg+'»':''),body:['Перелік будівель:',...lines.map(x=>'• '+x.b.name+' — '+x.n+' шт.'),'','Необхідні ресурси:',...Object.keys(tot).filter(k=>tot[k]).map(k=>'• '+k+': '+fmt(tot[k])),'','Разом за ринковими цінами ≈ '+fmt(silv)+' срібла.'].join('\n'),lines,tot,reg};}
+
 // ---------- 3. Витрати ----------
 function econExpenses(s,si){
   const tr=s.treasury||{};const resOpts=invItems(tr).map(it=>it.name);const ex=s.expenses||[];const dl=s.daily||[];
@@ -3471,6 +3496,7 @@ function econExpenses(s,si){
   const wOut=mv.filter(o=>mvWeek(o)===cw&&!MVIN(o.kind)).reduce((a,o)=>a+mvSilver(s,o),0);
   const perDay=dl.reduce((a,it)=>a+(silverOf(s,it.res||'Срібло',dailyRate(it))||0),0);const allEx=ex.reduce((a,e)=>a+exSilver(s,e),0);
   let h=`<div class="eco-stats"><div class="es out"><span class="k">Витрачено за тиждень</span><b>${wOut?'−':''}${fmt(Math.abs(wOut))}</b><span class="s">срібла, разом зі списаннями</span></div><div class="es out"><span class="k">Щоденні списання</span><b>${perDay?'−':''}${fmt(perDay)}</b><span class="s">срібла на день · ${fmt(perDay*7)} на тиждень</span></div><div class="es out"><span class="k">Усі разові витрати</span><b>${allEx?'−':''}${fmt(allEx)}</b><span class="s">срібла · ${ex.length} запис${ex.length%10===1&&ex.length%100!==11?'':ex.length%10>=2&&ex.length%10<=4&&(ex.length%100<10||ex.length%100>=20)?'и':'ів'}</span></div></div>`;
+  h+=bldCalcHtml(s);
   if((isFin()||AUTH.admin)&&!AUTH.bot){const sv=EXF.rows.reduce((a,r)=>a+(silverOf(s,r.res,+String(r.qty).replace(/\s/g,'')||0)||0),0);
     h+=`<div class="block exform"><h3>➕ Нова витрата</h3><input type="text" id="exf-what" data-a="exf" data-k="what" value="${esc(EXF.what)}" placeholder="На що пішло, напр. «Закупівля 20 танків для 3-го куреня»" maxlength="160">
       <div class="excats">${EXCATS.map(([k,ic,l])=>`<button type="button" class="${EXF.cat===k?'on':''}" data-a="excat" data-k="${k}">${ic} ${l}</button>`).join('')}</div>
@@ -3644,6 +3670,7 @@ function econHtml(s,si){
     h+=fl.length?`<div class="tblwrap" style="border:0;background:transparent"><table class="exp jour"><thead><tr><th>Коли</th><th>Що</th><th class="num">Зміна</th></tr></thead><tbody>${lim.map(o=>`<tr><td>${o.at?esc(fmtDT(o.at)):esc(o.date||'раніше')}${o.at&&o.kind==='week'?`<div class="hint">тиждень ${esc(o.date)}</div>`:''}</td><td>${icon[o.kind]} <b>${o.kind==='daily'?'Держава':(o.who?plink(o.who):'—')}</b><div class="hint">${esc(o.what)}</div></td><td class="num">${moneyCell(s,o.items)}${o.items.some(i=>!i.canon)?'<div><span class="tag warn">⚠ такого ресурсу немає в казні</span></div>':''}</td></tr>`).join('')}</tbody></table></div>${fl.length>5?moreBtn('jour',fl.length):''}`:'<p class="empty">Записів ще немає.</p>';
     h+='</div>';
   }
+  if(editing){const L=bldList(s);h+=`<div class="block"><h3>Ціни будівель <small>для калькулятора будівництва (за 1 будівлю)</small></h3>`+L.map((b,bi)=>`<div class="erow bldr"><input type="text" id="bl-ic-${bi}" data-a="blf" data-s="${si}" data-p="${bi}" data-k="ic" value="${esc(b.ic||'')}" style="max-width:56px" aria-label="Значок"><input type="text" id="bl-n-${bi}" data-a="blf" data-s="${si}" data-p="${bi}" data-k="name" value="${esc(b.name)}" placeholder="Назва">${BLD_RES.map(k=>`<label class="fl sm">${k}<input type="text" inputmode="numeric" id="bl-${bi}-${k}" data-a="blc" data-s="${si}" data-p="${bi}" data-k="${k}" value="${esc(String((b.cost||{})[k]||''))}"></label>`).join('')}<button class="small danger" data-a="bldel" data-s="${si}" data-p="${bi}">✕</button></div>`).join('')+`<div><button class="small" data-a="bladd" data-s="${si}">+ Будівля</button></div></div>`;}
   // ===== weekly contributions (від Земель)
   {const c=wkCfg(s);
   if(editing&&AUTH.admin)h+=`<div class="block ecoreset"><h3>Почати економіку з нуля</h3><p class="hint">Стирає всі записи: стартовий залишок казни, усі внески Земель і штрафи за них, пожертви меценатів, витрати, архів старих внесків. Казна стане 0, тижні почнуться з поточного (${esc(wkLabelOf(wkMonday(kyivToday())))}). Налаштування лишаються: суми внесків, ресурси, ціни, щоденні списання (рахуватимуться заново від цієї миті). Борги за рішеннями Суду не зникають. Скасувати це неможливо.</p><div class="row2"><input type="text" id="ecorz" data-a="ecorz" placeholder="Щоб підтвердити, впишіть: ОБНУЛИТИ" value="${esc(ECORZ)}" style="max-width:320px"><button class="danger" data-a="ecoreset" data-s="${si}" ${ECORZ.trim().toUpperCase()==='ОБНУЛИТИ'&&!busy?'':'disabled'}>Стерти все й почати з 0</button></div></div>`;
@@ -3861,6 +3888,7 @@ app.addEventListener('input',e=>{
   if(a==='pinvsel'){PINVSEL=t.value;return;}
   if(a==='paddsel'){PADDSEL=t.value;return;}
   if(a==='ecorz'){ECORZ=t.value;const bt=document.querySelector('button[data-a=ecoreset]');if(bt)bt.disabled=ECORZ.trim().toUpperCase()!=='ОБНУЛИТИ';return;}
+  if(a==='bcf'){const k=t.dataset.k;if(k==='region'){BC.region=t.value;return;}const r=BC.rows[+t.dataset.i];if(r){r[k]=k==='n'?t.value.replace(/\D/g,''):t.value;}clearTimeout(window.__bcT);window.__bcT=setTimeout(()=>{const id=t.id;render();const el=document.getElementById(id);if(el&&el.tagName==='INPUT'){el.focus();el.setSelectionRange(el.value.length,el.value.length);}},t.tagName==='SELECT'?0:300);return;}
   if(a==='exf'){const k=t.dataset.k;if(k==='what')EXF.what=t.value;else{const r=EXF.rows[+t.dataset.i];if(r){r[k]=t.value;}if(t.tagName==='SELECT')render();else{const sp=t.closest('.exform');}}return;}
   if(a==='pd2'){PD2[t.dataset.k]=t.value;if(t.dataset.k!=='qty'||true){if(t.tagName==='SELECT')render();}return;}
   if(a==='chin'){CHAT.draft[CHAT.th]=t.value;const q=mentionQ(t);if(q!==CHAT.mq){CHAT.mq=q;render();}return;}
@@ -3942,6 +3970,8 @@ app.addEventListener('input',e=>{
   if(a==='ab'){sec.doc.chapters[+t.dataset.c].articles[+t.dataset.r].body=t.value;return;}
   if(a==='mn'){const mi=+t.dataset.p;const old=String(sec.members[mi].name||'').trim();if(old&&old!==t.value&&!/^вакант/i.test(old)){(sec.weeks||[]).forEach(w=>{w.who=w.who||[];if(!w.who[mi])w.who[mi]=old;});}sec.members[mi].name=t.value;render();return;}
   if(a==='mq'){sec.members[+t.dataset.p].needs=t.value;return;}
+  if(a==='blf'){bldList(sec)[+t.dataset.p][t.dataset.k]=t.value;return;}
+  if(a==='blc'){const b=bldList(sec)[+t.dataset.p];(b.cost=b.cost||{})[t.dataset.k]=+t.value.replace(/\D/g,'')||0;return;}
   if(a==='wkfp'){wkCfg(sec).finePct=Math.min(500,+t.value.replace(/\D/g,'')||0);return;}
   if(a==='wksv'){wkCfg(sec).groups[+t.dataset.g].silver=+t.value.replace(/\D/g,'')||0;return;}
   if(a==='wkgd'){wkCfg(sec).groups[+t.dataset.g].gold=+t.value.replace(/\D/g,'')||0;return;}
@@ -4455,6 +4485,13 @@ app.addEventListener('click',async e=>{
   if(a==='jfl'){JFL=b.dataset.k;JPG=0;render();return;}
   if(a==='jpg'){JPG=Math.max(0,+b.dataset.k||0);render();return;}
   if(a==='expg'){EXPG=Math.max(0,+b.dataset.k||0);render();return;}
+  if(a==='bcadd'){BC.rows.push({b:(BC.rows[BC.rows.length-1]||{}).b||'hosp',n:1});render();return;}
+  if(a==='bcdel'){BC.rows.splice(+b.dataset.k,1);if(!BC.rows.length)BC.rows.push({b:'hosp',n:1});render();return;}
+  if(a==='bcdoc'||a==='bccopy'||a==='bcexp'){const es=state.sections.find(x=>x.kind==='economy');if(!es)return;const T=bldText(es);if(!T.lines.length)return;
+    if(a==='bccopy'){const tx=T.title+'\n\n'+T.body;try{await navigator.clipboard.writeText(tx);msg='Кошторис скопійовано';msgErr=false;}catch(_){msg='Не вдалося скопіювати';msgErr=true;}render();return;}
+    if(a==='bcdoc'){const mp=myPost();const me=meAny();showDoc({type:'КОШТОРИС',issuer:'НА БУДІВНИЦТВО',no:'',date:dateLong(new Date().toISOString()),title:T.title,body:T.body,role:mp?mp.title:'',name:mp?mp.name:(me?me.name:''),seal:mp?sealFor(mp.title):'parl'});return;}
+    if(!(isFin()||AUTH.admin))return;const before=JSON.stringify(es);const mp=myPost();es.expenses=es.expenses||[];es.expenses.push({date:today(),what:T.title+': '+T.lines.map(x=>x.n+'× '+x.b.name).join(', '),cat:'build',items:Object.keys(T.tot).filter(k=>T.tot[k]).map(k=>({res:k,qty:String(T.tot[k])})),by:mp?mp.name:((plByEmail(AUTH.email)||{}).name||'Адміністрація'),at:new Date().toISOString()});
+    busy=true;render();try{await window.FB.saveEcon(es);saved=JSON.stringify(state);msg='Будівництво записано у витрати';msgErr=false;}catch(e){const i=state.sections.indexOf(es);if(i>=0)state.sections[i]=JSON.parse(before);msg='Не вдалося зберегти';msgErr=true;}busy=false;render();return;}
   if(a==='excat'){EXF.cat=b.dataset.k;render();return;}
   if(a==='exrowadd'){EXF.rows.push({res:'Срібло',qty:''});render();return;}
   if(a==='exrowdel'){EXF.rows.splice(+b.dataset.k,1);if(!EXF.rows.length)EXF.rows.push({res:'Срібло',qty:''});render();return;}
@@ -4515,6 +4552,8 @@ app.addEventListener('click',async e=>{
   else if(a==='gpdel'){if(b.dataset.confirm==='1'){s.posts.splice(+b.dataset.p,1);}else{b.dataset.confirm='1';b.textContent='Точно?';return;}}
   else if(a==='iadd'){invItems(s.treasury=s.treasury||{}).push({name:'',qty:''});}
   else if(a==='idel'){s.treasury.items.splice(+b.dataset.p,1);}
+  else if(a==='bladd'){bldList(s).push({id:'b'+Date.now().toString(36),ic:'🏗',name:'',cost:{}});}
+  else if(a==='bldel'){bldList(s).splice(+b.dataset.p,1);}
   else if(a==='exadd'){(s.expenses=s.expenses||[]).push({date:today(),what:'',amount:'',unit:'Срібло',by:'',at:new Date().toISOString()});}
   else if(a==='exdel'){s.expenses.splice(+b.dataset.p,1);}
   else if(a==='pradd'){(s.prices=s.prices||[]).push({name:'',price:''});}
