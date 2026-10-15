@@ -45,6 +45,27 @@
 @media (max-width:640px){.srow3{grid-template-columns:1fr;gap:4px}}
 
 
+
+.hemi.v2 .hall{aspect-ratio:2.05/1;overflow:visible}
+.hsect2{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.hsec{fill:var(--sc);fill-opacity:.2;stroke:var(--sc);stroke-opacity:.75;stroke-width:.22;cursor:pointer;transition:fill-opacity .2s,opacity .2s}
+.hsec.ind{fill-opacity:.09;stroke-opacity:.35;cursor:default}
+.hsec:hover{fill-opacity:.34}
+.hall:has(.hsec:hover) .hsec:not(:hover){opacity:.35}
+.hdiv{stroke:var(--bg,#0d0905);stroke-width:.6}
+.hcoal{fill:none;stroke:var(--gold-hi,#ffdc8a);stroke-width:.35;stroke-opacity:.8}
+.hmaj{stroke:var(--cream,#f7ecd6);stroke-width:.3;stroke-dasharray:1 .8;opacity:.8}
+.hmajl{position:absolute;transform:translate(-50%,-50%);font:700 10px var(--f-body);color:var(--cream,#f7ecd6);opacity:.85;background:rgba(0,0,0,.45);padding:1px 5px;border-radius:6px;white-space:nowrap;pointer-events:none}
+.hslab{position:absolute;transform:translate(-50%,-100%);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px;max-width:160px;padding:3px 8px;border-radius:999px;background:color-mix(in srgb,var(--sc) 22%,rgba(0,0,0,.55));border:1px solid color-mix(in srgb,var(--sc) 70%,transparent);font-size:12px;white-space:nowrap;cursor:pointer;z-index:2}
+.hslab.ind{cursor:default;opacity:.8}
+.hslab b{color:var(--cream,#f7ecd6)}.hslab .hsn{font-weight:800;color:var(--gold-hi,#ffdc8a)}
+.hslab .hse{width:18px;height:18px;border-radius:5px;font-size:8px}
+.hsv{flex-basis:100%;display:flex;gap:6px;justify-content:center;font-size:10.5px}.hsv em{font-style:normal;font-weight:700}.hsv .f{color:var(--ok)}.hsv .a{color:var(--danger)}.hsv .z{color:var(--muted)}
+.hclab{position:absolute;transform:translate(-50%,-100%);font:700 12px var(--f-body);color:var(--gold-hi,#ffdc8a);white-space:nowrap;text-shadow:0 1px 3px #000;pointer-events:none}
+.hemi.v2 .hseat{z-index:1;width:auto}.hemi.v2 .hav{width:38px;height:38px}.hemi.v2 .hseat .hl{display:none}.hemi.v2 .hseat:hover .hl{display:block;position:absolute;top:100%;white-space:nowrap;background:rgba(0,0,0,.75);padding:1px 6px;border-radius:6px;color:var(--cream,#f7ecd6);z-index:6}
+.hemi.v2 .hall{margin-top:26px}.hemi.v2 .hseat.hjump{z-index:5}
+.hemi.v2 .hseat.hjump .hav{box-shadow:0 0 0 3px var(--pc,#ffdc8a),0 0 24px var(--pc,#ffdc8a)}
+@media (max-width:640px){.hslab{font-size:10px;padding:2px 6px}.hslab .hse{display:none}.hclab,.hmajl{font-size:9px}}
 /* ===== Партії ===== */
 .parties{display:grid;gap:14px}
 .phero{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;background:radial-gradient(120% 160% at 0% 0%,rgba(242,181,68,.14),transparent 60%),var(--panel)}.phero h3{margin:0 0 4px}.phero p{margin:0;max-width:640px}
@@ -1844,26 +1865,58 @@ function roundTable(posts){const n=posts.length;if(!n)return '';
     return `<div class="seat${pl}${head?' head':''}${v?' vac':''}" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%">${seatLink(p.name,seatAv(p.name,'sav'),p.title+': '+(v?'вакантно':p.name))}<span class="st">${esc(p.title)}</span><span class="sn">${v?'Вакантно':plink(p.name)}</span>${perm?`<span class="sp">${perm}</span>`:''}</div>`;}).join('');
   return `<div class="rtable" role="group" aria-label="Круглий стіл Гетьманської Канцелярії"><div class="tabletop"><div class="tt-in"><span class="tt-k">Гетьманська</span><span class="tt-t">Канцелярія</span><span class="tt-s">${n} ${n===1?'посада':n<5?'посади':'посад'} · ${posts.filter(p=>String(p.name||'').trim()).length} зайнято</span></div></div>${seats}</div>`;}
 // ---------- Палата Земель: зал парламенту (півколо) ----------
-function hemicycle(reps,chair,bill){const n=reps.length;if(!n)return '';
-  // rows from the inside out; each row a little longer
-  const rows=[];let left=n,k=0;const base=Math.max(3,Math.round(n/4));while(left>0){const cap=Math.min(left,base+k*2);rows.push(cap);left-=cap;k++;}
+// ===== Зал Палати: спочатку сектори партій, потім крісла в них =====
+let HALLPOS={};
+function hemicycle(reps,chair,bill){const N=reps.length;if(!N)return '';
   const vmap={};if(bill){(VOTES[bill.id]||[]).forEach(v=>{vmap[v.land]=v.choice;});}
-  const pos=[];rows.forEach((cnt,ri)=>{const R0=17+ri*(19/Math.max(1,rows.length-1));for(let j=0;j<cnt;j++){const a=Math.PI-(cnt===1?Math.PI/2:j*Math.PI/(cnt-1));pos.push({a,x:50+R0*1.22*Math.cos(a),y:84-R0*Math.sin(a)*2.05,ri});}});
-  pos.sort((p1,p2)=>p2.a-p1.a||p1.ri-p2.ri);
-  let html='';
-  // сектори фракцій: кольоровий клин під кріслами однієї партії
-  {const PP=reps.map(r=>String(r.name||'').trim()?partyOfName(r.name):null);const groups=[];reps.forEach((r,i)=>{const pid=PP[i]?PP[i].id:'';const g=groups[groups.length-1];if(g&&g.pid===pid)g.to=i;else groups.push({pid,from:i,to:i,p:PP[i]});});
-    if(groups.some(g=>g.p)){let svg='';groups.forEach(g=>{if(!g.p)return;const col=esc(g.p.color||'#8a7a63');let mnY=1e9,sx=0,n=0;
-        for(let i=g.from;i<=g.to;i++){const q=pos[i];if(!q)continue;svg+=`<ellipse cx="${q.x.toFixed(2)}" cy="${q.y.toFixed(2)}" rx="7.4" ry="15.2" fill="${col}"/>`;mnY=Math.min(mnY,q.y);sx+=q.x;n++;}
-        svg=`<g class="hsg" data-p="${esc(g.p.id)}">`+svg+'</g>';html+='';groups._svg=(groups._svg||'')+svg;svg='';});
-      const all=groups._svg||'';
-      html+=`<svg class="hsect" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><defs><filter id="hsblur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.5"/></filter></defs>${all.replace(/<g class="hsg"/g,'<g class="hsg" filter="url(#hsblur)"').replace(/<text[^>]*>[^<]*<\/text>/g,'')}${(all.match(/<text[^>]*>[^<]*<\/text>/g)||[]).join('')}</svg>`;}}
-  reps.forEach((r,i)=>{const q=pos[i];const v=!r.name;const ch=vmap[r.land];const pp=v?null:partyOfName(r.name);
-    html+=`<div class="hseat${v?' vac':''}${ch?' v-'+ch:''}${pp?' hasp':''}" style="left:${q.x.toFixed(2)}%;top:${q.y.toFixed(2)}%${pp?';--pc:'+esc(pp.color||'#8a7a63'):''}">${seatLink(r.name,seatAv(r.name,'hav'),r.land+' — '+(v?'вакантно':r.name)+(pp?' · '+pp.name:'')+(ch?' · '+CH[ch][0]:''))}<span class="hl">${esc(r.land.replace(/\s*Земля$/,''))}</span></div>`;});
+  // групи зліва направо: коаліції, партії, позафракційні, вакантні
+  const filled=reps.filter(r=>String(r.name||'').trim()&&r.name!=='0');const vac=reps.filter(r=>!filled.includes(r));
+  const byP={};const ind=[];filled.forEach(r=>{const p=partyOfName(r.name);if(p)(byP[p.id]=byP[p.id]||[]).push(r);else ind.push(r);});
+  const ps=Object.keys(byP).map(id=>({p:partyById(id),rs:byP[id]}));const coalSize=c=>(c.parties||[]).reduce((a,id)=>a+((byP[id]||[]).length),0);
+  const coals=COALS.filter(c=>coalSize(c)>0).sort((a,b)=>coalSize(b)-coalSize(a));
+  const groups=[];coals.forEach(c=>{ps.filter(x=>(c.parties||[]).includes(x.p.id)).sort((a,b)=>b.rs.length-a.rs.length).forEach(x=>{if(!groups.some(g=>g.p===x.p))groups.push({p:x.p,rs:x.rs,coal:c});});});
+  ps.filter(x=>!groups.some(g=>g.p===x.p)).sort((a,b)=>b.rs.length-a.rs.length).forEach(x=>groups.push({p:x.p,rs:x.rs}));
+  if(ind.length)groups.push({ind:true,rs:ind});if(vac.length)groups.push({vac:true,rs:vac});
+  // геометрія (координати в % залу; центр дуги внизу посередині)
+  const nRows=N<=10?2:N<=24?3:4;const Rin=13.5,Rstep=nRows>=4?5.2:6.4;const rowR=[...Array(nRows)].map((_,i)=>Rin+4+i*Rstep);const Rout=rowR[nRows-1]+4.2;
+  const X=(R,a)=>50+R*1.18*Math.cos(a),Y=(R,a)=>97-R*2.05*Math.sin(a);
+  let acc=0;const pos={};let svg='',labels='';
+  groups.forEach((g,gi)=>{const k=g.rs.length;const a0=Math.PI*(1-acc/N),a1=Math.PI*(1-(acc+k)/N);g.a0=a0;g.a1=a1;acc+=k;
+    // скільки крісел у кожному ряду: пропорційно довжині дуги
+    const w=rowR.map(r=>r);const sw=w.reduce((a,b)=>a+b,0);let cnt=w.map(x=>Math.floor(k*x/sw));let left=k-cnt.reduce((a,b)=>a+b,0);
+    const rem=w.map((x,i)=>({i,f:k*x/sw-Math.floor(k*x/sw)})).sort((a,b)=>b.f-a.f);for(let j=0;left>0;j++,left--)cnt[rem[j%nRows].i]++;
+    if(k<=nRows){cnt=rowR.map(()=>0);const mid=Math.floor(nRows/2);const order=[mid,mid+1,mid-1,mid+2,mid-2].filter(i=>i>=0&&i<nRows);for(let j=0;j<k;j++)cnt[order[j%order.length]]++;}
+    let si=0;cnt.forEach((c,ri)=>{for(let j=0;j<c;j++){const a=a0+(a1-a0)*(j+0.5)/c;const r=g.rs[si++];pos[r.land]={x:X(rowR[ri],a),y:Y(rowR[ri],a)};}});
+    if(g.vac)return;
+    const col=g.ind?'#8a7a63':esc(g.p.color||'#8a7a63');const M=28;const out=[],inn=[];for(let m=0;m<=M;m++){const a=a0+(a1-a0)*m/M;out.push(X(Rout,a).toFixed(2)+','+Y(Rout,a).toFixed(2));inn.push(X(Rin,a).toFixed(2)+','+Y(Rin,a).toFixed(2));}
+    const tip=g.ind?`Позафракційні · ${k} місц${k===1?'е':k<5?'я':'ь'}`:`${g.p.name} · ${k} місц${k===1?'е':k<5?'я':'ь'} · лідер ${g.p.leader||'—'}${g.coal?' · 🤝 '+g.coal.name:''}`;
+    svg+=`<polygon class="hsec${g.ind?' ind':''}" ${g.p?`data-a="partym" data-k="${esc(g.p.id)}"`:''} points="${out.join(' ')} ${inn.reverse().join(' ')}" style="--sc:${col}"><title>${esc(tip)}</title></polygon>`;
+    // підпис над сектором
+    const am=(a0+a1)/2;const lx=X(Rout+1.2,am),ly=Y(Rout+1.2,am);const vs=bill?g.rs.reduce((o,r)=>{const ch=vmap[r.land];if(ch)o[ch]=(o[ch]||0)+1;return o;},{}):null;
+    const vtxt=vs&&(vs.for||vs.against||vs.abstain)?`<span class="hsv">${vs.for?`<em class="f">${vs.for} за</em>`:''}${vs.against?`<em class="a">${vs.against} проти</em>`:''}${vs.abstain?`<em class="z">${vs.abstain} утр.</em>`:''}</span>`:'';
+    labels+=`<div class="hslab${g.ind?' ind':''}" style="left:${lx.toFixed(2)}%;top:${ly.toFixed(2)}%;--sc:${col}" ${g.p?`data-a="partym" data-k="${esc(g.p.id)}" role="button" tabindex="0"`:''} title="${esc(tip)}">${g.p?pEmblem(g.p,'hse'):''}<b>${esc(g.ind?'Позафр.':(g.p.short||g.p.name))}</b><span class="hsn">${k}</span>${vtxt}</div>`;});
+  // межі між секторами
+  groups.forEach((g,gi)=>{if(gi===0||g.vac&&groups[gi-1].vac)return;const a=g.a0;svg+=`<line class="hdiv" x1="${X(Rin,a).toFixed(2)}" y1="${Y(Rin,a).toFixed(2)}" x2="${X(Rout,a).toFixed(2)}" y2="${Y(Rout,a).toFixed(2)}"/>`;});
+  // дужки коаліцій
+  coals.forEach(c=>{const gs=groups.filter(g=>g.coal===c);if(gs.length<2)return;const a0=gs[0].a0-0.01,a1=gs[gs.length-1].a1+0.01;const R=Rout+6.4;const pts=[];for(let m=0;m<=40;m++){const a=a0+(a1-a0)*m/40;pts.push(X(R,a).toFixed(2)+','+Y(R,a).toFixed(2));}
+    svg+=`<polyline class="hcoal" points="${X(R-2.4,a0).toFixed(2)},${Y(R-2.4,a0).toFixed(2)} ${pts.join(' ')} ${X(R-2.4,a1).toFixed(2)},${Y(R-2.4,a1).toFixed(2)}"/>`;const am=(a0+a1)/2;
+    labels+=`<div class="hclab" style="left:${X(R+0.6,am).toFixed(2)}%;top:${Y(R+0.6,am).toFixed(2)}%">🤝 ${esc(c.name)} · ${coalSize(c)}</div>`;});
+  // лінія більшості
+  const need=Math.floor(N/2)+1;if(groups.some(g=>g.p)){const a=Math.PI*(1-(need-0.5)/N);svg+=`<line class="hmaj" x1="${X(Rin-2,a).toFixed(2)}" y1="${Y(Rin-2,a).toFixed(2)}" x2="${X(Rout+1.5,a).toFixed(2)}" y2="${Y(Rout+1.5,a).toFixed(2)}"/>`;labels+=`<div class="hmajl" style="left:${X(Rin-4.5,a).toFixed(2)}%;top:${Y(Rin-4.5,a).toFixed(2)}%" title="Більшість: ${need} з ${N}">50%+1</div>`;}
+  let html=`<svg class="hsect2" viewBox="0 0 100 100" preserveAspectRatio="none">${svg}</svg>${labels}`;
+  reps.forEach(r=>{const q=pos[r.land];if(!q)return;const v=!String(r.name||'').trim()||r.name==='0';const ch=vmap[r.land];const pp=v?null:partyOfName(r.name);
+    html+=`<div class="hseat${v?' vac':''}${ch?' v-'+ch:''}${pp?' hasp':''}" data-land="${esc(r.land)}" style="left:${q.x.toFixed(2)}%;top:${q.y.toFixed(2)}%${pp?';--pc:'+esc(pp.color||'#8a7a63'):''}">${seatLink(r.name,seatAv(r.name,'hav'),r.land+' — '+(v?'вакантно':r.name)+(pp?' · '+pp.name:'')+(ch?' · '+CH[ch][0]:''))}<span class="hl">${esc(r.land.replace(/\s*Земля$/,''))}</span></div>`;});
   const legend=bill?`<div class="hlegend"><span class="lg v-for">За</span><span class="lg v-against">Проти</span><span class="lg v-abstain">Утримався</span><span class="lg none">Ще не голосував</span><span class="hint">· «${esc(bill.title||'')}»</span></div>`:'';
   const trib=cls=>`<div class="tribune ${cls}"><span class="tk">Голова Палати</span>${chair?seatLink(chair,seatAv(chair,'hav'),'Голова Палати: '+chair)+`<span class="tn">${plink(chair)}</span>`:'<span class="tn vacn">Вакантно</span>'}</div>`;
-  const pleg=(()=>{const c={};reps.forEach(r=>{const pp=String(r.name||'').trim()?partyOfName(r.name):null;if(pp)c[pp.id]=(c[pp.id]||0)+1;});const ids=Object.keys(c);return ids.length?`<div class="hpleg">${ids.sort((a,b)=>c[b]-c[a]).map(id=>{const pp=partyById(id);return `<button type="button" data-a="partygo" data-k="${esc(id)}" style="--pc:${esc(pp.color||'#8a7a63')}"><i></i>${esc(pp.name)} <b>${c[id]}</b></button>`;}).join('')}</div>`:'';})();
-  return `<div class="hemi" role="group" aria-label="Зал Палати Земель"><div class="hall">${html}${trib('in')}</div>${trib('out')}${pleg}${legend}</div>`;}
+  return `<div class="hemi v2" role="group" aria-label="Зал Палати Земель"><div class="hall">${html}${trib('in')}</div>${trib('out')}${legend}</div>`;}
+// крісла плавно перелітають, коли представник змінює партію або Земля — представника
+function hallAnim(){const seats=document.querySelectorAll('.hemi.v2 .hseat[data-land]');if(!seats.length)return;const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;const now={};
+  seats.forEach(el=>{const k=el.dataset.land;const l=parseFloat(el.style.left),t=parseFloat(el.style.top);now[k]={l,t};const o=HALLPOS[k];
+    if(o&&!reduce&&(Math.abs(o.l-l)>0.2||Math.abs(o.t-t)>0.2)){const hall=el.parentElement;const w=hall.clientWidth,h=hall.clientHeight;const dx=(o.l-l)/100*w,dy=(o.t-t)/100*h;
+      el.style.transition='none';el.style.transform=`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))`;el.classList.add('hjump');void el.offsetWidth;
+      el.style.transition='transform 1.1s cubic-bezier(.3,1.25,.4,1)';el.style.transform='';setTimeout(()=>{el.classList.remove('hjump');el.style.transition='';},1200);}});
+  HALLPOS=now;}
+
 // ---------- законодавство: види актів, кодекси, статті, покарання ----------
 const SANC={warn:['Попередження','⚠️'],repr:['Догана','📝'],fine:['Штраф','💰'],banvote:['Позбавлення права голосу','🗳'],banpost:['Заборона обіймати посади','🚫'],dismiss:['Позбавлення посади','🚪'],strip:['Позбавлення звань і нагород','🎗'],exile:['Позбавлення громадянства','⛔']};
 const SANC_ORDER=['warn','repr','fine','banvote','banpost','dismiss','strip','exile'];
@@ -1944,7 +1997,7 @@ function parlView(s,si){const reps=landLeaders();const lead={};reps.forEach(r=>l
   const arch=all.filter(b=>!active.includes(b)).sort((x,y)=>String(y.closesAt||y.date||'').localeCompare(String(x.closesAt||x.date||'')));
   const passed=all.filter(b=>phase(b)==='passed'&&!voidedBy(b.id)).length;const signN=all.filter(b=>phase(b)==='sign').length;
   let h='<div class="parl">';
-  h+=`<div class="block chamber"><div class="doors left">${L.map(p=>doorHtml(p,'l')).join('')}</div><div class="hallc">${hemicycle(sortRepsByParty(reps),chair,all.find(b=>isOpen(b)))}<div class="kpis"><span class="pill review">🗳 На голосуванні: ${active.filter(b=>phase(b)==='voting').length}</span>${signN?`<span class="pill sign">✍️ Чекає підпису: ${signN}</span>`:''}<span class="pill passed">📜 Чинних законів: ${passed}</span>${partiesActive().length?`<button type="button" class="pill factbtn" data-a="factm" data-k="1">🎨 Фракції Палати</button>`:''}</div><p class="hint">Двері ведуть до кабінетів уряду й до Генерального Суду. Наведіть на крісло, щоб побачити Представника.</p></div><div class="doors right">${R.map(p=>doorHtml(p,'r')).join('')}</div></div>`;
+  h+=`<div class="block chamber"><div class="doors left">${L.map(p=>doorHtml(p,'l')).join('')}</div><div class="hallc">${hemicycle(reps,chair,all.find(b=>isOpen(b)))}<div class="kpis"><span class="pill review">🗳 На голосуванні: ${active.filter(b=>phase(b)==='voting').length}</span>${signN?`<span class="pill sign">✍️ Чекає підпису: ${signN}</span>`:''}<span class="pill passed">📜 Чинних законів: ${passed}</span>${partiesActive().length?`<button type="button" class="pill factbtn" data-a="factm" data-k="1">🎨 Фракції Палати</button>`:''}</div><p class="hint">Двері ведуть до кабінетів уряду й до Генерального Суду. Наведіть на крісло, щоб побачити Представника.</p></div><div class="doors right">${R.map(p=>doorHtml(p,'r')).join('')}</div></div>`;
   if(FACTM){const fh=factionsHtml();if(fh)MODALH=`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="factm" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide"><button class="small bmx" data-a="factm" data-k="">✕ Закрити</button>${fh}</div></div>`;else FACTM='';}
   const ord=active.slice().reverse();
   h+=`<div class="pgrid"><div class="block vbox"><h3>На голосуванні <small>${ord.length>3?'гортайте список · ':''}${ord.length?'новіші зверху':''}</small></h3>${ord.length?`<div class="vlist">${ord.map(billRow).join('')}</div>`:'<p class="empty">Зараз немає актів на голосуванні.</p>'}</div>`;
@@ -3603,7 +3656,7 @@ function syncHetAdmin(){if(!AUTH||AUTH.bot)return;let h=false;try{h=!!(state&&st
 function render0(){syncHetAdmin();const cm0=document.getElementById('chmsgs');const cmS=cm0?{top:cm0.scrollTop,bot:cm0.scrollHeight-cm0.scrollTop-cm0.clientHeight<60}:null;const ae=document.activeElement;const fid=ae&&ae.id&&app.contains(ae)?ae.id:null;let s0=null,s1=null;try{s0=ae.selectionStart;s1=ae.selectionEnd;}catch(_){}
   renderInner();document.documentElement.lang=LANG==='en'?'en':'uk';if(LANG==='en')trTree(app);app.querySelectorAll('nav.toc,.subnav').forEach(nv=>{if(nv.scrollWidth>nv.clientWidth){const c=nv.querySelector('[aria-current]');if(c)nv.scrollLeft=Math.max(0,c.offsetLeft-nv.clientWidth/2+c.offsetWidth/2);}});
   if(fid){const el=document.getElementById(fid);if(el&&el!==document.activeElement){el.focus({preventScroll:true});try{if(s0!=null)el.setSelectionRange(s0,s1);}catch(_){}}}
-  mapFit();hcLayout();{const ht=document.querySelector('.hcwrap:not(.editing)');if(ht&&ht.scrollWidth>ht.clientWidth+4)ht.scrollLeft=(ht.scrollWidth-ht.clientWidth)/2;}{const cm=document.getElementById('chmsgs');if(cm){const st=CHAT.stick||Date.now()<(CHAT.stickUntil||0)||!cmS||cmS.bot;
+  mapFit();hcLayout();try{hallAnim();}catch(_){}{const ht=document.querySelector('.hcwrap:not(.editing)');if(ht&&ht.scrollWidth>ht.clientWidth+4)ht.scrollLeft=(ht.scrollWidth-ht.clientWidth)/2;}{const cm=document.getElementById('chmsgs');if(cm){const st=CHAT.stick||Date.now()<(CHAT.stickUntil||0)||!cmS||cmS.bot;
     if(st){cm.scrollTop=cm.scrollHeight;if(CHAT.msgs&&CHAT.stick){CHAT.stick=false;CHAT.stickUntil=Date.now()+3000;}}else cm.scrollTop=cmS.top;
     cm.querySelectorAll('img').forEach(im=>{if(!im.complete)im.addEventListener('load',()=>{const near=cm.scrollHeight-cm.scrollTop-cm.clientHeight<260;if(Date.now()<(CHAT.stickUntil||0)||near)cm.scrollTop=cm.scrollHeight;},{once:true});});}}
   setTimeout(()=>{try{chatEnsure();}catch(e){console.warn(e);}try{setFavicon();}catch(_){}},0);
