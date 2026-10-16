@@ -3353,7 +3353,7 @@ function dailyTicks(fromMs,toMs){const out=[];if(!(toMs>fromMs))return out;const
   return out.sort((a,b)=>a-b);}
 function nextTick(){const n=Date.now();return dailyTicks(n,n+2*86400000)[0]||n;}
 function dailyRate(it){const h=it.hist||[];return h.length?(+h[h.length-1].qty||0):0;}
-function movements(s){const out=[];const tr=s.treasury||{};
+function movements(s){try{wkCfg(s);}catch(_){}const out=[];const tr=s.treasury||{};
   (s.daily||[]).forEach(it=>{const h=it.hist||[];h.forEach((seg,i)=>{const q=+seg.qty||0;if(!q)return;const from=Date.parse(seg.from);const to=i+1<h.length?Date.parse(h[i+1].from):Date.now();
     dailyTicks(from,to).forEach(t=>out.push({kind:'daily',at:new Date(t).toISOString(),date:'',who:'',what:it.what||'Щоденне списання',items:[{res:it.res||'Срібло',qty:-q}]}));});});
   (s.weeks||[]).forEach((w,wi)=>(s.members||[]).forEach((m,mi)=>{if(!(w.done||[])[mi])return;const txt=(w.got&&w.got[mi])||m.needs;out.push({kind:'week',at:(w.at||[])[mi]||null,date:w.label,who:wkWho(w,mi,m)||'Вакантно',what:'Тижневий внесок',items:parseNeeds(txt)});}));
@@ -3388,9 +3388,17 @@ function econCompact(html){try{const t=document.createElement('template');t.inne
 function wkWho(w,mi,m){return (w&&w.who&&w.who[mi])||((m&&m.name)||'');}
 // ===== Тижневі внески від Земель: кожна Земля здає свою частку, представник сам ставить галочку (колекція wkpay)
 let WKPAY=[];
-const WK_DEF={start:'2026-10-12',fineStart:'2026-10-19',finePct:10,groups:[{sec:'ud',title:'Українська Держава',silver:5096000,gold:728,goldBy:'hetman',treasury:true},{sec:'ck',title:'Червоний Клин',silver:1176000,gold:168,goldBy:'pysar',treasury:false}],off:{}};
+// Правила гри від 16.10.2026: витрати держави за добу. Тижневий внесок = добова норма × 7, ділиться між УД і Клином у тій самій пропорції, що й раніше (13 : 3)
+const DAILY_RULES={from:'2026-10-16T18:00:00.000Z',items:[['Срібло',260001],['Золото',65],['Нафта',65],['Вугілля',416],['Руда',208]]};
+const WK_RES=[['Нафта','нафти'],['Вугілля','вугілля'],['Руда','руди']];
+const WK_DEF={start:'2026-10-12',fineStart:'2026-10-19',finePct:10,groups:[{sec:'ud',title:'Українська Держава',silver:1478756,gold:370,goldBy:'hetman',res:{'Нафта':370,'Вугілля':2366,'Руда':1183},treasury:true},{sec:'ck',title:'Червоний Клин',silver:341251,gold:85,goldBy:'pysar',res:{'Нафта':85,'Вугілля':546,'Руда':273},treasury:false}],off:{}};
+function wkRules2(s,c){c.groups.forEach(g=>{const d=WK_DEF.groups.find(x=>x.sec===g.sec);if(!d)return;g.silver=d.silver;g.gold=d.gold;g.res=JSON.parse(JSON.stringify(d.res));});
+  const dl=s.daily||(s.daily=[]);const key=r=>String(canonRes(s,r)||r||'').toLowerCase();
+  DAILY_RULES.items.forEach(([res,q])=>{let it=dl.find(x=>key(x.res||'Срібло')===key(res));if(!it){it={id:'d_'+key(res),what:'Утримання держави (правила гри)',res,hist:[]};dl.push(it);}it.hist=it.hist||[];
+    if(it.hist.some(h=>h.from===DAILY_RULES.from))return;const last=it.hist[it.hist.length-1];if(last&&Date.parse(last.from)>Date.parse(DAILY_RULES.from))return;it.hist.push({from:DAILY_RULES.from,qty:String(q)});});
+  c.v=2;}
 function wkCfg(s){if(!s.wkcfg)s.wkcfg=JSON.parse(JSON.stringify(WK_DEF));const c=s.wkcfg;c.groups=c.groups||[];c.off=c.off||{};if(!c.start)c.start=WK_DEF.start;if(!c.fineStart)c.fineStart=WK_DEF.fineStart;if(c.finePct==null)c.finePct=WK_DEF.finePct;
-  c.groups.forEach(g=>{const d=WK_DEF.groups.find(x=>x.sec===g.sec)||{};if(g.silver==null)g.silver=d.silver||0;if(g.gold==null)g.gold=d.gold||0;if(!g.goldBy)g.goldBy=d.goldBy||'hetman';delete g.quota;});return c;}
+  if(!(c.v>=2))wkRules2(s,c);c.groups.forEach(g=>{const d=WK_DEF.groups.find(x=>x.sec===g.sec)||{};if(g.silver==null)g.silver=d.silver||0;if(g.gold==null)g.gold=d.gold||0;if(!g.res)g.res=JSON.parse(JSON.stringify(d.res||{}));if(!g.goldBy)g.goldBy=d.goldBy||'hetman';delete g.quota;});return c;}
 function wkNowMs(){return window.__FAKENOW||Date.now();}
 function kyivDate(ms){try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Kiev',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(ms));}catch(_){return new Date(ms).toISOString().slice(0,10);}}
 function kyivToday(){return kyivDate(wkNowMs());}
@@ -3405,16 +3413,20 @@ function wkRows(g,c){const sec=state.sections.find(x=>x.id===g.sec&&x.lands);if(
   return sec.lands.map(l=>{const nm=cur(l).name||'Земля';const lid=l.id||('n'+nm);const r=L.find(x=>x.lid===l.id)||L.find(x=>x.land===nm)||{};const def=/писар/i.test(r.post||'');const off=c.off[lid]!=null?!!c.off[lid]:def;return {lid,land:nm,rep:r.name||'',post:r.post||'',on:!off};});}
 // частка срібла кожної Землі = тижнева сума ÷ кількість зайнятих посад губернаторів
 function wkShare(g,rows){const n=rows.filter(r=>r.on&&r.rep).length;return n?Math.round((+g.silver||0)/n):0;}
-function wkShareTxt(g,rows){return fmt(wkShare(g,rows))+' срібла';}
+// усе, що здає кожна Земля: срібло, нафта, вугілля, руда (і золото, якщо його теж ділять між Землями)
+function wkShareItems(g,rows){const n=rows.filter(r=>r.on&&r.rep).length;if(!n)return [];const out=[{res:'срібла',qty:Math.round((+g.silver||0)/n)}];if(g.goldBy==='lands'&&+g.gold)out.push({res:'золота',qty:Math.ceil((+g.gold||0)/n)});WK_RES.forEach(([k,w])=>{const q=+((g.res||{})[k])||0;if(q)out.push({res:w,qty:Math.ceil(q/n)});});return out.filter(x=>x.qty);}
+function wkShareTxt(g,rows){const it=wkShareItems(g,rows);return it.length?it.map(x=>fmt(x.qty)+' '+x.res).join(' + '):'0 срібла';}
+function wkTotalTxt(g){const p=[fmt(+g.silver||0)+' срібла'];if(+g.gold)p.push(fmt(+g.gold)+' золота');WK_RES.forEach(([k,w])=>{const q=+((g.res||{})[k])||0;if(q)p.push(fmt(q)+' '+w);});return p.join(' + ');}
 // хто здає золото: Гетьман (УД) або Писар домініону (Клин)
-function wkGold(g,c){if(!(+g.gold))return null;if(g.goldBy==='pysar'){const sec=state.sections.find(x=>x.id===g.sec&&x.lands);const L=landLeaders();const r=sec?L.find(x=>x.sec===sec.id&&/писар/i.test(x.post||'')):null;return {lid:'gold_'+g.sec,land:r?r.land:g.title,rep:r?r.name:'',post:r?r.post:'Писар',title:'Золото · '+(r&&r.post||'Писар'),on:true,gold:true};}
+function wkGold(g,c){if(!(+g.gold)||g.goldBy==='lands')return null;if(g.goldBy==='pysar'){const sec=state.sections.find(x=>x.id===g.sec&&x.lands);const L=landLeaders();const r=sec?L.find(x=>x.sec===sec.id&&/писар/i.test(x.post||'')):null;return {lid:'gold_'+g.sec,land:r?r.land:g.title,rep:r?r.name:'',post:r?r.post:'Писар',title:'Золото · '+(r&&r.post||'Писар'),on:true,gold:true};}
   return {lid:'gold_'+g.sec,land:'Золото УД',rep:hetmanName(state),post:'Гетьман',title:'Золото · Гетьман',on:true,gold:true};}
 function wkPayMap(){const m={};WKPAY.forEach(d=>{m[d.id]=d;});return m;}
+function wkSilverOnly(txt){return parseNeeds(txt).filter(i=>/срібл/i.test(i.res)).reduce((x,i)=>x+i.qty,0);}
 function wkSilverTxt(s,txt){return parseNeeds(txt).reduce((x,i)=>x+(silverOf(s,i.res,i.qty)||0),0);}
 function wkCanMark(row){return !!(!AUTH.bot&&!editing&&AUTH.email&&row.on&&(AUTH.admin||isFin()||(row.rep&&emailOf(row.rep)===AUTH.email)));}
 function wkItemsOf(g,rows,row){return row.gold?fmt(+g.gold||0)+' золота':wkShareTxt(g,rows);}
 // ===== Штрафи: якщо внесок не здано до кінця тижня (неділя 23:59 за Києвом) — борг = частка + штраф (% від частки)
-function wkFineTxt(c,items){const it=parseNeeds(items)[0];if(!it)return '';const q=Math.round(it.qty*(+c.finePct||0)/100);return q?fmt(q)+' '+it.res:'';}
+function wkFineTxt(c,items){return parseNeeds(items).map(it=>{const q=Math.round(it.qty*(+c.finePct||0)/100);return q?fmt(q)+' '+it.res:'';}).filter(Boolean).join(' + ');}
 function wkDebts(s,g,c,row,PM){const out=[];if(!row.on||!row.rep)return out;const today=kyivToday();const rows=wkRows(g,c);
   wkKeys(c).forEach(k=>{if(k<wkMonday(c.fineStart))return;const end=wkNext(k);if(today<end)return;const d=PM[k+'_'+row.lid];const fd=PM[k+'_fine_'+row.lid];
     const late=!d||(d.at&&kyivDate(d.at)>=end);if(!late)return;const items=d?(d.items||wkItemsOf(g,rows,row)):wkItemsOf(g,rows,row);const fine=wkFineTxt(c,items);
@@ -3425,16 +3437,16 @@ function wkCanUndo(d){if(AUTH.bot||editing||!AUTH.email||!d)return false;if(AUTH
 function wkGroupHtml(s,si,g,gi){const c=wkCfg(s);const rows=wkRows(g,c);if(!rows.length)return '';const PM=wkPayMap();
   const keys=wkKeys(c).slice().reverse();const lim=MORE['wk'+gi]?keys:keys.slice(0,7);const act=rows.filter(r=>r.on&&r.rep);const share=wkShare(g,rows);const gr=wkGold(g,c);
   const all=gr?[...rows,gr]:rows;const cw=wkMonday(kyivToday());const nw=wkNext(cw);
-  const sil=d=>wkSilverTxt(s,d.items||'');const sumNow=cw?rows.reduce((a,r)=>{const d=PM[cw+'_'+r.lid];return d?a+sil(d):a;},0):0;
+  const sil=d=>wkSilverOnly(d.items||'');const sumNow=cw?rows.reduce((a,r)=>{const d=PM[cw+'_'+r.lid];return d?a+sil(d):a;},0):0;
   const paidNow=cw?act.filter(r=>PM[cw+'_'+r.lid]).length:0;const goldNow=gr&&cw&&PM[cw+'_'+gr.lid];
   const mine=all.filter(r=>r.on&&r.rep&&AUTH.email&&emailOf(r.rep)===AUTH.email);
-  let h=`<div class="block wkg"><h3>${esc(g.title)} <small>за тиждень: ${fmt(+g.silver||0)} срібла${+g.gold?' + '+fmt(+g.gold)+' золота':''}${g.treasury?' · іде в казну УД':''}</small></h3>`;
-  h+=`<div class="wksum"><div><b>${act.length?fmt(share):'—'}</b><span>${act.length?'':'немає зайнятих посад губернаторів · '}срібла з кожної Землі: ${fmt(+g.silver||0)} ÷ ${act.length} губернатор${act.length%10===1&&act.length%100!==11?'':act.length%10>=2&&act.length%10<=4&&(act.length%100<10||act.length%100>=20)?'и':'ів'}</span></div><div><b>${paidNow} з ${act.length}</b><span>Земель здали за ${cw?esc(wkLabelOf(cw)):'—'} · ${fmt(sumNow)} срібла</span></div>${gr?`<div><b>${goldNow?'✓ ':''}${fmt(+g.gold)} золота</b><span>${goldNow?'здано':'здає'} ${esc(gr.post==='Гетьман'?'Гетьман':gr.post)}${gr.rep?' '+esc(gr.rep):''}</span></div>`:''}</div>`;
+  let h=`<div class="block wkg"><h3>${esc(g.title)} <small>за тиждень: ${esc(wkTotalTxt(g))}${g.treasury?' · іде в казну УД':''}</small></h3>`;
+  h+=`<div class="wksum"><div><b>${act.length?esc(wkShareTxt(g,rows)):'—'}</b><span>${act.length?'':'немає зайнятих посад губернаторів · '}з кожної Землі: тижнева норма ÷ ${act.length} губернатор${act.length%10===1&&act.length%100!==11?'':act.length%10>=2&&act.length%10<=4&&(act.length%100<10||act.length%100>=20)?'и':'ів'}</span></div><div><b>${paidNow} з ${act.length}</b><span>Земель здали за ${cw?esc(wkLabelOf(cw)):'—'} · ${fmt(sumNow)} срібла</span></div>${gr?`<div><b>${goldNow?'✓ ':''}${fmt(+g.gold)} золота</b><span>${goldNow?'здано':'здає'} ${esc(gr.post==='Гетьман'?'Гетьман':gr.post)}${gr.rep?' '+esc(gr.rep):''}</span></div>`:''}</div>`;
   if(mine.length&&cw)h+=mine.map(r=>{const it=wkItemsOf(g,rows,r);return PM[cw+'_'+r.lid]?`<p class="wkme ok">✓ ${esc(r.gold?r.title:r.land)}: внесок за цей тиждень позначено.</p>`:`<div class="wkme"><span>${r.gold?`Ви здаєте золото: <b>${esc(it)}</b> щотижня.`:`Ви представник: <b>${esc(r.land)}</b>. Ваша частка — <b>${esc(it)}</b>.`} Скинули в казну?</span><button class="primary small" data-a="wkmark" data-s="${si}" data-g="${gi}" data-wk="${cw}" data-l="${esc(r.lid)}">✓ Я здав за ${esc(wkLabelOf(cw))}</button></div>`;}).join('');
   {const debts=[];all.forEach(r=>wkDebts(s,g,c,r,PM).filter(wkDebtOpen).forEach(x=>debts.push({r,x})));
     const myd=debts.filter(o=>AUTH.email&&o.r.rep&&emailOf(o.r.rep)===AUTH.email);
     if(myd.length)h+=`<div class="wkme bad"><span>⚠ У вас є борг: ${myd.map(o=>`${esc(wkLabelOf(o.x.wk))} — ${o.x.paid?'':esc(o.x.items)+' + '}штраф ${esc(o.x.fine||'0')}`).join('; ')}. Внесок позначайте в таблиці, штраф — кнопкою «Сплатити штраф» нижче.</span></div>`;
-    if(debts.length){const fineTot={};debts.forEach(o=>{if(o.x.fine&&!o.x.finePaid){const it=parseNeeds(o.x.fine)[0];if(it)fineTot[it.res]=(fineTot[it.res]||0)+it.qty;}});
+    if(debts.length){const fineTot={};debts.forEach(o=>{if(o.x.fine&&!o.x.finePaid){parseNeeds(o.x.fine).forEach(it=>{fineTot[it.res]=(fineTot[it.res]||0)+it.qty;});}});
       h+=`<details class="wkdebts" open><summary><b>Борги і штрафи · ${debts.length}</b> <span class="hint">несплачено штрафів: ${Object.entries(fineTot).map(([k,v])=>fmt(v)+' '+esc(k)).join(' + ')||'0'}</span></summary><div class="tblwrap"><table class="bud wkdt"><thead><tr><th>Земля</th><th>Тиждень</th><th>Внесок</th><th>Штраф ${esc(String(c.finePct))}%</th></tr></thead><tbody>`+
         debts.map(({r,x})=>`<tr><th><b>${esc(r.gold?r.title:r.land)}</b><span class="need">${plink(r.rep)}</span></th><td>${esc(wkLabelOf(x.wk))}</td><td>${x.paid?'<span class="st y">✓ здано із запізненням</span>':`<span class="st n">✕ ${esc(x.items)}</span>`}</td><td>${x.finePaid?(parseNeeds(x.fineDoc&&x.fineDoc.items).length?'<span class="st y">✓ сплачено</span>':'<span class="st y">✓ прощено</span>'):`<b>${esc(x.fine||'—')}</b>${x.fine&&wkCanMark(r)?` <button class="small" data-a="wkfine" data-s="${si}" data-g="${gi}" data-wk="${x.wk}" data-l="${esc(r.lid)}">Сплатити штраф</button>`:''}${x.fine&&!AUTH.bot&&!editing&&(AUTH.admin||isFin())?` <button class="small ghost" data-a="wkfine" data-forgive="1" data-s="${si}" data-g="${gi}" data-wk="${x.wk}" data-l="${esc(r.lid)}" title="Скасувати штраф без оплати (наприклад, якщо внесок насправді здали вчасно)">Пробачити</button>`:''}`}</td></tr>`).join('')+`</tbody></table></div></details>`;}}
   h+=`<div class="tblwrap"><table class="bud wkt"><thead><tr><th>Земля</th>${lim.map(k=>`<th class="wk">${esc(wkLabelOf(k))}${k===cw?'<span class="need">цей тиждень</span>':k===nw?'<span class="need">наступний</span>':''}</th>`).join('')}</tr></thead><tbody>`;
@@ -3445,7 +3457,7 @@ function wkGroupHtml(s,si,g,gi){const c=wkCfg(s);const rows=wkRows(g,c);if(!rows
     return `<td>${wkCanMark(r)?`<button class="st n mk${ended?' debt':''}" data-a="wkmark" data-s="${si}" data-g="${gi}" data-wk="${k}" data-l="${esc(r.lid)}" title="Позначити, що внесок здано">☐ ${ended?'Борг · позначити':'Позначити'}</button>`:`<span class="st n">✕ ${ended?'Борг':'Ні'}</span>`}</td>`;}).join('')+'</tr>';}).join('');
   h+=`</tbody><tfoot><tr><th>Здано срібла</th>${lim.map(k=>`<td>${act.filter(r=>PM[k+'_'+r.lid]).length} з ${act.length}</td>`).join('')}</tr></tfoot></table></div>`;
   if(keys.length>7)h+=moreBtn('wk'+gi,keys.length);
-  h+=`<p class="hint">Срібло ділиться порівну між зайнятими посадами губернаторів і перераховується саме, коли посаду займають чи звільняють. Галочку ставить сам представник (або Скарбник чи адміністрація); помилкову позначку можна скасувати протягом 24 годин. Не здали до кінця тижня (неділя, 23:59 за Києвом) — борг і штраф ${esc(String(c.finePct))}% від частки; штрафи рахуються з тижня ${esc(wkLabelOf(wkMonday(c.fineStart)))}.</p></div>`;
+  h+=`<p class="hint">Тижнева норма (добові витрати держави × 7: срібло, нафта, вугілля, руда) ділиться порівну між зайнятими посадами губернаторів і перераховується саме, коли посаду займають чи звільняють. Галочку ставить сам представник (або Скарбник чи адміністрація); помилкову позначку можна скасувати протягом 24 годин. Не здали до кінця тижня (неділя, 23:59 за Києвом) — борг і штраф ${esc(String(c.finePct))}% від частки; штрафи рахуються з тижня ${esc(wkLabelOf(wkMonday(c.fineStart)))}.</p></div>`;
   return h;}
 // ===================== Економіка: Огляд · Доходи · Витрати · Боржники =====================
 let ECORZ='',ECV='ov',INCV='wk',INCG=0,JPG=0,JFL='all',EXPG=0,EXF={what:'',cat:'army',rows:[{res:'Срібло',qty:''}]};
@@ -3460,7 +3472,7 @@ function ecoItemsHtml(s,items,sign){return items.filter(i=>+i.qty).map(i=>`<span
 const MVICON={week:'📅',patron:'🎁',fine:'⚖️',expense:'💸',daily:'🕘'};
 const MVIN=k=>k==='week'||k==='patron'||k==='fine';
 
-function econView(s,si){
+function econView(s,si){try{wkCfg(s);}catch(_){}
   const tabs=[['ov','Огляд'],['inc','Доходи'],['exp','Витрати'],['debt','Боржники']];
   const debtN=ecoDebtList(s).length;
   let h=`<div class="econ eco2"><div class="etabs2" role="tablist">${tabs.map(([k,l])=>`<button role="tab" aria-selected="${ECV===k}" class="${ECV===k?'on':''}" data-a="ecv" data-k="${k}">${l}${k==='debt'&&debtN?` <span class="ebadge">${debtN}</span>`:''}</button>`).join('')}</div>`;
@@ -3507,13 +3519,13 @@ function econIncome(s,si){
   if(groups.length>1)h+=`<div class="egroups">${groups.map((x,i)=>`<button class="${i===INCG?'on':''}" data-a="incg" data-k="${i}">${esc(x.title)}</button>`).join('')}</div>`;
   const rows=wkRows(g,c);const act=rows.filter(r=>r.on&&r.rep);const share=wkShare(g,rows);const gr=wkGold(g,c);const PM=wkPayMap();
   const cw=wkCur(c);const nw=wkNext(cw);const future=cw>wkMonday(kyivToday());
-  const got=act.reduce((a,r)=>{const d=PM[cw+'_'+r.lid];return d?a+wkSilverTxt(s,d.items||''):a;},0);const need=share*act.length;const paidN=act.filter(r=>PM[cw+'_'+r.lid]).length;
+  const got=act.reduce((a,r)=>{const d=PM[cw+'_'+r.lid];return d?a+wkSilverOnly(d.items||''):a;},0);const need=share*act.length;const paidN=act.filter(r=>PM[cw+'_'+r.lid]).length;
   const pct=need?Math.min(1,got/need):0;const goldDone=gr&&PM[cw+'_'+gr.lid];
   const daysLeft=Math.round((Date.parse((future?cw:nw)+'T00:00:00Z')-Date.parse(kyivToday()+'T00:00:00Z'))/864e5);
   const R=52,C=2*Math.PI*R;
   h+=`<div class="block inc-hero"><svg class="ering" viewBox="0 0 128 128" role="img" aria-label="Зібрано ${Math.round(pct*100)}%"><circle cx="64" cy="64" r="${R}" class="trk"/>${pct>0?`<circle cx="64" cy="64" r="${R}" class="val" stroke-dasharray="${(C*pct).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 64 64)"/>`:''}<text x="64" y="62" text-anchor="middle" class="r1">${Math.round(pct*100)}%</text><text x="64" y="80" text-anchor="middle" class="r2">зібрано</text></svg>
     <div class="ih-txt"><span class="k">${esc(g.title)} · ${future?'перший тиждень збору':'тиждень'} ${esc(wkLabelOf(cw))}</span><span class="v">${fmt(got)} <small>з ${fmt(need)} срібла</small></span>
-    <div class="ih-facts"><span><b>${paidN} з ${act.length}</b> Земель здали</span><span><b>${act.length?fmt(share):'—'}</b> срібла з кожної</span><span>⏳ ${future?`збір починається з понеділка <b>${esc(wkLabelOf(cw).slice(0,5))}</b> (через ${daysLeft} дн.) — можна здати наперед`:`<b>${daysLeft<=1?'останній день':'ще '+daysLeft+' дн.'}</b> до кінця тижня`}</span>${gr?`<span>${goldDone?'✓':'🪙'} <b>${fmt(+g.gold)} золота</b> · ${esc(gr.post)}${goldDone?' здав':''}</span>`:''}</div></div></div>`;
+    <div class="ih-facts"><span><b>${paidN} з ${act.length}</b> Земель здали</span><span><b>${act.length?esc(wkShareTxt(g,rows)):'—'}</b> з кожної</span><span>⏳ ${future?`збір починається з понеділка <b>${esc(wkLabelOf(cw).slice(0,5))}</b> (через ${daysLeft} дн.) — можна здати наперед`:`<b>${daysLeft<=1?'останній день':'ще '+daysLeft+' дн.'}</b> до кінця тижня`}</span>${gr?`<span>${goldDone?'✓':'🪙'} <b>${fmt(+g.gold)} золота</b> · ${esc(gr.post)}${goldDone?' здав':''}</span>`:''}</div></div></div>`;
   // мій рядок
   const all=gr?[...rows,gr]:rows;
   const mine=all.filter(r=>r.on&&r.rep&&AUTH.email&&emailOf(r.rep)===AUTH.email&&!AUTH.bot);
@@ -3532,7 +3544,7 @@ function econIncome(s,si){
   if(vac.length||off.length)h+=`<p class="hint lc-rest">${vac.length?'Без представника (не ділять суму): '+vac.map(r=>esc(r.land)).join(', ')+'. ':''}${off.length?'Не здають срібла: '+off.map(r=>esc(r.land)+(r.post?' ('+esc(r.post)+')':'')).join(', ')+'.':''}</p>`;
   // діаграма надходжень
   h+=incomeChart(s,c);
-  h+=`<p class="hint">Срібло ділиться порівну між зайнятими посадами губернаторів. Галочку ставить сам представник, Скарбник або адміністрація; не здали до неділі 23:59 — борг і штраф ${esc(String(c.finePct))}% (див. «Боржники»).</p>`;
+  h+=`<p class="hint">Тижнева норма (добові витрати держави × 7: срібло, нафта, вугілля, руда) ділиться порівну між зайнятими посадами губернаторів. Галочку ставить сам представник, Скарбник або адміністрація; не здали до неділі 23:59 — борг і штраф ${esc(String(c.finePct))}% (див. «Боржники»).</p>`;
   return h;
 }
 function incomeChart(s,c){const mv=movements(s).filter(o=>MVIN(o.kind)&&o.at);const cw=wkMonday(kyivToday());
@@ -3587,7 +3599,7 @@ function econExpenses(s,si){
   const cw=wkMonday(kyivToday());const mv=movements(s);
   const wOut=mv.filter(o=>mvWeek(o)===cw&&!MVIN(o.kind)).reduce((a,o)=>a+mvSilver(s,o),0);
   const perDay=dl.reduce((a,it)=>a+(silverOf(s,it.res||'Срібло',dailyRate(it))||0),0);const allEx=ex.reduce((a,e)=>a+exSilver(s,e),0);
-  let h=`<div class="eco-stats"><div class="es out"><span class="k">Витрачено за тиждень</span><b>${wOut?'−':''}${fmt(Math.abs(wOut))}</b><span class="s">срібла, разом зі списаннями</span></div><div class="es out"><span class="k">Щоденні списання</span><b>${perDay?'−':''}${fmt(perDay)}</b><span class="s">срібла на день · ${fmt(perDay*7)} на тиждень</span></div><div class="es out"><span class="k">Усі разові витрати</span><b>${allEx?'−':''}${fmt(allEx)}</b><span class="s">срібла · ${ex.length} запис${ex.length%10===1&&ex.length%100!==11?'':ex.length%10>=2&&ex.length%10<=4&&(ex.length%100<10||ex.length%100>=20)?'и':'ів'}</span></div></div>`;
+  let h=`<div class="eco-stats"><div class="es out"><span class="k">Витрачено за тиждень</span><b>${wOut?'−':''}${fmt(Math.abs(wOut))}</b><span class="s">срібла, разом зі списаннями</span></div><div class="es out"><span class="k">Щоденні списання</span><b>${perDay?'−':''}${fmt(perDay)}</b><span class="s">на день у перерахунку на срібло · ${fmt(perDay*7)} на тиждень</span></div><div class="es out"><span class="k">Усі разові витрати</span><b>${allEx?'−':''}${fmt(allEx)}</b><span class="s">срібла · ${ex.length} запис${ex.length%10===1&&ex.length%100!==11?'':ex.length%10>=2&&ex.length%10<=4&&(ex.length%100<10||ex.length%100>=20)?'и':'ів'}</span></div></div>`;
   h+=bldCalcHtml(s);
   if((isFin()||AUTH.admin)&&!AUTH.bot){const sv=EXF.rows.reduce((a,r)=>a+(silverOf(s,r.res,+String(r.qty).replace(/\s/g,'')||0)||0),0);
     h+=`<div class="block exform"><h3>➕ Нова витрата</h3><input type="text" id="exf-what" data-a="exf" data-k="what" value="${esc(EXF.what)}" placeholder="На що пішло, напр. «Закупівля 20 танків для 3-го куреня»" maxlength="160">
@@ -3727,7 +3739,7 @@ function partyDetail(p){const lead=isPLeader(p),adm=pAdmin();const mine=myParty(
       :`<div class="row2"><input type="text" id="pcname" data-a="pcnm" value="${esc(PINV)}" placeholder="Назва нової коаліції" maxlength="60"><button class="small" data-a="pcnew" data-p="${esc(p.id)}">Створити коаліцію</button></div>`}</div>`;}
   return h+'</div>';}
 
-function econHtml(s,si){
+function econHtml(s,si){try{wkCfg(s);}catch(_){}
   const mem=s.members||(s.members=[]), isVac=m=>!String(m.name||'').trim()||/^вакант/i.test(m.name);
   s.weeks=s.weeks||[];
   let h='<div class="econ">';
@@ -3766,7 +3778,7 @@ function econHtml(s,si){
   // ===== weekly contributions (від Земель)
   {const c=wkCfg(s);
   if(editing&&AUTH.admin)h+=`<div class="block ecoreset"><h3>Почати економіку з нуля</h3><p class="hint">Стирає всі записи: стартовий залишок казни, усі внески Земель і штрафи за них, пожертви меценатів, витрати, архів старих внесків. Казна стане 0, тижні почнуться з поточного (${esc(wkLabelOf(wkMonday(kyivToday())))}). Налаштування лишаються: суми внесків, ресурси, ціни, щоденні списання (рахуватимуться заново від цієї миті). Борги за рішеннями Суду не зникають. Скасувати це неможливо.</p><div class="row2"><input type="text" id="ecorz" data-a="ecorz" placeholder="Щоб підтвердити, впишіть: ОБНУЛИТИ" value="${esc(ECORZ)}" style="max-width:320px"><button class="danger" data-a="ecoreset" data-s="${si}" ${ECORZ.trim().toUpperCase()==='ОБНУЛИТИ'&&!busy?'':'disabled'}>Стерти все й почати з 0</button></div></div>`;
-  if(editing){h+=`<div class="block"><h3>Тижневі внески Земель <small>налаштування</small></h3><div class="erow"><label class="fl">Перший тиждень нової системи<input type="date" id="wks" data-a="wks" data-s="${si}" value="${esc(c.start)}"></label><label class="fl">Штрафи рахуються з тижня<input type="date" id="wkfs" data-a="wkfs" data-s="${si}" value="${esc(c.fineStart)}"></label><label class="fl">Штраф за несплату, % від частки<input type="text" inputmode="numeric" id="wkfp" data-a="wkfp" data-s="${si}" value="${esc(String(c.finePct))}"></label></div>`+c.groups.map((g,gi)=>`<div class="artedit"><div class="erow"><b>${esc(g.title)}</b><label class="fl">Срібла за тиждень (ділиться між губернаторами)<input type="text" inputmode="numeric" id="wksv-${gi}" data-a="wksv" data-s="${si}" data-g="${gi}" value="${esc(g.silver)}"></label><label class="fl">Золота за тиждень (здає ${g.goldBy==='pysar'?'Писар':'Гетьман'})<input type="text" inputmode="numeric" id="wkgd-${gi}" data-a="wkgd" data-s="${si}" data-g="${gi}" value="${esc(g.gold)}"></label><label class="chk"><input type="checkbox" data-a="wkt" data-s="${si}" data-g="${gi}"${g.treasury?' checked':''}> іде в казну УД</label></div><div class="wkland">${wkRows(g,c).map(r=>`<label class="chk"><input type="checkbox" data-a="wkon" data-s="${si}" data-l="${esc(r.lid)}"${r.on?' checked':''}> ${esc(r.land)}${r.rep?'':' <span class="hint">(немає представника)</span>'}</label>`).join('')}</div><p class="hint">Срібло ділять лише Землі з галочкою і з представником. Землю, де сидить Писар, за замовчуванням знято: Писар здає золото.</p></div>`).join('')+'</div>';}
+  if(editing){h+=`<div class="block"><h3>Тижневі внески Земель <small>налаштування</small></h3><div class="erow"><label class="fl">Перший тиждень нової системи<input type="date" id="wks" data-a="wks" data-s="${si}" value="${esc(c.start)}"></label><label class="fl">Штрафи рахуються з тижня<input type="date" id="wkfs" data-a="wkfs" data-s="${si}" value="${esc(c.fineStart)}"></label><label class="fl">Штраф за несплату, % від частки<input type="text" inputmode="numeric" id="wkfp" data-a="wkfp" data-s="${si}" value="${esc(String(c.finePct))}"></label></div>`+c.groups.map((g,gi)=>`<div class="artedit"><div class="erow"><b>${esc(g.title)}</b><label class="fl">Срібла за тиждень (ділиться між губернаторами)<input type="text" inputmode="numeric" id="wksv-${gi}" data-a="wksv" data-s="${si}" data-g="${gi}" value="${esc(g.silver)}"></label><label class="fl">Золота за тиждень<input type="text" inputmode="numeric" id="wkgd-${gi}" data-a="wkgd" data-s="${si}" data-g="${gi}" value="${esc(g.gold)}"></label><label class="fl">Золото здає<select id="wkgb-${gi}" data-a="wkgb" data-s="${si}" data-g="${gi}"><option value="hetman"${g.goldBy==='hetman'?' selected':''}>Гетьман</option><option value="pysar"${g.goldBy==='pysar'?' selected':''}>Писар домініону</option><option value="lands"${g.goldBy==='lands'?' selected':''}>Землі (ділиться між губернаторами)</option></select></label>${WK_RES.map(([k])=>`<label class="fl">${esc(k)} за тиждень<input type="text" inputmode="numeric" id="wkr-${gi}-${esc(k)}" data-a="wkr" data-k="${esc(k)}" data-s="${si}" data-g="${gi}" value="${esc(String((g.res||{})[k]||0))}"></label>`).join('')}<label class="chk"><input type="checkbox" data-a="wkt" data-s="${si}" data-g="${gi}"${g.treasury?' checked':''}> іде в казну УД</label></div><div class="wkland">${wkRows(g,c).map(r=>`<label class="chk"><input type="checkbox" data-a="wkon" data-s="${si}" data-l="${esc(r.lid)}"${r.on?' checked':''}> ${esc(r.land)}${r.rep?'':' <span class="hint">(немає представника)</span>'}</label>`).join('')}</div><p class="hint">Срібло, нафту, вугілля й руду ділять лише Землі з галочкою і з представником (округлення — вгору). Землю, де сидить Писар, за замовчуванням знято. Добова норма за правилами гри: ${DAILY_RULES.items.map(([r,q])=>fmt(q)+' '+resWord(s,r)).join(', ')}.</p></div>`).join('')+'</div>';}
   h+=c.groups.map((g,gi)=>wkGroupHtml(s,si,g,gi)).join('');}
   const hasOld=s.weeks.some(w=>(w.done||[]).some(Boolean));
   if(editing||hasOld){h+=`<details class="block wkold"${editing?' open':''}><summary><h3>Архів: внески до ${esc(wkLabelOf(wkMonday(wkCfg(s).start)).slice(0,5))} <small>стара система «за учасниками»; позначки й далі враховані в казні</small></h3></summary>`;
@@ -4069,6 +4081,7 @@ app.addEventListener('input',e=>{
   if(a==='wkfp'){wkCfg(sec).finePct=Math.min(500,+t.value.replace(/\D/g,'')||0);return;}
   if(a==='wksv'){wkCfg(sec).groups[+t.dataset.g].silver=+t.value.replace(/\D/g,'')||0;return;}
   if(a==='wkgd'){wkCfg(sec).groups[+t.dataset.g].gold=+t.value.replace(/\D/g,'')||0;return;}
+  if(a==='wkr'){const g=wkCfg(sec).groups[+t.dataset.g];g.res=g.res||{};g.res[t.dataset.k]=+t.value.replace(/\D/g,'')||0;return;}
   if(a==='wl'){sec.weeks[+t.dataset.w].label=t.value;return;}
   if(a==='in'){sec.treasury.items[+t.dataset.p].name=t.value;return;}
   if(a==='iq'){sec.treasury.items[+t.dataset.p].qty=t.value.replace(/\D/g,'');return;}
@@ -4110,7 +4123,8 @@ app.addEventListener('change',e=>{
   else if(a==='wkon'){const c=wkCfg(sec);c.off[t.dataset.l]=!t.checked;render();}
   else if(a==='wkt'){wkCfg(sec).groups[+t.dataset.g].treasury=t.checked;render();}
   else if(a==='wks'){if(/^\d{4}-\d{2}-\d{2}$/.test(t.value))wkCfg(sec).start=t.value;render();}
-  else if(a==='wksv'||a==='wkgd'||a==='wkfp'){render();}
+  else if(a==='wksv'||a==='wkgd'||a==='wkfp'||a==='wkr'){render();}
+  else if(a==='wkgb'){wkCfg(sec).groups[+t.dataset.g].goldBy=t.value;render();}
   else if(a==='wkfs'){if(/^\d{4}-\d{2}-\d{2}$/.test(t.value))wkCfg(sec).fineStart=t.value;render();}
   else if(a==='pln'){const nv=t.value.trim();const ov=t.dataset.old||'';if(ov&&nv&&ov!==nv){if(players().filter(x=>x.name===nv).length>1){msg='Гравець з таким ім’ям уже є';msgErr=true;}else{renameEverywhere(ov,nv);t.dataset.old=nv;msg='Ім’я змінено всюди на сайті';msgErr=false;setTimeout(()=>render(),250);}}}
   else if(a==='madd'){const l=sec.lands[+t.dataset.l];if(t.value&&!(l.members||[]).includes(t.value)){(l.members=l.members||[]).push(t.value);}render();}
