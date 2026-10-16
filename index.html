@@ -1253,12 +1253,28 @@ button.lcard.vacant{border-style:dashed}
 @media (max-width:760px){.eltl{grid-template-columns:1fr}.elhead{flex-direction:column}.elcand{flex-direction:column}.elbar{grid-template-columns:minmax(0,1fr) auto 40px}.elbar .elbt{grid-column:1/-1;grid-row:2}.elban{grid-template-columns:auto minmax(0,1fr)}.elban .ebgo{grid-column:1/-1}}
 
 .maptop{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}.maptop>*{margin:0!important}
-.mapwrap{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}.mapwrap.hasside{grid-template-columns:minmax(0,1fr) 290px}
+.mapwrap{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start}.mapwrap.hasside{grid-template-columns:minmax(0,1fr) 290px}
 .mapbox{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0f1418}
 .mapsvg{display:block;width:100%;height:auto;aspect-ratio:1.73;touch-action:none;cursor:grab;user-select:none}.mapsvg:active{cursor:grabbing}
 .msea{fill:#13202b}
 .mreg{stroke:#1a1410;stroke-width:.7;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round;cursor:pointer}.mreg:not(.our):not(.uni){opacity:.92}.mreg.our{stroke-width:.8}.mreg:hover{filter:brightness(1.2)}.mreg.sel{stroke:#fff;stroke-width:2.2;filter:brightness(1.25)}
-.mcity{cursor:pointer}.mcity circle{fill:rgba(255,247,230,.85);stroke:#140f0b;stroke-width:.8;vector-effect:non-scaling-stroke}.mcity.cap circle{fill:#f2b544}.mcity text{fill:#fff7e6;paint-order:stroke;stroke:#140f0b;stroke-width:2.5px;vector-effect:non-scaling-stroke;pointer-events:none;font-weight:600}
+.mcity{cursor:pointer}.mcm{fill:#fff7e6;stroke:#140f0b;stroke-width:1.3px;vector-effect:non-scaling-stroke;transition:transform .15s}.mcity.cap .mcm{fill:#f2b544}.mcity:hover .mcm,.mcity.sel .mcm{fill:#ffe9a8;stroke:#fff}.mcity.sel .mcm{stroke-width:2px}
+.mcn{fill:#fff7e6;font-size:10.5px;font-weight:700;text-anchor:middle;paint-order:stroke;stroke:#140f0b;stroke-width:2.4px;vector-effect:non-scaling-stroke;pointer-events:none;opacity:0;transition:opacity .2s}.mcity.cap .mcn,.mcity.sel .mcn,.mcity:hover .mcn,.mapsvg.zin .mcn,.mapsvg.cn .mcn{opacity:1}
+.mreg.city{stroke:none}.mreg.city.sel{stroke:#fff;stroke-width:2}
+.mapsvg.zin .mland text{opacity:.85}
+.mctl{position:absolute;right:10px;top:10px;display:grid;gap:4px;z-index:2}.mctl button{all:unset;cursor:pointer;width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:rgba(20,15,10,.82);border:1px solid var(--line);color:var(--cream);font-size:16px;line-height:1}.mctl button:hover{border-color:var(--gold)}.mctl button.on{background:var(--gold);color:#1a120a}.mctl button:focus-visible{outline:2px solid var(--gold-hi)}
+.msearch{position:absolute;left:10px;top:10px;width:min(280px,calc(100% - 70px));z-index:3}.msearch input{width:100%;margin:0;background:rgba(20,15,10,.88);border-radius:10px;padding:8px 10px;font-size:14px}
+.msug{margin-top:4px;background:rgba(20,15,10,.96);border:1px solid var(--line);border-radius:10px;overflow:hidden;max-height:300px;overflow-y:auto}.msug button{all:unset;cursor:pointer;display:flex;gap:6px;align-items:baseline;width:100%;box-sizing:border-box;padding:7px 10px;font-size:13.5px;color:var(--cream)}.msug button:hover,.msug button:focus-visible{background:rgba(242,181,68,.15)}.msug small{color:var(--muted);margin-left:auto;font-size:11.5px;white-space:nowrap}.msug .hint{padding:8px 10px}
+.mstat{position:absolute;left:10px;bottom:10px;background:rgba(20,15,10,.8);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:12px;color:var(--cream);pointer-events:none}
+.mshead{display:flex;justify-content:space-between;align-items:center}.mshead .mx{padding:4px 9px}
+.mtype{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:700;background:rgba(79,143,214,.18);border:1px solid rgba(79,143,214,.55);color:#cfe2f7}.mtype.city{background:rgba(242,181,68,.16);border-color:rgba(242,181,68,.6);color:#ffe2a6}
+.mrel{font-size:13.5px}.mrel .linkbtn{font-weight:700}
+.mgrid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.mchips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;max-height:150px;overflow-y:auto}.mchip{all:unset;cursor:pointer;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--cream)}.mchip.city{border-color:rgba(242,181,68,.45)}.mchip:hover{border-color:var(--gold)}.mchip.on{background:var(--gold);color:#1a120a;border-color:var(--gold)}
+.mhist summary{cursor:pointer;font-size:13px;color:var(--muted)}.mhist ol{margin:6px 0 0;padding-left:18px;font-size:13px;display:grid;gap:3px}.mhist s{opacity:.7}
+.mbtns{display:flex;flex-wrap:wrap;gap:6px}.mbtns>*{margin:0!important}
+.mkc{display:inline-block;width:14px;text-align:center;color:#fff7e6;font-size:12px}.mkc.cap{color:#f2b544}
+.mapwrap:fullscreen{background:var(--bg,#120d09);padding:12px;overflow:auto}.mapwrap:fullscreen .mapsvg{aspect-ratio:auto;height:calc(100vh - 24px)}.mapwrap:fullscreen .mapbox{align-self:start}
 .mctry{fill:rgba(255,255,255,.35);text-anchor:middle;font-weight:700;letter-spacing:.06em;pointer-events:none;text-transform:uppercase}.mctry.uni{fill:rgba(255,255,255,.75)}
 .mland{cursor:pointer}.mland image{filter:drop-shadow(0 1px 2px rgba(0,0,0,.8))}.mlbl{font-weight:700;fill:#fff;text-anchor:middle;paint-order:stroke;stroke:rgba(15,10,6,.85);stroke-width:2.6px;vector-effect:non-scaling-stroke;pointer-events:none}
 .mtip{position:absolute;pointer-events:none;background:rgba(20,15,10,.92);border:1px solid var(--gold-soft);border-radius:8px;padding:4px 8px;font-size:12.5px;color:var(--cream);white-space:nowrap;z-index:2}
@@ -1266,7 +1282,7 @@ button.lcard.vacant{border-style:dashed}
 .mlandb{all:unset;cursor:pointer;display:flex;gap:10px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:12px}.mlandb:hover{border-color:var(--gold)}.mlandb img{width:48px;height:32px;object-fit:cover;border-radius:4px}.mlandb span{display:grid}.mlandb small{color:var(--muted)}
 .mlegend{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:10px}.mlg{all:unset;display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--cream)}button.mlg{cursor:pointer}button.mlg:hover{color:var(--gold-hi)}.mlg i{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid rgba(0,0,0,.4)}
 .mcopy{margin-top:6px;font-size:11.5px}
-@media (max-width:760px){.mapwrap.hasside{grid-template-columns:1fr}.mapsvg{aspect-ratio:auto;height:58vh}}
+@media (max-width:760px){.mapwrap.hasside{grid-template-columns:1fr}.mapsvg{aspect-ratio:auto;height:58vh}.mstat{font-size:11px;padding:3px 8px}.mgrid2{grid-template-columns:1fr}}
 
 .hhero{background:linear-gradient(115deg,rgba(0,87,183,.22),rgba(255,215,0,.12));}.hhero p{margin:6px 0 0;font-size:15px}
 .htree{overflow-x:auto;padding:8px 0 4px}.htree ul{display:flex;justify-content:center;gap:0;padding:22px 0 0;margin:0;list-style:none;position:relative}.htree>ul{min-width:max-content;margin:0 auto}.htree>ul{padding-top:0}
@@ -2689,7 +2705,7 @@ function revertAmend(b,doc){const ap=b.applied;if(!ap||!doc)return false;let ok=
     else if(ap.mode==='replace'&&a.title===ap.artTitle&&a.body===ap.after){a.body=ap.before;ok=true;}});});
   if(ok){delete b.applied;delete b.article;}return ok;}
 const CONST_MODES=['replace','add','delart','addch','delch','constfull'];
-const LAW_MODES=[['none','Нічого не змінює автоматично'],['Конституція',[['replace','Змінити текст статті'],['add','Додати нову статтю'],['delart','Виключити статтю'],['addch','Створити новий розділ'],['delch','Виключити розділ'],['constfull','Нова редакція Конституції в цілому']]],['Землі',[['ataman','Призначити Крайового Отамана'],['dismiss','Звільнити Крайового Отамана'],['rename','Перейменувати Землю'],['flag','Затвердити новий прапор Землі'],['newland','Утворити нову Землю'],['loseland','Визнати втрату контролю над Землею'],['restoreland','Відновити втрачену Землю']]],['Гравці',[['addplayer','Внести нового гравця до реєстру'],['editplayer','Змінити дані гравця'],['delplayer','Виключити гравця з реєстру']]],['Палата Земель',[['chair','Обрати Голову Палати'],['chairfire','Звільнити Голову Палати'],['committee','Утворити комітет (зокрема ЦВК)'],['committeedel','Розпустити комітет'],['election','Призначити вибори']]],['Гетьман і Канцелярія',[['gov','Призначити на посаду (Гетьман, Писар, Секретарі, Суддя)'],['govfire','Звільнити з посади'],['revokedecree','Скасувати указ Гетьмана']]],['Календар',[['holiday','Встановити державне свято'],['holidaydel','Скасувати державне свято']]],['Надзвичайний стан',[['emergency','Запровадити надзвичайний стан'],['emergencyend','Припинити надзвичайний стан']]],['Церква',[['patriarch','Обрати Патріарха'],['patriarchfire','Усунути Патріарха']]]];
+const LAW_MODES=[['none','Нічого не змінює автоматично'],['Конституція',[['replace','Змінити текст статті'],['add','Додати нову статтю'],['delart','Виключити статтю'],['addch','Створити новий розділ'],['delch','Виключити розділ'],['constfull','Нова редакція Конституції в цілому']]],['Землі',[['ataman','Призначити Крайового Отамана'],['dismiss','Звільнити Крайового Отамана'],['rename','Перейменувати Землю'],['regname','Перейменувати уділ або місто'],['flag','Затвердити новий прапор Землі'],['newland','Утворити нову Землю'],['loseland','Визнати втрату контролю над Землею'],['restoreland','Відновити втрачену Землю']]],['Гравці',[['addplayer','Внести нового гравця до реєстру'],['editplayer','Змінити дані гравця'],['delplayer','Виключити гравця з реєстру']]],['Палата Земель',[['chair','Обрати Голову Палати'],['chairfire','Звільнити Голову Палати'],['committee','Утворити комітет (зокрема ЦВК)'],['committeedel','Розпустити комітет'],['election','Призначити вибори']]],['Гетьман і Канцелярія',[['gov','Призначити на посаду (Гетьман, Писар, Секретарі, Суддя)'],['govfire','Звільнити з посади'],['revokedecree','Скасувати указ Гетьмана']]],['Календар',[['holiday','Встановити державне свято'],['holidaydel','Скасувати державне свято']]],['Надзвичайний стан',[['emergency','Запровадити надзвичайний стан'],['emergencyend','Припинити надзвичайний стан']]],['Церква',[['patriarch','Обрати Патріарха'],['patriarchfire','Усунути Патріарха']]]];
 const MONTHS=['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'];
 const MONTHS_G=['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
 const WD=['неділя','понеділок','вівторок','середа','четвер','п’ятниця','субота'];
@@ -2725,6 +2741,7 @@ function applyLaw(b,st){const am=b.amend;if(!am||!am.mode||am.mode==='none')retu
       ['repEmails','repHolder'].forEach(k=>{const m=parl[k];if(m&&am.land in m){m[am.newName]=m[am.land];delete m[am.land];}});
       return ok({mode:'rename',land:am.newName,oldName:am.land});}
     if(am.mode==='flag'){if(!am.img)return fail();const cur=l.flags[l.flags.length-1]||{};l.flags.push({img:am.img,name:cur.name||am.land,date:today()});return ok({mode:'flag',land:am.land});}}
+  if(am.mode==='regname'){const u=landSecs(st)[0];const nn=String(am.newName||'').trim();if(!u||!am.rid||!nn)return fail();u.regNames=u.regNames||{};const prev=u.regNames[am.rid]?JSON.parse(JSON.stringify(u.regNames[am.rid])):null;const o=u.regNames[am.rid]||{n:am.game||am.old,hist:[]};o.hist=o.hist||[];o.hist.push({from:o.n||am.old||'',to:nn,date:today(),law:b.title||''});o.n=nn;u.regNames[am.rid]=o;return ok({mode:'regname',rid:am.rid,prev});}
   if(am.mode==='newland'){const sec=landSecs(st).find(x=>x.id===am.sec)||landSecs(st)[0];if(!sec||!am.name)return fail();
     const id='l'+String(b.id||Date.now().toString(36)).slice(-10);if(sec.lands.some(x=>x.id===id))return fail();
     sec.lands.push({id,flags:[{img:am.img||'',name:am.name,date:today()}],posts:[{title:'1-й Крайовий Отаман',holder:am.ataman||''}]});
@@ -2762,6 +2779,7 @@ function revertLaw(b,st){const ap=b.applied;if(!ap)return false;
     const rE=(parl.repEmails=parl.repEmails||{}),rH=(parl.repHolder=parl.repHolder||{});if(ap.prevE==null)delete rE[ap.land];else rE[ap.land]=ap.prevE;if(ap.prevH==null)delete rH[ap.land];else rH[ap.land]=ap.prevH;}
   else if(ap.mode==='rename'){const L=findLand(st,ap.land);if(!L)return false;L.l.flags.pop();['repEmails','repHolder'].forEach(k=>{const m=parl[k];if(m&&ap.land in m){m[ap.oldName]=m[ap.land];delete m[ap.land];}});}
   else if(ap.mode==='flag'){const L=findLand(st,ap.land);if(!L)return false;L.l.flags.pop();}
+  else if(ap.mode==='regname'){const u=landSecs(st)[0];if(!u)return false;u.regNames=u.regNames||{};if(ap.prev)u.regNames[ap.rid]=ap.prev;else delete u.regNames[ap.rid];}
   else if(ap.mode==='revokedecree'||ap.mode==='emergency'||ap.mode==='emergencyend'){}
   else if(CODE_MODES.includes(ap.mode)){if(!revertCode(ap,st))return false;}
   else if(ap.mode==='patriarch'||ap.mode==='patriarchfire'){const c=churchSec(st);if(!c)return false;c.patriarch=ap.prev;}
@@ -2790,6 +2808,7 @@ function amendHtml(b){const am=b.amend;if(!am||!am.mode||am.mode==='none')return
   else if(am.mode==='ataman')h+=`<div class="lawline">👤 Призначити Крайовим Отаманом Землі «${esc(am.land)}»: <b>${plink(am.name)}</b></div>`;
   else if(am.mode==='dismiss')h+=`<div class="lawline">🚪 Звільнити Крайового Отамана Землі «${esc(am.land)}»</div>`;
   else if(am.mode==='rename')h+=`<div class="lawline">✏️ Перейменувати Землю: «${esc(am.land)}» → <b>«${esc(am.newName)}»</b></div>`;
+  else if(am.mode==='regname')h+=`<div class="lawline">${am.city?'🏙':'🗺'} Перейменувати ${am.city?'місто':'уділ'} «${esc(am.old||'')}»${am.land?' ('+esc(am.land)+')':''} → <b>«${esc(am.newName||'')}»</b></div>`;
   else if(am.mode==='flag')h+=`<div class="lawline">🏳 Новий прапор Землі «${esc(am.land)}»</div>${am.img?`<img class="lawflag" src="${esc(am.img)}" alt="Новий прапор Землі ${esc(am.land)}">`:''}`;
   else if(am.mode==='chair')h+=`<div class="lawline">🪑 Голова Палати Земель: <b>${plink(am.name)}</b></div>`;
   else if(am.mode==='revokedecree')h+=`<div class="lawline">🚫 Скасувати Указ Гетьмана №${esc(am.no||'')} «${esc(am.title||'')}»</div>`;
@@ -2822,6 +2841,11 @@ function viewState(){const pend=allBills().filter(b=>b.amend&&b.amend.mode&&b.am
 function liveBills(){return PROPS.filter(pr=>pr.at).map(pr=>{const end=pr.at+(+pr.hours||24)*3600000;const conf=+pr.closedAtMs||0;const ec=conf||earlyClose(pr.id,end);const eff=ec&&ec<end?ec:end;return {early:eff<end,earlyOk:!!conf&&conf<end,id:pr.id,live:true,email:pr.email,title:pr.title,text:pr.text,date:pr.date,author:pr.petition?pr.author:(pr.author?pr.author+' ('+pr.land+')':pr.land),amend:pr.amend||null,kind:pr.kind||'',voting:true,status:'review',closesAt:new Date(eff).toISOString(),hours:+pr.hours||24,at0:pr.at};});}
 function allBills(){const p=parlSec();const st=(p&&p.bills)||[];const seen=new Set();const out=[];st.forEach(b=>{if(b.id&&seen.has(b.id))return;if(b.id)seen.add(b.id);out.push(b);});return [...liveBills().filter(b=>!seen.has(b.id)),...out];}
 function artOptions(){const cs=constSec();const out=[];if(cs)cs.doc.chapters.forEach((c,ci)=>c.articles.forEach((a,ai)=>out.push({v:ci+':'+ai,t:a.title,ci,ai,a})));return out;}
+function regnameFields(){const G=window.MAPGEO;if(!G){loadMapGeo();return '<p class="hint">Завантажую список уділів і міст…</p>';}const res=mapResolve();const groups={};mapRegs().forEach(r=>{const e=res[r.id];if(!e||e.lost)return;const ln=cur(e.l).name;(groups[ln]=groups[ln]||[]).push(r);});
+  const ks=Object.keys(groups).sort((a,b)=>a.localeCompare(b,'uk'));if(!ks.length)return '<p class="hint warn">На карті немає уділів держави.</p>';if(!(DRAFT.rid&&res[DRAFT.rid]&&!res[DRAFT.rid].lost))DRAFT.rid=groups[ks[0]][0].id;const r=G.__by[DRAFT.rid];
+  let h=`<label class="fl">Уділ або місто<select id="np-rid" data-a="np" data-k="rid">${ks.map(k=>`<optgroup label="${esc(k)}">${groups[k].slice().sort((a,b)=>(b.city-a.city)||mapName(a).localeCompare(mapName(b),'uk')).map(x=>`<option value="${esc(x.id)}"${x.id===DRAFT.rid?' selected':''}>${x.city?'🏙 місто ':'🗺 уділ '}${esc(mapName(x))}</option>`).join('')}</optgroup>`).join('')}</select></label>`;
+  h+=`<p class="hint">${r.city?'Місто':'Уділ'} «${esc(mapName(r))}»${mapName(r)!==r.n?' · у грі: «'+esc(r.n)+'»':''}. Нова назва з’явиться на карті держави, у пошуку й історії назв; у самій грі DragPolit назва не зміниться.</p><input type="text" id="np-rnew" data-a="np" data-k="rnew" maxlength="60" value="${esc(DRAFT.rnew||'')}" placeholder="Нова назва ${r.city?'міста':'уділу'}">`;
+  return h;}
 function modeFields(mode){const opts=artOptions();const cs=constSec();const lands=landList(state).map(x=>x.name);const gov=govSec();
   const landSel=(k='land2')=>`<label class="fl">Земля<select id="np-${k}" data-a="np" data-k="${k}">${lands.map(n=>`<option${n===DRAFT[k]?' selected':''}>${esc(n)}</option>`).join('')}</select></label>`;
   let h='';
@@ -2838,6 +2862,7 @@ function modeFields(mode){const opts=artOptions();const cs=constSec();const land
   if(mode==='ataman')h+=landSel()+who('Ім’я нового Крайового Отамана',true);
   if(mode==='dismiss')h+=landSel()+'<p class="hint">Після прийняття закону посада стане вакантною, а пошта цієї Землі перестане голосувати.</p>';
   if(mode==='rename')h+=landSel()+`<input type="text" id="np-newName" data-a="np" data-k="newName" maxlength="80" value="${esc(DRAFT.newName||'')}" placeholder="Нова назва Землі">`;
+  if(mode==='regname')h+=regnameFields();
   if(mode==='flag')h+=landSel()+`<div class="landtools"><button type="button" class="small" data-a="nppick">${DRAFT.img?'Змінити картинку':'Вибрати картинку прапора'}</button>${DRAFT.img?`<img class="lawflag" src="${esc(DRAFT.img)}" alt="Новий прапор">`:''}</div>`;
   if(mode==='chair')h+=who('Ім’я Голови Палати',false);
   if(mode==='revokedecree'){const ds=NEWS.filter(n=>n.type==='decree'&&!decreeRevoked(n)).sort((a,b)=>(b.at||0)-(a.at||0));h+=ds.length?`<label class="fl">Указ<select id="np-dec" data-a="np" data-k="dec">${ds.map(n=>`<option value="${esc(n.id)}"${n.id===DRAFT.dec?' selected':''}>№${esc(n.no||'')} «${esc(n.title)}»</option>`).join('')}</select></label>`:'<p class="hint warn">Чинних указів немає.</p>';}
@@ -2941,10 +2966,11 @@ function historyHtml(s,si){const tree=s.tree||[];const ev=s.events||[];
 // ---------- Карта держави (регіони DragPolit) ----------
 let MAP_L='lands',MAPSEL='',MAPEDIT=false,MAPZ=null;const GAME_REGION='https://dragpolit.com/region/';
 function loadMapGeo(){if(window.MAPGEO||window.__mapLoading)return;window.__mapLoading=true;const sc=document.createElement('script');sc.src='mapgeo.js?v=k1';sc.onload=()=>{window.__mapLoading=false;renderSoon();};sc.onerror=()=>{window.__mapLoading=false;window.__mapErr=true;renderSoon();};document.head.appendChild(sc);}
-function udilSec(){return landSecs()[0]||null;}
+function udilSec(st){return landSecs(st)[0]||null;}
 function mapLandIdx(){const out=[];landSecs().forEach(sec=>(sec.lands||[]).forEach(l=>out.push({l,sec,lost:false})));((lostSec()||{}).lands||[]).forEach(l=>out.push({l,sec:lostSec(),lost:true}));return out;}
 const mapNorm=t=>String(t||'').toLowerCase().replace(/[’ʼ`']/g,'').replace(/днепр/g,'дніпро').replace(/священий/g,'священний').replace(/\s+/g,' ').trim();
-function mapRegs(){const G=window.MAPGEO;if(G.__r)return G.__r;G.__r=G.regs.map(a=>({id:a[0],n:a[1],cid:a[2],au:a[3],d:a[4],x:a[5],y:a[6],city:a[7],a:a[8]}));G.__by={};G.__r.forEach(r=>G.__by[r.id]=r);return G.__r;}
+const MAP_CITY_X=['Київ','Севастополь'];
+function mapRegs(){const G=window.MAPGEO;if(G.__r)return G.__r;G.__r=G.regs.map(a=>({id:a[0],n:a[1],cid:a[2],au:a[3],d:a[4],x:a[5],y:a[6],city:a[7]||(MAP_CITY_X.includes(a[1])?1:0),a:a[8]}));G.__by={};G.__r.forEach(r=>G.__by[r.id]=r);return G.__r;}
 function mapOurs(r){return window.MAPGEO.ours.includes(r.cid);}
 function mapResolve(){const idx=mapLandIdx();const ov=((udilSec()||{}).udils)||{};const res={};const byName=n=>{const k=mapNorm(n);return k?idx.find(x=>(x.l.flags||[]).some(f=>mapNorm(f.name)===k))||null:null;};
   mapRegs().forEach(r=>{let e=null;if(r.id in ov)e=ov[r.id]?idx.find(x=>x.l.id===ov[r.id])||null:null;else if(mapOurs(r))e=byName(r.au);res[r.id]=e;});return res;}
@@ -2972,51 +2998,105 @@ function mapLegend(res){const G=window.MAPGEO;const used=new Map();const R=mapRe
   if(MAP_L==='ep'){const eps=((churchSec()||{}).eparchies||[]).filter(x=>x.name);return (eps.map((ep,i)=>`<span class="mlg"><i style="background:${MAP_PAL[i%MAP_PAL.length]}"></i>${esc(ep.name)}${ep.bishop?' · '+esc(ep.bishop):''}</span>`).join('')||'<span class="hint">Єпархій ще не створено.</span>')+'<span class="mlg"><i style="background:#4a4540"></i>Поза єпархіями</span>';}
   if(MAP_L==='el'){const a=elActive();const loc=a.filter(x=>x.post&&x.post.kind==='land');const nat=a.filter(x=>!(x.post&&x.post.kind==='land'));return (loc.length?`<span class="mlg"><i style="background:#f2b544"></i>Тривають вибори очільника Землі</span>`:'<span class="hint">Виборів у Землях зараз немає.</span>')+(nat.length?`<span class="hint">По всій державі: ${nat.map(x=>esc(x.post.title)).join(', ')}</span>`:'');}
   return '';}
+let MAPCN=false;
+function mapName(r){const o=((udilSec()||{}).regNames||{})[r.id];return (o&&o.n)||r.n;}
+function mapZ0(){const G=window.MAPGEO;return MAPZ||{x:G.vb[0],y:G.vb[1],w:G.vb[2],h:G.vb[3]};}
+function mapIsCap(r,res){return r.n==='Львів'||(r.cid==='8'&&!!r.city&&!res[r.id]);}
+function mapView(fn){const real=state;if(!editing)state=viewState();try{return fn();}finally{state=real;}}
+// у якому уділі лежить місто: беремо точки одразу за межею міста й дивимося, чий регіон їх містить
+function mapParents(){const G=window.MAPGEO;if(G.__par)return G.__par;const sv=document.getElementById('mapsvg');if(!sv||!sv.isConnected)return null;const els={};sv.querySelectorAll('path.mreg').forEach(p=>els[p.dataset.u]=p);const R=mapRegs();const bb={};const par={};
+  try{R.forEach(r=>{if(!r.city&&els[r.id])bb[r.id]=els[r.id].getBBox();});
+    R.forEach(r=>{if(!r.city||!els[r.id])return;const cb=els[r.id].getBBox();const e=Math.max(cb.width,cb.height)*0.1+0.6;const pts=[[cb.x-e,r.y],[cb.x+cb.width+e,r.y],[r.x,cb.y-e],[r.x,cb.y+cb.height+e]];const votes={};
+      R.forEach(q=>{const b=bb[q.id];if(!b||r.x<b.x-e||r.x>b.x+b.width+e||r.y<b.y-e||r.y>b.y+b.height+e)return;pts.forEach(([x,y])=>{const pt=sv.createSVGPoint();pt.x=x;pt.y=y;if(els[q.id].isPointInFill(pt))votes[q.id]=(votes[q.id]||0)+1;});});
+      const best=Object.entries(votes).sort((a,b)=>b[1]-a[1])[0];if(best)par[r.id]=best[0];});}catch(_){return null;}
+  G.__par=par;return par;}
+function mapTipText(id){return mapView(()=>mapTipText0(id));}
+function mapTipText0(id){const G=window.MAPGEO;const r=G&&G.__by[id];if(!r)return '';const res=window.__mres||{};const e=res[id];const c=G.countries[r.cid];
+  return (r.city?'🏙 ':'')+mapName(r)+(e?' — '+cur(e.l).name:c&&!mapOurs(r)?' — '+c[0]:'');}
+function mapSideHtml(res){const G=window.MAPGEO;const r0=MAPSEL&&G.__by[MAPSEL];if(!r0)return '';const R=mapRegs();
+  const can=(isPysar()||AUTH.admin)&&!AUTH.bot;const e=res[r0.id];const nm=e?cur(e.l).name:'';const h=e?landHead(e.l):null;const ep=nm?eparchyOf(nm):null;const ctry=G.countries[r0.cid];const our=mapOurs(r0)||!!e;const cap=mapIsCap(r0,res);
+  const rn=((udilSec()||{}).regNames||{})[r0.id];const name=mapName(r0);
+  const badge=r0.city?`<span class="mtype city">${cap?'⭐ Столиця':'🏙 Місто'}</span>`:`<span class="mtype">${our?'🗺 Уділ':'🗾 Регіон'}</span>`;
+  let rel='';const par=our?mapParents():null;
+  if(par&&r0.city&&par[r0.id]){const p=G.__by[par[r0.id]];rel=`<div class="mrel">📍 Лежить в уділі <button type="button" class="linkbtn" data-a="mapfocus" data-u="${esc(p.id)}">${esc(mapName(p))}</button></div>`;}
+  if(par&&!r0.city){const ch=Object.keys(par).filter(c=>par[c]===r0.id).map(id=>G.__by[id]);if(ch.length)rel=`<div class="mrel">🏙 ${ch.length>1?'Міста':'Місто'} в уділі: ${ch.map(c=>`<button type="button" class="linkbtn" data-a="mapfocus" data-u="${esc(c.id)}">${esc(mapName(c))}</button>`).join(', ')}</div>`;}
+  let land='';
+  if(e){const mine=R.filter(r=>res[r.id]&&res[r.id].l.id===e.l.id).sort((a,b)=>(b.city-a.city)||mapName(a).localeCompare(mapName(b),'uk'));const nc=mine.filter(r=>r.city).length,nu=mine.length-nc;
+    land=`<button type="button" class="mlandb" data-a="landm" data-k="${esc(nm)}">${cur(e.l).img?`<img src="${esc(cur(e.l).img)}" alt="">`:''}<span><b>${esc(nm)}</b><small>${esc(MAP_KINDS[mapKind(r0,e)][1])} · відкрити сторінку Землі</small></span></button>
+      <div class="mgrid2"><div class="dsec"><div class="hint">${esc(h&&h.post?String(h.post.title).replace(/^\d+\s*-?\s*[йя]?\s*/,''):'Очільник')}</div><div>${h&&h.name?plink(h.name):'<span class="vacn">Вакантно</span>'}</div></div>${ep?`<div class="dsec"><div class="hint">Єпархія</div><div>⛪ ${esc(ep.name)}${ep.bishop?`<small class="hint"> · ${esc(ep.bishop)}</small>`:''}</div></div>`:''}</div>
+      <div class="dsec"><div class="hint">Територія Землі: ${nu} ${nu===1?'уділ':nu<5&&nu>0?'уділи':'уділів'}${nc?` · ${nc} ${nc===1?'місто':nc<5?'міста':'міст'}`:''}</div><div class="mchips">${mine.map(r=>`<button type="button" class="mchip${r.city?' city':''}${r.id===r0.id?' on':''}" data-a="mapfocus" data-u="${esc(r.id)}">${r.city?'🏙 ':''}${esc(mapName(r))}</button>`).join('')}</div></div>`;}
+  else if(our)land=`<p class="hint">${esc(MAP_KINDS[mapKind(r0,e)][1])}${r0.cid==='8'?' Червоного Клину':' Української Держави'}.</p>`;
+  else if(ctry)land=`<p class="hint">${esc(ctry[0])}${ctry[2]?' · '+esc(ctry[2]):''}${G.union.includes(r0.cid)?' · союзна держава':''}</p>`;
+  const hist=rn&&(rn.hist||[]).length?`<details class="mhist"><summary>Історія назви · ${rn.hist.length}</summary><ol>${rn.hist.slice().reverse().map(x=>`<li><s>${esc(x.from||'')}</s> → <b>${esc(x.to||'')}</b><small class="hint">${x.date?' · '+esc(x.date):''}${x.law?' · закон «'+esc(x.law)+'»':''}</small></li>`).join('')}</ol></details>`:'';
+  const canProp=our&&!AUTH.bot&&npLands().length&&!editing;
+  return `<div class="mside" id="mside"><div class="mshead">${badge}<button type="button" class="small ghost mx" data-a="mapsel" data-u="" aria-label="Закрити">✕</button></div><h3>${esc(name)}</h3>${name!==r0.n?`<div class="hint">Назва у грі: «${esc(r0.n)}»</div>`:''}${rel}${land}${hist}
+    <div class="mbtns"><button type="button" class="small ghost" data-a="mapfocus" data-u="${esc(r0.id)}">🎯 Наблизити</button><a class="gamebtn small" href="${GAME_REGION}${encodeURIComponent(r0.id)}" target="_blank" rel="noopener">🎮 У грі ↗</a>${canProp?`<button type="button" class="small" data-a="mapren" data-u="${esc(r0.id)}">✏️ Перейменувати законом</button>`:''}</div>
+    ${MAPEDIT&&can&&our?`<label class="fl">Належить Землі<select id="map-as" data-a="mapas" data-u="${esc(r0.id)}"><option value="">— без Землі —</option>${mapLandIdx().map(x=>`<option value="${esc(x.l.id)}"${e&&e.l.id===x.l.id?' selected':''}>${esc(cur(x.l).name)}${x.lost?' (втрачена)':''}</option>`).join('')}</select></label><button class="small ghost" data-a="mapreset" data-u="${esc(r0.id)}">Як у грі${r0.au?' ('+esc(r0.au)+')':''}</button>`:''}</div>`;}
 function mapHtml(s,si){const G=window.MAPGEO;
   if(!G){loadMapGeo();return `<div class="block"><p class="hint">${window.__mapErr?'Не вдалося завантажити карту. Перевірте, чи файл mapgeo.js лежить поруч з index.html.':'Завантажую карту…'}</p></div>`;}
-  const R=mapRegs();const res=mapResolve();const can=(isPysar()||AUTH.admin)&&!AUTH.bot;
+  const R=mapRegs();const res=mapResolve();window.__mres=res;const can=(isPysar()||AUTH.admin)&&!AUTH.bot;
+  if(MAPSEL&&!G.__by[MAPSEL])MAPSEL='';
   const layers=[['lands','🗺 Землі'],['kind','🏛 Устрій'],['head','👑 Очільники'],['ep','⛪ Єпархії'],['el','🗳 Вибори'],['pol','🌍 Політична']];
   const lc={};R.forEach(r=>{const e=res[r.id];if(!e||e.lost)return;const o=lc[e.l.id]||(lc[e.l.id]={x:0,y:0,a:0,e});const w=Math.max(r.a,0.3);o.x+=r.x*w;o.y+=r.y*w;o.a+=w;});
   const cl={};if(MAP_L==='pol'||MAP_L==='lands'||MAP_L==='kind'){R.forEach(r=>{if(!r.cid||(mapOurs(r)&&MAP_L!=='pol'))return;const o=cl[r.cid]||(cl[r.cid]={x:0,y:0,a:0,big:null});o.a+=r.a;if(!o.big||r.a>o.big.a)o.big=r;});Object.values(cl).forEach(o=>{const c=o.big;let sx=0,sy=0,sa=0;R.forEach(r=>{if(r.cid===c.cid&&Math.hypot(r.x-c.x,r.y-c.y)<350){sx+=r.x*r.a;sy+=r.y*r.a;sa+=r.a;}});o.x=sx;o.y=sy;o.a=sa;});}
-  const z=MAPZ||{x:G.vb[0],y:G.vb[1],w:G.vb[2],h:G.vb[3]};const sw=(z.w/1000).toFixed(2);
-  let svg=`<svg id="mapsvg" class="mapsvg" viewBox="${z.x} ${z.y} ${z.w} ${z.h}" style="--sw:${sw}" role="img" aria-label="Карта Української Держави"><rect x="${G.box[0]-4000}" y="${G.box[1]-4000}" width="${G.box[2]+8000}" height="${G.box[3]+8000}" class="msea"/>`;
-  R.forEach(r=>{const e=res[r.id];const f=mapFill(r,e);const our=mapOurs(r)||!!e;svg+=`<path d="${r.d}" class="mreg${our?' our':''}${G.union.includes(r.cid)?' uni':''}${MAPSEL===r.id?' sel':''}" data-u="${r.id}" fill="${f}"><title>${esc(r.n)}${e?' — '+esc(cur(e.l).name):r.cid&&!mapOurs(r)&&G.countries[r.cid]?' — '+esc(G.countries[r.cid][0]):''}</title></path>`;});
-  R.forEach(r=>{if(!r.city||!(mapOurs(r)||G.union.includes(r.cid)||res[r.id]))return;const cap=r.n==='Львів'||(r.cid==='8'&&!res[r.id]);svg+=`<g class="mcity${cap?' cap':''}" data-u="${r.id}"><circle cx="${r.x}" cy="${r.y}" r="${(z.w/(cap?330:520)).toFixed(1)}"><title>${esc(r.n)}</title></circle></g>`;});
-  Object.entries(cl).forEach(([cid,o])=>{if(o.a<25||!G.countries[cid])return;svg+=`<text x="${(o.x/o.a).toFixed(0)}" y="${(o.y/o.a).toFixed(0)}" class="mctry${G.union.includes(cid)?' uni':''}" style="font-size:${(z.w/(G.union.includes(cid)?85:110)).toFixed(1)}px">${esc(G.countries[cid][0])}</text>`;});
-  if(MAP_L==='lands'||MAP_L==='head')Object.values(lc).forEach(o=>{const x=o.x/o.a,y=o.y/o.a;const c=cur(o.e.l);const k=z.w/1000;svg+=`<g class="mland" data-a="landm" data-k="${esc(c.name)}">${c.img?`<image href="${esc(c.img)}" x="${(x-11*k).toFixed(0)}" y="${(y-19*k).toFixed(0)}" width="${(22*k).toFixed(0)}" height="${(14*k).toFixed(0)}" preserveAspectRatio="xMidYMid slice"/>`:''}<text x="${x.toFixed(0)}" y="${(y+6*k).toFixed(0)}" class="mlbl" style="font-size:${(9*k).toFixed(1)}px">${esc(c.name.replace(/ Земля$/,''))}</text></g>`;});
+  const z=mapZ0();const k=z.w/(window.__mapPW||1000);const sc=(x,y)=>`class="msc" data-x="${(+x).toFixed(1)}" data-y="${(+y).toFixed(1)}" transform="translate(${(+x).toFixed(1)} ${(+y).toFixed(1)}) scale(${k.toFixed(4)})"`;
+  let svg=`<svg id="mapsvg" class="mapsvg${z.w<G.vb[2]*0.55?' zin':''}${MAPCN?' cn':''}" viewBox="${z.x} ${z.y} ${z.w} ${z.h}" role="img" aria-label="Карта Української Держави"><rect x="${G.box[0]-4000}" y="${G.box[1]-4000}" width="${G.box[2]+8000}" height="${G.box[3]+8000}" class="msea"/>`;
+  const path=r=>{const e=res[r.id];const our=mapOurs(r)||!!e;return `<path d="${r.d}" class="mreg${our?' our':''}${r.city?' city':''}${G.union.includes(r.cid)?' uni':''}${MAPSEL===r.id?' sel':''}" data-u="${r.id}" fill="${mapFill(r,e)}"/>`;};
+  R.forEach(r=>{if(!r.city)svg+=path(r);});R.forEach(r=>{if(r.city)svg+=path(r);});
+  Object.entries(cl).forEach(([cid,o])=>{if(o.a<25||!G.countries[cid])return;const u=G.union.includes(cid);svg+=`<g ${sc(o.x/o.a,o.y/o.a)}><text class="mctry${u?' uni':''}" style="font-size:${u?11.8:9.1}px">${esc(G.countries[cid][0])}</text></g>`;});
+  if(MAP_L==='lands'||MAP_L==='head')Object.values(lc).forEach(o=>{const c=cur(o.e.l);svg+=`<g class="mland" data-a="landm" data-k="${esc(c.name)}"><g ${sc(o.x/o.a,o.y/o.a)}>${c.img?`<image href="${esc(c.img)}" x="-13" y="-22" width="26" height="16" preserveAspectRatio="xMidYMid slice"/>`:''}<text y="7" class="mlbl" style="font-size:10.5px">${esc(c.name.replace(/ Земля$/,''))}</text></g></g>`;});
+  R.forEach(r=>{if(!r.city||!(mapOurs(r)||G.union.includes(r.cid)||res[r.id]))return;const cap=mapIsCap(r,res);
+    svg+=`<g class="mcity${cap?' cap':''}${MAPSEL===r.id?' sel':''}" data-u="${r.id}"><g ${sc(r.x,r.y)}>${cap?'<path class="mcm" d="M0,-7.5 L2,-2.4 L7.1,-2.4 L3,0.9 L4.5,6.1 L0,3 L-4.5,6.1 L-3,0.9 L-7.1,-2.4 L-2,-2.4 Z"/>':'<rect class="mcm" x="-3.3" y="-3.3" width="6.6" height="6.6" rx="1.2" transform="rotate(45)"/>'}<text class="mcn" y="${cap?-10:-7.5}">${esc(mapName(r))}</text></g></g>`;});
   svg+='</svg>';
-  let side='';const r0=MAPSEL&&G.__by[MAPSEL];
-  if(r0){const e=res[r0.id];const nm=e?cur(e.l).name:'';const h=e?landHead(e.l):null;const ep=nm?eparchyOf(nm):null;const ctry=G.countries[r0.cid];const our=mapOurs(r0);
-    side=`<div class="mside"><div class="hint">${our?(r0.city?'Місто':'Уділ'):'Регіон'}</div><h3>${esc(r0.n)}</h3>${!our&&ctry?`<div class="hint">${esc(ctry[0])}${ctry[2]?' · '+esc(ctry[2]):''}${G.union.includes(r0.cid)?' · союзна держава':''}</div>`:''}
-      ${e?`<button type="button" class="mlandb" data-a="landm" data-k="${esc(nm)}">${cur(e.l).img?`<img src="${esc(cur(e.l).img)}" alt="">`:''}<span><b>${esc(nm)}</b><small>${esc(MAP_KINDS[mapKind(r0,e)][1])} · відкрити сторінку Землі</small></span></button>
-      <div class="dsec"><div class="hint">${esc(h&&h.post?h.post.title:'Очільник')}</div><div>${h&&h.name?plink(h.name):'<span class="vacn">Вакантно</span>'}</div></div>${ep?`<div class="hint">⛪ ${esc(ep.name)}${ep.bishop?' · єпископ '+esc(ep.bishop):''}</div>`:''}`:our?`<p class="hint">${esc(MAP_KINDS[mapKind(r0,e)][1])}${r0.cid==='8'?' Червоного Клину':' Української Держави'}.</p>`:''}
-      <a class="gamebtn" href="${GAME_REGION}${encodeURIComponent(r0.id)}" target="_blank" rel="noopener">🎮 Регіон у грі ↗</a>
-      ${MAPEDIT&&can&&(our||e)?`<label class="fl">Належить Землі<select id="map-as" data-a="mapas" data-u="${esc(r0.id)}"><option value="">— без Землі —</option>${mapLandIdx().map(x=>`<option value="${esc(x.l.id)}"${e&&e.l.id===x.l.id?' selected':''}>${esc(cur(x.l).name)}${x.lost?' (втрачена)':''}</option>`).join('')}</select></label><button class="small ghost" data-a="mapreset" data-u="${esc(r0.id)}">Як у грі${r0.au?' ('+esc(r0.au)+')':''}</button>`:''}
-      <button class="small ghost" data-a="mapsel" data-u="">✕ Закрити</button></div>`;}
-  let h=`<div class="maptop"><div class="afilter">${layers.map(([k,l])=>`<button class="small${MAP_L===k?' primary':''}" data-a="mapl" data-k="${k}">${l}</button>`).join('')}</div><div class="landtools">${can?`<button class="small${MAPEDIT?' primary':' ghost'}" data-a="mapedit">✏️ Розподіл уділів</button>`:''}<button class="small ghost" data-a="mapz" data-k="in" aria-label="Наблизити">＋</button><button class="small ghost" data-a="mapz" data-k="out" aria-label="Віддалити">－</button><button class="small ghost" data-a="mapz" data-k="0" aria-label="Уся держава">⤢</button></div></div>`;
+  const side=mapSideHtml(res);
+  const ours=R.filter(r=>{const e=res[r.id];return e&&!e.lost;});const nC=ours.filter(r=>r.city).length,nL=Object.keys(lc).length;
+  let h=`<div class="maptop"><div class="afilter">${layers.map(([k,l])=>`<button class="small${MAP_L===k?' primary':''}" data-a="mapl" data-k="${k}">${l}</button>`).join('')}</div><div class="landtools">${can?`<button class="small${MAPEDIT?' primary':' ghost'}" data-a="mapedit">✏️ Розподіл уділів</button>`:''}</div></div>`;
   if(MAPEDIT&&can)h+='<p class="hint warn">Режим розподілу: натисніть на уділ і виберіть, якій Землі він належить. Зміни зберігаються одразу.</p>';
-  h+=`<div class="mapwrap${side?' hasside':''}"><div class="mapbox" id="mapbox">${svg}<div class="mtip" id="mtip" hidden></div></div>${side}</div><div class="mlegend">${mapLegend(res)}</div><p class="hint mcopy">Регіони й межі — з політичної карти DragPolit. Колесо миші або два пальці — масштаб, перетягування — рух карти, клік на регіон — подробиці й посилання на регіон у грі.</p>`;
+  h+=`<div class="mapwrap${side?' hasside':''}"><div class="mapbox" id="mapbox">${svg}<div class="mtip" id="mtip" hidden></div>
+    <div class="msearch"><input type="search" id="map-q" data-a="mapq" autocomplete="off" placeholder="🔍 Уділ, місто чи Земля" aria-label="Пошук на карті"><div class="msug" id="map-sug" hidden></div></div>
+    <div class="mctl"><button type="button" data-a="mapz" data-k="in" aria-label="Наблизити" title="Наблизити">＋</button><button type="button" data-a="mapz" data-k="out" aria-label="Віддалити" title="Віддалити">－</button><button type="button" data-a="mapz" data-k="0" aria-label="Уся держава" title="Уся держава">⤢</button><button type="button" class="${MAPCN?'on':''}" data-a="mapcn" aria-pressed="${MAPCN}" title="Назви всіх міст">🏙</button><button type="button" data-a="mapfs" title="На весь екран" aria-label="На весь екран">⛶</button></div>
+    <div class="mstat">${ours.length-nC} уділів · ${nC} міст · ${nL} Земель</div></div>${side}</div><div class="mlegend">${mapLegend(res)}<span class="mlg"><b class="mkc">◆</b>Місто</span><span class="mlg"><b class="mkc cap">★</b>Столиця</span></div><p class="hint mcopy">Регіони й межі — з політичної карти DragPolit. Колесо миші або два пальці — масштаб, перетягування — рух карти, клік на уділ чи місто — подробиці. Назви уділів і міст змінює Палата Земель законом.</p>`;
   if(LANDM){const x=mapLandIdx().find(q=>cur(q.l).name===LANDM);if(x&&!MODALH)MODALH=`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="landm" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide"><button class="small bmx" data-a="landm" data-k="">✕ Закрити</button>${landInfo(x.l)}</div></div>`;}
   return h;}
-function mapFit(){const sv=document.getElementById('mapsvg');const G=window.MAPGEO;if(!sv||!G||MAPZ)return;const r=sv.getBoundingClientRect();if(!r.width||!r.height)return;const ar=r.width/r.height,[vx,vy,vw,vh]=G.vb,g=vw/vh;if(Math.abs(ar-g)<0.06)return;let w,h;if(ar<g){h=vh;w=h*ar;}else{w=vw;h=w/ar;}const cx=vx+(ar<g?vw*0.36:vw/2),cy=vy+vh/2;MAPZ={x:cx-w/2,y:cy-h/2,w,h};mapApplyZ();}
-function mapApplyZ(){const sv=document.getElementById('mapsvg');if(sv&&MAPZ)sv.setAttribute('viewBox',`${MAPZ.x} ${MAPZ.y} ${MAPZ.w} ${MAPZ.h}`);}
-function mapLim(){const G=window.MAPGEO;return {max:G.box[2],min:G.vb[2]/10};}
-function mapZoom(f,cx,cy){const G=window.MAPGEO;if(!G)return;const z=MAPZ||{x:G.vb[0],y:G.vb[1],w:G.vb[2],h:G.vb[3]};const L=mapLim();const nw=Math.min(L.max,Math.max(L.min,z.w*f));const k=nw/z.w;cx=cx==null?z.x+z.w/2:cx;cy=cy==null?z.y+z.h/2:cy;MAPZ={x:cx-(cx-z.x)*k,y:cy-(cy-z.y)*k,w:nw,h:z.h*k};mapApplyZ();clearTimeout(window.__mzT);window.__mzT=setTimeout(()=>{if(Math.abs(nw-(window.__mzW||0))>1){window.__mzW=nw;render();}},350);}
+// вибір регіону без повного перемальовування сторінки
+function mapSelUpd(){const sv=document.getElementById('mapsvg');const wrap=document.querySelector('.mapwrap');if(!sv||!wrap){render();return;}
+  sv.querySelectorAll('.sel').forEach(x=>x.classList.remove('sel'));if(MAPSEL)sv.querySelectorAll(`[data-u="${MAPSEL}"]`).forEach(x=>x.classList.add('sel'));
+  const h=mapView(()=>mapSideHtml(window.__mres||mapResolve()));const old=wrap.querySelector('.mside');if(old)old.remove();
+  if(h){wrap.insertAdjacentHTML('beforeend',h);const el=wrap.querySelector('.mside');if(LANG==='en')try{trTree(el);}catch(_){}}
+  wrap.classList.toggle('hasside',!!h);mapApplyZ();}
+function mapFit(){const sv=document.getElementById('mapsvg');const G=window.MAPGEO;if(!sv||!G)return;if(MAPSEL&&!G.__par){mapParents();if(G.__par){mapSelUpd();}}if(MAPZ){mapApplyZ();return;}MAPZ=mapFullZ();mapApplyZ();}
+function mapFullZ(){const sv=document.getElementById('mapsvg');const G=window.MAPGEO;const [vx,vy,vw,vh]=G.vb;const r=sv?sv.getBoundingClientRect():{width:0,height:0};if(!r.width||!r.height)return null;const ar=r.width/r.height,g=vw/vh;if(Math.abs(ar-g)<0.06)return null;let w,h;if(ar<g){h=vh;w=h*ar;}else{w=vw;h=w/ar;}const cx=vx+(ar<g?vw*0.36:vw/2),cy=vy+vh/2;return {x:cx-w/2,y:cy-h/2,w,h};}
+function mapApplyZ(){const sv=document.getElementById('mapsvg');const G=window.MAPGEO;if(!sv||!G)return;const z=mapZ0();sv.setAttribute('viewBox',`${z.x} ${z.y} ${z.w} ${z.h}`);const rw=sv.getBoundingClientRect().width;if(rw>50)window.__mapPW=Math.min(rw,1200);const k=(z.w/(window.__mapPW||1000)).toFixed(4);
+  sv.querySelectorAll('.msc').forEach(g=>g.setAttribute('transform',`translate(${g.dataset.x} ${g.dataset.y}) scale(${k})`));sv.classList.toggle('zin',z.w<G.vb[2]*0.55);}
 function mapPt(sv,ev){const r=sv.getBoundingClientRect();const G=window.MAPGEO;const z=MAPZ||{x:G.vb[0],y:G.vb[1],w:G.vb[2],h:G.vb[3]};return {x:z.x+(ev.clientX-r.left)/r.width*z.w,y:z.y+(ev.clientY-r.top)/r.height*z.h};}
+function mapLim(){const G=window.MAPGEO;return {max:G.box[2],min:G.vb[2]/14};}
+function mapZoom(f,cx,cy){const G=window.MAPGEO;if(!G)return;cancelAnimationFrame(window.__mzA);const z=mapZ0();const L=mapLim();const nw=Math.min(L.max,Math.max(L.min,z.w*f));const k=nw/z.w;cx=cx==null?z.x+z.w/2:cx;cy=cy==null?z.y+z.h/2:cy;MAPZ={x:cx-(cx-z.x)*k,y:cy-(cy-z.y)*k,w:nw,h:z.h*k};mapApplyZ();}
+function mapAnimTo(t){const z0=mapZ0();const t0=performance.now();const D=matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches?1:420;cancelAnimationFrame(window.__mzA);
+  const st=now=>{let p=Math.min(1,(now-t0)/D);p=1-Math.pow(1-p,3);MAPZ={x:z0.x+(t.x-z0.x)*p,y:z0.y+(t.y-z0.y)*p,w:z0.w+(t.w-z0.w)*p,h:z0.h+(t.h-z0.h)*p};mapApplyZ();if(p<1)window.__mzA=requestAnimationFrame(st);};window.__mzA=requestAnimationFrame(st);}
+function mapFocus(id){const G=window.MAPGEO;if(!G||!G.__by[id])return;MAPSEL=id;mapSelUpd();const sv=document.getElementById('mapsvg');const el=sv&&sv.querySelector(`path.mreg[data-u="${id}"]`);if(!el)return;
+  const b=el.getBBox();const r=sv.getBoundingClientRect();const ar=r.width&&r.height?r.width/r.height:1.73;let w=Math.max(b.width*3.4,b.height*3.4*ar,G.vb[2]/(G.__by[id].city?7:5));w=Math.min(w,G.vb[2]*1.2);const h=w/ar;mapAnimTo({x:b.x+b.width/2-w/2,y:b.y+b.height/2-h/2,w,h});}
+function mapSearch(q){return mapView(()=>mapSearch0(q));}
+function mapSearch0(q){const G=window.MAPGEO;const box=document.getElementById('map-sug');if(!G||!box)return [];const k=mapNorm(q);if(!k){box.hidden=true;box.innerHTML='';return [];}const res=window.__mres||{};
+  const hits=[];mapRegs().forEach(r=>{const e=res[r.id];const our=mapOurs(r)||!!e;if(!our&&!G.union.includes(r.cid))return;const n=mapNorm(mapName(r));const ln=e?mapNorm(cur(e.l).name):'';let sc=n===k?0:n.startsWith(k)?1:n.includes(k)?2:mapNorm(r.n).includes(k)?3:ln.includes(k)?4:9;if(sc<9)hits.push({r,e,sc});});
+  hits.sort((a,b)=>a.sc-b.sc||(b.r.city-a.r.city)||mapName(a.r).localeCompare(mapName(b.r),'uk'));const top=hits.slice(0,8);
+  box.innerHTML=top.length?top.map(x=>`<button type="button" data-a="mapfocus" data-u="${esc(x.r.id)}">${x.r.city?'🏙':'🗺'} <b>${esc(mapName(x.r))}</b><small>${esc(x.e?cur(x.e.l).name:(G.countries[x.r.cid]||[''])[0])}</small></button>`).join(''):'<div class="hint">Нічого не знайдено</div>';box.hidden=false;return top;}
 (function(){const P=new Map();let drag=null,moved=false,pinch=null;
-  const z0=()=>{const G=window.MAPGEO;return MAPZ||{x:G.vb[0],y:G.vb[1],w:G.vb[2],h:G.vb[3]};};
   document.addEventListener('wheel',ev=>{const sv=ev.target.closest&&ev.target.closest('#mapsvg');if(!sv)return;ev.preventDefault();const p=mapPt(sv,ev);mapZoom(ev.deltaY>0?1.18:1/1.18,p.x,p.y);},{passive:false});
-  document.addEventListener('pointerdown',ev=>{const sv=ev.target.closest&&ev.target.closest('#mapsvg');if(!sv)return;P.set(ev.pointerId,{x:ev.clientX,y:ev.clientY});moved=false;
-    if(P.size===1){MAPZ=z0();drag={x:ev.clientX,y:ev.clientY,z:{...MAPZ},r:sv.getBoundingClientRect()};}
-    else if(P.size===2){const [a,b]=[...P.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),z:{...z0()},m:mapPt(sv,{clientX:(a.x+b.x)/2,clientY:(a.y+b.y)/2})};drag=null;}});
-  document.addEventListener('pointermove',ev=>{if(!P.has(ev.pointerId)){const sv=ev.target.closest&&ev.target.closest('#mapsvg');const tip=document.getElementById('mtip');if(sv&&tip&&ev.pointerType==='mouse'){const u=ev.target.closest('[data-u]');const t=u&&u.querySelector('title');if(t||u){tip.textContent=t?t.textContent:((window.MAPGEO.__by||{})[u.dataset.u]||{}).n||'';const bx=document.getElementById('mapbox').getBoundingClientRect();tip.style.left=(ev.clientX-bx.left+12)+'px';tip.style.top=(ev.clientY-bx.top+12)+'px';tip.hidden=false;}else tip.hidden=true;}return;}
+  document.addEventListener('pointerdown',ev=>{const sv=ev.target.closest&&ev.target.closest('#mapsvg');if(!sv)return;cancelAnimationFrame(window.__mzA);P.set(ev.pointerId,{x:ev.clientX,y:ev.clientY});moved=false;
+    if(P.size===1){MAPZ=mapZ0();drag={x:ev.clientX,y:ev.clientY,z:{...MAPZ},r:sv.getBoundingClientRect()};}
+    else if(P.size===2){const [a,b]=[...P.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),z:{...mapZ0()},m:mapPt(sv,{clientX:(a.x+b.x)/2,clientY:(a.y+b.y)/2})};drag=null;}});
+  let tipU='';
+  document.addEventListener('pointermove',ev=>{if(!P.has(ev.pointerId)){const sv=ev.target.closest&&ev.target.closest('#mapsvg');const tip=document.getElementById('mtip');if(!tip)return;if(sv&&ev.pointerType==='mouse'){const u=ev.target.closest('[data-u]');if(u){if(tipU!==u.dataset.u){tipU=u.dataset.u;tip.textContent=mapTipText(tipU);}const bx=document.getElementById('mapbox').getBoundingClientRect();tip.style.left=(ev.clientX-bx.left+12)+'px';tip.style.top=(ev.clientY-bx.top+12)+'px';tip.hidden=false;}else tip.hidden=true;}else if(!tip.hidden)tip.hidden=true;return;}
     P.set(ev.pointerId,{x:ev.clientX,y:ev.clientY});
     if(pinch&&P.size===2){const [a,b]=[...P.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);if(d>0){const L=mapLim();const nw=Math.min(L.max,Math.max(L.min,pinch.z.w*pinch.d/d));const kk=nw/pinch.z.w;MAPZ={x:pinch.m.x-(pinch.m.x-pinch.z.x)*kk,y:pinch.m.y-(pinch.m.y-pinch.z.y)*kk,w:nw,h:pinch.z.h*kk};mapApplyZ();moved=true;}return;}
     if(drag){const dx=ev.clientX-drag.x,dy=ev.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>5)moved=true;if(moved){MAPZ={...drag.z,x:drag.z.x-dx/drag.r.width*drag.z.w,y:drag.z.y-dy/drag.r.height*drag.z.h};mapApplyZ();}}});
   const up=ev=>{if(!P.has(ev.pointerId))return;P.delete(ev.pointerId);const wasPinch=!!pinch;if(P.size<2)pinch=null;
-    if(P.size===0){const was=moved;drag=null;if(wasPinch){window.__mzW=MAPZ&&MAPZ.w;render();return;}if(!was){const el=document.elementFromPoint(ev.clientX,ev.clientY);const land=el&&el.closest&&el.closest('.mland');const u=el&&el.closest&&el.closest('[data-u]');if(land){LANDM=land.dataset.k;render();}else if(u){MAPSEL=u.dataset.u;render();}}}};
-  document.addEventListener('pointerup',up);document.addEventListener('pointercancel',ev=>{P.delete(ev.pointerId);pinch=null;drag=null;});})();
-
+    if(P.size===0){const was=moved;drag=null;if(wasPinch||was)return;const el=document.elementFromPoint(ev.clientX,ev.clientY);const land=el&&el.closest&&el.closest('.mland');const u=el&&el.closest&&el.closest('[data-u]');
+      if(land){LANDM=land.dataset.k;render();}else if(u){MAPSEL=MAPSEL===u.dataset.u?'':u.dataset.u;mapSelUpd();}}};
+  document.addEventListener('pointerup',up);document.addEventListener('pointercancel',ev=>{P.delete(ev.pointerId);pinch=null;drag=null;});
+  document.addEventListener('keydown',ev=>{if(ev.target&&ev.target.id==='map-q'){if(ev.key==='Enter'){ev.preventDefault();const t=mapSearch(ev.target.value);if(t[0]){mapFocus(t[0].r.id);const s=document.getElementById('map-sug');if(s)s.hidden=true;}}else if(ev.key==='Escape'){ev.target.value='';mapSearch('');}return;}
+    if(ev.key==='Escape'&&MAPSEL&&!MODALH&&!LANDM&&document.getElementById('mapsvg')){MAPSEL='';mapSelUpd();}});
+  document.addEventListener('fullscreenchange',()=>{setTimeout(()=>{if(document.getElementById('mapsvg')){const z=mapZ0();const sv=document.getElementById('mapsvg');const r=sv.getBoundingClientRect();if(r.width&&r.height){const ar=r.width/r.height;const cx=z.x+z.w/2,cy=z.y+z.h/2;const h=z.w/ar;MAPZ={x:z.x,y:cy-h/2,w:z.w,h};mapApplyZ();}}},80);});})();
 // ---------- Комітети Палати, ЦВК і вибори ----------
 let ELECTIONS=[],CANDS={},MYVOTE={},EL_T='cur',ELM='',EF={post:'',other:'',via:'',reg:'2',vote:'2',note:''},CF={},ELCONF='';
 const RES_MODES=[['none','📋 Звичайна постанова'],['committee','👥 Утворити комітет'],['committeedel','✕ Розпустити комітет'],['election','🗳 Призначити вибори']];
@@ -3874,6 +3954,7 @@ app.addEventListener('input',e=>{
   if(a==='sx'){const L=sxList(t.dataset.c);const x=L[+t.dataset.i];if(!x)return;if(t.dataset.k==='t'){x.t=t.value;delete x.min;delete x.max;render();}else x[t.dataset.k]=t.value.replace(/\D/g,'');return;}
   if(a==='sp'){const P0=SP[t.dataset.p]=SP[t.dataset.p]||{};const v=P0[t.dataset.t]=P0[t.dataset.t]||{};if(t.dataset.k==='on'){v.on=t.checked;render();}else v.v=t.value.replace(/\D/g,'');return;}
   if(a==='lq'){LQ=t.value;render();return;}
+  if(a==='mapq'){mapSearch(t.value);return;}
   if(a==='actas'){ACTAS=t.value;try{localStorage.setItem('ud-actas',ACTAS);}catch(_){}DOSSIER=null;render();return;}
   if(a==='chd'){CHD[t.dataset.k]=t.value;return;}
   if(a==='hca'){const sx=state.sections[+t.dataset.s];if(!sx)return;const ar=hcArrows(sx).find(x=>x.id===HCSEL);if(!ar)return;const k=t.dataset.k;if(k==='fs'||k==='ts'){if(t.value==='auto')delete ar[k];else ar[k]=t.value;delete ar.m;}else ar[k]=t.value;hcLayout();return;}
@@ -3923,7 +4004,7 @@ app.addEventListener('input',e=>{
   if(a==='td'){TD[t.dataset.k]=t.value;return;}
   if(a==='tdr'){TDR[t.dataset.id]=t.value;return;}
   if(a==='dc'){DC[t.dataset.k]=t.value;if(t.dataset.k==='type'||t.dataset.k==='iss')render();return;}
-  if(a==='np'){const k=t.dataset.k;DRAFT[k]=t.type==='checkbox'?(t.checked?'1':''):t.value;if(k==='art'){DRAFT.find='';render();}if(/^cm\d$/.test(k)||k==='ctype'||k==='elpost'||k==='mode'||k==='nname'||k==='chpos'||k==='chdel'||k==='pl'||k==='hmon'||k==='code'||k==='cart'||k==='ckind'||k==='doc')render();if(k==='full'){clearTimeout(window.__fullT);window.__fullT=setTimeout(()=>{const el=document.activeElement;const st=el&&el.id==='np-full'?[el.selectionStart,el.selectionEnd,el.scrollTop]:null;render();if(st){const e2=document.getElementById('np-full');if(e2){e2.focus();e2.setSelectionRange(st[0],st[1]);e2.scrollTop=st[2];}}},700);}return;}
+  if(a==='np'){const k=t.dataset.k;DRAFT[k]=t.type==='checkbox'?(t.checked?'1':''):t.value;if(k==='art'){DRAFT.find='';render();}if(/^cm\d$/.test(k)||k==='ctype'||k==='elpost'||k==='mode'||k==='rid'||k==='nname'||k==='chpos'||k==='chdel'||k==='pl'||k==='hmon'||k==='code'||k==='cart'||k==='ckind'||k==='doc')render();if(k==='full'){clearTimeout(window.__fullT);window.__fullT=setTimeout(()=>{const el=document.activeElement;const st=el&&el.id==='np-full'?[el.selectionStart,el.selectionEnd,el.scrollTop]:null;render();if(st){const e2=document.getElementById('np-full');if(e2){e2.focus();e2.setSelectionRange(st[0],st[1]);e2.scrollTop=st[2];}}},700);}return;}
   if(a==='ap'){AP[t.dataset.k]=t.value;return;}
   if(a==='apr'){APR[t.dataset.id]=t.value;return;}
   if(a==='es'){ES[t.dataset.k]=t.value;return;}
@@ -4225,8 +4306,12 @@ app.addEventListener('click',async e=>{
     render();return;}
   if(a==='mapl'){MAP_L=b.dataset.k;render();return;}
   if(a==='mapedit'){MAPEDIT=!MAPEDIT;render();return;}
-  if(a==='mapsel'){MAPSEL=b.dataset.u||'';render();return;}
-  if(a==='mapz'){const k=b.dataset.k;if(k==='0'){MAPZ=null;render();}else mapZoom(k==='in'?1/1.4:1.4);return;}
+  if(a==='mapsel'){MAPSEL=b.dataset.u||'';mapSelUpd();return;}
+  if(a==='mapfocus'){const sg=document.getElementById('map-sug');if(sg)sg.hidden=true;mapFocus(b.dataset.u);return;}
+  if(a==='mapcn'){MAPCN=!MAPCN;const sv=document.getElementById('mapsvg');if(sv)sv.classList.toggle('cn',MAPCN);b.classList.toggle('on',MAPCN);b.setAttribute('aria-pressed',MAPCN);return;}
+  if(a==='mapfs'){const el=document.querySelector('.mapwrap');try{if(document.fullscreenElement)document.exitFullscreen();else if(el&&el.requestFullscreen)el.requestFullscreen();}catch(_){}return;}
+  if(a==='mapren'){const G=window.MAPGEO;const r=G&&G.__by[b.dataset.u];const ps=sectionByKind('parliament');if(!r||!ps)return;DRAFT.cat='law';DRAFT.kind='law';DRAFT.mode='regname';DRAFT.rid=r.id;DRAFT.rnew='';DRAFT.title='Про перейменування '+(r.city?'міста':'уділу')+' «'+mapName(r)+'»';PROF='';delete SUB[ps.id];active=ps.id;LANDM='';try{history.replaceState(null,'','#'+active);}catch(_){}render();setTimeout(()=>{const f=document.querySelector('.propose');if(f)f.scrollIntoView({behavior:'smooth',block:'start'});const i=document.getElementById('np-rnew');if(i)i.focus({preventScroll:true});},60);return;}
+  if(a==='mapz'){const k=b.dataset.k;if(k==='0'){const G=window.MAPGEO;if(G)mapAnimTo(mapFullZ()||{x:G.vb[0],y:G.vb[1],w:G.vb[2],h:G.vb[3]});}else mapZoom(k==='in'?1/1.4:1.4);return;}
   if(a==='mapreset'){const us=udilSec();if(!us||!(isPysar()||AUTH.admin)||editing)return;us.udils=us.udils||{};delete us.udils[b.dataset.u];busy=true;render();try{await window.FB.saveLands(state.sections.filter(isLandsSec));saved=JSON.stringify(state);msg='Уділ повернуто як у Конституції';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося зберегти';msgErr=true;state=JSON.parse(saved);}busy=false;render();return;}
   if(a==='admtick'){if(!AUTH.admin)return;msg='Перевіряю голосування…';msgErr=false;render();try{const r=await window.__botTick();msg='Готово: '+String(r).replace(/ · access ok/,'');}catch(e){console.warn(e);msg='Не вдалося: '+(e&&e.code||e);msgErr=true;}render();return;}
   if(a==='gosub'){PROF='';active=b.dataset.p;SUB[b.dataset.p]=b.dataset.id;MMORE=false;try{history.replaceState(null,'','#'+b.dataset.id);}catch(_){}render();window.scrollTo(0,0);return;}
@@ -4332,6 +4417,7 @@ app.addEventListener('click',async e=>{
     if(mode==='holidaydel'){const hs=holidays();const x=hs.find(q=>q.id===DRAFT.hdel)||hs[0];if(!x){bad('Державних свят немає');return;}amend={mode,hid:x.id,name:x.name,day:x.day,month:x.month};}
     if(mode==='emergency'){const d=+String(DRAFT.edays||'7').replace(/\D/g,'');if(!(d>=1&&d<=30)){bad('Строк: від 1 до 30 днів');return;}const r=String(DRAFT.ereason||'').trim();if(!r){bad('Вкажіть причину надзвичайного стану');return;}amend={mode,days:d,reason:r};}
     if(mode==='emergencyend'){if(!emActive()){bad('Зараз надзвичайного стану немає');return;}amend={mode};}
+    if(mode==='regname'){const G=window.MAPGEO;const r=G&&G.__by[DRAFT.rid];if(!r){bad('Оберіть уділ або місто');return;}const nn=String(DRAFT.rnew||'').trim().replace(/\s+/g,' ');const old=mapName(r);if(!nn){bad('Впишіть нову назву');return;}if(nn===old){bad('Нова назва збігається з чинною');return;}const res0=mapResolve();if(mapRegs().some(x=>x.id!==r.id&&res0[x.id]&&mapNorm(mapName(x))===mapNorm(nn))){bad('Уділ чи місто з такою назвою вже є');return;}const e0=res0[r.id];amend={mode,rid:r.id,old,game:r.n,newName:nn,city:r.city?1:0,land:e0?cur(e0.l).name:''};}
     const ld=landLeaders().find(r=>r.land===land);const mp0=myPost();busy=true;render();
     try{await window.FB.propose({title:DRAFT.title.trim(),text:DRAFT.text.trim(),land,author:land==='Канцелярія'?String(mp0?mp0.name:''):String(ld&&ld.name||'').trim(),date:today(),amend,kind,hours:voteHours()});DRAFT={land:'',title:'',text:'',kind,cat:DRAFT.cat,doc:DRAFT.doc,pt:DRAFT.pt};PROPS=await window.FB.loadProposals();VOTES=await window.FB.loadVotes();msg='Законопроєкт подано, голосування почалося';}
     catch(err){msg=err&&err.code==='permission-denied'?'Не прийнято: подавати можуть лише Представники Земель, Гетьман і Генеральний Прокурор':'Не вдалося подати законопроєкт';msgErr=true;}
@@ -4942,7 +5028,7 @@ function decreeRevoked(n){if(n.revoked)return n.revoked;const b=allBills().find(
 const msIso=v=>typeof v==='number'?new Date(v).toISOString():(v||'');
 function lawShort(am){if(!am||!am.mode)return '';if(CODE_MODES.includes(am.mode))return codeShort(am);if(am.mode==='constfull')return 'прийнято нову редакцію Конституції';switch(am.mode){
   case 'ataman':return `${am.name} — Крайовий Отаман Землі «${am.land}»`;case 'dismiss':return `звільнено Крайового Отамана Землі «${am.land}»`;
-  case 'rename':return `Землю «${am.land}» перейменовано на «${am.newName}»`;case 'flag':return `новий прапор Землі «${am.land}»`;
+  case 'rename':return `Землю «${am.land}» перейменовано на «${am.newName}»`;case 'flag':return `новий прапор Землі «${am.land}»`;case 'regname':return `${am.city?'місто':'уділ'} «${am.old}» перейменовано на «${am.newName}»`;
   case 'newland':return `утворено нову Землю «${am.name}»`;case 'loseland':return `втрачено контроль над Землею «${am.land}»`;case 'restoreland':return `Землю «${am.land}» відновлено`;
   case 'addplayer':return `до реєстру внесено гравця ${am.name}`;
   case 'revokedecree':return `скасовано Указ Гетьмана №${am.no||''} «${am.title||''}»`;
