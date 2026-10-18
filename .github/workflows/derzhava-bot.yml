@@ -54,6 +54,8 @@ jobs:
           TELEGRAM_REMIND_THREAD_ID: ${{ secrets.TELEGRAM_REMIND_THREAD_ID }}
         run: |
           end=$(( $(date +%s) + 5*3600 + 30*60 ))
+          # Telegram-бот команд (/start, /казна, /закони, /мій_внесок) слухає у фоні всю зміну
+          TGBOT_MINUTES=325 node tgbot.mjs > tgbot.log 2>&1 &
           while true; do
             start=$(date +%s)
             echo "=== $(TZ=Europe/Kiev date '+%d.%m %H:%M') ==="
@@ -63,6 +65,7 @@ jobs:
             pause=$(( 900 - (now - start) ))
             if [ $pause -gt 0 ]; then sleep $pause; fi
           done
+          echo "--- tgbot ---"; tail -n 40 tgbot.log || true
       - name: Запустити наступну зміну
         if: steps.shift.outcome == 'success'
         env:
