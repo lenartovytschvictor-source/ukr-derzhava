@@ -303,6 +303,7 @@ a.dpbm{display:inline-block;padding:5px 12px;border-radius:999px;background:var(
 .musbtn .mt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.musbtn.on{border-color:var(--gold,#e9b44c)}.musbtn.on .mi{animation:musbeat 1s ease-in-out infinite}.musbtn .mx{opacity:.6;margin-left:2px}
 @keyframes musbeat{50%{transform:scale(1.25)}}
 @media (max-width:900px){.musbtn{bottom:calc(72px + env(safe-area-inset-bottom,0px));left:10px;padding:6px 10px}}
+.musadm{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}.musg{margin:10px 0;padding:8px 10px;border:1px solid var(--line);border-radius:10px}.musc{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 0}.musc audio{height:30px;max-width:230px}.musup{display:inline-block;margin-top:6px;cursor:pointer;border:1px dashed var(--line2,var(--line));border-radius:8px;padding:4px 10px}
 </style>
 <style id="page-style">
 /* Layout: one column registry; each land is a row — current flag, name + offices, then the flag history strip */
@@ -3065,7 +3066,7 @@ function adminPanel(){if(!AUTH.admin||AUTH.bot)return '';const g=govSec();const 
     b=ELOG.length?`<ul class="elog">${ELOG.slice().reverse().slice(0,80).map(e=>`<li><div><b>${esc((e.secs||[]).map(x=>x.title).join(', '))}</b><div class="hint">${esc(fmtDT(new Date(e.at||0).toISOString()))} · ${esc(e.by||'')}</div></div>${e.before&&e.before.length>2?`<button class="small ghost" data-a="elrev" data-k="${esc(e.id)}">↺ Повернути як було</button>`:''}</li>`).join('')}</ul>`:'<p class="empty">Змін ще не записано. Кожне збереження розділу з’являтиметься тут, і його можна буде відкотити.</p>';}
   else if(ADMP==='roles'){const r=window.__rolesOf?window.__rolesOf(JSON.parse(JSON.stringify(state))):{};const L=[['hetman','Гетьман (права адміністрації)'],['lands','Писарі (Землі, уділи, гравці)'],['dlands','Домініальний Писар'],['econ','Секретар Фінансів'],['decon','Секретар Фінансів Домініону'],['def','Секретар Оборони'],['interior','Секретар Внутрішніх Справ'],['dinterior','Секретар Внутрішніх Справ Домініону'],['foreign','Секретар Міжнародних Справ'],['court','Судді'],['prosecutor','Генеральний Прокурор'],['patriarch','Патріарх'],['cvk','ЦВК']];
     b=`<p class="hint">Ролі рахуються самі з посад (бот оновлює їх у базі раз на 15 хвилин). Змінити людину на посаді — на сторінці «Влада».</p><div class="tblwrap"><table class="bud"><tbody>${L.map(([k,t])=>`<tr><th>${esc(t)}</th><td>${(r[k]||[]).map(e=>esc((plByEmail(e)||{}).name||e)).join(', ')||'<span class="hint">—</span>'}</td></tr>`).join('')}</tbody></table></div>`;}
-  else if(ADMP==='season'){b=`<label class="fl">Що показувати<select id="season2" data-a="season2">${[['auto','Автоматично за календарем'],['au','🍂 Осінь'],['hw','🎃 Хелловін'],['xm','🎄 Зимові свята'],['sp','🌸 Весна'],['df','🛡 День захисників'],['ind','🇺🇦 День Незалежності'],['off','Вимкнути святкове оформлення']].map(([v,l])=>`<option value="${v}"${((g&&g.season==='on'?'hw':g&&g.season)||'auto')===v?' selected':''}>${l}</option>`).join('')}</select></label><p class="hint">Автоматично: 🍂 осінь 1.09–30.11 · 🛡 1 жовтня · 🎃 25.10–1.11 · 🎄 5.12 (з 6:00)–10.01 · 🌸 березень–травень · 🇺🇦 24 серпня. Зараз: <b>${esc(({au:'осінь',hw:'Хелловін',xm:'зимові свята',sp:'весна',df:'День захисників',ind:'День Незалежності'})[seasonNow()]||'без теми')}</b>.</p>${seasonNow()==='au'?`<p class="hint">🌧 Восени інколи (раз на 15–35 хв) на 2–3 хвилини йде дощ.</p><button class="small" data-a="rainnow">🌧 Показати дощ зараз</button>`:''}`;}
+  else if(ADMP==='season'){b=`<label class="fl">Що показувати<select id="season2" data-a="season2">${[['auto','Автоматично за календарем'],['au','🍂 Осінь'],['hw','🎃 Хелловін'],['xm','🎄 Зимові свята'],['sp','🌸 Весна'],['df','🛡 День захисників'],['ind','🇺🇦 День Незалежності'],['off','Вимкнути святкове оформлення']].map(([v,l])=>`<option value="${v}"${((g&&g.season==='on'?'hw':g&&g.season)||'auto')===v?' selected':''}>${l}</option>`).join('')}</select></label><p class="hint">Автоматично: 🍂 осінь 1.09–30.11 · 🛡 1 жовтня · 🎃 25.10–1.11 · 🎄 5.12 (з 6:00)–10.01 · 🌸 березень–травень · 🇺🇦 24 серпня. Зараз: <b>${esc(({au:'осінь',hw:'Хелловін',xm:'зимові свята',sp:'весна',df:'День захисників',ind:'День Незалежності'})[seasonNow()]||'без теми')}</b>.</p>${seasonNow()==='au'?`<p class="hint">🌧 Восени інколи (раз на 15–35 хв) на 2–3 хвилини йде дощ.</p><button class="small" data-a="rainnow">🌧 Показати дощ зараз</button>`:''}${musAdminHtml()}`;}
   else if(ADMP==='backup'){b=`<p class="hint">Повна копія всіх даних сайту (Землі, закони, економіка, гравці, Військо, Церква) одним файлом. Зберігайте перед великими змінами.</p><div class="landtools"><button class="small primary" data-a="bkdown">💾 Завантажити копію (.json)</button><button class="small" data-a="bkup">📂 Відновити з файлу…</button></div><p class="hint warn">Відновлення перезапише всі дані сайту копією з файлу.</p>`;}
   else{b=`<div class="landtools"><a class="gamebtn small" href="modtest.html" target="_blank" rel="noopener">🎓 Тест модераторів ↗</a><button class="small" data-a="admtick" ${busy?'disabled':''}>🔄 Підбити підсумки голосувань зараз</button><button class="small" data-a="edit">🧰 Повне редагування всього сайту (старий режим)</button></div><label class="fl">Ім’я бота в Telegram (для кнопки «Відкрити бота» в кабінетах)<input type="text" id="tgbotn" data-a="tgbotn" value="${esc((g&&g.tgBot)||'')}" placeholder="@ukr_derzhava_bot"></label><div><button class="small" data-a="tgbotsave">Зберегти</button></div>`;}
   return `<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="admp" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide admp"><button class="small bmx" data-a="admp" data-k="">✕ Закрити</button><h3>⚙️ Адмін-панель</h3><div class="afilter">${tabs.map(([k,l])=>`<button class="small${ADMP===k?' primary':''}" data-a="admp" data-k="${k}">${l}</button>`).join('')}</div><div class="admpb">${b}</div></div></div>`;}
@@ -4255,7 +4256,11 @@ window.__rainNow=()=>rainStart(150000);
 // Вмикається кнопкою 🎵 (браузери не дозволяють звук без натискання). Вибір запам'ятовується.
 let MUS={ctx:null,master:null,on:false,timer:0,idx:0,season:''};
 const NOTE=n=>{const m=/^([A-G])(#|b)?(\d)$/.exec(n);if(!m)return 0;const b={C:0,D:2,E:4,F:5,G:7,A:9,B:11}[m[1]]+(m[2]==='#'?1:m[2]==='b'?-1:0);return 440*Math.pow(2,(b+(+m[3]-4)*12-9)/12);};
-function musPref(){try{return localStorage.getItem('ud-music')==='1';}catch(_){return false;}}
+function musCfgAll(){const g=govSec();return (g&&g.music)||{};}
+function musCfg(sn){const m=musCfgAll()[sn]||{};return {off:m.off||[],custom:m.custom||[]};}
+function musAuto(){const g=govSec();return !(g&&g.musicAuto===false);}
+function musList(sn){const c=musCfg(sn);return [...(PIECES[sn]||[]).filter(p=>!c.off.includes(p.id)).map(p=>({...p,type:'synth'})),...c.custom.filter(x=>x&&x.url).map(x=>({type:'file',name:x.name||'Трек',url:x.url}))];}
+function musPref(){let v=null;try{v=localStorage.getItem('ud-music');}catch(_){}if(v==='1')return true;if(v==='0')return false;return musAuto();}
 function musSetPref(v){try{localStorage.setItem('ud-music',v?'1':'0');}catch(_){}}
 function musEnv(g,t,a,peak,dec){g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(0.0001,t+a+dec);}
 // інструменти
@@ -4270,35 +4275,58 @@ function seq(t,bpm,notes,inst,tr){const b=60/bpm;let x=t;notes.forEach(([n,d])=>
 const SHCH_M=[['Bb4',1],['A4',.5],['Bb4',.5],['G4',1]];
 const PIECES={
   xm:[
-    {name:'Щедрик (М. Леонтович)',play(t){const bpm=168;let d=0;const rep=(m,k)=>Array.from({length:k},()=>m).flat();
+    {id:'shch',name:'Щедрик (М. Леонтович)',play(t){const bpm=168;let d=0;const rep=(m,k)=>Array.from({length:k},()=>m).flat();
       const A=rep(SHCH_M,4),B=rep([['D5',1],['C5',.5],['D5',.5],['Bb4',1]],4),
         C=[['G5',.5],['G5',.5],['G5',.5],['F5',.5],['Eb5',.5],['D5',.5],['C5',.5],['C5',.5],['C5',.5],['Bb4',.5],['A4',.5],['G4',.5],['F4',.5],['G4',.5],['A4',.5],['Bb4',.5],['C5',.5],['D5',.5],['C5',3],
            ['G5',.5],['G5',.5],['G5',.5],['F5',.5],['Eb5',.5],['D5',.5],['C5',.5],['C5',.5],['C5',.5],['Bb4',.5],['A4',.5],['G4',.5],['F4',.5],['G4',.5],['A4',.5],['Bb4',.5],['C5',.5],['A4',.5],['G4',3]];
       const mel=[...A,...B,...C,...A];d=seq(t,bpm,mel,iBell);
       const bass=[];for(let i=0;i<mel.reduce((a,x)=>a+x[1],0)/3;i++)bass.push([['G2','G2','Eb2','D2'][Math.floor(i/4)%4],3]);seq(t,bpm,bass,(tt,f,dd)=>iPad(tt,f,dd,0.07));return d;}},
-    {name:'Jingle Bells (Дж. Пірпонт)',play(t){const bpm=200;const ch=[['E5',1],['E5',1],['E5',2],['E5',1],['E5',1],['E5',2],['E5',1],['G5',1],['C5',1.5],['D5',.5],['E5',4],['F5',1],['F5',1],['F5',1.5],['F5',.5],['F5',1],['E5',1],['E5',1],['E5',.5],['E5',.5],['E5',1],['D5',1],['D5',1],['E5',1],['D5',2],['G5',2],
+    {id:'jingle',name:'Jingle Bells (Дж. Пірпонт)',play(t){const bpm=200;const ch=[['E5',1],['E5',1],['E5',2],['E5',1],['E5',1],['E5',2],['E5',1],['G5',1],['C5',1.5],['D5',.5],['E5',4],['F5',1],['F5',1],['F5',1.5],['F5',.5],['F5',1],['E5',1],['E5',1],['E5',.5],['E5',.5],['E5',1],['D5',1],['D5',1],['E5',1],['D5',2],['G5',2],
         ['E5',1],['E5',1],['E5',2],['E5',1],['E5',1],['E5',2],['E5',1],['G5',1],['C5',1.5],['D5',.5],['E5',4],['F5',1],['F5',1],['F5',1.5],['F5',.5],['F5',1],['E5',1],['E5',1],['E5',.5],['E5',.5],['G5',1],['G5',1],['F5',1],['D5',1],['C5',4]];
-      const d=seq(t,bpm,ch,iBell);const bass=[];const chords=['C3','C3','F3','C3','D3','G2','C3','G2','C3','C3','F3','C3','G2','G2','C3','C3'];chords.forEach(n=>bass.push([n,4]));seq(t,bpm,bass,(tt,f,dd)=>iPad(tt,f,dd,0.06));return d;}}],
+      const d=seq(t,bpm,ch,iBell);const bass=[];const chords=['C3','C3','F3','C3','D3','G2','C3','G2','C3','C3','F3','C3','G2','G2','C3','C3'];chords.forEach(n=>bass.push([n,4]));seq(t,bpm,bass,(tt,f,dd)=>iPad(tt,f,dd,0.06));return d;}},
+    {id:'dobryi',name:'Добрий вечір тобі (колядка)',play(t){const bpm=104;const v=[['E5',1],['E5',.5],['E5',.5],['D5',.5],['C5',.5],['B4',1],['C5',.5],['D5',.5],['E5',.5],['D5',.5],['C5',.5],['B4',.5],['A4',2],
+        ['A4',.5],['B4',.5],['C5',1],['B4',.5],['A4',.5],['G#4',1],['A4',.5],['B4',.5],['C5',.5],['D5',.5],['E5',2],['E5',.5],['F5',.5],['E5',.5],['D5',.5],['C5',.5],['B4',.5],['C5',.5],['B4',.5],['A4',2]];
+      const mel=[...v,['-',1],...v];const d=seq(t,bpm,mel,iBell);const bass=[];for(let i=0;i<Math.ceil(d/(60/bpm)/4);i++)bass.push([['A2','E2','A2','D2','A2','E2','A2','A2'][i%8],4]);seq(t,bpm,bass,(tt,f,dd)=>iPad(tt,f,dd,0.07));return d;}},
+    {id:'nova',name:'Нова радість стала (колядка)',play(t){const bpm=138;const v=[['G4',1],['C5',1],['C5',1],['D5',1],['E5',1],['E5',1],['D5',1],['C5',1],['D5',1],['E5',2],['-',1],
+        ['E5',1],['F5',1],['G5',1],['G5',1],['F5',1],['E5',1],['D5',1],['E5',1],['F5',1],['E5',2],['-',1],
+        ['G5',1],['E5',1],['C5',1],['D5',1],['E5',1],['C5',1],['B4',1],['G4',1],['B4',1],['C5',3]];
+      const mel=[...v,...v];const d=seq(t,bpm,mel,iBell);const bass=[];const ch=['C3','C3','G2','C3','C3','F2','G2','C3','C3','G2','G2','C3'];for(let i=0;i<Math.ceil(d/(60/bpm)/3);i++)bass.push([ch[i%ch.length],3]);seq(t,bpm,bass,(tt,f,dd)=>iPad(tt,f,dd,0.07));return d;}},
+  ],
   hw:[
-    {name:'В печері гірського короля (Е. Гріг)',play(t){const th=[['B3',.5],['C#4',.5],['D4',.5],['E4',.5],['F#4',.5],['D4',.5],['F#4',1],['F4',.5],['C#4',.5],['F4',1],['E4',.5],['C4',.5],['E4',1],
+    {id:'grieg',name:'В печері гірського короля (Е. Гріг)',play(t){const th=[['B3',.5],['C#4',.5],['D4',.5],['E4',.5],['F#4',.5],['D4',.5],['F#4',1],['F4',.5],['C#4',.5],['F4',1],['E4',.5],['C4',.5],['E4',1],
         ['B3',.5],['C#4',.5],['D4',.5],['E4',.5],['F#4',.5],['D4',.5],['F#4',.5],['B4',.5],['A4',.5],['F#4',.5],['D4',.5],['F#4',.5],['A4',2]];
       let x=0;[96,108,124,144].forEach((bpm,k)=>{x+=seq(t+x,bpm,th,k<2?iPluck:(tt,f,dd)=>{iPluck(tt,f,dd);iPluck(tt,f*2,dd);});});iDrone(t,NOTE('B1'),x);return x;}},
-    {name:'Токата ре мінор (Й. С. Бах)',play(t){const bpm=72;const a=[['A5',.25],['G5',.25],['A5',1.5],['-',.5],['G5',.25],['F5',.25],['E5',.25],['D5',.25],['C#5',.75],['D5',2],['-',1],
+    {id:'bach',name:'Токата ре мінор (Й. С. Бах)',play(t){const bpm=72;const a=[['A5',.25],['G5',.25],['A5',1.5],['-',.5],['G5',.25],['F5',.25],['E5',.25],['D5',.25],['C#5',.75],['D5',2],['-',1],
         ['A4',.25],['G4',.25],['A4',1.5],['-',.5],['E4',.5],['F4',.5],['C#4',.5],['D4',2],['-',1],
         ['A3',.25],['G3',.25],['A3',1.5],['-',.5],['G3',.25],['F3',.25],['E3',.25],['D3',.25],['C#3',.75],['D3',3]];
       const d=seq(t,bpm,a,(tt,f,dd)=>iOrgan(tt,f,dd,0.18));seq(t,bpm,[['-',2],['D2',4],['-',2],['D2',4],['-',2],['D2',5]],(tt,f,dd)=>iOrgan(tt,f,dd,0.11));iDrone(t,NOTE('D2'),d);return d;}}]};
+function musAdminHtml(){const g=govSec();if(!g)return '';const sec=[['xm','🎄 Зимові свята'],['hw','🎃 Хелловін']];
+  return `<div class="musadm"><h4>🎵 Музика</h4><label class="chk"><input type="checkbox" data-a="musauto"${musAuto()?' checked':''}> Вмикати автоматично — музика почне грати з першого натискання на сторінці (браузери не дозволяють раніше). Кожен гравець може вимкнути її кнопкою 🎵, і сайт це запам'ятає.</label>
+    ${sec.map(([sn,tt])=>{const c=musCfg(sn);return `<div class="musg"><b>${tt}</b>
+      ${(PIECES[sn]||[]).map(p=>`<label class="chk"><input type="checkbox" data-a="musof" data-u="${sn}:${p.id}"${c.off.includes(p.id)?'':' checked'}> ${esc(p.name)} <span class="hint">· вбудована</span></label>`).join('')}
+      ${c.custom.map((x,i)=>`<div class="musc"><span>🎧 ${esc(x.name||'Трек')}</span><audio controls preload="none" src="${esc(x.url)}"></audio><button class="chx" data-a="musdel" data-u="${sn}" data-k="${i}" title="Прибрати з плейлиста">✕</button></div>`).join('')}
+      <label class="small musup">➕ Додати свій трек (MP3, до 15 МБ)<input type="file" accept="audio/*" data-a="musfile" data-u="${sn}" hidden></label>${MUS.up&&MUS.up.sn===sn?`<span class="hint"> · завантаження ${MUS.up.pct}%…</span>`:''}</div>`;}).join('')}
+    <p class="hint">Зніміть галочку, щоб прибрати мелодію з плейлиста. Свої треки грають по черзі з вбудованими. Завантажуйте лише музику, яку маєте право використовувати.</p></div>`;}
+async function musSaveCfg(fn,okMsg){const g=govSec();if(!g||!AUTH.admin)return;const before=JSON.parse(saved);g.music=g.music||{};fn(g);busy=true;render();try{await window.FB.save(state);await logEdit(before);saved=JSON.stringify(state);msg=okMsg||'Збережено';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося зберегти';msgErr=true;state=JSON.parse(saved);}busy=false;render();try{musBtn();}catch(_){}}
+async function musUpload(sn,file){if(!AUTH.admin||!file)return;if(file.size>15*1024*1024){msg='Файл більший за 15 МБ';msgErr=true;render();return;}if(!/^audio\//.test(file.type||'')){msg='Це не аудіофайл';msgErr=true;render();return;}
+  MUS.up={sn,pct:0};render();try{const r=await window.FB.uploadMusic(file,p=>{MUS.up={sn,pct:p};});MUS.up=null;
+    await musSaveCfg(g=>{const m=g.music[sn]=g.music[sn]||{};m.custom=(m.custom||[]).concat([{name:String(file.name||'Трек').replace(/\.[a-z0-9]+$/i,'').slice(0,80),url:r.url,path:r.path}]);},'Трек додано до плейлиста');}
+  catch(e){console.warn(e);MUS.up=null;msg='Не вдалося завантажити: '+(e&&e.code||'помилка');msgErr=true;render();}}
 function musEnsure(){if(MUS.ctx)return true;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;MUS.ctx=new AC();MUS.master=MUS.ctx.createGain();MUS.master.gain.value=0;
   const comp=MUS.ctx.createDynamicsCompressor();MUS.master.connect(comp).connect(MUS.ctx.destination);return true;}
-function musNext(){if(!MUS.on)return;const L=PIECES[MUS.season]||[];if(!L.length)return;const p=L[MUS.idx%L.length];MUS.idx++;const t=MUS.ctx.currentTime+0.15;let d=8;try{d=p.play(t);}catch(e){console.warn(e);}MUS.now=p.name;musBtn();clearTimeout(MUS.timer);MUS.timer=setTimeout(musNext,(d+5)*1000);}
-function musStart(){const sn=seasonNow();if(!PIECES[sn]||!musEnsure())return;MUS.season=sn;MUS.on=true;MUS.ctx.resume();const g=MUS.master.gain,t=MUS.ctx.currentTime;g.cancelScheduledValues(t);g.setValueAtTime(g.value,t);g.linearRampToValueAtTime(0.55,t+1.5);musNext();musBtn();}
-function musStop(){MUS.on=false;clearTimeout(MUS.timer);if(MUS.ctx){const g=MUS.master.gain,t=MUS.ctx.currentTime;g.cancelScheduledValues(t);g.setValueAtTime(g.value,t);g.linearRampToValueAtTime(0,t+0.8);const old=MUS.ctx;MUS.ctx=null;setTimeout(()=>{try{old.close();}catch(_){}},1000);}musBtn();}
-function musBtn(){let b=document.getElementById('musbtn');const sn=seasonNow();const show=!!PIECES[sn]&&!/[?&]bot=1/.test(location.search);
+function musNext(){if(!MUS.on)return;const L=musList(MUS.season);if(!L.length){musStop();return;}const p=L[MUS.idx%L.length];MUS.idx++;clearTimeout(MUS.timer);if(MUS.audio){try{MUS.audio.pause();}catch(_){}MUS.audio=null;}
+  MUS.now=p.name;musBtn();
+  if(p.type==='file'){const au=new Audio(p.url);au.volume=0.6;au.preload='auto';MUS.audio=au;au.onended=()=>{MUS.timer=setTimeout(musNext,3000);};au.onerror=()=>{MUS.timer=setTimeout(musNext,1500);};au.play().catch(()=>{MUS.timer=setTimeout(musNext,1500);});return;}
+  const t=MUS.ctx.currentTime+0.15;let d=8;try{d=p.play(t);}catch(e){console.warn(e);}MUS.timer=setTimeout(musNext,(d+5)*1000);}
+function musStart(){const sn=seasonNow();if(!PIECES[sn]||!musList(sn).length||!musEnsure())return;MUS.season=sn;MUS.on=true;MUS.ctx.resume();const g=MUS.master.gain,t=MUS.ctx.currentTime;g.cancelScheduledValues(t);g.setValueAtTime(g.value,t);g.linearRampToValueAtTime(0.55,t+1.5);musNext();musBtn();}
+function musStop(){MUS.on=false;clearTimeout(MUS.timer);if(MUS.audio){try{MUS.audio.pause();}catch(_){}MUS.audio=null;}if(MUS.ctx){const g=MUS.master.gain,t=MUS.ctx.currentTime;g.cancelScheduledValues(t);g.setValueAtTime(g.value,t);g.linearRampToValueAtTime(0,t+0.8);const old=MUS.ctx;MUS.ctx=null;setTimeout(()=>{try{old.close();}catch(_){}},1000);}musBtn();}
+function musBtn(){let b=document.getElementById('musbtn');const sn=seasonNow();const show=!!PIECES[sn]&&musList(sn).length>0&&!/[?&]bot=1/.test(location.search);
   if(!show){if(b)b.remove();if(MUS.on)musStop();return;}
-  if(!b){b=document.createElement('button');b.id='musbtn';b.type='button';b.addEventListener('click',e=>{e.stopPropagation();if(MUS.on){musStop();musSetPref(false);}else{musStart();musSetPref(true);}});document.body.appendChild(b);}
+  if(!b){b=document.createElement('button');b.id='musbtn';b.type='button';b.addEventListener('click',e=>{e.stopPropagation();if(MUS.on){musStop();musSetPref(false);MUS.userOff=true;}else{MUS.userOff=false;musStart();musSetPref(true);}});document.body.appendChild(b);}
   b.className='musbtn'+(MUS.on?' on':'');b.title=MUS.on?('Зараз грає: '+(MUS.now||'')+' — натисніть, щоб вимкнути'):'Увімкнути святкову музику';b.setAttribute('aria-label',b.title);b.innerHTML=MUS.on?`<span class="mi">🎵</span><span class="mt">${esc(MUS.now||'Музика')}</span><span class="mx">✕</span>`:'<span class="mi">🎵</span><span class="mt">Музика</span>';
   if(MUS.on&&MUS.season!==sn){musStop();}}
 // якщо гравець раніше ввімкнув музику — продовжимо з першого ж натискання на сторінці
-document.addEventListener('pointerdown',e=>{if(e.target&&e.target.closest&&e.target.closest('#musbtn'))return;if(!MUS.on&&musPref()&&PIECES[seasonNow()]&&!/[?&]bot=1/.test(location.search))musStart();},{capture:true});
+document.addEventListener('pointerdown',e=>{if(e.target&&e.target.closest&&e.target.closest('#musbtn'))return;if(!MUS.on&&!MUS.userOff&&musPref()&&PIECES[seasonNow()]&&!/[?&]bot=1/.test(location.search))musStart();},{capture:true});
 
 function hwApply(){const sn=seasonNow();const R=document.documentElement;['hw','xm','au','sp','df','ind'].forEach(k=>R.classList.toggle(k,sn===k));let fx=document.getElementById('hwfx');
   if(fx&&fx.dataset.s!==sn){fx.remove();fx=null;}
@@ -4649,6 +4677,7 @@ app.addEventListener('input',e=>{
   if(a==='mapq'){mapSearch(t.value);return;}
   if(a==='lrenin'){LRENV=t.value;return;}
   if(a==='apn'){APN=t.value;return;}
+  if(a==='musof'||a==='musauto'||a==='musfile'||a==='season2')return;
   if(a==='wkin'){const u=t.dataset.u;const v=t.value.replace(/[^\d]/g,'');(WKIN[u]=WKIN[u]||{})[t.dataset.k]=v;if(t.value!==v&&t.value.replace(/\s/g,'')!==v)t.value=v;return;}
   if(a==='dpf'){const k=t.dataset.k,u=t.dataset.u;if(k==='tr')DPSEL.noTr=!t.checked;else if(k==='ic'){if(t.value)DPSEL.icons[u]=t.value;else delete DPSEL.icons[u];}else if(k==='act')DPSEL.act[u]=t.value;else if(k==='don'){if(t.value)DPSEL.don[u]=t.value;else delete DPSEL.don[u];}else if(k==='who'){if(t.value)DPSEL.who[u]=t.value;else delete DPSEL.who[u];}render();return;}
   if(a==='prland'){const p=myProfile();const v=t.value;(async()=>{try{await window.FB.saveProfile(AUTH.email,{about:p.about||'',land:v,tgcode:p.tgcode||''});PROFILES[AUTH.email]={...p,land:v};msg=v?'Землю обрано — її кімната з’явилась у чаті':'Землю прибрано';msgErr=false;}catch(e){msg='Не вдалося зберегти';msgErr=true;}render();})();return;}
@@ -4793,6 +4822,9 @@ app.addEventListener('change',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;const sec=state.sections[+t.dataset.s];
   if(a==='dr'){sec.donations[+t.dataset.p].res=t.value;render();}
   else if(a==='season'){sec.season=t.value;render();}
+  else if(a==='musauto'){if(!AUTH.admin)return;const v=t.checked;musSaveCfg(g=>{g.musicAuto=v;},v?'Музика вмикатиметься автоматично':'Автоувімкнення вимкнено');}
+  else if(a==='musof'){if(!AUTH.admin)return;const [sn,id]=String(t.dataset.u).split(':');const on=t.checked;musSaveCfg(g=>{const m=g.music[sn]=g.music[sn]||{};const off=new Set(m.off||[]);if(on)off.delete(id);else off.add(id);m.off=[...off];},'Плейлист оновлено');}
+  else if(a==='musfile'){const f=t.files&&t.files[0];t.value='';musUpload(t.dataset.u,f);}
   else if(a==='season2'){const g=govSec();if(!g||!AUTH.admin)return;const before=JSON.parse(saved);g.season=t.value;busy=true;render();(async()=>{try{await window.FB.save(state);await logEdit(before);saved=JSON.stringify(state);msg='Святкову тему змінено';msgErr=false;}catch(e){msg='Не вдалося зберегти';msgErr=true;state=JSON.parse(saved);}busy=false;render();})();}
   else if(a==='wkon'){const c=wkCfg(sec);c.off[t.dataset.l]=!t.checked;render();}
   else if(a==='wkt'){wkCfg(sec).groups[+t.dataset.g].treasury=t.checked;render();}
@@ -5200,6 +5232,7 @@ app.addEventListener('click',async e=>{
   if(a==='prej'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return;}busy=true;render();
     try{await window.FB.delProposal(b.dataset.id);PROPS=await window.FB.loadProposals();msg='Законопроєкт знято';}catch(err){msg='Не вдалося';msgErr=true;}
     busy=false;render();return;}
+  if(a==='musdel'){if(!AUTH.admin)return;const sn=b.dataset.u,i=+b.dataset.k;const x=musCfg(sn).custom[i];if(!x)return;if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='?';return;}await musSaveCfg(g=>{const m=g.music[sn];m.custom=(m.custom||[]).filter((_,k)=>k!==i);},'Трек прибрано');if(x.path)try{await window.FB.deleteMusic(x.path);}catch(_){}return;}
   if(a==='rainnow'){try{rainStart(150000);}catch(_){}return;}
   if(a==='dpclose'){{const es=sectionByKind('economy');if(es){active=es.id;ECV='ov';}}DPIMP=null;DPDONE=null;DPSEL={icons:{},who:{},act:{},don:{},noTr:false};render();return;}
   if(a==='dpapply'){if(busy)return;await dpApply();return;}
@@ -6052,7 +6085,7 @@ const firebaseConfig = {
 };
 // ========================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getStorage, ref as sref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+import { getStorage, ref as sref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, collectionGroup, getDocs, writeBatch, serverTimestamp, onSnapshot, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithCustomToken, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -6295,6 +6328,10 @@ function uploadChatFile(path, file, onp){ STORE = STORE || getStorage(); const s
   const p = "chat/" + path.replace(/\/msgs$/, "").replace(/[|]/g, "~") + "/" + Date.now().toString(36) + "_" + safe;
   const r = sref(STORE, p); const task = uploadBytesResumable(r, file, { contentType: file.type || "application/octet-stream", customMetadata: { from: (auth.currentUser.email || "").toLowerCase() } });
   return new Promise((res, rej) => { task.on("state_changed", s => onp && onp(Math.round(s.bytesTransferred / Math.max(1, s.totalBytes) * 100)), rej, async () => { try { const url = await getDownloadURL(r); res({ url, name: String(file.name || "file").slice(0, 200), size: file.size, type: String(file.type || "").slice(0, 100), path: p }); } catch (e) { rej(e); } }); }); }
+function uploadMusic(file, onp){ STORE = STORE || getStorage(); const safe = String(file.name || "track").replace(/[^\w.\-а-яіїєґА-ЯІЇЄҐ ]+/g, "_").slice(-100); const p = "music/" + Date.now().toString(36) + "_" + safe; const r = sref(STORE, p);
+  const task = uploadBytesResumable(r, file, { contentType: file.type || "audio/mpeg" });
+  return new Promise((res, rej) => { task.on("state_changed", s => onp && onp(Math.round(s.bytesTransferred / Math.max(1, s.totalBytes) * 100)), rej, async () => { try { res({ url: await getDownloadURL(r), path: p }); } catch (e) { rej(e); } }); }); }
+async function deleteMusic(path){ if (!/^music\//.test(path || "")) return; STORE = STORE || getStorage(); await deleteObject(sref(STORE, path)); }
 async function addEditLog(d){ const u = auth.currentUser; await setDoc(doc(db, "editlog", "e" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5)), { ...d, email: (u.email || "").toLowerCase(), at: serverTimestamp() }); }
 async function loadEditLog(){ const s = await getDocs(query(collection(db, "editlog"), orderBy("at", "desc"), limit(120))); return listFrom(s); }
 async function addBuild(d){ const u = auth.currentUser; await setDoc(doc(db, "builds", "b" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)), { ...d, email: (u.email || "").toLowerCase(), at: serverTimestamp() }); }
@@ -6394,7 +6431,7 @@ window.FB = {
   postComment, delComment, createPetition, signPetition, delPetition, petitionToBill, fileCase, decideCase, delCase, revokeNews, updCase, postNote, delNote,
   postSealed, delSealed, postProtocol, updProtocol, saveProfile, closeProposal, watchMsgs, watchDms, sendMsg, delMsg, watchPings, sendPings, delPings, chatBan, chatCleanup, setAdvocate, updAdvocate, delAdvocate, pardon, watchSealed,
   syncBallots, loadAllVotes, reopenBallot, createElection, updElection, delElection, applyCand, setCand, delCand, castVote, myVote, tallyElection,
-  applyCitizen, delApp, decideApp, saveRanks, setEmergency, foundAward, updAwardType, delAwardType, saveChurch, postTreaty, updTreaty, delTreaty, markWk, unmarkWk, createParty, updParty, delParty, addAppt, updAppt, addBuild, delBuild, updBuild, addEditLog, loadEditLog, uploadChatFile, createCoal, updCoal, delCoal,
+  applyCitizen, delApp, decideApp, saveRanks, setEmergency, foundAward, updAwardType, delAwardType, saveChurch, postTreaty, updTreaty, delTreaty, markWk, unmarkWk, uploadMusic, deleteMusic, createParty, updParty, delParty, addAppt, updAppt, addBuild, delBuild, updBuild, addEditLog, loadEditLog, uploadChatFile, createCoal, updCoal, delCoal,
   login: () => { const p = new GoogleAuthProvider(); if (p.setCustomParameters) p.setCustomParameters({ prompt: 'select_account' }); return signInWithPopup(auth, p); },
   logout: () => signOut(auth),
 };
