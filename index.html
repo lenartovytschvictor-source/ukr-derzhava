@@ -292,6 +292,7 @@ a.dpbm{display:inline-block;padding:5px 12px;border-radius:999px;background:var(
 .wkin{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}.wkin label{display:flex;align-items:center;gap:4px;font-size:13px}.wkr .wkin input{width:110px;max-width:110px;flex:0 0 auto;padding:6px 8px}
 .wkdocs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.wkdocs span{font-size:12.5px;background:#ffffff10;border-radius:8px;padding:2px 8px}.wkdocs i{opacity:.65;font-style:normal}
 @media(max-width:600px){.wkr .wkin input{width:90px;max-width:90px}.wkres{grid-template-columns:1fr 1fr}}
+.dpunk .dpic{display:grid;grid-template-columns:auto 1fr minmax(160px,220px) auto;gap:10px;align-items:center;margin:6px 0}.dpunk .dpic.need select{border-color:#ff8a73}.dpk{font-weight:700}@media(max-width:600px){.dpunk .dpic{grid-template-columns:auto 1fr}.dpunk .dpic select{grid-column:1/-1}}
 </style>
 <style id="page-style">
 /* Layout: one column registry; each land is a row — current flag, name + offices, then the flag history strip */
@@ -1962,7 +1963,7 @@ async function dpBookmarklet(SITE){
   const own=e=>[...e.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join(' ').replace(/\s+/g,' ').trim();
   const all=()=>[...document.querySelectorAll('body *')].filter(e=>!/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE)$/.test(e.tagName));
   const leaf=()=>all().filter(e=>own(e));
-  const LBL=/^(срібло|золото|вугілля|руда|нафта|піхотн\S*( оснащення)?|додатков\S*( оснащення)?|артилерія|дрони|танки|літаки|кораблі)$/i;
+  const LBL=/^(срібло|золото|вугілля|руда|нафта|(піхотн|додатков|винищувач|літак|артилері|дрон|танк|есмін|корабл|бомбард|гелікоп|ракет)[^\d]{0,28})$/i;
   const DT=/^(\d{2})\.(\d{2})\.(\d{4}),?\s+(\d{1,2}):(\d{2})$/;
   const AM=/^\+?\s?\d[\d\s  ]*$/;
   const num=s=>+String(s).replace(/[^\d]/g,'');
@@ -1977,7 +1978,7 @@ async function dpBookmarklet(SITE){
   function readTr(){const tr={},ic={};leaf().forEach(l=>{const t=own(l);if(!LBL.test(t))return;let tile=l.parentElement;
     for(let i=0;i<4&&tile;i++){const ls=[...tile.querySelectorAll('*')].filter(x=>LBL.test(own(x)));if(ls.length>1)break;
       const v=[...tile.querySelectorAll('*')].map(own).find(x=>/^[\d\s  ]+$/.test(x)&&/\d/.test(x));
-      if(v){tr[t]=num(v);const I=icons(tile).filter(o=>!o.e.contains(l)&&o.k.indexOf('txt:')!==0);if(I[0])ic[I[0].k]={res:t,src:I[0].src};break;}tile=tile.parentElement;}});return {tr,ic};}
+      if(v){tr[t]=num(v);const I=icons(tile).filter(o=>!o.e.contains(l)&&o.e!==l);if(I[0])ic[I[0].k]={res:t,src:I[0].src};break;}tile=tile.parentElement;}});return {tr,ic};}
   function readDon(){const out=[],seen=new Set();leaf().forEach(l=>{const m=DT.exec(own(l));if(!m)return;let row=l.parentElement;
     for(let i=0;i<6&&row;i++){const kids=[...row.querySelectorAll('*')];if(kids.filter(x=>DT.test(own(x))).length>1)break;
       const am=kids.find(x=>x!==l&&AM.test(own(x)));
@@ -2008,8 +2009,24 @@ function dpPlayer(d){const ov=DPSEL.who[d.n];if(ov!=null)return ov?plByName(ov):
   const n=String(d.n||'').trim().toLowerCase();return players().find(x=>String(x.name||'').trim().toLowerCase()===n)||null;}
 const wkLate=(d,end)=>{const t=d&&(d.paidAt||d.at);return !!(t&&kyivDate(t)>=end);};
 // план імпорту: що з пожертв піде в тижневі внески, що меценатам, що вже враховано
+// здогадка за значком гри: класи Font Awesome, емодзі, назва файлу картинки
+function dpGuess(k){k=String(k||'').toLowerCase();
+  if(/coins|coin|money|silver/.test(k)){if(/yellow|text-ye|warning|gold|amber/.test(k))return 'Золото';if(/gray|grey|text-gr|secondary|silver|muted|white/.test(k))return 'Срібло';}
+  if(/fighter|plane|jet/.test(k))return 'Літаки';if(/briefcase|toolbox|kit|box/.test(k))return 'Додаткове оснащення';
+  if(/oil|barrel|gas-pump|fuel|naft|нафт/.test(k))return 'Нафта';if(/coal|вугіл|fire|burn/.test(k))return 'Вугілля';if(/\bore\b|ore\.|pickaxe|gem|mountain|hammer|руда/.test(k))return 'Руда';
+  if(/gold|золот/.test(k))return 'Золото';if(/silver|срібл/.test(k))return 'Срібло';
+  if(/🪖|helmet|infantry|soldier|піхот/.test(k))return 'Піхотне оснащення';if(/plane|jet|aircraft|літак|✈/.test(k))return 'Літаки';if(/drone|дрон/.test(k))return 'Дрони';
+  if(/tank|танк/.test(k))return 'Танки';if(/ship|anchor|корабл|⚓|🚢/.test(k))return 'Кораблі';if(/artiller|cannon|артил/.test(k))return 'Артилерія';return '';}
+function dpKeyLabel(k){const m=/^txt:(.+)$/.exec(k);if(m)return m[1];{const f=/^fa:([\w-]+)(?::(\w+))?$/.exec(k);if(f)return 'значок «'+f[1]+'»'+(f[2]?' ('+({gray:'сірий',yellow:'жовтий',green:'зелений',red:'червоний',blue:'синій',dark:'темний',black:'чорний'}[f[2]]||f[2])+')':'');}if(/^cls:/.test(k)){const c=k.slice(4);const col=(/text-(\w+)/.exec(c)||[])[1]||'';const ic=(/fa-([\w-]+)/.exec(c.replace(/fa-(solid|regular|fw)\b/g,''))||[])[1]||c;return 'значок «'+ic+'»'+(col?' ('+({gray:'сірий',grey:'сірий',yellow:'жовтий',warning:'жовтий',success:'зелений',green:'зелений',danger:'червоний',red:'червоний',info:'блакитний',primary:'синій',blue:'синій',dark:'темний',secondary:'сірий'}[col]||col)+')':'');}return k.replace(/^\w+:/,'');}
+// один і той самий значок у блоці економіки й у пожертвах може мати трохи різні класи (fa-2x, text-gray-300/400…) — зводимо до «значок+колір»
+function dpNorm(k){k=String(k||'');if(k.indexOf('cls:')!==0)return k;const cl=k.slice(4).toLowerCase().split(/\s+/);
+  const skip=/^fa-(solid|regular|light|thin|duotone|brands|fw|lg|xl|xs|sm|\dx|spin|pulse|beat|bounce|shake|flip|inverse|stack.*|border|pull-.*)$/;
+  const ic=cl.find(c=>/^fa-/.test(c)&&!skip.test(c))||cl.join(' ');const col=((cl.find(c=>/^text-[a-z]/.test(c))||'').match(/^text-([a-z]+)/)||[])[1]||'';
+  const fam={grey:'gray',slate:'gray',zinc:'gray',neutral:'gray',stone:'gray',secondary:'gray',muted:'gray',silver:'gray',white:'gray',amber:'yellow',warning:'yellow',gold:'yellow',orange:'yellow',emerald:'green',success:'green',lime:'green',rose:'red',danger:'red',sky:'blue',info:'blue',primary:'blue',cyan:'blue',indigo:'blue'}[col]||col;
+  return 'fa:'+ic.replace(/^fa-/,'')+(fam?':'+fam:'');}
 function dpPlan(){const es=sectionByKind('economy');const D=DPIMP;if(!es||!D||D.err)return null;const c=wkCfg(es);const PM=wkPayMap();
-  const icm={};Object.entries(D.icons||{}).forEach(([k,v])=>{icm[k]=v.res;});Object.assign(icm,es.dpIcons||{},DPSEL.icons);
+  if(!D._norm){(D.don||[]).forEach(x=>{x.k=dpNorm(x.k);});const ic={};Object.entries(D.icons||{}).forEach(([k,v])=>{ic[dpNorm(k)]=v;});D.icons=ic;D._norm=1;}
+  const icm={};(D.don||[]).forEach(x=>{const g=dpGuess(x.k+' '+(x.src||''));if(g&&x.k)icm[x.k]=g;});const guessed=new Set(Object.keys(icm));Object.entries(D.icons||{}).forEach(([k,v])=>{const r=canonRes(es,v.res)||v.res;icm[k]=r;guessed.delete(k);});Object.entries(Object.assign({},es.dpIcons||{},DPSEL.icons)).forEach(([k,v])=>{const kk=dpNorm(k);icm[kk]=v;guessed.delete(kk);});
   const seen=new Set(es.dpSeen||[]);const occ={};
   const dons=(D.don||[]).map(x=>{const b=[x.n,x.t,x.q,x.k].join('|');occ[b]=(occ[b]||0)+1;let hh=0;for(let i=0;i<b.length;i++)hh=(hh*31+b.charCodeAt(i))|0;const key=(hh>>>0).toString(36)+'.'+occ[b];const tt=dpParseT(x.t);
     const raw=icm[x.k]||'';return {...x,key,res:raw?canonRes(es,raw)||raw:'',wk:tt?wkMonday(tt.iso):'',ms:tt?tt.ms:null};}).filter(x=>!seen.has(x.key)&&+x.q>0);
@@ -2037,7 +2054,7 @@ function dpPlan(){const es=sectionByKind('economy');const D=DPIMP;if(!es||!D||D.
   // казна: гра vs сайт
   const {cur}=treasuryNow(es);const trRows=Object.entries(D.tr||{}).map(([lbl,v])=>{const res=canonRes(es,lbl);return res?{res,game:+v||0,site:cur[res]||0}:null;}).filter(Boolean);
   const keys=[...new Set((D.don||[]).map(x=>x.k).filter(Boolean))];
-  return {es,c,groups,trRows,keys,icm,dons,seenN:(D.don||[]).length-dons.length};}
+  return {es,c,groups,trRows,keys,icm,guessed,dons,seenN:(D.don||[]).length-dons.length};}
 function dpResOpts(es,cur){return `<option value="">— ресурс? —</option>`+invItems(es.treasury||{}).map(it=>`<option${it.name===cur?' selected':''}>${esc(it.name)}</option>`).join('');}
 function dpItemsTxt(es,list){return list.map(x=>fmt(x.qty)+' '+esc(resWord(es,x.res))).join(' + ');}
 function dpModal(){const close=`<button class="small bmx" data-a="dpclose">✕ Закрити</button>`;const wrap=b=>`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="dpclose" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide dpm">${close}<h3>📥 Дані з гри DragPolit</h3>${b}</div></div>`;
@@ -2052,8 +2069,8 @@ function dpModal(){const close=`<button class="small bmx" data-a="dpclose">✕ �
   if(P.trRows.length){h+=`<div class="dsec"><h4>🏛 Казна</h4><div class="tblwrap"><table class="bud dptr"><thead><tr><th>Ресурс</th><th class="num">У грі</th><th class="num">На сайті</th><th class="num">Різниця</th></tr></thead><tbody>${P.trRows.map(x=>{const d=x.game-x.site;return `<tr><th>${esc(x.res)}</th><td class="num"><b>${fmt(x.game)}</b></td><td class="num">${fmt(x.site)}</td><td class="num ${d?(d>0?'dpup':'dpdn'):''}">${d?(d>0?'+':'−')+fmt(Math.abs(d)):'—'}</td></tr>`;}).join('')}</tbody></table></div>
     <label class="chk"><input type="checkbox" data-a="dpf" data-k="tr"${DPSEL.noTr?'':' checked'}> після внесків вирівняти казну сайту за грою (різницю — доходи й витрати гри, яких немає на сайті, — буде записано в «Рух казни» окремим рядком «🔄 Звірка з грою»)</label></div>`;}
   // невідомі значки ресурсів
-  const unk=P.keys.filter(k=>!P.icm[k]);
-  if(unk.length){h+=`<div class="dsec dpunk"><h4>❓ Який це ресурс?</h4><p class="hint">Сайт ще не знає цих значків із гри. Оберіть один раз — далі він запам'ятає.</p>${unk.map(k=>{const d=(DPIMP.don||[]).find(x=>x.k===k)||{};return `<div class="row2 dpic">${d.src?`<img src="${esc(d.src)}" alt="" referrerpolicy="no-referrer">`:`<code>${esc(k.slice(0,24))}</code>`}<span class="hint">напр. ${esc(d.n||'')}: +${fmt(d.q||0)}</span><select data-a="dpf" data-k="ic" data-u="${esc(k)}">${dpResOpts(es,'')}</select></div>`;}).join('')}</div>`;}
+  const unk=P.keys.filter(k=>!P.icm[k]||P.guessed.has(k));
+  if(unk.length){h+=`<div class="dsec dpunk"><h4>❓ Перевірте ресурси</h4><p class="hint">У грі пожертви позначені лише значками, без назв. Сайт спробував вгадати — перевірте й виправте за потреби. Вибір запам'ятається, наступного разу питати не буде.</p>${unk.map(k=>{const d=(DPIMP.don||[]).find(x=>x.k===k)||{};const cur=P.icm[k]||'';return `<div class="dpic${cur?'':' need'}">${d.src?`<img src="${esc(d.src)}" alt="" referrerpolicy="no-referrer">`:`<span class="dpk">${esc(dpKeyLabel(k))}</span>`}<span class="hint">напр. ${esc(d.n||'')}: +${fmt(d.q||0)}</span><select data-a="dpf" data-k="ic" data-u="${esc(k)}">${dpResOpts(es,cur)}</select>${cur&&P.guessed.has(k)?'<span class="tag">вгадано</span>':''}</div>`;}).join('')}</div>`;}
   // пожертви
   h+=`<div class="dsec"><h4>🎁 Нові пожертви · ${P.dons.length}</h4>${P.seenN?`<p class="hint">Ще ${P.seenN} уже були перенесені раніше — їх пропущено.</p>`:''}`;
   if(!P.groups.length)h+='<p class="empty">Нових пожертв немає.</p>';
@@ -2078,7 +2095,7 @@ async function dpApply(){const P=dpPlan();if(!P||!canDp())return;const es=P.es;c
   const seen=es.dpSeen=es.dpSeen||[];const pl=es.patronList=es.patronList||[];const added={};const marks=[];let nPat=0;
   const addPat=(name,res,qty,iso,ms)=>{if(!(qty>0)||!res)return;let p=pl.find(x=>x.name===name);if(!p){p={name,items:[]};pl.push(p);}const pr=silverOf(es,res,1);p.items=p.items||[];p.items.push({res,qty:String(qty),price:pr==null?'':String(pr),date:iso?iso.split('-').reverse().join('.'):'',at:ms?new Date(ms).toISOString():new Date().toISOString(),src:'game'});added[res]=(added[res]||0)+qty;nPat++;};
   // запам'ятати значки
-  es.dpIcons=Object.assign({},es.dpIcons||{},DPSEL.icons);Object.entries(DPIMP.icons||{}).forEach(([k,v])=>{if(!es.dpIcons[k])es.dpIcons[k]=v.res;});
+  es.dpIcons=Object.assign({},es.dpIcons||{},DPSEL.icons);P.guessed.forEach(k=>{if(!es.dpIcons[k]&&P.icm[k])es.dpIcons[k]=P.icm[k];});Object.entries(DPIMP.icons||{}).forEach(([k,v])=>{if(!es.dpIcons[k])es.dpIcons[k]=canonRes(es,v.res)||v.res;});
   P.groups.forEach(G=>{if(G.act==='wait')return;const nm=G.pl||G.n;const last=G.dons.reduce((a,d)=>Math.max(a,d.ms||0),0)||null;const iso=last?kyivDate(last):'';
     if(G.act==='skip'){G.dons.forEach(d=>seen.push(d.key));return;}
     if(G.unknown.length&&G.act==='apply'){/* невідомий ресурс — лишаємо до наступного разу */}
