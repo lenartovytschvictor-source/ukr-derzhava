@@ -79,6 +79,55 @@ async function telegram(page) {
   await ref.set({ sent, at: now });
 }
 
+
+// ---- УД 2.0: особисті сповіщення, щотижневий звіт, дані для команд, перевірка профілів
+async function tgPersonal(page) {
+  if (!TG.token) return;
+  const db = admin.firestore();
+  const links = {}; (await db.collection("tglinks").get()).forEach(d => { const v = d.data(); if (v.chat) links[d.id] = v.chat; });
+  if (!Object.keys(links).length) { console.log("Особисті: ніхто не підключив Telegram"); return; }
+  const evs = await page.evaluate(() => (window.__tgPersonal ? window.__tgPersonal() : []));
+  const ref = db.doc("botstate/tgpersonal"); const snap = await ref.get(); const sent = (snap.exists && snap.data().sent) || {}; const now = Date.now(); let n = 0;
+  for (const e of evs) {
+    const chat = links[String(e.email || "").toLowerCase()]; const k = hid(e.id);
+    if (!chat || sent[k]) continue;
+    try { await tgSendTo(chat, e.text); sent[k] = now; n++; await sleep(400); } catch (err) { console.log("Особисте не надіслано:", err.message); if (/blocked|chat not found|deactivated/i.test(err.message)) sent[k] = now; }
+    if (n >= 40) break;
+  }
+  for (const [k, t] of Object.entries(sent)) if (now - t > 30 * 86400000) delete sent[k];
+  await ref.set({ sent, at: now });
+  console.log(`Особисті сповіщення: ${n}`);
+}
+async function tgSendTo(chat, text) {
+  const r = await fetch(`https://api.telegram.org/bot${TG.token}/sendMessage`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ chat_id: chat, text, parse_mode: "HTML", disable_web_page_preview: true }) });
+  const j = await r.json().catch(() => ({})); if (!j.ok) throw new Error(`${j.error_code || r.status} ${j.description || ""}`); return true;
+}
+async function tgWeekly(page) {
+  if (!TG.token || !TG.chat) return;
+  const w = await page.evaluate(() => (window.__tgWeekly ? window.__tgWeekly() : null)); if (!w) return;
+  const ref = admin.firestore().doc("botstate/weekly"); const snap = await ref.get(); if (snap.exists && snap.data().last === w.id) return;
+  await tgSend(w.text, TG.thread); await ref.set({ last: w.id, at: Date.now() }); console.log("Щотижневий звіт надіслано");
+}
+async function saveSummary(page) {
+  const sm = await page.evaluate(() => (window.__tgSummary ? window.__tgSummary() : null)); if (!sm) return;
+  await admin.firestore().doc("botstate/summary").set({ ...sm, at: Date.now() });
+}
+async function checkProfiles() {
+  const db = admin.firestore(); const q = await db.collection("applications").where("status", "==", "open").get(); let n = 0;
+  for (const d of q.docs) {
+    const a = d.data(); if (a.check || !a.profile) continue;
+    const m = /(\d{2,})/.exec(String(a.profile)); if (!m) { await d.ref.update({ check: { ok: false, at: Date.now() } }); continue; }
+    let ok = false, gameName = "";
+    try {
+      const r = await fetch("https://dragpolit.com/profile/" + m[1], { headers: { "user-agent": "Mozilla/5.0 UkrDerzhavaBot" }, redirect: "follow" });
+      if (r.ok) { const html = await r.text(); const t = /<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)/i.exec(html) || /<title>([^<]+)<\/title>/i.exec(html); gameName = t ? t[1].replace(/\s*[|–—-]\s*DragPolit.*$/i, "").trim() : ""; ok = !/not found|404|не знайдено/i.test(html.slice(0, 3000)); }
+    } catch (e) { console.log("Перевірка профілю:", e.message); continue; }
+    const norm = s => String(s || "").toLowerCase().replace(/[^a-zа-яіїєґ0-9]+/gi, "");
+    await d.ref.update({ check: { ok, gameName: gameName.slice(0, 80), match: gameName ? norm(gameName).includes(norm(a.name)) || norm(a.name).includes(norm(gameName)) : null, at: Date.now() } }); n++;
+  }
+  if (n) console.log(`Перевірено профілів: ${n}`);
+}
+
 const browser = await chromium.launch();
 try {
   const page = await browser.newPage();
@@ -91,6 +140,10 @@ try {
   console.log("Результат:", result);
   await page.waitForTimeout(4000);
   try { await telegram(page); } catch (err) { console.log("Telegram: помилка", err.message); }
+  try { await tgPersonal(page); } catch (err) { console.log("Особисті: помилка", err.message); }
+  try { await tgWeekly(page); } catch (err) { console.log("Звіт: помилка", err.message); }
+  try { await saveSummary(page); } catch (err) { console.log("Зведення: помилка", err.message); }
+  try { await checkProfiles(); } catch (err) { console.log("Профілі: помилка", err.message); }
 } finally {
   await browser.close();
 }
