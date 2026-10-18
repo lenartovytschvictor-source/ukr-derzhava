@@ -161,7 +161,9 @@ html.hw section.sec>h2::before{box-shadow:0 0 14px rgba(255,128,32,.6)}
 html.hw h1,html.hw .brand2 h1{background:linear-gradient(180deg,#ffd27a,#ff8a1f 60%,#d2560c);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 16px rgba(255,120,20,.35))}
 .hwpump{display:inline-block;margin-left:.25em;-webkit-text-fill-color:initial;color:initial;filter:drop-shadow(0 0 10px rgba(255,140,30,.7));animation:hwbob 3s ease-in-out infinite}
 @keyframes hwbob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-4px) rotate(4deg)}}
-#hwfx{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+#hwfx{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+/* сезонні ефекти — позаду основного вмісту: листя й дощ видно лише довкола блоків */
+#app.wrap{position:relative;z-index:1}
 .hwbat{position:absolute;display:block;width:46px;opacity:.85;filter:drop-shadow(0 0 8px rgba(255,130,30,.55))}
 .hwbat svg{width:100%;fill:#0a0410;stroke:rgba(255,150,60,.6);stroke-width:.7}
 .hwbat.b0{top:12%;animation:hwfly 26s linear infinite}
@@ -1451,9 +1453,15 @@ button.lcard.vacant{border-style:dashed}
 /* ===== Осінь (1.09–30.11, крім Хелловіну) ===== */
 html.au{--gold:#f0a640;--gold-hi:#ffd58a;--line2:rgba(240,166,64,.46)}
 html.au body{background:radial-gradient(1100px 520px at 18% -160px,rgba(190,70,30,.40),transparent 70%),radial-gradient(900px 600px at 100% 60%,rgba(130,40,20,.22),transparent 70%),repeating-linear-gradient(45deg,rgba(240,166,64,.03) 0 2px,transparent 2px 15px),var(--bg);background-attachment:fixed}
-.auf{position:absolute;top:-40px;width:var(--s);height:var(--s);animation:aufall var(--du) linear var(--dl) infinite,ausway calc(var(--du)/3) ease-in-out var(--dl) infinite alternate;opacity:.85}
-.auf svg{width:100%;height:100%;fill:var(--c);filter:drop-shadow(0 2px 3px rgba(0,0,0,.5));animation:auspin calc(var(--du)/2) linear infinite}
-@keyframes aufall{to{top:106%}}@keyframes ausway{from{margin-left:calc(var(--dr)*-1)}to{margin-left:var(--dr)}}@keyframes auspin{to{transform:rotate(360deg)}}
+.auf{position:absolute;top:-50px;width:var(--s);height:var(--s);animation:aufall var(--du) linear var(--dl) infinite,ausway calc(var(--du)/3) ease-in-out var(--dl) infinite alternate;opacity:.9;perspective:200px}
+.auf svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 3px 3px rgba(0,0,0,.45));animation:autumble var(--tu,6s) ease-in-out infinite;transform-origin:50% 40%}
+.auf .lf{fill:var(--c);stroke:rgba(70,25,5,.35);stroke-width:1.2;stroke-linejoin:round}.auf .lv{fill:none;stroke:rgba(70,25,5,.38);stroke-width:2;stroke-linecap:round}
+@keyframes aufall{to{top:106%}}@keyframes ausway{from{margin-left:calc(var(--dr)*-1)}to{margin-left:var(--dr)}}
+@keyframes autumble{0%{transform:rotateZ(-25deg) rotateY(0deg) rotateX(15deg)}25%{transform:rotateZ(20deg) rotateY(70deg) rotateX(-10deg)}50%{transform:rotateZ(45deg) rotateY(180deg) rotateX(20deg)}75%{transform:rotateZ(10deg) rotateY(250deg) rotateX(-15deg)}100%{transform:rotateZ(-25deg) rotateY(360deg) rotateX(15deg)}}
+#aurain{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0}
+html.raining body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:linear-gradient(180deg,rgba(25,35,50,.22),rgba(25,35,50,.08));animation:raindim 8s ease forwards}
+@keyframes raindim{from{opacity:0}to{opacity:1}}
+html.raining .auf{animation-duration:calc(var(--du)*.7),calc(var(--du)/4)}
 /* ===== День захисників (1.10) і День Незалежності (24.08): стрічки ===== */
 .uaribbon{position:absolute;top:0;width:120px;height:120px;overflow:hidden}
 .uaribbon.l{left:0}.uaribbon.r{right:0;transform:scaleX(-1)}
@@ -3052,7 +3060,7 @@ function adminPanel(){if(!AUTH.admin||AUTH.bot)return '';const g=govSec();const 
     b=ELOG.length?`<ul class="elog">${ELOG.slice().reverse().slice(0,80).map(e=>`<li><div><b>${esc((e.secs||[]).map(x=>x.title).join(', '))}</b><div class="hint">${esc(fmtDT(new Date(e.at||0).toISOString()))} · ${esc(e.by||'')}</div></div>${e.before&&e.before.length>2?`<button class="small ghost" data-a="elrev" data-k="${esc(e.id)}">↺ Повернути як було</button>`:''}</li>`).join('')}</ul>`:'<p class="empty">Змін ще не записано. Кожне збереження розділу з’являтиметься тут, і його можна буде відкотити.</p>';}
   else if(ADMP==='roles'){const r=window.__rolesOf?window.__rolesOf(JSON.parse(JSON.stringify(state))):{};const L=[['hetman','Гетьман (права адміністрації)'],['lands','Писарі (Землі, уділи, гравці)'],['dlands','Домініальний Писар'],['econ','Секретар Фінансів'],['decon','Секретар Фінансів Домініону'],['def','Секретар Оборони'],['interior','Секретар Внутрішніх Справ'],['dinterior','Секретар Внутрішніх Справ Домініону'],['foreign','Секретар Міжнародних Справ'],['court','Судді'],['prosecutor','Генеральний Прокурор'],['patriarch','Патріарх'],['cvk','ЦВК']];
     b=`<p class="hint">Ролі рахуються самі з посад (бот оновлює їх у базі раз на 15 хвилин). Змінити людину на посаді — на сторінці «Влада».</p><div class="tblwrap"><table class="bud"><tbody>${L.map(([k,t])=>`<tr><th>${esc(t)}</th><td>${(r[k]||[]).map(e=>esc((plByEmail(e)||{}).name||e)).join(', ')||'<span class="hint">—</span>'}</td></tr>`).join('')}</tbody></table></div>`;}
-  else if(ADMP==='season'){b=`<label class="fl">Що показувати<select id="season2" data-a="season2">${[['auto','Автоматично за календарем'],['au','🍂 Осінь'],['hw','🎃 Хелловін'],['xm','🎄 Зимові свята'],['sp','🌸 Весна'],['df','🛡 День захисників'],['ind','🇺🇦 День Незалежності'],['off','Вимкнути святкове оформлення']].map(([v,l])=>`<option value="${v}"${((g&&g.season==='on'?'hw':g&&g.season)||'auto')===v?' selected':''}>${l}</option>`).join('')}</select></label><p class="hint">Автоматично: 🍂 осінь 1.09–30.11 · 🛡 1 жовтня · 🎃 25.10–1.11 · 🎄 5.12 (з 6:00)–10.01 · 🌸 березень–травень · 🇺🇦 24 серпня. Зараз: <b>${esc(({au:'осінь',hw:'Хелловін',xm:'зимові свята',sp:'весна',df:'День захисників',ind:'День Незалежності'})[seasonNow()]||'без теми')}</b>.</p>`;}
+  else if(ADMP==='season'){b=`<label class="fl">Що показувати<select id="season2" data-a="season2">${[['auto','Автоматично за календарем'],['au','🍂 Осінь'],['hw','🎃 Хелловін'],['xm','🎄 Зимові свята'],['sp','🌸 Весна'],['df','🛡 День захисників'],['ind','🇺🇦 День Незалежності'],['off','Вимкнути святкове оформлення']].map(([v,l])=>`<option value="${v}"${((g&&g.season==='on'?'hw':g&&g.season)||'auto')===v?' selected':''}>${l}</option>`).join('')}</select></label><p class="hint">Автоматично: 🍂 осінь 1.09–30.11 · 🛡 1 жовтня · 🎃 25.10–1.11 · 🎄 5.12 (з 6:00)–10.01 · 🌸 березень–травень · 🇺🇦 24 серпня. Зараз: <b>${esc(({au:'осінь',hw:'Хелловін',xm:'зимові свята',sp:'весна',df:'День захисників',ind:'День Незалежності'})[seasonNow()]||'без теми')}</b>.</p>${seasonNow()==='au'?`<p class="hint">🌧 Восени інколи (раз на 15–35 хв) на 2–3 хвилини йде дощ.</p><button class="small" data-a="rainnow">🌧 Показати дощ зараз</button>`:''}`;}
   else if(ADMP==='backup'){b=`<p class="hint">Повна копія всіх даних сайту (Землі, закони, економіка, гравці, Військо, Церква) одним файлом. Зберігайте перед великими змінами.</p><div class="landtools"><button class="small primary" data-a="bkdown">💾 Завантажити копію (.json)</button><button class="small" data-a="bkup">📂 Відновити з файлу…</button></div><p class="hint warn">Відновлення перезапише всі дані сайту копією з файлу.</p>`;}
   else{b=`<div class="landtools"><a class="gamebtn small" href="modtest.html" target="_blank" rel="noopener">🎓 Тест модераторів ↗</a><button class="small" data-a="admtick" ${busy?'disabled':''}>🔄 Підбити підсумки голосувань зараз</button><button class="small" data-a="edit">🧰 Повне редагування всього сайту (старий режим)</button></div><label class="fl">Ім’я бота в Telegram (для кнопки «Відкрити бота» в кабінетах)<input type="text" id="tgbotn" data-a="tgbotn" value="${esc((g&&g.tgBot)||'')}" placeholder="@ukr_derzhava_bot"></label><div><button class="small" data-a="tgbotsave">Зберегти</button></div>`;}
   return `<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="admp" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide admp"><button class="small bmx" data-a="admp" data-k="">✕ Закрити</button><h3>⚙️ Адмін-панель</h3><div class="afilter">${tabs.map(([k,l])=>`<button class="small${ADMP===k?' primary':''}" data-a="admp" data-k="${k}">${l}</button>`).join('')}</div><div class="admpb">${b}</div></div></div>`;}
@@ -4207,19 +4215,46 @@ function seasonNow(){const m=seasonMode();if(m==='on'||m==='hw')return 'hw';if([
   return '';}
 function hwOn(){return seasonNow()==='hw';}
 const BAT='<svg viewBox="0 0 64 28" aria-hidden="true"><path d="M32 9c1.6-3 3-4 3-4l1 3c2.5-.6 4.2.2 4.2.2 3.2-5 9.8-7 16.6-5.4-4.4 1.6-6.4 4.6-6.4 4.6 4.6-.6 9.2 1.4 11.6 5-4-.4-7.4.4-9.4 2.4 1.8 2 2.2 4.8 2.2 4.8-3.6-2.6-8.4-2.6-11 .2C42 15 38 13.6 32 22c-6-8.4-10-7-11.8-3.6-2.6-2.8-7.4-2.8-11-.2 0 0 .4-2.8 2.2-4.8-2-2-5.4-2.8-9.4-2.4 2.4-3.6 7-5.6 11.6-5 0 0-2-3-6.4-4.6C14 -.2 20.6 1.8 23.8 6.8c0 0 1.7-.8 4.2-.2l1-3s1.4 1 3 4z"/></svg>';
-const LEAF='<svg viewBox="0 0 24 24"><path d="M12 2l1.6 4.2 3.6-2.2-.8 4.4 4.4-.6-2.6 3.4 3.8 2-4.2 1 1.4 4.2-4-2-1.2 4.6-1.2-4.6-4 2 1.4-4.2-4.2-1 3.8-2-2.6-3.4 4.4.6-.8-4.4 3.6 2z"/></svg>';
+// осіннє листя: клен, дуб, липа — з прожилками
+const LEAVES=[
+ '<svg viewBox="0 0 100 100"><path class="lf" d="M50 4L56 20L63 15L61 34L72 23L75 30L89 26L83 40L91 45L74 57L77 63L57 61L52 74L48 74L43 61L23 63L26 57L9 45L17 40L11 26L25 30L28 23L39 34L37 15L44 20Z"/><path class="lv" d="M50 74V10M50 52L82 31M50 52L18 31M50 64L71 58M50 64L29 58M50 76Q51 86 54 97"/></svg>',
+ '<svg viewBox="0 0 100 100"><path class="lf" d="M50 8C58 8 60 16 57 22C66 18 72 24 66 32C76 30 80 40 70 46C80 48 80 60 68 62C76 68 70 78 60 74C60 80 56 86 52 86L48 86C44 86 40 80 40 74C30 78 24 68 32 62C20 60 20 48 30 46C20 40 24 30 34 32C28 24 34 18 43 22C40 16 42 8 50 8Z"/><path class="lv" d="M50 86V12M50 30L62 26M50 30L38 26M50 46L66 40M50 46L34 40M50 62L64 60M50 62L36 60M50 86Q50 92 52 97"/></svg>',
+ '<svg viewBox="0 0 100 100"><path class="lf" d="M50 6C70 20 82 46 68 72C62 82 55 87 51 90L49 90C45 87 38 82 32 72C18 46 30 20 50 6Z"/><path class="lv" d="M50 90V12M50 34L64 26M50 34L36 26M50 50L68 42M50 50L32 42M50 66L64 60M50 66L36 60M50 90Q50 94 52 98"/></svg>'];
+const LEAF=LEAVES[0];
+// дощ: інколи на 2–3 хвилини (восени), м'яко з'являється і зникає
+let RAIN={t:0,on:false,raf:0,cv:null,drops:[],alpha:0,until:0};
+function rainOk(){try{if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return false;}catch(_){}return !/[?&]bot=1/.test(location.search);}
+function rainSchedule(first){clearTimeout(RAIN.t);if(!rainOk())return;const min=first?3:14,max=first?9:35;RAIN.t=setTimeout(()=>rainStart(120000+Math.random()*60000),(min+Math.random()*(max-min))*60000);}
+function rainStart(dur){if(!rainOk()||seasonNow()!=='au')return;let cv=RAIN.cv;if(!cv){cv=document.createElement('canvas');cv.id='aurain';cv.setAttribute('aria-hidden','true');document.body.appendChild(cv);RAIN.cv=cv;}
+  RAIN.on=true;RAIN.until=Date.now()+(dur||150000);document.documentElement.classList.add('raining');
+  const fit=()=>{const d=Math.min(2,window.devicePixelRatio||1);cv.width=innerWidth*d;cv.height=innerHeight*d;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';RAIN.d=d;
+    const n=Math.round(innerWidth*innerHeight/7000);RAIN.drops=Array.from({length:n},()=>({x:Math.random()*innerWidth*1.2,y:Math.random()*innerHeight,l:10+Math.random()*16,v:9+Math.random()*7,o:.18+Math.random()*.3}));};
+  fit();window.removeEventListener('resize',RAIN.fit);RAIN.fit=fit;window.addEventListener('resize',fit);
+  const ctx=cv.getContext('2d');const wind=-2.2;
+  const step=()=>{if(!RAIN.cv)return;const now=Date.now();const end=now>RAIN.until;RAIN.alpha=Math.max(0,Math.min(1,RAIN.alpha+(end?-0.008:0.01)));
+    if(end&&RAIN.alpha<=0){rainStop(true);return;}
+    if(!document.hidden){const d=RAIN.d;ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,innerWidth,innerHeight);ctx.lineWidth=1.1;ctx.lineCap='round';
+      const vis=Math.ceil(RAIN.drops.length*RAIN.alpha);
+      for(let i=0;i<vis;i++){const r=RAIN.drops[i];ctx.strokeStyle='rgba(190,210,235,'+(r.o*RAIN.alpha).toFixed(3)+')';ctx.beginPath();ctx.moveTo(r.x,r.y);ctx.lineTo(r.x+wind*r.l/r.v*1.6,r.y+r.l);ctx.stroke();
+        r.y+=r.v;r.x+=wind;if(r.y>innerHeight){r.y=-r.l-Math.random()*80;r.x=Math.random()*innerWidth*1.2;}}
+      cv.style.opacity=RAIN.alpha.toFixed(3);}
+    RAIN.raf=requestAnimationFrame(step);};
+  cancelAnimationFrame(RAIN.raf);RAIN.raf=requestAnimationFrame(step);}
+function rainStop(resched){cancelAnimationFrame(RAIN.raf);RAIN.on=false;RAIN.alpha=0;document.documentElement.classList.remove('raining');if(RAIN.cv){RAIN.cv.remove();RAIN.cv=null;}window.removeEventListener('resize',RAIN.fit);if(resched)rainSchedule(false);}
+window.__rainNow=()=>rainStart(150000);
 function hwApply(){const sn=seasonNow();const R=document.documentElement;['hw','xm','au','sp','df','ind'].forEach(k=>R.classList.toggle(k,sn===k));let fx=document.getElementById('hwfx');
   if(fx&&fx.dataset.s!==sn){fx.remove();fx=null;}
   if(sn&&!fx){fx=document.createElement('div');fx.id='hwfx';fx.dataset.s=sn;fx.setAttribute('aria-hidden','true');
     const rain=(cls,n,inner,cols)=>{let o='';for(let i=0;i<n;i++){const x=(i*37)%100,dl=-((i*7919)%160)/10,du=11+((i*31)%9),sz=12+(i*13)%14,dr=((i%2)?1:-1)*(14+(i*11)%30);o+=`<i class="${cls}" style="left:${x}%;--s:${sz}px;--du:${du}s;--dl:${dl}s;--dr:${dr}px;--c:${cols[i%cols.length]}">${inner}</i>`;}return o;};
-    if(sn==='au')fx.innerHTML=rain('auf',22,LEAF,['#d9562b','#e8902e','#f2c14e','#b8412a','#c97a2c']);
+    if(sn==='au'){const cols=['#c4412a','#d9622b','#e8902e','#f2b33d','#a8521f','#b83a24','#d7a23a','#8c4a1f'];let o='';for(let i=0;i<20;i++){const x=(i*37+11)%100,dl=-((i*7919)%180)/10,du=13+((i*31)%10),sz=24+(i*13)%20,dr=((i%2)?1:-1)*(20+(i*11)%40),tu=4+((i*7)%6);o+=`<i class="auf" style="left:${x}%;--s:${sz}px;--du:${du}s;--dl:${dl}s;--dr:${dr}px;--tu:${tu}s;--c:${cols[(i*3)%cols.length]}">${LEAVES[i%3]}</i>`;}fx.innerHTML=o;}
     else if(sn==='sp')fx.innerHTML=rain('spf',20,'',['#fff']);
     else if(sn==='df'||sn==='ind')fx.innerHTML='<div class="uaribbon l"><i></i></div><div class="uaribbon r"><i></i></div>';
     else if(sn==='hw')fx.innerHTML=[0,1,2,3,4].map(i=>`<i class="hwbat b${i}">${BAT}</i>`).join('')+'<i class="hwweb l"></i><i class="hwweb r"></i>';
     else{let s='';for(let i=0;i<36;i++){const x=(i*37)%100,dl=-((i*7919)%140)/10,du=9+((i*31)%9),sz=(i%5===0)?16:(i%3===0?11:7),dr=((i%2)?1:-1)*(10+(i*13)%30);s+=`<i class="xmf" style="left:${x}%;width:${sz}px;height:${sz}px;animation-duration:${du}s,${(du/3).toFixed(1)}s;animation-delay:${dl}s,${dl}s;--dr:${dr}px">${sz>=11?'❄':''}</i>`;}
       const cols=['#ff4d4d','#ffd43b','#51cf66','#4dabf7','#f783ac'];let gl='';for(let i=0;i<34;i++)gl+=`<i style="--c:${cols[i%5]};animation-delay:${(i%5)*0.35}s"></i>`;fx.innerHTML=s+`<div class="xmgar">${gl}</div>`;}
     document.body.appendChild(fx);}
-  else if(!sn&&fx)fx.remove();}
+  else if(!sn&&fx)fx.remove();
+  if(sn==='au'){if(!RAIN.t&&!RAIN.on)rainSchedule(true);}else if(RAIN.t||RAIN.on){clearTimeout(RAIN.t);RAIN.t=0;rainStop(false);}}
 
 
 // режим «Редагувати» в Палаті Земель і Канцелярії: блоки згортаються, щоб сторінка не була кілометровою
@@ -5102,6 +5137,7 @@ app.addEventListener('click',async e=>{
   if(a==='prej'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return;}busy=true;render();
     try{await window.FB.delProposal(b.dataset.id);PROPS=await window.FB.loadProposals();msg='Законопроєкт знято';}catch(err){msg='Не вдалося';msgErr=true;}
     busy=false;render();return;}
+  if(a==='rainnow'){try{rainStart(150000);}catch(_){}return;}
   if(a==='dpclose'){{const es=sectionByKind('economy');if(es){active=es.id;ECV='ov';}}DPIMP=null;DPDONE=null;DPSEL={icons:{},who:{},act:{},don:{},noTr:false};render();return;}
   if(a==='dpapply'){if(busy)return;await dpApply();return;}
   if(a==='dpundo'){if(busy)return;if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно скасувати?';return;}await dpUndo(b.dataset.u);return;}
