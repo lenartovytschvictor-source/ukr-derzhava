@@ -294,6 +294,7 @@ a.dpbm{display:inline-block;padding:5px 12px;border-radius:999px;background:var(
 @media(max-width:600px){.wkr .wkin input{width:90px;max-width:90px}.wkres{grid-template-columns:1fr 1fr}}
 .dpunk .dpic{display:grid;grid-template-columns:auto 1fr minmax(160px,220px) auto;gap:10px;align-items:center;margin:6px 0}.dpunk .dpic.need select{border-color:#ff8a73}.dpk{font-weight:700}@media(max-width:600px){.dpunk .dpic{grid-template-columns:auto 1fr}.dpunk .dpic select{grid-column:1/-1}}
 .dpdons select.dpinl{width:auto;padding:1px 4px;font-size:12px;display:inline-block}
+.dpdbg pre{white-space:pre-wrap;word-break:break-all;font-size:11px;max-height:220px;overflow:auto;background:#0005;padding:8px;border-radius:8px}
 </style>
 <style id="page-style">
 /* Layout: one column registry; each land is a row — current flag, name + offices, then the flag history strip */
@@ -1971,16 +1972,21 @@ async function dpBookmarklet(SITE){
   const head=re=>all().find(e=>re.test(T(e))&&e.querySelectorAll('*').length<12);
   function ikey(e){const tg=e.tagName.toLowerCase();
     if(tg==='img')return 'img:'+(e.getAttribute('src')||'').split('?')[0].split('/').pop();
-    if(tg==='svg'){const s=e.innerHTML.replace(/\s+/g,'');let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return 'svg:'+(h>>>0).toString(36);}
+    if(tg==='svg'){const u=e.querySelector('use');if(u){const hr=u.getAttribute('href')||u.getAttribute('xlink:href')||'';if(hr)return 'use:'+hr.split('/').pop();}const s=e.innerHTML.replace(/\s+/g,'');let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return 'svg:'+(h>>>0).toString(36);}
     const bg=getComputedStyle(e).backgroundImage;if(bg&&bg!=='none'&&bg.indexOf('url(')>=0)return 'bg:'+bg.replace(/^.*url\(["']?/,'').replace(/["']?\).*$/,'').split('?')[0].split('/').pop();
-    if(tg==='i'&&e.className)return 'cls:'+String(e.className).trim();
-    const t=own(e);if(t&&t.length<=2&&/[^\w\s\d+.,:]/.test(t))return 'txt:'+t;return '';}
+    const cls=typeof e.className==='string'?e.className.trim():(e.getAttribute('class')||'').trim();
+    if(tg==='i'&&cls)return 'cls:'+cls;
+    const t=own(e);if(t&&t.length<=2&&/[^\w\s\d+.,:]/.test(t))return 'txt:'+t;
+    if(!t&&!e.children.length){let pc='';try{pc=getComputedStyle(e,'::before').content;}catch(_){}if(pc&&pc!=='none'&&pc!=='normal'&&pc!=='""')return 'pse:'+cls+'|'+pc;
+      const mk=getComputedStyle(e).maskImage||getComputedStyle(e).webkitMaskImage||'';if(mk&&mk.indexOf('url(')>=0)return 'msk:'+mk.replace(/^.*url\(["']?/,'').replace(/["']?\).*$/,'').split('?')[0].split('/').pop();
+      if(cls&&/icon|ico|res|fa-|svg|img/i.test(cls))return 'cls:'+cls;}
+    return '';}
   function icons(root){const out=[];[root,...root.querySelectorAll('*')].forEach(e=>{const tg=e.tagName.toLowerCase();if(tg!=='svg'&&e.closest('svg'))return;const k=ikey(e);if(k)out.push({e,k,src:tg==='img'?(e.currentSrc||e.src):''});});return out;}
   function readTr(){const tr={},ic={};leaf().forEach(l=>{const t=own(l);if(!LBL.test(t))return;let tile=l.parentElement;
     for(let i=0;i<4&&tile;i++){const ls=[...tile.querySelectorAll('*')].filter(x=>LBL.test(own(x)));if(ls.length>1)break;
       const v=[...tile.querySelectorAll('*')].map(own).find(x=>/^[\d\s  ]+$/.test(x)&&/\d/.test(x));
       if(v){tr[t]=num(v);const I=icons(tile).filter(o=>!o.e.contains(l)&&o.e!==l);if(I[0])ic[I[0].k]={res:t,src:I[0].src};break;}tile=tile.parentElement;}});return {tr,ic};}
-  function readDon(){const out=[],seen=new Set();leaf().forEach(l=>{const m=DT.exec(own(l));if(!m)return;let row=l.parentElement;
+  const dbg=[];function readDon(){const out=[],seen=new Set();dbg.length=0;leaf().forEach(l=>{const m=DT.exec(own(l));if(!m)return;let row=l.parentElement;
     for(let i=0;i<6&&row;i++){const kids=[...row.querySelectorAll('*')];if(kids.filter(x=>DT.test(own(x))).length>1)break;
       const am=kids.find(x=>x!==l&&AM.test(own(x)));
       if(am&&row.querySelector('img')){if(seen.has(row))break;seen.add(row);
@@ -1990,12 +1996,13 @@ async function dpBookmarklet(SITE){
         if(!pid&&av){const mm=/users\/(\d+)/.exec(av.src);if(mm)pid=mm[1];}
         const skip=o=>o.e===av||(av&&o.e.contains(av));
         let I=icons(am.parentElement).filter(o=>!skip(o)&&o.e!==am);if(!I.length)I=icons(row).filter(o=>!skip(o));const ico=I[I.length-1];
+        if(!ico&&dbg.length<2)dbg.push(row.outerHTML.replace(/\s(style|srcset|data-[\w-]+)="[^"]*"/g,'').replace(/\s+/g,' ').slice(0,700));
         out.push({n:name,t:m[1]+'.'+m[2]+'.'+m[3]+' '+m[4].padStart(2,'0')+':'+m[5],q:num(own(am)),k:ico?ico.k:'',src:ico?ico.src:'',pid});break;}
       row=row.parentElement;}});return out;}
   let r=readTr();if(!Object.keys(r.tr).length){const h=head(/^економіка держави$/i);if(h){h.click();await W(1500);r=readTr();}}
   let don=readDon();if(!don.length){const h=head(/^пожертви державі$/i);if(h){h.click();await W(2000);don=readDon();}}
   if(!Object.keys(r.tr).length&&!don.length){alert('УД: на цій сторінці не знайдено ні казни, ні пожертв.\nВідкрийте сторінку своєї країни в DragPolit (після входу в гру) і натисніть закладку ще раз.');return;}
-  const P={v:1,at:Date.now(),url:location.href,tr:r.tr,icons:r.ic,don};
+  const P={v:2,at:Date.now(),url:location.href,tr:r.tr,icons:r.ic,don,dbg};
   const b64=btoa(unescape(encodeURIComponent(JSON.stringify(P)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   const url=SITE+'#dpimp='+b64;const w=window.open(url,'_blank');if(!w)location.href=url;}
 function dpBmHref(){const site=location.origin+location.pathname;return 'javascript:'+encodeURIComponent('('+dpBookmarklet.toString()+')('+JSON.stringify(site)+')');}
@@ -2066,6 +2073,8 @@ function dpModal(){const close=`<button class="small bmx" data-a="dpclose">✕ �
   const P=dpPlan();if(!P)return wrap('<p class="empty">Завантаження…</p>');const es=P.es;
   const when=DPIMP.at?fmtDT(new Date(DPIMP.at).toISOString()):'';
   let h=`<p class="hint">Зчитано ${esc(when)} зі сторінки країни. Перевірте й натисніть «Застосувати».</p>`;
+  if(!(DPIMP.v>=2))h+=`<p class="msg err">⚠ У вас стара закладка — вона не розпізнає частину ресурсів. Видаліть її й перетягніть нову кнопку «📥 УД: з гри» (Економіка → Огляд → «Синхронізація з грою»), потім зчитайте ще раз.</p>`;
+  {const nk=(DPIMP.don||[]).filter(x=>!x.k).length;if(nk)h+=`<details class="dpdbg"><summary>⚠ У ${nk} пожертв закладка не знайшла значок ресурсу — технічні подробиці для розробника</summary><pre>${esc((DPIMP.dbg||[]).join('\n\n')||'немає даних (стара закладка)')}</pre></details>`;}
   // казна
   if(P.trRows.length){h+=`<div class="dsec"><h4>🏛 Казна</h4><div class="tblwrap"><table class="bud dptr"><thead><tr><th>Ресурс</th><th class="num">У грі</th><th class="num">На сайті</th><th class="num">Різниця</th></tr></thead><tbody>${P.trRows.map(x=>{const d=x.game-x.site;return `<tr><th>${esc(x.res)}</th><td class="num"><b>${fmt(x.game)}</b></td><td class="num">${fmt(x.site)}</td><td class="num ${d?(d>0?'dpup':'dpdn'):''}">${d?(d>0?'+':'−')+fmt(Math.abs(d)):'—'}</td></tr>`;}).join('')}</tbody></table></div>
     <label class="chk"><input type="checkbox" data-a="dpf" data-k="tr"${DPSEL.noTr?'':' checked'}> після внесків вирівняти казну сайту за грою (різницю — доходи й витрати гри, яких немає на сайті, — буде записано в «Рух казни» окремим рядком «🔄 Звірка з грою»)</label></div>`;}
@@ -2086,7 +2095,7 @@ function dpModal(){const close=`<button class="small bmx" data-a="dpclose">✕ �
     const opts=[['apply','Застосувати'],['patron','Усе — як меценат'],['wait','Відкласти'],['skip','Пропустити (не записувати)']];
     return `<div class="dpg ${G.act}"><div class="dpgh"><div><b>${G.pl?plink(G.pl):esc(G.n)}</b>${G.pl?'':` <span class="tag warn">не знайдено на сайті</span>`} <span class="hint">· тиждень ${G.wk?esc(wkLabelOf(G.wk)):'—'}</span></div>
       <select data-a="dpf" data-k="act" data-u="${esc(G.gk)}">${opts.map(([k,l])=>`<option value="${k}"${G.act===k?' selected':''}>${l}</option>`).join('')}</select></div>
-      <div class="dpdons">${G.dons.map(d=>`<span>+${fmt(d.q)} ${d.res?esc(resWord(es,d.res)):`<select class="dpinl" data-a="dpf" data-k="ic" data-u="${esc(d.k)}" title="${esc(dpKeyLabel(d.k))}">${dpResOpts(es,'')}</select>`} <i>${esc(d.t)}</i></span>`).join('')}</div>
+      <div class="dpdons">${G.dons.map(d=>`<span>+${fmt(d.q)} ${d.res?esc(resWord(es,d.res)):!d.k?'❓':`<select class="dpinl" data-a="dpf" data-k="ic" data-u="${esc(d.k)}" title="${esc(dpKeyLabel(d.k))}">${dpResOpts(es,'')}</select>`} <i>${esc(d.t)}</i></span>`).join('')}</div>
       ${G.pl?'':`<div class="row2"><span class="hint">Хто це на сайті?</span>${plSelect('dpw-'+plHash(G.n),`data-a="dpf" data-k="who" data-u="${esc(G.n)}"`,'','— меценат під ігровим ніком —')}</div>`}
       <ul class="dpl">${lines.join('')}</ul>${G.act==='wait'?'<p class="hint">Відкладено: нічого не запишеться, наступного разу пожертви знову з’являться тут.</p>':''}</div>`;}).join('');
   h+='</div>';
