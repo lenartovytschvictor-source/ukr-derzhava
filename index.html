@@ -295,6 +295,7 @@ a.dpbm{display:inline-block;padding:5px 12px;border-radius:999px;background:var(
 .dpunk .dpic{display:grid;grid-template-columns:auto 1fr minmax(160px,220px) auto;gap:10px;align-items:center;margin:6px 0}.dpunk .dpic.need select{border-color:#ff8a73}.dpk{font-weight:700}@media(max-width:600px){.dpunk .dpic{grid-template-columns:auto 1fr}.dpunk .dpic select{grid-column:1/-1}}
 .dpdons select.dpinl{width:auto;padding:1px 4px;font-size:12px;display:inline-block}
 .dpdbg pre{white-space:pre-wrap;word-break:break-all;font-size:11px;max-height:220px;overflow:auto;background:#0005;padding:8px;border-radius:8px}
+.dpold{margin:6px 0 12px}.dpold summary{cursor:pointer;color:var(--gold,#e9b44c);font-weight:600}.dpg.old{opacity:.92;background:#ffffff08}
 </style>
 <style id="page-style">
 /* Layout: one column registry; each land is a row — current flag, name + offices, then the flag history strip */
@@ -2033,12 +2034,19 @@ function dpNorm(k){k=String(k||'');if(k.indexOf('cls:')!==0)return k;const cl=k.
   const fam={grey:'gray',slate:'gray',zinc:'gray',neutral:'gray',stone:'gray',secondary:'gray',muted:'gray',silver:'gray',white:'gray',amber:'yellow',warning:'yellow',gold:'yellow',orange:'yellow',emerald:'green',success:'green',lime:'green',rose:'red',danger:'red',sky:'blue',info:'blue',primary:'blue',cyan:'blue',indigo:'blue'}[col]||col;
   return 'fa:'+ic.replace(/^fa-/,'')+(fam?':'+fam:'');}
 function dpPlan(){const es=sectionByKind('economy');const D=DPIMP;if(!es||!D||D.err)return null;const c=wkCfg(es);const PM=wkPayMap();
-  if(!D._norm){(D.don||[]).forEach(x=>{x.k=dpNorm(x.k);});const ic={};Object.entries(D.icons||{}).forEach(([k,v])=>{ic[dpNorm(k)]=v;});D.icons=ic;D._norm=1;}
+  if(!D._norm){(D.don||[]).forEach(x=>{x.k0=x.k;x.k=dpNorm(x.k);});const ic={};Object.entries(D.icons||{}).forEach(([k,v])=>{ic[dpNorm(k)]=v;});D.icons=ic;D._norm=1;}
   const icm={};(D.don||[]).forEach(x=>{const g=dpGuess(x.k+' '+(x.src||''));if(g&&x.k)icm[x.k]=g;});const guessed=new Set(Object.keys(icm));Object.entries(D.icons||{}).forEach(([k,v])=>{const r=canonRes(es,v.res)||v.res;icm[k]=r;guessed.delete(k);});Object.entries(Object.assign({},es.dpIcons||{},DPSEL.icons)).forEach(([k,v])=>{const kk=dpNorm(k);icm[kk]=v;guessed.delete(kk);});
-  const seen=new Set(es.dpSeen||[]);const occ={};
-  const dons=(D.don||[]).map(x=>{const b=[x.n,x.t,x.q,x.k].join('|');occ[b]=(occ[b]||0)+1;let hh=0;for(let i=0;i<b.length;i++)hh=(hh*31+b.charCodeAt(i))|0;const key=(hh>>>0).toString(36)+'.'+occ[b];const tt=dpParseT(x.t);
-    const raw=(x.k&&icm[x.k])||DPSEL.don[key]||'';return {...x,key,res:raw?canonRes(es,raw)||raw:'',wk:tt?wkMonday(tt.iso):'',ms:tt?tt.ms:null};}).filter(x=>!seen.has(x.key)&&+x.q>0);
-  dons.forEach(d=>{const p=dpPlayer(d);d.pl=p?p.name:'';});
+  const seen=new Set(es.dpSeen||[]);const occ={};const hk=b=>{let hh=0;for(let i=0;i<b.length;i++)hh=(hh*31+b.charCodeAt(i))|0;return (hh>>>0).toString(36);};const ok=(tag,b)=>{const z=tag+b;occ[z]=(occ[z]||0)+1;return hk(b)+'.'+occ[z];};
+  // ключ пожертви не залежить від значка (значки закладка з часом розпізнає краще); старі ключі (зі значком) теж визнаємо
+  const allD=(D.don||[]).filter(x=>+x.q>0).map(x=>{const base=[x.n,x.t,x.q].join('|');const key='g'+ok('n',base);const legacy=[...new Set([x.k0||'',x.k||'',''])].map(k=>ok('l'+k+'#',[x.n,x.t,x.q,k].join('|')));const tt=dpParseT(x.t);
+    const raw=(x.k&&icm[x.k])||DPSEL.don[key]||'';return {...x,key,legacy,was:seen.has(key)||legacy.some(k=>seen.has(k)),res:raw?canonRes(es,raw)||raw:'',wk:tt?wkMonday(tt.iso):'',ms:tt?tt.ms:null};});
+  allD.forEach(d=>{const p=dpPlayer(d);d.pl=p?p.name:'';});
+  const dons=allD.filter(x=>!x.was);
+  // уже перенесені — групи для скасування
+  const oldG={};allD.filter(x=>x.was).forEach(d=>{const gk=(d.pl||('?'+d.n))+'|'+d.wk;(oldG[gk]=oldG[gk]||{gk,pl:d.pl,n:d.n,wk:d.wk,dons:[]}).dons.push(d);});
+  const oldGroups=Object.values(oldG).map(G=>{const nm=G.pl||G.n;const isos=new Set(G.dons.filter(d=>d.ms).map(d=>new Date(d.ms).toISOString()));const mss=new Set(G.dons.map(d=>d.ms).filter(Boolean));
+    G.pat=[];(es.patronList||[]).forEach(p=>{if(p.name!==nm)return;(p.items||[]).forEach((it,ii)=>{if(it.src==='game'&&isos.has(it.at))G.pat.push({p,ii,it});});});
+    G.wkd=WKPAY.filter(d=>d.paidAt&&mss.has(d.paidAt)&&(!G.pl||d.name===G.pl));return G;}).sort((a,b)=>(b.wk||'').localeCompare(a.wk||''));
   // групи: гравець × тиждень
   const grp={};dons.forEach(d=>{const gk=(d.pl||('?'+d.n))+'|'+d.wk;(grp[gk]=grp[gk]||{gk,pl:d.pl,n:d.n,wk:d.wk,dons:[]}).dons.push(d);});
   const groups=Object.values(grp);const today=kyivToday();
@@ -2062,7 +2070,7 @@ function dpPlan(){const es=sectionByKind('economy');const D=DPIMP;if(!es||!D||D.
   // казна: гра vs сайт
   const {cur}=treasuryNow(es);const trRows=Object.entries(D.tr||{}).map(([lbl,v])=>{const res=canonRes(es,lbl);return res?{res,game:+v||0,site:cur[res]||0}:null;}).filter(Boolean);
   const keys=[...new Set((D.don||[]).map(x=>x.k).filter(Boolean))];
-  return {es,c,groups,trRows,keys,icm,guessed,dons,seenN:(D.don||[]).length-dons.length};}
+  return {es,c,groups,oldGroups,trRows,keys,icm,guessed,dons,seenN:(D.don||[]).length-dons.length};}
 function dpResOpts(es,cur){return `<option value="">— ресурс? —</option>`+invItems(es.treasury||{}).map(it=>`<option${it.name===cur?' selected':''}>${esc(it.name)}</option>`).join('');}
 function dpItemsTxt(es,list){return list.map(x=>fmt(x.qty)+' '+esc(resWord(es,x.res))).join(' + ');}
 function dpModal(){const close=`<button class="small bmx" data-a="dpclose">✕ Закрити</button>`;const wrap=b=>`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="dpclose" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide dpm">${close}<h3>📥 Дані з гри DragPolit</h3>${b}</div></div>`;
@@ -2082,7 +2090,9 @@ function dpModal(){const close=`<button class="small bmx" data-a="dpclose">✕ �
   const unk=P.keys.filter(k=>!P.icm[k]||P.guessed.has(k));
   if(unk.length){h+=`<div class="dsec dpunk"><h4>❓ Перевірте ресурси</h4><p class="hint">У грі пожертви позначені лише значками, без назв. Сайт спробував вгадати — перевірте й виправте за потреби. Вибір запам'ятається, наступного разу питати не буде.</p>${unk.map(k=>{const d=(DPIMP.don||[]).find(x=>x.k===k)||{};const cur=P.icm[k]||'';return `<div class="dpic${cur?'':' need'}">${d.src?`<img src="${esc(d.src)}" alt="" referrerpolicy="no-referrer">`:`<span class="dpk">${esc(dpKeyLabel(k))}</span>`}<span class="hint">напр. ${esc(d.n||'')}: +${fmt(d.q||0)}</span><select data-a="dpf" data-k="ic" data-u="${esc(k)}">${dpResOpts(es,cur)}</select>${cur&&P.guessed.has(k)?'<span class="tag">вгадано</span>':''}</div>`;}).join('')}</div>`;}
   // пожертви
-  h+=`<div class="dsec"><h4>🎁 Нові пожертви · ${P.dons.length}</h4>${P.seenN?`<p class="hint">Ще ${P.seenN} уже були перенесені раніше — їх пропущено.</p>`:''}`;
+  h+=`<div class="dsec"><h4>🎁 Нові пожертви · ${P.dons.length}</h4>`;
+  if(P.oldGroups.length)h+=`<details class="dpold"${DPSEL.oldOpen?' open':''}><summary data-a="dpoldt">↩ Уже перенесені раніше · ${P.oldGroups.reduce((a,G)=>a+G.dons.length,0)} — переглянути або скасувати</summary><p class="hint">«Скасувати» прибирає те, що з цих пожертв було записано на сайті (тижневий внесок і/або меценатство), і повертає їх у «Нові пожертви» — їх можна перенести заново, інакше або пропустити.</p>${P.oldGroups.map(G=>{const eff=[];G.wkd.forEach(d=>eff.push(`📅 внесок · ${esc(d.land)}: ${esc(d.items)}`));if(G.pat.length)eff.push(`🎁 меценат: ${G.pat.map(x=>fmt(+x.it.qty)+' '+esc(resWord(es,x.it.res))).join(' + ')}`);
+    return `<div class="dpg old"><div class="dpgh"><div><b>${G.pl?plink(G.pl):esc(G.n)}</b> <span class="hint">· тиждень ${G.wk?esc(wkLabelOf(G.wk)):'—'}</span></div><button class="small" data-a="dpundo" data-u="${esc(G.gk)}" ${busy?'disabled':''}>↩ Скасувати</button></div><div class="dpdons">${G.dons.map(d=>`<span>+${fmt(d.q)} ${d.res?esc(resWord(es,d.res)):'❓'} <i>${esc(d.t)}</i></span>`).join('')}</div><ul class="dpl">${eff.length?eff.map(x=>`<li>${x}</li>`).join(''):'<li class="hint">на сайті нічого не записано (було пропущено)</li>'}</ul></div>`;}).join('')}</details>`;
   if(!P.groups.length)h+='<p class="empty">Нових пожертв немає.</p>';
   h+=P.groups.map(G=>{const nm=x=>esc(x.r.gold?x.r.title:x.r.land);const lines=[];
     G.rows.forEach(x=>{if(x.absorbed.length)lines.push(`<li>↺ ${nm(x)}: ${dpItemsTxt(es,x.absorbed)} уже позначено на сайті вручну — не дублюю</li>`);
@@ -2102,19 +2112,24 @@ function dpModal(){const close=`<button class="small bmx" data-a="dpclose">✕ �
   h+='</div>';
   h+=`<div class="landtools"><button class="primary" data-a="dpapply" ${busy?'disabled':''}>Застосувати</button><button class="ghost" data-a="dpclose">Скасувати</button></div>`;
   return wrap(h);}
+async function dpUndo(gk){const P=dpPlan();if(!P||!canDp())return;const G=P.oldGroups.find(x=>x.gk===gk);if(!G)return;const es=P.es;const before=JSON.stringify(es);
+  const drop=new Set();G.dons.forEach(d=>{drop.add(d.key);d.legacy.forEach(k=>drop.add(k));});es.dpSeen=(es.dpSeen||[]).filter(k=>!drop.has(k));
+  const rm=new Set(G.pat.map(x=>x.it));(es.patronList||[]).forEach(p=>{p.items=(p.items||[]).filter(it=>!rm.has(it));});es.patronList=(es.patronList||[]).filter(p=>(p.items||[]).length||p.sys);
+  busy=true;render();try{for(const d of G.wkd)await window.FB.unmarkWk(d.id);await window.FB.saveEcon(es);saved=JSON.stringify(state);msg=`↩ Скасовано: ${G.pl||G.n} · ${G.dons.length} пожертв(и) знову серед нових`;msgErr=false;}
+  catch(e){console.warn(e);const i=state.sections.indexOf(es);if(i>=0)state.sections[i]=JSON.parse(before);msg='Не вдалося скасувати: '+(e&&e.code||'помилка мережі');msgErr=true;}busy=false;render();}
 async function dpApply(){const P=dpPlan();if(!P||!canDp())return;const es=P.es;const before=JSON.stringify(es);const mp=myPost();const by=mp&&mp.name||((plByEmail(AUTH.email)||{}).name)||'Адміністрація';
   const seen=es.dpSeen=es.dpSeen||[];const pl=es.patronList=es.patronList||[];const added={};const marks=[];let nPat=0;
   const addPat=(name,res,qty,iso,ms)=>{if(!(qty>0)||!res)return;let p=pl.find(x=>x.name===name);if(!p){p={name,items:[]};pl.push(p);}const pr=silverOf(es,res,1);p.items=p.items||[];p.items.push({res,qty:String(qty),price:pr==null?'':String(pr),date:iso?iso.split('-').reverse().join('.'):'',at:ms?new Date(ms).toISOString():new Date().toISOString(),src:'game'});added[res]=(added[res]||0)+qty;nPat++;};
   // запам'ятати значки
   es.dpIcons=Object.assign({},es.dpIcons||{},DPSEL.icons);P.guessed.forEach(k=>{if(!es.dpIcons[k]&&P.icm[k])es.dpIcons[k]=P.icm[k];});Object.entries(DPIMP.icons||{}).forEach(([k,v])=>{if(!es.dpIcons[k])es.dpIcons[k]=canonRes(es,v.res)||v.res;});
   P.groups.forEach(G=>{if(G.act==='wait')return;const nm=G.pl||G.n;const last=G.dons.reduce((a,d)=>Math.max(a,d.ms||0),0)||null;const iso=last?kyivDate(last):'';
-    if(G.act==='skip'){G.dons.forEach(d=>seen.push(d.key));return;}
+    if(G.act==='skip'){G.dons.forEach(d=>seen.push(d.key,...d.legacy));return;}
     if(G.unknown.length&&G.act==='apply'){/* невідомий ресурс — лишаємо до наступного разу */}
     const known=G.dons.filter(d=>d.res);
-    if(G.act==='patron'){known.forEach(d=>{addPat(nm,d.res,+d.q,iso,d.ms);seen.push(d.key);});return;}
+    if(G.act==='patron'){known.forEach(d=>{addPat(nm,d.res,+d.q,iso,d.ms);seen.push(d.key,...d.legacy);});return;}
     G.rows.filter(x=>x.take.length).forEach(x=>{marks.push({wk:G.wk,lid:x.r.lid,land:x.r.land,grp:x.g.sec,name:x.r.rep,items:wkTxt(es,x.take),paidAt:G.paidAt||undefined,part:x.st==='part'?Math.random().toString(36).slice(2,8).padEnd(6,'0'):undefined});if(x.g.treasury)x.take.forEach(n=>{added[n.res]=(added[n.res]||0)+n.qty;});});
     if(G.matchIds.length)es.dpMatched=(es.dpMatched||[]).concat(G.matchIds).slice(-1000);
-    G.rest.forEach(x=>addPat(nm,x.res,x.qty,iso,last));known.forEach(d=>seen.push(d.key));});
+    G.rest.forEach(x=>addPat(nm,x.res,x.qty,iso,last));known.forEach(d=>seen.push(d.key,...d.legacy));});
   if(seen.length>2000)es.dpSeen=seen.slice(-2000);
   // казна
   let trTxt='';if(!DPSEL.noTr&&P.trRows.length){const tr=es.treasury=es.treasury||{};const items=invItems(tr);const diff={};
@@ -5089,6 +5104,8 @@ app.addEventListener('click',async e=>{
     busy=false;render();return;}
   if(a==='dpclose'){{const es=sectionByKind('economy');if(es){active=es.id;ECV='ov';}}DPIMP=null;DPDONE=null;DPSEL={icons:{},who:{},act:{},don:{},noTr:false};render();return;}
   if(a==='dpapply'){if(busy)return;await dpApply();return;}
+  if(a==='dpundo'){if(busy)return;if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно скасувати?';return;}await dpUndo(b.dataset.u);return;}
+  if(a==='dpoldt'){DPSEL.oldOpen=!DPSEL.oldOpen;return;}
   if(a==='invcancel'){INV_IN=null;try{history.replaceState(null,'',location.pathname);}catch(_){}render();return;}
   if(a==='invapply'){if(!AUTH.admin||!INV_IN)return;const es=state.sections.find(x=>x.kind==='economy');if(!es)return;const tr=es.treasury=es.treasury||{link:'https://dragpolit.com/economy/country/193'};const items=invItems(tr);
     reconcile(es,INV_IN);busy=true;render();
