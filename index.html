@@ -1976,7 +1976,7 @@ async function dpBookmarklet(SITE){
     const bg=getComputedStyle(e).backgroundImage;if(bg&&bg!=='none'&&bg.indexOf('url(')>=0)return 'bg:'+bg.replace(/^.*url\(["']?/,'').replace(/["']?\).*$/,'').split('?')[0].split('/').pop();
     const cls=typeof e.className==='string'?e.className.trim():(e.getAttribute('class')||'').trim();
     if(tg==='i'&&cls)return 'cls:'+cls;
-    const t=own(e);if(t&&t.length<=2&&/[^\w\s\d+.,:]/.test(t))return 'txt:'+t;
+    const t=own(e);if(t&&t.length<=6&&/\p{Extended_Pictographic}/u.test(t))return 'txt:'+t.replace(/\uFE0F/g,'');if(t&&t.length<=2&&/[^\w\s\d+.,:]/.test(t))return 'txt:'+t;
     if(!t&&!e.children.length){let pc='';try{pc=getComputedStyle(e,'::before').content;}catch(_){}if(pc&&pc!=='none'&&pc!=='normal'&&pc!=='""')return 'pse:'+cls+'|'+pc;
       const mk=getComputedStyle(e).maskImage||getComputedStyle(e).webkitMaskImage||'';if(mk&&mk.indexOf('url(')>=0)return 'msk:'+mk.replace(/^.*url\(["']?/,'').replace(/["']?\).*$/,'').split('?')[0].split('/').pop();
       if(cls&&/icon|ico|res|fa-|svg|img/i.test(cls))return 'cls:'+cls;}
@@ -2007,7 +2007,7 @@ async function dpBookmarklet(SITE){
   const url=SITE+'#dpimp='+b64;const w=window.open(url,'_blank');if(!w)location.href=url;}
 function dpBmHref(){const site=location.origin+location.pathname;return 'javascript:'+encodeURIComponent('('+dpBookmarklet.toString()+')('+JSON.stringify(site)+')');}
 
-let DPIMP=null,DPSEL={icons:{},who:{},act:{},noTr:false},DPDONE=null;
+let DPIMP=null,DPSEL={icons:{},who:{},act:{},don:{},noTr:false},DPDONE=null;
 try{const h0=location.hash||'';if(h0.startsWith('#dpimp=')){const b=h0.slice(7).replace(/-/g,'+').replace(/_/g,'/');DPIMP=JSON.parse(decodeURIComponent(escape(atob(b))));try{history.replaceState(null,'',location.pathname);}catch(_){}}}catch(e){DPIMP={err:1};try{history.replaceState(null,'',location.pathname);}catch(_){}}
 function canDp(){return !!(AUTH.email&&!AUTH.bot&&(AUTH.admin||isFin()));}
 function kyivMs(y,mo,d,hh,mi){const g=Date.UTC(y,mo-1,d,hh,mi);try{const loc=new Date(new Date(g).toLocaleString('en-US',{timeZone:'Europe/Kiev'}));const utc=new Date(new Date(g).toLocaleString('en-US',{timeZone:'UTC'}));return g-(loc-utc);}catch(_){return g-3*3600e3;}}
@@ -2021,7 +2021,7 @@ const wkLate=(d,end)=>{const t=d&&(d.paidAt||d.at);return !!(t&&kyivDate(t)>=end
 function dpGuess(k){k=String(k||'').toLowerCase();
   if(/coins|coin|money|silver/.test(k)){if(/yellow|text-ye|warning|gold|amber/.test(k))return 'Золото';if(/gray|grey|text-gr|secondary|silver|muted|white/.test(k))return 'Срібло';}
   if(/fighter|plane|jet/.test(k))return 'Літаки';if(/briefcase|toolbox|kit|box/.test(k))return 'Додаткове оснащення';
-  if(/oil|barrel|gas-pump|fuel|naft|нафт/.test(k))return 'Нафта';if(/coal|вугіл|fire|burn/.test(k))return 'Вугілля';if(/\bore\b|ore\.|pickaxe|gem|mountain|hammer|руда/.test(k))return 'Руда';
+  if(/oil|barrel|gas-pump|fuel|naft|нафт|🛢/.test(k))return 'Нафта';if(/⛏|pickaxe/.test(k))return 'Руда';if(/🪨|⚫|coal/.test(k))return 'Вугілля';if(/coal|вугіл|fire|burn/.test(k))return 'Вугілля';if(/\bore\b|ore\.|pickaxe|gem|mountain|hammer|руда/.test(k))return 'Руда';
   if(/gold|золот/.test(k))return 'Золото';if(/silver|срібл/.test(k))return 'Срібло';
   if(/🪖|helmet|infantry|soldier|піхот/.test(k))return 'Піхотне оснащення';if(/plane|jet|aircraft|літак|✈/.test(k))return 'Літаки';if(/drone|дрон/.test(k))return 'Дрони';
   if(/tank|танк/.test(k))return 'Танки';if(/ship|anchor|корабл|⚓|🚢/.test(k))return 'Кораблі';if(/artiller|cannon|артил/.test(k))return 'Артилерія';return '';}
@@ -2037,7 +2037,7 @@ function dpPlan(){const es=sectionByKind('economy');const D=DPIMP;if(!es||!D||D.
   const icm={};(D.don||[]).forEach(x=>{const g=dpGuess(x.k+' '+(x.src||''));if(g&&x.k)icm[x.k]=g;});const guessed=new Set(Object.keys(icm));Object.entries(D.icons||{}).forEach(([k,v])=>{const r=canonRes(es,v.res)||v.res;icm[k]=r;guessed.delete(k);});Object.entries(Object.assign({},es.dpIcons||{},DPSEL.icons)).forEach(([k,v])=>{const kk=dpNorm(k);icm[kk]=v;guessed.delete(kk);});
   const seen=new Set(es.dpSeen||[]);const occ={};
   const dons=(D.don||[]).map(x=>{const b=[x.n,x.t,x.q,x.k].join('|');occ[b]=(occ[b]||0)+1;let hh=0;for(let i=0;i<b.length;i++)hh=(hh*31+b.charCodeAt(i))|0;const key=(hh>>>0).toString(36)+'.'+occ[b];const tt=dpParseT(x.t);
-    const raw=icm[x.k]||'';return {...x,key,res:raw?canonRes(es,raw)||raw:'',wk:tt?wkMonday(tt.iso):'',ms:tt?tt.ms:null};}).filter(x=>!seen.has(x.key)&&+x.q>0);
+    const raw=(x.k&&icm[x.k])||DPSEL.don[key]||'';return {...x,key,res:raw?canonRes(es,raw)||raw:'',wk:tt?wkMonday(tt.iso):'',ms:tt?tt.ms:null};}).filter(x=>!seen.has(x.key)&&+x.q>0);
   dons.forEach(d=>{const p=dpPlayer(d);d.pl=p?p.name:'';});
   // групи: гравець × тиждень
   const grp={};dons.forEach(d=>{const gk=(d.pl||('?'+d.n))+'|'+d.wk;(grp[gk]=grp[gk]||{gk,pl:d.pl,n:d.n,wk:d.wk,dons:[]}).dons.push(d);});
@@ -2055,7 +2055,7 @@ function dpPlan(){const es=sectionByKind('economy');const D=DPIMP;if(!es||!D||D.
       else{row.take=st.rem.map(n=>({res:n.res,qty:Math.min(G.pool[n.res]||0,n.qty)})).filter(x=>x.qty>0);
         if(!row.take.length)row.st='none';else{row.take.forEach(x=>{G.pool[x.res]-=x.qty;});row.left=wkRemOf(st.rem,Object.fromEntries(row.take.map(x=>[x.res,x.qty])));row.st=row.left.length?'part':'ok';}}
       G.rows.push(row);});});});
-  groups.forEach(G=>{G.act=DPSEL.act[G.gk]||'apply';
+  const st0=wkMonday(c.start);groups.forEach(G=>{G.old=!!(G.wk&&G.wk<st0);G.act=DPSEL.act[G.gk]||(G.old?'skip':'apply');
     const used=d=>G.rows.some(x=>x.take.some(n=>n.res===d.res));
     G.paidAt=Math.max(0,...G.dons.filter(used).map(d=>d.ms||0))||null;
     G.rest=Object.entries(G.pool).filter(([,v])=>v>0).map(([res,qty])=>({res,qty}));});
@@ -2091,11 +2091,12 @@ function dpModal(){const close=`<button class="small bmx" data-a="dpclose">✕ �
       else if(x.st==='dup')lines.push(`<li>✓ ${nm(x)}: внесок за цей тиждень уже здано</li>`);
       else if(x.st==='none'&&!x.absorbed.length)lines.push(`<li class="n">⏳ ${nm(x)}: внесок ще не здано (лишилось ${dpItemsTxt(es,x.S.rem)})</li>`);});
     if(G.rest.length)lines.push(`<li>🎁 Меценат: ${dpItemsTxt(es,G.rest)}${G.rows.length?' (понад внесок)':''}</li>`);
+    if(G.old)lines.unshift(`<li class="n">📅 Цей тиждень — ще до початку нової системи внесків (${esc(wkLabelOf(wkMonday(P.c.start)))}), тож внесків тоді не було. За замовчуванням пропускаю, щоб не задвоїти старі записи; якщо це справді меценатство — оберіть «Усе — як меценат».</li>`);
     if(G.unknown.length)lines.push(`<li class="n">❓ ${G.unknown.length} пожертв(и) з невідомим ресурсом — оберіть ресурс у списку поруч із сумою (один раз для кожного значка)</li>`);
     const opts=[['apply','Застосувати'],['patron','Усе — як меценат'],['wait','Відкласти'],['skip','Пропустити (не записувати)']];
     return `<div class="dpg ${G.act}"><div class="dpgh"><div><b>${G.pl?plink(G.pl):esc(G.n)}</b>${G.pl?'':` <span class="tag warn">не знайдено на сайті</span>`} <span class="hint">· тиждень ${G.wk?esc(wkLabelOf(G.wk)):'—'}</span></div>
       <select data-a="dpf" data-k="act" data-u="${esc(G.gk)}">${opts.map(([k,l])=>`<option value="${k}"${G.act===k?' selected':''}>${l}</option>`).join('')}</select></div>
-      <div class="dpdons">${G.dons.map(d=>`<span>+${fmt(d.q)} ${d.res?esc(resWord(es,d.res)):!d.k?'❓':`<select class="dpinl" data-a="dpf" data-k="ic" data-u="${esc(d.k)}" title="${esc(dpKeyLabel(d.k))}">${dpResOpts(es,'')}</select>`} <i>${esc(d.t)}</i></span>`).join('')}</div>
+      <div class="dpdons">${G.dons.map(d=>`<span>+${fmt(d.q)} ${d.res&&!(!d.k&&DPSEL.don[d.key])?esc(resWord(es,d.res)):!d.k?`<select class="dpinl" data-a="dpf" data-k="don" data-u="${esc(d.key)}">${dpResOpts(es,DPSEL.don[d.key]||'')}</select>`:`<select class="dpinl" data-a="dpf" data-k="ic" data-u="${esc(d.k)}" title="${esc(dpKeyLabel(d.k))}">${dpResOpts(es,'')}</select>`} <i>${esc(d.t)}</i></span>`).join('')}</div>
       ${G.pl?'':`<div class="row2"><span class="hint">Хто це на сайті?</span>${plSelect('dpw-'+plHash(G.n),`data-a="dpf" data-k="who" data-u="${esc(G.n)}"`,'','— меценат під ігровим ніком —')}</div>`}
       <ul class="dpl">${lines.join('')}</ul>${G.act==='wait'?'<p class="hint">Відкладено: нічого не запишеться, наступного разу пожертви знову з’являться тут.</p>':''}</div>`;}).join('');
   h+='</div>';
@@ -4540,7 +4541,7 @@ app.addEventListener('input',e=>{
   if(a==='lrenin'){LRENV=t.value;return;}
   if(a==='apn'){APN=t.value;return;}
   if(a==='wkin'){const u=t.dataset.u;const v=t.value.replace(/[^\d]/g,'');(WKIN[u]=WKIN[u]||{})[t.dataset.k]=v;if(t.value!==v&&t.value.replace(/\s/g,'')!==v)t.value=v;return;}
-  if(a==='dpf'){const k=t.dataset.k,u=t.dataset.u;if(k==='tr')DPSEL.noTr=!t.checked;else if(k==='ic'){if(t.value)DPSEL.icons[u]=t.value;else delete DPSEL.icons[u];}else if(k==='act')DPSEL.act[u]=t.value;else if(k==='who'){if(t.value)DPSEL.who[u]=t.value;else delete DPSEL.who[u];}render();return;}
+  if(a==='dpf'){const k=t.dataset.k,u=t.dataset.u;if(k==='tr')DPSEL.noTr=!t.checked;else if(k==='ic'){if(t.value)DPSEL.icons[u]=t.value;else delete DPSEL.icons[u];}else if(k==='act')DPSEL.act[u]=t.value;else if(k==='don'){if(t.value)DPSEL.don[u]=t.value;else delete DPSEL.don[u];}else if(k==='who'){if(t.value)DPSEL.who[u]=t.value;else delete DPSEL.who[u];}render();return;}
   if(a==='prland'){const p=myProfile();const v=t.value;(async()=>{try{await window.FB.saveProfile(AUTH.email,{about:p.about||'',land:v,tgcode:p.tgcode||''});PROFILES[AUTH.email]={...p,land:v};msg=v?'Землю обрано — її кімната з’явилась у чаті':'Землю прибрано';msgErr=false;}catch(e){msg='Не вдалося зберегти';msgErr=true;}render();})();return;}
   if(a==='bff'){const k=t.dataset.k;BF[k]=t.type==='checkbox'?t.checked:t.value;if(k==='type'||k==='n'){const el=document.querySelector('.bform .bcost');if(el){const T=bldType(BF.type);const n=Math.max(1,Math.floor(+BF.n||1));el.textContent='Вартість: '+(Object.entries(T.cost||{}).filter(([,v])=>+v).map(([kk,v])=>fmt(v*n)+' '+resWord(sectionByKind('economy')||{},kk)).join(' + ')||'—');}if(k==='type')mapSelUpd();}return;}
   if(a==='actas'){ACTAS=t.value;try{localStorage.setItem('ud-actas',ACTAS);}catch(_){}DOSSIER=null;render();return;}
@@ -5086,7 +5087,7 @@ app.addEventListener('click',async e=>{
   if(a==='prej'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return;}busy=true;render();
     try{await window.FB.delProposal(b.dataset.id);PROPS=await window.FB.loadProposals();msg='Законопроєкт знято';}catch(err){msg='Не вдалося';msgErr=true;}
     busy=false;render();return;}
-  if(a==='dpclose'){{const es=sectionByKind('economy');if(es){active=es.id;ECV='ov';}}DPIMP=null;DPDONE=null;DPSEL={icons:{},who:{},act:{},noTr:false};render();return;}
+  if(a==='dpclose'){{const es=sectionByKind('economy');if(es){active=es.id;ECV='ov';}}DPIMP=null;DPDONE=null;DPSEL={icons:{},who:{},act:{},don:{},noTr:false};render();return;}
   if(a==='dpapply'){if(busy)return;await dpApply();return;}
   if(a==='invcancel'){INV_IN=null;try{history.replaceState(null,'',location.pathname);}catch(_){}render();return;}
   if(a==='invapply'){if(!AUTH.admin||!INV_IN)return;const es=state.sections.find(x=>x.kind==='economy');if(!es)return;const tr=es.treasury=es.treasury||{link:'https://dragpolit.com/economy/country/193'};const items=invItems(tr);
