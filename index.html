@@ -299,6 +299,10 @@ a.dpbm{display:inline-block;padding:5px 12px;border-radius:999px;background:var(
 .dpdbg pre{white-space:pre-wrap;word-break:break-all;font-size:11px;max-height:220px;overflow:auto;background:#0005;padding:8px;border-radius:8px}
 .dpold{margin:6px 0 12px}.dpold summary{cursor:pointer;color:var(--gold,#e9b44c);font-weight:600}.dpg.old{opacity:.92;background:#ffffff08}
 .wkr.ex{border-left-color:#8a96a8;opacity:.8}.wkr.ex .lchip{background:#8a96a833;color:#c9d2de}
+.musbtn{position:fixed;left:14px;bottom:14px;z-index:900;display:flex;align-items:center;gap:6px;max-width:min(320px,70vw);padding:7px 12px;border-radius:999px;border:1px solid var(--line2,var(--line));background:rgba(20,13,6,.88);color:var(--ink,#f7ecd6);font:600 13px system-ui,sans-serif;cursor:pointer;box-shadow:0 4px 14px #0007;backdrop-filter:blur(6px)}
+.musbtn .mt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.musbtn.on{border-color:var(--gold,#e9b44c)}.musbtn.on .mi{animation:musbeat 1s ease-in-out infinite}.musbtn .mx{opacity:.6;margin-left:2px}
+@keyframes musbeat{50%{transform:scale(1.25)}}
+@media (max-width:900px){.musbtn{bottom:calc(72px + env(safe-area-inset-bottom,0px));left:10px;padding:6px 10px}}
 </style>
 <style id="page-style">
 /* Layout: one column registry; each land is a row — current flag, name + offices, then the flag history strip */
@@ -4247,6 +4251,55 @@ function rainStart(dur){if(!rainOk()||seasonNow()!=='au')return;let cv=RAIN.cv;i
   cancelAnimationFrame(RAIN.raf);RAIN.raf=requestAnimationFrame(step);}
 function rainStop(resched){cancelAnimationFrame(RAIN.raf);RAIN.on=false;RAIN.alpha=0;document.documentElement.classList.remove('raining');if(RAIN.cv){RAIN.cv.remove();RAIN.cv=null;}window.removeEventListener('resize',RAIN.fit);if(resched)rainSchedule(false);}
 window.__rainNow=()=>rainStart(150000);
+// ===== Святкова музика (Хелловін і зимові свята) — синтезована у браузері, мелодії народні/класичні (вільні від авторських прав) =====
+// Вмикається кнопкою 🎵 (браузери не дозволяють звук без натискання). Вибір запам'ятовується.
+let MUS={ctx:null,master:null,on:false,timer:0,idx:0,season:''};
+const NOTE=n=>{const m=/^([A-G])(#|b)?(\d)$/.exec(n);if(!m)return 0;const b={C:0,D:2,E:4,F:5,G:7,A:9,B:11}[m[1]]+(m[2]==='#'?1:m[2]==='b'?-1:0);return 440*Math.pow(2,(b+(+m[3]-4)*12-9)/12);};
+function musPref(){try{return localStorage.getItem('ud-music')==='1';}catch(_){return false;}}
+function musSetPref(v){try{localStorage.setItem('ud-music',v?'1':'0');}catch(_){}}
+function musEnv(g,t,a,peak,dec){g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(0.0001,t+a+dec);}
+// інструменти
+function iBell(t,f,d){const C=MUS.ctx;[[1,0.5],[2,0.18],[3.01,0.08],[4.2,0.04]].forEach(([k,v])=>{const o=C.createOscillator(),g=C.createGain();o.type='sine';o.frequency.value=f*k;musEnv(g,t,0.004,v,Math.max(0.5,d*2.2)/(k>1?1.6:1));o.connect(g).connect(MUS.master);o.start(t);o.stop(t+d*2.5+1);});}
+function iPad(t,f,d,v){const C=MUS.ctx;const o=C.createOscillator(),g=C.createGain();o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(v||0.12,t+0.08);g.gain.setValueAtTime(v||0.12,t+d*0.8);g.gain.exponentialRampToValueAtTime(0.0001,t+d+0.3);o.connect(g).connect(MUS.master);o.start(t);o.stop(t+d+0.4);}
+function iPluck(t,f,d){const C=MUS.ctx;const o=C.createOscillator(),g=C.createGain(),lp=C.createBiquadFilter();o.type='sawtooth';o.frequency.value=f;lp.type='lowpass';lp.frequency.setValueAtTime(2400,t);lp.frequency.exponentialRampToValueAtTime(300,t+0.25);musEnv(g,t,0.005,0.28,0.32);o.connect(lp).connect(g).connect(MUS.master);o.start(t);o.stop(t+0.5);}
+function iOrgan(t,f,d,v){const C=MUS.ctx;const g=C.createGain(),lp=C.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1700;g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(v||0.13,t+0.03);g.gain.setValueAtTime(v||0.13,t+Math.max(0.05,d-0.05));g.gain.exponentialRampToValueAtTime(0.0001,t+d+0.35);
+  [[1,'sawtooth',0.5],[2,'square',0.18],[0.5,'sine',0.5]].forEach(([k,ty,vv])=>{const o=C.createOscillator(),og=C.createGain();o.type=ty;o.frequency.value=f*k;og.gain.value=vv;o.connect(og).connect(lp);o.start(t);o.stop(t+d+0.4);});lp.connect(g).connect(MUS.master);}
+function iDrone(t,f,d){const C=MUS.ctx;const o=C.createOscillator(),g=C.createGain(),l=C.createOscillator(),lg=C.createGain();o.type='sine';o.frequency.value=f;l.frequency.value=0.18;lg.gain.value=0.04;l.connect(lg).connect(g.gain);g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.09,t+2);g.gain.setValueAtTime(0.09,t+d-2);g.gain.linearRampToValueAtTime(0.0001,t+d);o.connect(g).connect(MUS.master);o.start(t);l.start(t);o.stop(t+d+0.1);l.stop(t+d+0.1);}
+// мелодії: [нота, тривалість у долях]; '-' — пауза
+function seq(t,bpm,notes,inst,tr){const b=60/bpm;let x=t;notes.forEach(([n,d])=>{if(n!=='-'){const f=NOTE(n)*(tr||1);if(f)inst(x,f,d*b);}x+=d*b;});return x-t;}
+const SHCH_M=[['Bb4',1],['A4',.5],['Bb4',.5],['G4',1]];
+const PIECES={
+  xm:[
+    {name:'Щедрик (М. Леонтович)',play(t){const bpm=168;let d=0;const rep=(m,k)=>Array.from({length:k},()=>m).flat();
+      const A=rep(SHCH_M,4),B=rep([['D5',1],['C5',.5],['D5',.5],['Bb4',1]],4),
+        C=[['G5',.5],['G5',.5],['G5',.5],['F5',.5],['Eb5',.5],['D5',.5],['C5',.5],['C5',.5],['C5',.5],['Bb4',.5],['A4',.5],['G4',.5],['F4',.5],['G4',.5],['A4',.5],['Bb4',.5],['C5',.5],['D5',.5],['C5',3],
+           ['G5',.5],['G5',.5],['G5',.5],['F5',.5],['Eb5',.5],['D5',.5],['C5',.5],['C5',.5],['C5',.5],['Bb4',.5],['A4',.5],['G4',.5],['F4',.5],['G4',.5],['A4',.5],['Bb4',.5],['C5',.5],['A4',.5],['G4',3]];
+      const mel=[...A,...B,...C,...A];d=seq(t,bpm,mel,iBell);
+      const bass=[];for(let i=0;i<mel.reduce((a,x)=>a+x[1],0)/3;i++)bass.push([['G2','G2','Eb2','D2'][Math.floor(i/4)%4],3]);seq(t,bpm,bass,(tt,f,dd)=>iPad(tt,f,dd,0.07));return d;}},
+    {name:'Jingle Bells (Дж. Пірпонт)',play(t){const bpm=200;const ch=[['E5',1],['E5',1],['E5',2],['E5',1],['E5',1],['E5',2],['E5',1],['G5',1],['C5',1.5],['D5',.5],['E5',4],['F5',1],['F5',1],['F5',1.5],['F5',.5],['F5',1],['E5',1],['E5',1],['E5',.5],['E5',.5],['E5',1],['D5',1],['D5',1],['E5',1],['D5',2],['G5',2],
+        ['E5',1],['E5',1],['E5',2],['E5',1],['E5',1],['E5',2],['E5',1],['G5',1],['C5',1.5],['D5',.5],['E5',4],['F5',1],['F5',1],['F5',1.5],['F5',.5],['F5',1],['E5',1],['E5',1],['E5',.5],['E5',.5],['G5',1],['G5',1],['F5',1],['D5',1],['C5',4]];
+      const d=seq(t,bpm,ch,iBell);const bass=[];const chords=['C3','C3','F3','C3','D3','G2','C3','G2','C3','C3','F3','C3','G2','G2','C3','C3'];chords.forEach(n=>bass.push([n,4]));seq(t,bpm,bass,(tt,f,dd)=>iPad(tt,f,dd,0.06));return d;}}],
+  hw:[
+    {name:'В печері гірського короля (Е. Гріг)',play(t){const th=[['B3',.5],['C#4',.5],['D4',.5],['E4',.5],['F#4',.5],['D4',.5],['F#4',1],['F4',.5],['C#4',.5],['F4',1],['E4',.5],['C4',.5],['E4',1],
+        ['B3',.5],['C#4',.5],['D4',.5],['E4',.5],['F#4',.5],['D4',.5],['F#4',.5],['B4',.5],['A4',.5],['F#4',.5],['D4',.5],['F#4',.5],['A4',2]];
+      let x=0;[96,108,124,144].forEach((bpm,k)=>{x+=seq(t+x,bpm,th,k<2?iPluck:(tt,f,dd)=>{iPluck(tt,f,dd);iPluck(tt,f*2,dd);});});iDrone(t,NOTE('B1'),x);return x;}},
+    {name:'Токата ре мінор (Й. С. Бах)',play(t){const bpm=72;const a=[['A5',.25],['G5',.25],['A5',1.5],['-',.5],['G5',.25],['F5',.25],['E5',.25],['D5',.25],['C#5',.75],['D5',2],['-',1],
+        ['A4',.25],['G4',.25],['A4',1.5],['-',.5],['E4',.5],['F4',.5],['C#4',.5],['D4',2],['-',1],
+        ['A3',.25],['G3',.25],['A3',1.5],['-',.5],['G3',.25],['F3',.25],['E3',.25],['D3',.25],['C#3',.75],['D3',3]];
+      const d=seq(t,bpm,a,(tt,f,dd)=>iOrgan(tt,f,dd,0.18));seq(t,bpm,[['-',2],['D2',4],['-',2],['D2',4],['-',2],['D2',5]],(tt,f,dd)=>iOrgan(tt,f,dd,0.11));iDrone(t,NOTE('D2'),d);return d;}}]};
+function musEnsure(){if(MUS.ctx)return true;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;MUS.ctx=new AC();MUS.master=MUS.ctx.createGain();MUS.master.gain.value=0;
+  const comp=MUS.ctx.createDynamicsCompressor();MUS.master.connect(comp).connect(MUS.ctx.destination);return true;}
+function musNext(){if(!MUS.on)return;const L=PIECES[MUS.season]||[];if(!L.length)return;const p=L[MUS.idx%L.length];MUS.idx++;const t=MUS.ctx.currentTime+0.15;let d=8;try{d=p.play(t);}catch(e){console.warn(e);}MUS.now=p.name;musBtn();clearTimeout(MUS.timer);MUS.timer=setTimeout(musNext,(d+5)*1000);}
+function musStart(){const sn=seasonNow();if(!PIECES[sn]||!musEnsure())return;MUS.season=sn;MUS.on=true;MUS.ctx.resume();const g=MUS.master.gain,t=MUS.ctx.currentTime;g.cancelScheduledValues(t);g.setValueAtTime(g.value,t);g.linearRampToValueAtTime(0.55,t+1.5);musNext();musBtn();}
+function musStop(){MUS.on=false;clearTimeout(MUS.timer);if(MUS.ctx){const g=MUS.master.gain,t=MUS.ctx.currentTime;g.cancelScheduledValues(t);g.setValueAtTime(g.value,t);g.linearRampToValueAtTime(0,t+0.8);const old=MUS.ctx;MUS.ctx=null;setTimeout(()=>{try{old.close();}catch(_){}},1000);}musBtn();}
+function musBtn(){let b=document.getElementById('musbtn');const sn=seasonNow();const show=!!PIECES[sn]&&!/[?&]bot=1/.test(location.search);
+  if(!show){if(b)b.remove();if(MUS.on)musStop();return;}
+  if(!b){b=document.createElement('button');b.id='musbtn';b.type='button';b.addEventListener('click',e=>{e.stopPropagation();if(MUS.on){musStop();musSetPref(false);}else{musStart();musSetPref(true);}});document.body.appendChild(b);}
+  b.className='musbtn'+(MUS.on?' on':'');b.title=MUS.on?('Зараз грає: '+(MUS.now||'')+' — натисніть, щоб вимкнути'):'Увімкнути святкову музику';b.setAttribute('aria-label',b.title);b.innerHTML=MUS.on?`<span class="mi">🎵</span><span class="mt">${esc(MUS.now||'Музика')}</span><span class="mx">✕</span>`:'<span class="mi">🎵</span><span class="mt">Музика</span>';
+  if(MUS.on&&MUS.season!==sn){musStop();}}
+// якщо гравець раніше ввімкнув музику — продовжимо з першого ж натискання на сторінці
+document.addEventListener('pointerdown',e=>{if(e.target&&e.target.closest&&e.target.closest('#musbtn'))return;if(!MUS.on&&musPref()&&PIECES[seasonNow()]&&!/[?&]bot=1/.test(location.search))musStart();},{capture:true});
+
 function hwApply(){const sn=seasonNow();const R=document.documentElement;['hw','xm','au','sp','df','ind'].forEach(k=>R.classList.toggle(k,sn===k));let fx=document.getElementById('hwfx');
   if(fx&&fx.dataset.s!==sn){fx.remove();fx=null;}
   if(sn&&!fx){fx=document.createElement('div');fx.id='hwfx';fx.dataset.s=sn;fx.setAttribute('aria-hidden','true');
@@ -4259,7 +4312,8 @@ function hwApply(){const sn=seasonNow();const R=document.documentElement;['hw','
       const cols=['#ff4d4d','#ffd43b','#51cf66','#4dabf7','#f783ac'];let gl='';for(let i=0;i<34;i++)gl+=`<i style="--c:${cols[i%5]};animation-delay:${(i%5)*0.35}s"></i>`;fx.innerHTML=s+`<div class="xmgar">${gl}</div>`;}
     document.body.appendChild(fx);}
   else if(!sn&&fx)fx.remove();
-  if(sn==='au'){if(!RAIN.t&&!RAIN.on)rainSchedule(true);}else if(RAIN.t||RAIN.on){clearTimeout(RAIN.t);RAIN.t=0;rainStop(false);}}
+  if(sn==='au'){if(!RAIN.t&&!RAIN.on)rainSchedule(true);}else if(RAIN.t||RAIN.on){clearTimeout(RAIN.t);RAIN.t=0;rainStop(false);}
+  try{musBtn();}catch(_){}}
 
 
 // режим «Редагувати» в Палаті Земель і Канцелярії: блоки згортаються, щоб сторінка не була кілометровою
