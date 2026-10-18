@@ -293,6 +293,7 @@ a.dpbm{display:inline-block;padding:5px 12px;border-radius:999px;background:var(
 .wkdocs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.wkdocs span{font-size:12.5px;background:#ffffff10;border-radius:8px;padding:2px 8px}.wkdocs i{opacity:.65;font-style:normal}
 @media(max-width:600px){.wkr .wkin input{width:90px;max-width:90px}.wkres{grid-template-columns:1fr 1fr}}
 .dpunk .dpic{display:grid;grid-template-columns:auto 1fr minmax(160px,220px) auto;gap:10px;align-items:center;margin:6px 0}.dpunk .dpic.need select{border-color:#ff8a73}.dpk{font-weight:700}@media(max-width:600px){.dpunk .dpic{grid-template-columns:auto 1fr}.dpunk .dpic select{grid-column:1/-1}}
+.dpdons select.dpinl{width:auto;padding:1px 4px;font-size:12px;display:inline-block}
 </style>
 <style id="page-style">
 /* Layout: one column registry; each land is a row — current flag, name + offices, then the flag history strip */
@@ -2081,11 +2082,11 @@ function dpModal(){const close=`<button class="small bmx" data-a="dpclose">✕ �
       else if(x.st==='dup')lines.push(`<li>✓ ${nm(x)}: внесок за цей тиждень уже здано</li>`);
       else if(x.st==='none'&&!x.absorbed.length)lines.push(`<li class="n">⏳ ${nm(x)}: внесок ще не здано (лишилось ${dpItemsTxt(es,x.S.rem)})</li>`);});
     if(G.rest.length)lines.push(`<li>🎁 Меценат: ${dpItemsTxt(es,G.rest)}${G.rows.length?' (понад внесок)':''}</li>`);
-    if(G.unknown.length)lines.push(`<li class="n">❓ ${G.unknown.length} пожертв(и) з невідомим ресурсом — оберіть значок вище</li>`);
+    if(G.unknown.length)lines.push(`<li class="n">❓ ${G.unknown.length} пожертв(и) з невідомим ресурсом — оберіть ресурс у списку поруч із сумою (один раз для кожного значка)</li>`);
     const opts=[['apply','Застосувати'],['patron','Усе — як меценат'],['wait','Відкласти'],['skip','Пропустити (не записувати)']];
     return `<div class="dpg ${G.act}"><div class="dpgh"><div><b>${G.pl?plink(G.pl):esc(G.n)}</b>${G.pl?'':` <span class="tag warn">не знайдено на сайті</span>`} <span class="hint">· тиждень ${G.wk?esc(wkLabelOf(G.wk)):'—'}</span></div>
       <select data-a="dpf" data-k="act" data-u="${esc(G.gk)}">${opts.map(([k,l])=>`<option value="${k}"${G.act===k?' selected':''}>${l}</option>`).join('')}</select></div>
-      <div class="dpdons">${G.dons.map(d=>`<span>+${fmt(d.q)} ${d.res?esc(resWord(es,d.res)):'❓'} <i>${esc(d.t)}</i></span>`).join('')}</div>
+      <div class="dpdons">${G.dons.map(d=>`<span>+${fmt(d.q)} ${d.res?esc(resWord(es,d.res)):`<select class="dpinl" data-a="dpf" data-k="ic" data-u="${esc(d.k)}" title="${esc(dpKeyLabel(d.k))}">${dpResOpts(es,'')}</select>`} <i>${esc(d.t)}</i></span>`).join('')}</div>
       ${G.pl?'':`<div class="row2"><span class="hint">Хто це на сайті?</span>${plSelect('dpw-'+plHash(G.n),`data-a="dpf" data-k="who" data-u="${esc(G.n)}"`,'','— меценат під ігровим ніком —')}</div>`}
       <ul class="dpl">${lines.join('')}</ul>${G.act==='wait'?'<p class="hint">Відкладено: нічого не запишеться, наступного разу пожертви знову з’являться тут.</p>':''}</div>`;}).join('');
   h+='</div>';
