@@ -270,6 +270,16 @@ button.es{cursor:pointer}button.es:hover{border-color:var(--line2,rgba(242,181,6
 .cfm{outline:2px solid var(--vacant,#e9c76b);outline-offset:2px}
 .ecoreset{border-color:rgba(239,106,90,.5);background:rgba(239,106,90,.06)}.ecoreset h3{color:var(--danger)}
 .nodebt{text-align:center;justify-items:center;padding:34px 16px}.nodebt>span{font-size:40px}.nodebt h3{margin:0}
+.dpsync .dpsteps{margin:6px 0 8px 18px;padding:0}.dpsync .dpsteps li{margin:6px 0}
+a.dpbm{display:inline-block;padding:5px 12px;border-radius:999px;background:var(--gold,#e9b44c);color:#2a1606!important;font-weight:700;text-decoration:none;cursor:grab;box-shadow:0 2px 6px #0006}
+.dpm h3{margin-top:0}.dpm .dsec{margin:14px 0}.dpm h4{margin:0 0 6px}
+.dptr td.dpup{color:#7fd18b}.dptr td.dpdn{color:#ff8a73}
+.dpic{align-items:center;gap:10px}.dpic img{width:32px;height:32px;object-fit:contain;background:#0003;border-radius:8px;padding:3px}
+.dpg{border:1px solid #ffffff1f;border-radius:12px;padding:10px 12px;margin:8px 0;background:#0000001f}.dpg.skip,.dpg.wait{opacity:.6}
+.dpgh{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}.dpgh select{max-width:220px}
+.dpdons{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.dpdons span{font-size:13px;background:#ffffff12;border-radius:8px;padding:2px 8px}.dpdons i{opacity:.65;font-style:normal;margin-left:4px}
+.dpl{margin:4px 0 0 18px;padding:0;font-size:14px}.dpl li{margin:3px 0}.dpl li.y{color:#7fd18b}.dpl li.n{color:#ffb070}
+.dpok ul{margin:8px 0 0 18px}
 </style>
 <style id="page-style">
 /* Layout: one column registry; each land is a row — current flag, name + offices, then the flag history strip */
@@ -1931,6 +1941,156 @@ function invItems(tr){if(!tr.items)tr.items=INV_DEFAULT.map(n=>({name:n,qty:''})
 function nowStamp(){const d=new Date();return pad2(d.getDate())+'.'+pad2(d.getMonth()+1)+'.'+String(d.getFullYear()).slice(2)+' о '+pad2(d.getHours())+':'+pad2(d.getMinutes());}
 let active=null;
 let DOSSIER=null;
+// ===================== Синхронізація з грою (закладка-зчитувач DragPolit) =====================
+// Закладка працює на сторінці країни в грі (у браузері Скарбника/Гетьмана, де вже виконано вхід):
+// зчитує казну й пожертви і відкриває наш сайт із цими даними. Сама на нашому сайті не запускається.
+async function dpBookmarklet(SITE){
+  const W=ms=>new Promise(r=>setTimeout(r,ms));
+  const T=e=>(e&&e.textContent||'').replace(/\s+/g,' ').trim();
+  const own=e=>[...e.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join(' ').replace(/\s+/g,' ').trim();
+  const all=()=>[...document.querySelectorAll('body *')].filter(e=>!/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE)$/.test(e.tagName));
+  const leaf=()=>all().filter(e=>own(e));
+  const LBL=/^(срібло|золото|вугілля|руда|нафта|піхотн\S*( оснащення)?|додатков\S*( оснащення)?|артилерія|дрони|танки|літаки|кораблі)$/i;
+  const DT=/^(\d{2})\.(\d{2})\.(\d{4}),?\s+(\d{1,2}):(\d{2})$/;
+  const AM=/^\+?\s?\d[\d\s  ]*$/;
+  const num=s=>+String(s).replace(/[^\d]/g,'');
+  const head=re=>all().find(e=>re.test(T(e))&&e.querySelectorAll('*').length<12);
+  function ikey(e){const tg=e.tagName.toLowerCase();
+    if(tg==='img')return 'img:'+(e.getAttribute('src')||'').split('?')[0].split('/').pop();
+    if(tg==='svg'){const s=e.innerHTML.replace(/\s+/g,'');let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return 'svg:'+(h>>>0).toString(36);}
+    const bg=getComputedStyle(e).backgroundImage;if(bg&&bg!=='none'&&bg.indexOf('url(')>=0)return 'bg:'+bg.replace(/^.*url\(["']?/,'').replace(/["']?\).*$/,'').split('?')[0].split('/').pop();
+    if(tg==='i'&&e.className)return 'cls:'+String(e.className).trim();
+    const t=own(e);if(t&&t.length<=2&&/[^\w\s\d+.,:]/.test(t))return 'txt:'+t;return '';}
+  function icons(root){const out=[];[root,...root.querySelectorAll('*')].forEach(e=>{const tg=e.tagName.toLowerCase();if(tg!=='svg'&&e.closest('svg'))return;const k=ikey(e);if(k)out.push({e,k,src:tg==='img'?(e.currentSrc||e.src):''});});return out;}
+  function readTr(){const tr={},ic={};leaf().forEach(l=>{const t=own(l);if(!LBL.test(t))return;let tile=l.parentElement;
+    for(let i=0;i<4&&tile;i++){const ls=[...tile.querySelectorAll('*')].filter(x=>LBL.test(own(x)));if(ls.length>1)break;
+      const v=[...tile.querySelectorAll('*')].map(own).find(x=>/^[\d\s  ]+$/.test(x)&&/\d/.test(x));
+      if(v){tr[t]=num(v);const I=icons(tile).filter(o=>!o.e.contains(l)&&o.k.indexOf('txt:')!==0);if(I[0])ic[I[0].k]={res:t,src:I[0].src};break;}tile=tile.parentElement;}});return {tr,ic};}
+  function readDon(){const out=[],seen=new Set();leaf().forEach(l=>{const m=DT.exec(own(l));if(!m)return;let row=l.parentElement;
+    for(let i=0;i<6&&row;i++){const kids=[...row.querySelectorAll('*')];if(kids.filter(x=>DT.test(own(x))).length>1)break;
+      const am=kids.find(x=>x!==l&&AM.test(own(x)));
+      if(am&&row.querySelector('img')){if(seen.has(row))break;seen.add(row);
+        const name=kids.map(own).find(x=>x&&!DT.test(x)&&!AM.test(x)&&x.length>1)||'';
+        const imgs=[...row.querySelectorAll('img')];const av=imgs.find(x=>/avatar/i.test(x.src))||imgs[0]||null;
+        let pid='';const a=row.querySelector('a[href*="/profile/"]')||row.closest('a[href*="/profile/"]');if(a){const mm=/profile\/(\d+)/.exec(a.href);if(mm)pid=mm[1];}
+        if(!pid&&av){const mm=/users\/(\d+)/.exec(av.src);if(mm)pid=mm[1];}
+        const skip=o=>o.e===av||(av&&o.e.contains(av));
+        let I=icons(am.parentElement).filter(o=>!skip(o)&&o.e!==am);if(!I.length)I=icons(row).filter(o=>!skip(o));const ico=I[I.length-1];
+        out.push({n:name,t:m[1]+'.'+m[2]+'.'+m[3]+' '+m[4].padStart(2,'0')+':'+m[5],q:num(own(am)),k:ico?ico.k:'',src:ico?ico.src:'',pid});break;}
+      row=row.parentElement;}});return out;}
+  let r=readTr();if(!Object.keys(r.tr).length){const h=head(/^економіка держави$/i);if(h){h.click();await W(1500);r=readTr();}}
+  let don=readDon();if(!don.length){const h=head(/^пожертви державі$/i);if(h){h.click();await W(2000);don=readDon();}}
+  if(!Object.keys(r.tr).length&&!don.length){alert('УД: на цій сторінці не знайдено ні казни, ні пожертв.\nВідкрийте сторінку своєї країни в DragPolit (після входу в гру) і натисніть закладку ще раз.');return;}
+  const P={v:1,at:Date.now(),url:location.href,tr:r.tr,icons:r.ic,don};
+  const b64=btoa(unescape(encodeURIComponent(JSON.stringify(P)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  const url=SITE+'#dpimp='+b64;const w=window.open(url,'_blank');if(!w)location.href=url;}
+function dpBmHref(){const site=location.origin+location.pathname;return 'javascript:'+encodeURIComponent('('+dpBookmarklet.toString()+')('+JSON.stringify(site)+')');}
+
+let DPIMP=null,DPSEL={icons:{},who:{},act:{},noTr:false},DPDONE=null;
+try{const h0=location.hash||'';if(h0.startsWith('#dpimp=')){const b=h0.slice(7).replace(/-/g,'+').replace(/_/g,'/');DPIMP=JSON.parse(decodeURIComponent(escape(atob(b))));try{history.replaceState(null,'',location.pathname);}catch(_){}}}catch(e){DPIMP={err:1};try{history.replaceState(null,'',location.pathname);}catch(_){}}
+function canDp(){return !!(AUTH.email&&!AUTH.bot&&(AUTH.admin||isFin()));}
+function kyivMs(y,mo,d,hh,mi){const g=Date.UTC(y,mo-1,d,hh,mi);try{const loc=new Date(new Date(g).toLocaleString('en-US',{timeZone:'Europe/Kiev'}));const utc=new Date(new Date(g).toLocaleString('en-US',{timeZone:'UTC'}));return g-(loc-utc);}catch(_){return g-3*3600e3;}}
+function dpParseT(t){const m=/^(\d{2})\.(\d{2})\.(\d{4}) (\d{2}):(\d{2})$/.exec(t||'');if(!m)return null;return {iso:`${m[3]}-${m[2]}-${m[1]}`,ms:kyivMs(+m[3],+m[2],+m[1],+m[4],+m[5])};}
+function dpPlayer(d){const ov=DPSEL.who[d.n];if(ov!=null)return ov?plByName(ov):null;
+  if(d.pid){const p=players().find(x=>profId(x.profile)===d.pid);if(p)return p;}
+  const n=String(d.n||'').trim().toLowerCase();return players().find(x=>String(x.name||'').trim().toLowerCase()===n)||null;}
+const wkLate=(d,end)=>{const t=d&&(d.paidAt||d.at);return !!(t&&kyivDate(t)>=end);};
+// план імпорту: що з пожертв піде в тижневі внески, що меценатам, що вже враховано
+function dpPlan(){const es=sectionByKind('economy');const D=DPIMP;if(!es||!D||D.err)return null;const c=wkCfg(es);const PM=wkPayMap();
+  const icm={};Object.entries(D.icons||{}).forEach(([k,v])=>{icm[k]=v.res;});Object.assign(icm,es.dpIcons||{},DPSEL.icons);
+  const seen=new Set(es.dpSeen||[]);const occ={};
+  const dons=(D.don||[]).map(x=>{const b=[x.n,x.t,x.q,x.k].join('|');occ[b]=(occ[b]||0)+1;let hh=0;for(let i=0;i<b.length;i++)hh=(hh*31+b.charCodeAt(i))|0;const key=(hh>>>0).toString(36)+'.'+occ[b];const tt=dpParseT(x.t);
+    const raw=icm[x.k]||'';return {...x,key,res:raw?canonRes(es,raw)||raw:'',wk:tt?wkMonday(tt.iso):'',ms:tt?tt.ms:null};}).filter(x=>!seen.has(x.key)&&+x.q>0);
+  dons.forEach(d=>{const p=dpPlayer(d);d.pl=p?p.name:'';});
+  // групи: гравець × тиждень
+  const grp={};dons.forEach(d=>{const gk=(d.pl||('?'+d.n))+'|'+d.wk;(grp[gk]=grp[gk]||{gk,pl:d.pl,n:d.n,wk:d.wk,dons:[]}).dons.push(d);});
+  const groups=Object.values(grp);const today=kyivToday();
+  groups.forEach(G=>{G.pool={};G.dons.forEach(d=>{if(d.res)G.pool[d.res]=(G.pool[d.res]||0)+(+d.q);});G.rows=[];G.unknown=G.dons.filter(d=>!d.res);
+    if(!G.pl||!G.wk)return;
+    c.groups.forEach((g,gi)=>{const rows=wkRows(g,c);const gr=wkGold(g,c);[...rows,...(gr?[gr]:[])].forEach(r=>{if(!r.on||!r.rep||r.rep!==G.pl)return;if(G.wk<wkMonday(c.start))return;
+      const need=r.gold?[{res:canonRes(es,'Золото')||'Золото',qty:+g.gold||0}]:wkShareItems(g,rows).map(x=>({res:canonRes(es,x.res)||x.res,qty:x.qty}));
+      const done=PM[G.wk+'_'+r.lid];const miss=need.filter(n=>(G.pool[n.res]||0)<n.qty).map(n=>({res:n.res,qty:n.qty-(G.pool[n.res]||0)}));
+      const row={g,gi,r,need,items:wkItemsOf(g,rows,r),done:!!done,miss};
+      if(done){row.st='dup';need.forEach(n=>{G.pool[n.res]=Math.max(0,(G.pool[n.res]||0)-n.qty);});}
+      else if(!miss.length){row.st='ok';need.forEach(n=>{G.pool[n.res]-=n.qty;});}
+      else row.st='part';
+      G.rows.push(row);});});});
+  groups.forEach(G=>{const ended=G.wk&&today>=wkNext(G.wk);const part=G.rows.some(x=>x.st==='part');
+    G.ended=ended;G.auto='apply';G.act=DPSEL.act[G.gk]||G.auto;
+    const used=d=>G.rows.some(x=>x.st!=='part'&&x.need.some(n=>n.res===d.res));
+    G.paidAt=Math.max(0,...G.dons.filter(used).map(d=>d.ms||0))||null;
+    G.rest=Object.entries(G.pool).filter(([,v])=>v>0).map(([res,qty])=>({res,qty}));});
+  // казна: гра vs сайт
+  const {cur}=treasuryNow(es);const trRows=Object.entries(D.tr||{}).map(([lbl,v])=>{const res=canonRes(es,lbl);return res?{res,game:+v||0,site:cur[res]||0}:null;}).filter(Boolean);
+  const keys=[...new Set((D.don||[]).map(x=>x.k).filter(Boolean))];
+  return {es,c,groups,trRows,keys,icm,dons,seenN:(D.don||[]).length-dons.length};}
+function dpResOpts(es,cur){return `<option value="">— ресурс? —</option>`+invItems(es.treasury||{}).map(it=>`<option${it.name===cur?' selected':''}>${esc(it.name)}</option>`).join('');}
+function dpItemsTxt(es,list){return list.map(x=>fmt(x.qty)+' '+esc(resWord(es,x.res))).join(' + ');}
+function dpModal(){const close=`<button class="small bmx" data-a="dpclose">✕ Закрити</button>`;const wrap=b=>`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="dpclose" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide dpm">${close}<h3>📥 Дані з гри DragPolit</h3>${b}</div></div>`;
+  if(DPDONE)return wrap(`<div class="dpok">${DPDONE}</div><div class="landtools"><button class="primary" data-a="dpclose">Готово</button></div>`);
+  if(DPIMP.err)return wrap('<p class="msg err">Не вдалося прочитати дані із закладки. Спробуйте ще раз зі сторінки країни в грі.</p>');
+  if(!AUTH.email)return wrap('<p>Увійдіть на сайт як Скарбник або Гетьман — і дані з гри одразу підтягнуться.</p><div class="landtools"><button class="primary" data-a="login">Увійти через Google</button></div>');
+  if(!canDp())return wrap('<p>Переносити дані з гри може лише Скарбник (Секретар фінансів) або Гетьман.</p>');
+  const P=dpPlan();if(!P)return wrap('<p class="empty">Завантаження…</p>');const es=P.es;
+  const when=DPIMP.at?fmtDT(new Date(DPIMP.at).toISOString()):'';
+  let h=`<p class="hint">Зчитано ${esc(when)} зі сторінки країни. Перевірте й натисніть «Застосувати».</p>`;
+  // казна
+  if(P.trRows.length){h+=`<div class="dsec"><h4>🏛 Казна</h4><div class="tblwrap"><table class="bud dptr"><thead><tr><th>Ресурс</th><th class="num">У грі</th><th class="num">На сайті</th><th class="num">Різниця</th></tr></thead><tbody>${P.trRows.map(x=>{const d=x.game-x.site;return `<tr><th>${esc(x.res)}</th><td class="num"><b>${fmt(x.game)}</b></td><td class="num">${fmt(x.site)}</td><td class="num ${d?(d>0?'dpup':'dpdn'):''}">${d?(d>0?'+':'−')+fmt(Math.abs(d)):'—'}</td></tr>`;}).join('')}</tbody></table></div>
+    <label class="chk"><input type="checkbox" data-a="dpf" data-k="tr"${DPSEL.noTr?'':' checked'}> після внесків вирівняти казну сайту за грою (різницю — доходи й витрати гри, яких немає на сайті, — буде записано в «Рух казни» окремим рядком «🔄 Звірка з грою»)</label></div>`;}
+  // невідомі значки ресурсів
+  const unk=P.keys.filter(k=>!P.icm[k]);
+  if(unk.length){h+=`<div class="dsec dpunk"><h4>❓ Який це ресурс?</h4><p class="hint">Сайт ще не знає цих значків із гри. Оберіть один раз — далі він запам'ятає.</p>${unk.map(k=>{const d=(DPIMP.don||[]).find(x=>x.k===k)||{};return `<div class="row2 dpic">${d.src?`<img src="${esc(d.src)}" alt="" referrerpolicy="no-referrer">`:`<code>${esc(k.slice(0,24))}</code>`}<span class="hint">напр. ${esc(d.n||'')}: +${fmt(d.q||0)}</span><select data-a="dpf" data-k="ic" data-u="${esc(k)}">${dpResOpts(es,'')}</select></div>`;}).join('')}</div>`;}
+  // пожертви
+  h+=`<div class="dsec"><h4>🎁 Нові пожертви · ${P.dons.length}</h4>${P.seenN?`<p class="hint">Ще ${P.seenN} уже були перенесені раніше — їх пропущено.</p>`:''}`;
+  if(!P.groups.length)h+='<p class="empty">Нових пожертв немає.</p>';
+  h+=P.groups.map(G=>{const ok=G.rows.filter(x=>x.st==='ok'),dup=G.rows.filter(x=>x.st==='dup'),part=G.rows.filter(x=>x.st==='part');
+    const lines=[];ok.forEach(x=>lines.push(`<li class="y">✓ Тижневий внесок · <b>${esc(x.r.gold?x.r.title:x.r.land)}</b> (${esc(x.items)}) — буде позначено «здано»${G.paidAt?' '+esc(fmtDT(new Date(G.paidAt).toISOString())):''}</li>`));
+    dup.forEach(x=>lines.push(`<li>↺ ${esc(x.r.gold?x.r.title:x.r.land)}: внесок за цей тиждень уже позначено — не дублюю</li>`));
+    part.forEach(x=>lines.push(`<li class="n">⚠ ${esc(x.r.gold?x.r.title:x.r.land)}: неповний внесок, бракує ${dpItemsTxt(es,x.miss)}${G.ended?' — тиждень минув, усе піде як меценат':' — чекаю решту (пожертви з’являться тут знову)'}</li>`));
+    if(G.rest.length&&!(part.length&&!G.ended))lines.push(`<li>🎁 Меценат: ${dpItemsTxt(es,G.rest)}${ok.length||dup.length?' (понад внесок)':''}</li>`);
+    if(G.unknown.length)lines.push(`<li class="n">❓ ${G.unknown.length} пожертв(и) з невідомим ресурсом — оберіть значок вище</li>`);
+    const opts=[['apply','Застосувати'],['patron','Усе — як меценат'],['wait','Відкласти'],['skip','Пропустити (не записувати)']];
+    return `<div class="dpg ${G.act}"><div class="dpgh"><div><b>${G.pl?plink(G.pl):esc(G.n)}</b>${G.pl?'':` <span class="tag warn">не знайдено на сайті</span>`} <span class="hint">· тиждень ${G.wk?esc(wkLabelOf(G.wk)):'—'}</span></div>
+      <select data-a="dpf" data-k="act" data-u="${esc(G.gk)}">${opts.map(([k,l])=>`<option value="${k}"${G.act===k?' selected':''}>${l}</option>`).join('')}</select></div>
+      <div class="dpdons">${G.dons.map(d=>`<span>+${fmt(d.q)} ${d.res?esc(resWord(es,d.res)):'❓'} <i>${esc(d.t)}</i></span>`).join('')}</div>
+      ${G.pl?'':`<div class="row2"><span class="hint">Хто це на сайті?</span>${plSelect('dpw-'+plHash(G.n),`data-a="dpf" data-k="who" data-u="${esc(G.n)}"`,'','— меценат під ігровим ніком —')}</div>`}
+      <ul class="dpl">${lines.join('')}</ul>${G.act==='wait'?'<p class="hint">Відкладено: нічого не запишеться, наступного разу пожертви знову з’являться тут.</p>':''}</div>`;}).join('');
+  h+='</div>';
+  h+=`<div class="landtools"><button class="primary" data-a="dpapply" ${busy?'disabled':''}>Застосувати</button><button class="ghost" data-a="dpclose">Скасувати</button></div>`;
+  return wrap(h);}
+async function dpApply(){const P=dpPlan();if(!P||!canDp())return;const es=P.es;const before=JSON.stringify(es);const mp=myPost();const by=mp&&mp.name||((plByEmail(AUTH.email)||{}).name)||'Адміністрація';
+  const seen=es.dpSeen=es.dpSeen||[];const pl=es.patronList=es.patronList||[];const added={};const marks=[];let nPat=0;
+  const addPat=(name,res,qty,iso,ms)=>{if(!(qty>0)||!res)return;let p=pl.find(x=>x.name===name);if(!p){p={name,items:[]};pl.push(p);}const pr=silverOf(es,res,1);p.items=p.items||[];p.items.push({res,qty:String(qty),price:pr==null?'':String(pr),date:iso?iso.split('-').reverse().join('.'):'',at:ms?new Date(ms).toISOString():new Date().toISOString(),src:'game'});added[res]=(added[res]||0)+qty;nPat++;};
+  // запам'ятати значки
+  es.dpIcons=Object.assign({},es.dpIcons||{},DPSEL.icons);Object.entries(DPIMP.icons||{}).forEach(([k,v])=>{if(!es.dpIcons[k])es.dpIcons[k]=v.res;});
+  P.groups.forEach(G=>{if(G.act==='wait')return;const nm=G.pl||G.n;const last=G.dons.reduce((a,d)=>Math.max(a,d.ms||0),0)||null;const iso=last?kyivDate(last):'';
+    if(G.act==='skip'){G.dons.forEach(d=>seen.push(d.key));return;}
+    if(G.unknown.length&&G.act==='apply'){/* невідомий ресурс — лишаємо до наступного разу */}
+    const known=G.dons.filter(d=>d.res);
+    if(G.act==='patron'){known.forEach(d=>{addPat(nm,d.res,+d.q,iso,d.ms);seen.push(d.key);});return;}
+    G.rows.filter(x=>x.st==='ok').forEach(x=>{marks.push({wk:G.wk,lid:x.r.lid,land:x.r.land,grp:x.g.sec,name:x.r.rep,items:x.items,paidAt:G.paidAt||undefined});if(x.g.treasury)x.need.forEach(n=>{added[n.res]=(added[n.res]||0)+n.qty;});});
+    if(G.rows.some(x=>x.st==='part')&&!G.ended)return;// неповний внесок, тиждень ще триває — чекаємо решту
+    G.rest.forEach(x=>addPat(nm,x.res,x.qty,iso,last));known.forEach(d=>seen.push(d.key));});
+  if(seen.length>2000)es.dpSeen=seen.slice(-2000);
+  // казна
+  let trTxt='';if(!DPSEL.noTr&&P.trRows.length){const tr=es.treasury=es.treasury||{};const items=invItems(tr);const diff={};
+    P.trRows.forEach(x=>{const it=items.find(i=>i.name===x.res);if(!it)return;const d=x.game-(x.site+(added[x.res]||0));if(!d)return;diff[x.res]=d;});
+    if(Object.keys(diff).length){// різницю записуємо окремим рухом казни «Звірка з грою», щоб історія лишалась прозорою
+      es.syncs=(es.syncs||[]).concat([{at:new Date().toISOString(),by,items:Object.entries(diff).map(([res,v])=>({res,qty:String(v)}))}]).slice(-300);
+      trTxt=Object.entries(diff).map(([r,v])=>(v>0?'+':'−')+fmt(Math.abs(v))+' '+resWord(es,r)).join(', ');}
+    tr.syncAt=new Date().toISOString();tr.syncBy=by;tr.checked=nowStamp();}
+  busy=true;render();
+  try{for(const m of marks)await window.FB.markWk(m);await window.FB.saveEcon(es);saved=JSON.stringify(state);
+    DPDONE=`<p>✓ Готово.</p><ul>${marks.length?`<li>Позначено тижневих внесків: <b>${marks.length}</b> (${marks.map(m=>esc(m.land)).join(', ')})</li>`:''}${nPat?`<li>Записано пожертв меценатів: <b>${nPat}</b></li>`:''}${!DPSEL.noTr&&P.trRows.length?`<li>Казну звірено з грою${trTxt?': '+esc(trTxt):' — розбіжностей немає'}</li>`:''}</ul>`;msg='';msgErr=false;}
+  catch(e){console.warn(e);const i=state.sections.indexOf(es);if(i>=0)state.sections[i]=JSON.parse(before);msg='Не вдалося зберегти: '+(e&&e.code||'помилка мережі');msgErr=true;}
+  busy=false;render();}
+function dpSyncBlock(s){if(!canDp())return '';const tr=s.treasury||{};
+  return `<div class="block dpsync"><h3>📥 Синхронізація з грою <small>${tr.syncAt?'востаннє: '+esc(fmtDT(tr.syncAt))+(tr.syncBy?' · '+esc(tr.syncBy):''):'ще не синхронізовано'}</small></h3>
+    <ol class="dpsteps"><li>Перетягніть кнопку <a class="dpbm" href="${esc(dpBmHref())}" onclick="return false" title="Перетягніть на панель закладок">📥 УД: з гри</a> на панель закладок браузера (один раз).</li>
+    <li>Відкрийте в грі <a href="https://dragpolit.com/country/193" target="_blank" rel="noopener">сторінку країни ↗</a> (після входу в акаунт).</li>
+    <li>Натисніть закладку «📥 УД: з гри» — відкриється наш сайт із казною й новими пожертвами. Перевірте й натисніть «Застосувати».</li></ol>
+    <p class="hint">Тижневі внески представників позначаться самі (з часом пожертви в грі — тож штраф за запізнення не нарахується), решта піде в меценати, а казна вирівняється за грою. Паролі й акаунти не потрібні — закладка лише читає сторінку, яку ви бачите.</p></div>`;}
+
 try{const h=decodeURIComponent((location.hash||'').slice(1));if(h.startsWith('players/')){active='players';PROF=h.slice(8);}else if(h.startsWith('cab/')){active='parl';CAB=h.slice(4);}else if(h)active=h;}catch(e){}
 const SERIES=['#3987e5','#d95926','#199e70','#c98500','#d55181','#008300','#9085e9','#e66767'];
 function donutHtml(list,tot){
@@ -2817,7 +2977,7 @@ function myTodo(){if(!AUTH.email||AUTH.bot)return [];const out=[];const ml=myLan
   APPTS.filter(x=>x.status==='new'&&lc(x.email)===AUTH.email).forEach(x=>out.push({ic:'⏳',t:`Призначення чекає бота: ${x.name||'звільнення'}`,sub:'до 15 хвилин',a:'tab',k:'power'}));
   return out;}
 function todoHtml(list,title){if(!list.length)return '';return `<div class="block todo"><h3>${title||'Що від мене чекають'} <small>${list.length}</small></h3><ul class="todol">${list.map(x=>`<li class="${x.hot?'hot':''}"><span class="ti">${x.ic}</span><span class="tt"><b>${esc(x.t)}</b>${x.sub?`<small>${esc(x.sub)}</small>`:''}</span><button class="small${x.hot?' primary':''}" data-a="${esc(x.a)}" ${x.a==='tab'?`data-id="${esc(x.k)}"`:`data-k="${esc(x.k)}"`}>Перейти</button></li>`).join('')}</ul></div>`;}
-function cabinetModal(){const me=meAny();const p=myProfile();const lands=landList(state);const sug=suggestLand();const td=myTodo();const tgBot=((govSec()||{}).tgBot||'').replace(/^@/,'');
+function cabinetModal(){const me=meAny();const p=myProfile();const lands=landList(state);const sug=suggestLand();const td=myTodo();const tgBot=((govSec()||{}).tgBot||'ukr_derzhava_bot').replace(/^@/,'');
   const code=p.tgcode||'';const link=tgBot&&code?`https://t.me/${encodeURIComponent(tgBot)}?start=${encodeURIComponent(code)}`:'';
   return `<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="cabm" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide cabm"><button class="small bmx" data-a="cabm" data-k="">✕ Закрити</button>
     <div class="cabh">${seatAv(me?me.name:'','cavbig')}<div><div class="hint">Мій кабінет</div><h3>${me?esc(me.name):esc(AUTH.email)}</h3>${me?`<div class="rkbs">${rankBadges(me.name)}</div><button class="small" data-a="dos" data-n="${esc(me.name)}">🪪 Мій паспорт громадянина →</button>`:'<p class="hint">Ви ще не в реєстрі гравців. Подайте заявку на громадянство.</p>'}</div></div>
@@ -2835,7 +2995,7 @@ function adminPanel(){if(!AUTH.admin||AUTH.bot)return '';const g=govSec();const 
     b=`<p class="hint">Ролі рахуються самі з посад (бот оновлює їх у базі раз на 15 хвилин). Змінити людину на посаді — на сторінці «Влада».</p><div class="tblwrap"><table class="bud"><tbody>${L.map(([k,t])=>`<tr><th>${esc(t)}</th><td>${(r[k]||[]).map(e=>esc((plByEmail(e)||{}).name||e)).join(', ')||'<span class="hint">—</span>'}</td></tr>`).join('')}</tbody></table></div>`;}
   else if(ADMP==='season'){b=`<label class="fl">Що показувати<select id="season2" data-a="season2">${[['auto','Автоматично за календарем'],['au','🍂 Осінь'],['hw','🎃 Хелловін'],['xm','🎄 Зимові свята'],['sp','🌸 Весна'],['df','🛡 День захисників'],['ind','🇺🇦 День Незалежності'],['off','Вимкнути святкове оформлення']].map(([v,l])=>`<option value="${v}"${((g&&g.season==='on'?'hw':g&&g.season)||'auto')===v?' selected':''}>${l}</option>`).join('')}</select></label><p class="hint">Автоматично: 🍂 осінь 1.09–30.11 · 🛡 1 жовтня · 🎃 25.10–1.11 · 🎄 5.12 (з 6:00)–10.01 · 🌸 березень–травень · 🇺🇦 24 серпня. Зараз: <b>${esc(({au:'осінь',hw:'Хелловін',xm:'зимові свята',sp:'весна',df:'День захисників',ind:'День Незалежності'})[seasonNow()]||'без теми')}</b>.</p>`;}
   else if(ADMP==='backup'){b=`<p class="hint">Повна копія всіх даних сайту (Землі, закони, економіка, гравці, Військо, Церква) одним файлом. Зберігайте перед великими змінами.</p><div class="landtools"><button class="small primary" data-a="bkdown">💾 Завантажити копію (.json)</button><button class="small" data-a="bkup">📂 Відновити з файлу…</button></div><p class="hint warn">Відновлення перезапише всі дані сайту копією з файлу.</p>`;}
-  else{b=`<div class="landtools"><a class="gamebtn small" href="modtest.html" target="_blank" rel="noopener">🎓 Тест модераторів ↗</a><button class="small" data-a="admtick" ${busy?'disabled':''}>🔄 Підбити підсумки голосувань зараз</button><button class="small" data-a="edit">🧰 Повне редагування всього сайту (старий режим)</button></div><label class="fl">Ім’я бота в Telegram (для кнопки «Відкрити бота» в кабінетах)<input type="text" id="tgbotn" data-a="tgbotn" value="${esc((g&&g.tgBot)||'')}" placeholder="@UkrDerzhavaBot"></label><div><button class="small" data-a="tgbotsave">Зберегти</button></div>`;}
+  else{b=`<div class="landtools"><a class="gamebtn small" href="modtest.html" target="_blank" rel="noopener">🎓 Тест модераторів ↗</a><button class="small" data-a="admtick" ${busy?'disabled':''}>🔄 Підбити підсумки голосувань зараз</button><button class="small" data-a="edit">🧰 Повне редагування всього сайту (старий режим)</button></div><label class="fl">Ім’я бота в Telegram (для кнопки «Відкрити бота» в кабінетах)<input type="text" id="tgbotn" data-a="tgbotn" value="${esc((g&&g.tgBot)||'')}" placeholder="@ukr_derzhava_bot"></label><div><button class="small" data-a="tgbotsave">Зберегти</button></div>`;}
   return `<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="admp" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide admp"><button class="small bmx" data-a="admp" data-k="">✕ Закрити</button><h3>⚙️ Адмін-панель</h3><div class="afilter">${tabs.map(([k,l])=>`<button class="small${ADMP===k?' primary':''}" data-a="admp" data-k="${k}">${l}</button>`).join('')}</div><div class="admpb">${b}</div></div></div>`;}
 function scopeAllows(s){if(!EDIT_SCOPE)return true;if(EDIT_SCOPE.startsWith('sec:')){const id=EDIT_SCOPE.slice(4);return s.id===id||(s.tab===id&&!!s.hideView);}if(EDIT_SCOPE==='econ')return s.kind==='economy';if(EDIT_SCOPE==='lands')return isLandsSec(s)||s.kind==='players';if(EDIT_SCOPE==='players')return s.kind==='players';if(EDIT_SCOPE==='ranks')return s.kind==='ranks';if(EDIT_SCOPE==='church')return s.kind==='church';return false;}
 function timeLeft(iso){const ms=Date.parse(iso)-Date.now();if(!(ms>0))return '';const h=Math.floor(ms/3600000),m=Math.floor(ms%3600000/60000);return (h?h+' год ':'')+m+' хв';}
@@ -3665,7 +3825,8 @@ function movements(s){try{wkCfg(s);}catch(_){}const out=[];const tr=s.treasury||
     dailyTicks(from,to).forEach(t=>{(byT[t]=byT[t]||[]).push({res:it.res||'Срібло',qty:-q});});});});
    Object.keys(byT).map(Number).sort((a,b)=>a-b).forEach(t=>{const m={};byT[t].forEach(x=>{const k=canonRes(s,x.res)||x.res;m[k]=(m[k]||0)+x.qty;});out.push({kind:'daily',at:new Date(t).toISOString(),date:'',who:'',what:'Планові витрати держави за добу',items:Object.entries(m).map(([res,qty])=>({res,qty}))});});}
   (s.weeks||[]).forEach((w,wi)=>(s.members||[]).forEach((m,mi)=>{if(!(w.done||[])[mi])return;const txt=(w.got&&w.got[mi])||m.needs;out.push({kind:'week',at:(w.at||[])[mi]||null,date:w.label,who:wkWho(w,mi,m)||'Вакантно',what:'Тижневий внесок',items:parseNeeds(txt)});}));
-  {const c=wkCfg(s);const tg={};c.groups.forEach(g=>{tg[g.sec]=g;});WKPAY.forEach(d=>{const g=tg[d.grp];if(!g||!g.treasury)return;if(String(d.lid||'').startsWith('fine_')){out.push({kind:'fine',at:d.at?new Date(d.at).toISOString():null,date:'',who:d.name||d.land,what:'Штраф за несплату внеску · '+(d.land||'')+' · '+wkLabelOf(d.wk),items:parseNeeds(d.items||'')});return;}out.push({kind:'week',at:d.at?new Date(d.at).toISOString():null,date:wkLabelOf(d.wk),who:d.name||d.land,what:'Тижневий внесок · '+(d.land||''),items:parseNeeds(d.items||'')});});}
+  {const c=wkCfg(s);const tg={};c.groups.forEach(g=>{tg[g.sec]=g;});WKPAY.forEach(d=>{const g=tg[d.grp];if(!g||!g.treasury)return;if(String(d.lid||'').startsWith('fine_')){out.push({kind:'fine',at:d.at?new Date(d.at).toISOString():null,date:'',who:d.name||d.land,what:'Штраф за несплату внеску · '+(d.land||'')+' · '+wkLabelOf(d.wk),items:parseNeeds(d.items||'')});return;}out.push({kind:'week',at:(d.paidAt||d.at)?new Date(d.paidAt||d.at).toISOString():null,date:wkLabelOf(d.wk),who:d.name||d.land,what:'Тижневий внесок · '+(d.land||''),items:parseNeeds(d.items||'')});});}
+  (s.syncs||[]).forEach(x=>{const its=(x.items||[]).map(i=>({res:i.res,qty:+i.qty||0})).filter(i=>i.qty);if(its.length)out.push({kind:'sync',at:x.at||null,date:'',who:x.by||'',what:'Звірка з грою: доходи й витрати гри, яких не було на сайті',items:its});});
   (s.patronList||[]).forEach(p=>(p.items||[]).forEach(it=>{if(+it.qty)out.push({kind:'patron',at:it.at||null,date:it.date||'',who:p.name,what:'Пожертва',items:[{res:it.res,qty:+it.qty}]});}));
   Object.entries(s.fines||{}).forEach(([k,f])=>{if(+f.amount)out.push({kind:'fine',at:f.at||null,date:'',who:f.who||'',what:'Штраф ('+(f.ref||'')+')',items:[{res:'Срібло',qty:+f.amount}]});});
   (s.expenses||[]).forEach(e=>{const its=exItems(e).filter(i=>i.qty);if(its.length)out.push({kind:'expense',at:e.at||null,date:e.date,who:e.by,what:e.what||'Витрата',items:its.map(i=>({res:i.res,qty:-i.qty}))});});
@@ -3737,7 +3898,7 @@ function wkItemsOf(g,rows,row){return row.gold?fmt(+g.gold||0)+' золота':w
 function wkFineTxt(c,items){return parseNeeds(items).map(it=>{const q=Math.round(it.qty*(+c.finePct||0)/100);return q?fmt(q)+' '+it.res:'';}).filter(Boolean).join(' + ');}
 function wkDebts(s,g,c,row,PM){const out=[];if(!row.on||!row.rep)return out;const today=kyivToday();const rows=wkRows(g,c);
   wkKeys(c).forEach(k=>{if(k<wkMonday(c.fineStart))return;const end=wkNext(k);if(today<end)return;const d=PM[k+'_'+row.lid];const fd=PM[k+'_fine_'+row.lid];
-    const late=!d||(d.at&&kyivDate(d.at)>=end);if(!late)return;const items=d?(d.items||wkItemsOf(g,rows,row)):wkItemsOf(g,rows,row);const fine=wkFineTxt(c,items);
+    const late=!d||wkLate(d,end);if(!late)return;const items=d?(d.items||wkItemsOf(g,rows,row)):wkItemsOf(g,rows,row);const fine=wkFineTxt(c,items);
     out.push({wk:k,paid:!!d,items,fine,finePaid:!!fd,fineDoc:fd||null});});
   return out;}
 function wkDebtOpen(x){return !x.paid||(x.fine&&!x.finePaid);}
@@ -3759,7 +3920,7 @@ function wkGroupHtml(s,si,g,gi){const c=wkCfg(s);const rows=wkRows(g,c);if(!rows
         debts.map(({r,x})=>`<tr><th><b>${esc(r.gold?r.title:r.land)}</b><span class="need">${plink(r.rep)}</span></th><td>${esc(wkLabelOf(x.wk))}</td><td>${x.paid?'<span class="st y">✓ здано із запізненням</span>':`<span class="st n">✕ ${esc(x.items)}</span>`}</td><td>${x.finePaid?(parseNeeds(x.fineDoc&&x.fineDoc.items).length?'<span class="st y">✓ сплачено</span>':'<span class="st y">✓ прощено</span>'):`<b>${esc(x.fine||'—')}</b>${x.fine&&wkCanMark(r)?` <button class="small" data-a="wkfine" data-s="${si}" data-g="${gi}" data-wk="${x.wk}" data-l="${esc(r.lid)}">Сплатити штраф</button>`:''}${x.fine&&!AUTH.bot&&!editing&&(AUTH.admin||isFin())?` <button class="small ghost" data-a="wkfine" data-forgive="1" data-s="${si}" data-g="${gi}" data-wk="${x.wk}" data-l="${esc(r.lid)}" title="Скасувати штраф без оплати (наприклад, якщо внесок насправді здали вчасно)">Пробачити</button>`:''}`}</td></tr>`).join('')+`</tbody></table></div></details>`;}}
   h+=`<div class="tblwrap"><table class="bud wkt"><thead><tr><th>Земля</th>${lim.map(k=>`<th class="wk">${esc(wkLabelOf(k))}${k===cw?'<span class="need">цей тиждень</span>':k===nw?'<span class="need">наступний</span>':''}</th>`).join('')}</tr></thead><tbody>`;
   h+=all.map(r=>{const vac=!r.rep;return `<tr class="${r.gold?'wkgold ':''}${!r.on?'wkoff':vac?'wkvac':''}"><th><b>${esc(r.gold?r.title:r.land)}</b><span class="need">${!r.on?'не здає срібла'+(r.post?' ('+esc(r.post)+')':''):vac?'немає '+(r.gold?'посадовця':'представника'):plink(r.rep)+' · '+esc(wkItemsOf(g,rows,r))}</span></th>`+lim.map(k=>{const d=PM[k+'_'+r.lid];
-    const ended=k>=wkMonday(c.fineStart)&&kyivToday()>=wkNext(k);const lateP=d&&ended&&d.at&&kyivDate(d.at)>=wkNext(k);
+    const ended=k>=wkMonday(c.fineStart)&&kyivToday()>=wkNext(k);const lateP=d&&ended&&wkLate(d,wkNext(k));
     if(d)return `<td><span class="st y" title="${esc((d.items||'')+(d.at?' · '+fmtDT(new Date(d.at).toISOString()):''))}">✓ Так</span>${lateP&&r.on&&r.rep?'<div><span class="tag warn wklate">із запізненням</span></div>':''}${d.name&&d.name!==r.rep?`<div class="wkwho">${esc(d.name)}</div>`:''}${wkCanUndo(d)?`<div><button class="linkbtn wkun" data-a="wkun" data-id="${esc(d.id)}">скасувати</button></div>`:''}</td>`;
     if(!r.on||vac)return '<td><span class="wkdash">—</span></td>';
     return `<td>${wkCanMark(r)?`<button class="st n mk${ended?' debt':''}" data-a="wkmark" data-s="${si}" data-g="${gi}" data-wk="${k}" data-l="${esc(r.lid)}" title="Позначити, що внесок здано">☐ ${ended?'Борг · позначити':'Позначити'}</button>`:`<span class="st n">✕ ${ended?'Борг':'Ні'}</span>`}</td>`;}).join('')+'</tr>';}).join('');
@@ -3777,7 +3938,7 @@ function mvSilver(s,o){return o.items.reduce((a,i)=>a+(silverOf(s,i.res,i.qty)||
 function mvWeek(o){return o.at?wkMonday(kyivDate(Date.parse(o.at))):'';}
 function ecoPager(act,page,pages){if(pages<=1)return '';return `<div class="epager"><button class="small" data-a="${act}" data-k="${page-1}" ${page<=0?'disabled':''} aria-label="Новіші">←</button><span>${page+1} / ${pages}</span><button class="small" data-a="${act}" data-k="${page+1}" ${page>=pages-1?'disabled':''} aria-label="Старіші">→</button></div>`;}
 function ecoItemsHtml(s,items,sign){return items.filter(i=>+i.qty).map(i=>`<span class="eamt ${i.qty<0||sign<0?'out':'in'}">${i.qty<0||sign<0?'−':'+'}${fmt(Math.abs(i.qty))} ${esc(resWord(s,i.res))}</span>`).join('');}
-const MVICON={week:'📅',patron:'🎁',fine:'⚖️',expense:'💸',daily:'🕘'};
+const MVICON={week:'📅',patron:'🎁',fine:'⚖️',expense:'💸',daily:'🕘',sync:'🔄'};
 const MVIN=k=>k==='week'||k==='patron'||k==='fine';
 
 function econView(s,si){try{wkCfg(s);}catch(_){}
@@ -3801,7 +3962,7 @@ function econOverview(s,si){
   const link=/^https:\/\//.test(tr.link||'')?`<a href="${esc(tr.link)}" target="_blank" rel="noopener">Казна в грі ↗</a>`:'';
   const mv=movements(s);const cw=wkMonday(kyivToday());
   const wIn=mv.filter(o=>mvWeek(o)===cw&&MVIN(o.kind)).reduce((a,o)=>a+mvSilver(s,o),0);
-  const wOut=mv.filter(o=>mvWeek(o)===cw&&!MVIN(o.kind)).reduce((a,o)=>a+mvSilver(s,o),0);
+  const wOut=mv.filter(o=>mvWeek(o)===cw&&!MVIN(o.kind)&&o.kind!=='sync').reduce((a,o)=>a+mvSilver(s,o),0);
   const debts=ecoDebtList(s);const debtSum=debts.reduce((a,d)=>a+d.silver,0);
   let h=`<div class="block eco-hero"><div class="eh-main"><span class="k">У казні зараз</span><span class="v">${fmt(cur[main.name]||0)}<small> ${esc(resWord(s,main.name))}</small></span><span class="s">усе разом ≈ <b>${fmt(total)}</b> срібла за ринковими цінами</span></div><div class="eh-side">${link}</div>
     ${shown.length>1?`<div class="eh-res">${shown.slice(1).map(it=>`<div class="${cur[it.name]>0?'':'neg'}"><span>${esc(it.name)}</span><b>${fmt(cur[it.name])}</b></div>`).join('')}</div>`:''}</div>`;
@@ -3815,13 +3976,14 @@ function econOverview(s,si){
   h+=page.length?`<div class="mvlist">${page.map(o=>`<div class="mv1 ${MVIN(o.kind)?'in':'out'}"><span class="mvic" aria-hidden="true">${MVICON[o.kind]||'•'}</span><div class="mvt"><b>${o.kind==='daily'?'Держава':(o.who?plink(o.who):'—')}</b><span>${esc(o.what)}</span></div><div class="mvr">${ecoItemsHtml(s,o.items,0)}<span class="mvd">${o.at?esc(fmtDT(o.at)):esc(o.date||'раніше')}</span></div></div>`).join('')}</div>${ecoPager('jpg',JPG,pages)}`:'<p class="empty">Записів ще немає.</p>';
   h+='</div>';
   const pr=(s.prices||[]).filter(p=>String(p.price||'').trim());
+  h+=dpSyncBlock(s);
   if(pr.length)h+=`<div class="eprices"><span class="hint">Ринкові ціни${s.pricesDate?' на '+esc(s.pricesDate):''}, срібла за 1 шт.:</span>${pr.map(p=>`<span><b>${esc(p.name)}</b> ${fmt(p.price)}</span>`).join('')}</div>`;
   return h;
 }
 
 // ---------- 2. Доходи ----------
 function lcHistory(g,c,row,PM){const today=kyivToday();const cw=wkCur(c);const keys=wkKeys(c).filter(k=>k<=cw).slice(-8);
-  const st=keys.map(k=>{const d=PM[k+'_'+row.lid];const end=wkNext(k);if(k===cw)return d?'ok':'now';if(!d)return k>=wkMonday(c.fineStart)?'miss':'skip';return d.at&&kyivDate(d.at)>=end&&k>=wkMonday(c.fineStart)?'late':'ok';});
+  const st=keys.map(k=>{const d=PM[k+'_'+row.lid];const end=wkNext(k);if(k===cw)return d?'ok':'now';if(!d)return k>=wkMonday(c.fineStart)?'miss':'skip';return wkLate(d,end)&&k>=wkMonday(c.fineStart)?'late':'ok';});
   let streak=0;for(let i=st.length-1;i>=0;i--){if(st[i]==='now')continue;if(st[i]==='ok')streak++;else break;}
   return {keys,st,streak};}
 function econIncome(s,si){
@@ -3911,7 +4073,7 @@ function bldText(s){const {tot,lines}=bldTotals(s);const reg=String(BC.region||'
 function econExpenses(s,si){
   const tr=s.treasury||{};const resOpts=invItems(tr).map(it=>it.name);const ex=s.expenses||[];const dl=s.daily||[];
   const cw=wkMonday(kyivToday());const mv=movements(s);
-  const wOut=mv.filter(o=>mvWeek(o)===cw&&!MVIN(o.kind)).reduce((a,o)=>a+mvSilver(s,o),0);
+  const wOut=mv.filter(o=>mvWeek(o)===cw&&!MVIN(o.kind)&&o.kind!=='sync').reduce((a,o)=>a+mvSilver(s,o),0);
   const perDay=dl.reduce((a,it)=>a+(silverOf(s,it.res||'Срібло',dailyRate(it))||0),0);const allEx=ex.reduce((a,e)=>a+exSilver(s,e),0);
   let h=`<div class="eco-stats"><div class="es out"><span class="k">Витрачено за тиждень</span><b>${wOut?'−':''}${fmt(Math.abs(wOut))}</b><span class="s">срібла, разом зі списаннями</span></div><div class="es out"><span class="k">Щоденні списання</span><b>${perDay?'−':''}${fmt(perDay)}</b><span class="s">на день у перерахунку на срібло · ${fmt(perDay*7)} на тиждень</span></div><div class="es out"><span class="k">Усі разові витрати</span><b>${allEx?'−':''}${fmt(allEx)}</b><span class="s">срібла · ${ex.length} запис${ex.length%10===1&&ex.length%100!==11?'':ex.length%10>=2&&ex.length%10<=4&&(ex.length%100<10||ex.length%100>=20)?'и':'ів'}</span></div></div>`;
   h+=bldCalcHtml(s);
@@ -4088,10 +4250,10 @@ function econHtml(s,si){try{wkCfg(s);}catch(_){}
     const exTot=(s.expenses||[]).reduce((a,e)=>a+(silverOf(s,e.unit||'Срібло',+e.amount||0)||0),0);
     h+=`<div class="ecotop"><div class="kpi in"><span class="k">Внески цього тижня</span><span class="v">${paid} з ${memN}</span><span class="s">${n?esc(n.label)+' · ':''}≈ ${fmt(wkSilver)} срібла</span></div><div class="kpi in"><span class="k">Від меценатів</span><span class="v">${patTot?"+":""}${fmt(patTot)}</span><span class="s">срібла загалом</span></div><div class="kpi out"><span class="k">Витрати</span><span class="v">${exTot?"−":""}${fmt(exTot)}</span><span class="s">срібла загалом</span></div></div>`;
     // journal
-    const kinds={all:'Усе',week:'Внески',patron:'Меценати',fine:'Штрафи',expense:'Витрати',daily:'Щоденні списання'};
+    const kinds={all:'Усе',week:'Внески',patron:'Меценати',fine:'Штрафи',expense:'Витрати',daily:'Щоденні списання',sync:'Звірка з грою'};
     const ord=mv.map((o,i)=>({o,i})).sort((a,b)=>(b.o.at||'').localeCompare(a.o.at||'')||b.i-a.i).map(x=>x.o);
     const fl=ord.filter(o=>JOUR_F==='all'||o.kind===JOUR_F);const lim=MORE.jour?fl:fl.slice(0,5);
-    const icon={week:'📅',patron:'🎁',fine:'⚖️',expense:'💸',daily:'🕘'};
+    const icon={week:'📅',patron:'🎁',fine:'⚖️',expense:'💸',daily:'🕘',sync:'🔄'};
     h+=`<div class="block"><h3>Рух казни <small>усі надходження й витрати</small></h3><div class="afilter">${Object.entries(kinds).map(([k,l])=>`<button class="small${JOUR_F===k?' primary':''}" data-a="jf" data-k="${k}">${l}</button>`).join('')}</div>`;
     h+=fl.length?`<div class="tblwrap" style="border:0;background:transparent"><table class="exp jour"><thead><tr><th>Коли</th><th>Що</th><th class="num">Зміна</th></tr></thead><tbody>${lim.map(o=>`<tr><td>${o.at?esc(fmtDT(o.at)):esc(o.date||'раніше')}${o.at&&o.kind==='week'?`<div class="hint">тиждень ${esc(o.date)}</div>`:''}</td><td>${icon[o.kind]} <b>${o.kind==='daily'?'Держава':(o.who?plink(o.who):'—')}</b><div class="hint">${esc(o.what)}</div></td><td class="num">${moneyCell(s,o.items)}${o.items.some(i=>!i.canon)?'<div><span class="tag warn">⚠ такого ресурсу немає в казні</span></div>':''}</td></tr>`).join('')}</tbody></table></div>${fl.length>5?moreBtn('jour',fl.length):''}`:'<p class="empty">Записів ще немає.</p>';
     h+='</div>';
@@ -4229,6 +4391,7 @@ function renderInner(){chatMarkSeen();
   if(ED){const sc=EDIT_SCOPE.startsWith('sec:')?(state.sections.find(x=>x.id===EDIT_SCOPE.slice(4))||{}).title:({econ:'Економіка',lands:'Землі, Військо й Гравці',players:'Гравці',ranks:'Звання',church:'Церква'})[EDIT_SCOPE]||'Увесь сайт';html+=`<div class="edbar" role="region" aria-label="Редагування"><span>✏️ Редагування: <b>${esc(sc||'')}</b>${JSON.stringify(state)!==saved?' · <i>є незбережені зміни</i>':''}</span><button class="primary small" data-a="save" ${busy?'disabled':''}>Зберегти</button><button class="ghost small" data-a="cancel">Скасувати</button></div>`;}
   if(ADMP&&!MODALH)MODALH=adminPanel();
   if(CABM&&!MODALH)MODALH=cabinetModal();
+  if(DPIMP&&!MODALH)MODALH=dpModal();
   if(swKids.length&&!(state.sections.find(s=>s.id===active)||{}).noSub){const par=state.sections.find(s=>s.id===active);html+='<div class="subnav" role="tablist" aria-label="Підрозділи">'+[par,...swKids].map(s=>{const lb=SUB_LABEL[s.kind]||s.nav||s.title;const ic=NAV_ICONS[s.kind==='parliament'?'parl':s.kind==='units'?'army':s.id]||NAV_ICONS[s.id];return `<button role="tab" data-a="sub" data-p="${esc(active)}" data-id="${esc(s.id)}" aria-selected="${s.id===swSel}"${s.id===swSel?' aria-current="page"':''}>${ic?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ic}</svg>`:''}<span>${esc(lb)}</span></button>`;}).join('')+'</div>';}
   state.sections.forEach((s,si)=>{
     if((s.tab||s.id)!==active)return;
@@ -4308,6 +4471,7 @@ app.addEventListener('input',e=>{
   if(a==='mapq'){mapSearch(t.value);return;}
   if(a==='lrenin'){LRENV=t.value;return;}
   if(a==='apn'){APN=t.value;return;}
+  if(a==='dpf'){const k=t.dataset.k,u=t.dataset.u;if(k==='tr')DPSEL.noTr=!t.checked;else if(k==='ic'){if(t.value)DPSEL.icons[u]=t.value;else delete DPSEL.icons[u];}else if(k==='act')DPSEL.act[u]=t.value;else if(k==='who'){if(t.value)DPSEL.who[u]=t.value;else delete DPSEL.who[u];}render();return;}
   if(a==='prland'){const p=myProfile();const v=t.value;(async()=>{try{await window.FB.saveProfile(AUTH.email,{about:p.about||'',land:v,tgcode:p.tgcode||''});PROFILES[AUTH.email]={...p,land:v};msg=v?'Землю обрано — її кімната з’явилась у чаті':'Землю прибрано';msgErr=false;}catch(e){msg='Не вдалося зберегти';msgErr=true;}render();})();return;}
   if(a==='bff'){const k=t.dataset.k;BF[k]=t.type==='checkbox'?t.checked:t.value;if(k==='type'||k==='n'){const el=document.querySelector('.bform .bcost');if(el){const T=bldType(BF.type);const n=Math.max(1,Math.floor(+BF.n||1));el.textContent='Вартість: '+(Object.entries(T.cost||{}).filter(([,v])=>+v).map(([kk,v])=>fmt(v*n)+' '+resWord(sectionByKind('economy')||{},kk)).join(' + ')||'—');}if(k==='type')mapSelUpd();}return;}
   if(a==='actas'){ACTAS=t.value;try{localStorage.setItem('ud-actas',ACTAS);}catch(_){}DOSSIER=null;render();return;}
@@ -4844,6 +5008,8 @@ app.addEventListener('click',async e=>{
   if(a==='prej'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return;}busy=true;render();
     try{await window.FB.delProposal(b.dataset.id);PROPS=await window.FB.loadProposals();msg='Законопроєкт знято';}catch(err){msg='Не вдалося';msgErr=true;}
     busy=false;render();return;}
+  if(a==='dpclose'){{const es=sectionByKind('economy');if(es){active=es.id;ECV='ov';}}DPIMP=null;DPDONE=null;DPSEL={icons:{},who:{},act:{},noTr:false};render();return;}
+  if(a==='dpapply'){if(busy)return;await dpApply();return;}
   if(a==='invcancel'){INV_IN=null;try{history.replaceState(null,'',location.pathname);}catch(_){}render();return;}
   if(a==='invapply'){if(!AUTH.admin||!INV_IN)return;const es=state.sections.find(x=>x.kind==='economy');if(!es)return;const tr=es.treasury=es.treasury||{link:'https://dragpolit.com/economy/country/193'};const items=invItems(tr);
     reconcile(es,INV_IN);busy=true;render();
@@ -5671,7 +5837,7 @@ window.APP={sigs(m){SIGS=m||{};sigsLoaded=true;botReady();renderSoon();finalizeE
     if(editing||busy){REMOTE=s;msg='Хтось щойно змінив дані на сайті. Після збереження або скасування ви побачите свіжу версію.';msgErr=false;renderSoon();return;}
     state=s;saved=js;syncBal();renderSoon();},
   votes(v){VOTES=v||{};votesLoaded=true;botReady();renderSoon();finalizeExpired();},props(l){PROPS=l||[];syncBal();renderSoon();},load(s){const p=s.sections.find(x=>x.kind==='parliament');if(p)(p.bills||[]).forEach((b,i)=>{if(!b.id)b.id='b'+i+'x'+Date.now().toString(36);});state=s;
-  if(p&&p.repEmails&&!p.repHolder){p.repHolder={};landLeaders().forEach(r=>{if(String(p.repEmails[r.land]||'').trim()&&r.name)p.repHolder[r.land]=r.name;});}{const es=s.sections.find(x=>x.kind==='economy');if(es)freezePrices(es);}ensureSections(s);saved=JSON.stringify(s);msg='';syncBal();if(INV_IN){const es=s.sections.find(x=>x.kind==='economy');if(es)active=es.tab||es.id;}renderSoon();},fail(t){msg=t;msgErr=true;renderSoon();},auth(a){const keep=editing&&EDIT_SCOPE&&a.email===AUTH.email;AUTH=a;AUTH.base=!!a.admin;syncHetAdmin();if(window.FB&&window.FB.watchSealed)window.FB.watchSealed(CASES);if(!a.admin&&!keep){editing=false;EDIT_SCOPE='';}botReady();renderSoon();finalizeExpired();}};
+  if(p&&p.repEmails&&!p.repHolder){p.repHolder={};landLeaders().forEach(r=>{if(String(p.repEmails[r.land]||'').trim()&&r.name)p.repHolder[r.land]=r.name;});}{const es=s.sections.find(x=>x.kind==='economy');if(es)freezePrices(es);}ensureSections(s);saved=JSON.stringify(s);msg='';syncBal();if(INV_IN||DPIMP){const es=s.sections.find(x=>x.kind==='economy');if(es){active=es.id;ECV='ov';}}renderSoon();},fail(t){msg=t;msgErr=true;renderSoon();},auth(a){const keep=editing&&EDIT_SCOPE&&a.email===AUTH.email;AUTH=a;AUTH.base=!!a.admin;syncHetAdmin();if(window.FB&&window.FB.watchSealed)window.FB.watchSealed(CASES);if(!a.admin&&!keep){editing=false;EDIT_SCOPE='';}botReady();renderSoon();finalizeExpired();}};
 window.APP_CANSEE=c=>canSeeSealed(c);window.__PROF=e=>PROFILES[lc(e)]||{};window.APP_POSTBANS=()=>[...bans().post];
 if(window.APP_READY)window.APP_READY();
 })();
@@ -5925,7 +6091,7 @@ async function postTreaty(t){ const id = "d" + Date.now().toString(36) + Math.ra
 async function updTreaty(id, v){ await updateDoc(doc(db, "treaties", id), v); }
 async function delTreaty(id){ await deleteDoc(doc(db, "treaties", id)); }
 // Тижневий внесок Землі: один документ на Землю й тиждень (повторна позначка неможлива)
-async function markWk(d){ const id = d.wk + "_" + d.lid; await setDoc(doc(db, "wkpay", id), { wk: d.wk, lid: d.lid, land: d.land, grp: d.grp, name: d.name || "", items: d.items || "", email: (auth.currentUser.email || "").toLowerCase(), at: serverTimestamp() }); }
+async function markWk(d){ const id = d.wk + "_" + d.lid; const o = { wk: d.wk, lid: d.lid, land: d.land, grp: d.grp, name: d.name || "", items: d.items || "", email: (auth.currentUser.email || "").toLowerCase(), at: serverTimestamp() }; if (d.paidAt && Number.isFinite(+d.paidAt)) o.paidAt = Math.min(Math.floor(+d.paidAt), Date.now()); await setDoc(doc(db, "wkpay", id), o); }
 async function unmarkWk(id){ await deleteDoc(doc(db, "wkpay", id)); }
 // Партії та коаліції
 let STORE = null;
