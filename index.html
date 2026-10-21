@@ -304,6 +304,13 @@ a.dpbm{display:inline-block;padding:5px 12px;border-radius:999px;background:var(
 @keyframes musbeat{50%{transform:scale(1.25)}}
 @media (max-width:900px){.musbtn{bottom:calc(72px + env(safe-area-inset-bottom,0px));left:10px;padding:6px 10px}}
 .musadm{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}.musg{margin:10px 0;padding:8px 10px;border:1px solid var(--line);border-radius:10px}.musc{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 0}.musc audio{height:30px;max-width:230px}.musup{display:inline-block;margin-top:6px;cursor:pointer;border:1px dashed var(--line2,var(--line));border-radius:8px;padding:4px 10px}
+.lab-stats .es b{font-size:22px}.lab-todo{border-color:var(--gold,#e9b44c)}
+.ctc{border:1px solid #ffffff1c;border-left:4px solid #8a7a63;border-radius:12px;padding:10px 12px;margin:8px 0;background:#00000024}
+.ctc.paid{border-left-color:#5fbf73}.ctc.wait{border-left-color:#e9b44c}.ctc.part{border-left-color:#e9b44c}.ctc.debt{border-left-color:#e0574a}.ctc.void{opacity:.75}
+.ctch{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}.ctc .lchip{font-size:12px;padding:2px 9px;border-radius:999px;background:#ffffff14;white-space:nowrap}
+.ctcb{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:6px;font-size:14px}.ctt{margin-top:4px}.ctca{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.labf textarea{min-height:64px}.cmpimg{max-width:220px;max-height:140px;border-radius:8px;margin-top:6px;border:1px solid var(--line)}
+.fundrep{white-space:pre-wrap;background:#0004;border-radius:10px;padding:12px;font-size:13.5px}.lnpay{max-width:110px}.num.neg,b.neg{color:#ff8a73}
 </style>
 <style id="page-style">
 /* Layout: one column registry; each land is a row — current flag, name + offices, then the flag history strip */
@@ -2381,7 +2388,7 @@ function restructure(s){const S=s.sections;const by=k=>S.find(x=>x.kind===k);con
   const parl=by('parliament'),laws=by('laws'),doc=by('doc'),pl=by('players'),gov=by('gov'),econ=by('economy'),aw=by('awards'),court=by('court'),units=by('units'),church=by('church'),home=by('home'),power=by('power'),comm=by('community'),chs=by('chat');
   const sub=(c,p,sw=true)=>{if(c&&p&&c!==p){c.tab=p.id;c.sw=sw;}};
   // ДЕРЖАВА: Землі УД · Червоний Клин · Карта · Економіка · Історія
-  if(ud){ud.navTop='Держава';S.filter(x=>!x.kind&&x.lands&&x!==ud).forEach(x=>sub(x,ud));sub(by('map'),ud);sub(econ,ud);sub(by('history'),ud);}
+  if(ud){ud.navTop='Держава';S.filter(x=>!x.kind&&x.lands&&x!==ud).forEach(x=>sub(x,ud));sub(by('map'),ud);sub(econ,ud);sub(by('labor'),ud);sub(by('fund'),ud);sub(by('history'),ud);}
   // ВЛАДА: Структура · Палата Земель · Суд (Канцелярії — кабінети)
   if(power){delete power.tab;power.navTop='Влада';sub(parl,power);sub(court,power);if(parl)delete parl.noSub;if(gov){gov.tab=power.id;gov.sw=false;gov.hideView=true;}}
   else{if(court&&parl){court.tab=parl.id;court.sw=true;parl.noSub=true;}if(gov&&parl){gov.tab=parl.id;gov.sw=false;gov.hideView=true;}}
@@ -3045,6 +3052,10 @@ function myTodo(){if(!AUTH.email||AUTH.bot)return [];const out=[];const ml=myLan
   allBills().filter(b=>isOpen(b)).forEach(b=>{const vs=tally(b).vs||[];ml.forEach(land=>{if(!vs.some(v=>v.land===land))out.push({ic:'🗳',t:`Проголосувати${ml.length>1?' від «'+land+'»':''}: «${b.title||'законопроєкт'}»`,sub:b.closesAt?'до '+fmtDT(b.closesAt):'',a:'billm',k:b.id,hot:1});});});
   if(isHetman())allBills().filter(b=>phase(b)==='sign').forEach(b=>out.push({ic:'✍️',t:`Підписати або ветувати: «${b.title||''}»`,a:'billm',k:b.id,hot:1}));
   try{const es=sectionByKind('economy');if(es){const c=wkCfg(es);const PM=wkPayMap();const cw=wkCur(c);c.groups.forEach(g=>{const rows=wkRows(g,c);const gr=wkGold(g,c);[...rows,...(gr?[gr]:[])].forEach(r=>{if(!r.on||!r.rep||emailOf(r.rep)!==AUTH.email)return;if(!PM[cw+'_'+r.lid]){const st=wkStat(es,g,c,r,cw);out.push({ic:'💰',t:`Тижневий внесок · ${r.gold?r.title:r.land}`,sub:(st.part?'лишилось '+wkTxt(es,st.rem):wkItemsOf(g,rows,r))+' · до неділі 23:59',a:'tab',k:es.id});}wkDebts(es,g,c,r,PM).filter(wkDebtOpen).forEach(x=>out.push({ic:'⚠️',t:`Борг за ${wkLabelOf(x.wk)} · ${r.land}`,sub:(x.paid?'':x.items+' + ')+'штраф '+(x.fine||'0'),a:'tab',k:es.id,hot:1}));});});}}catch(_){}
+  try{const ls=sectionByKind('labor'),fs=sectionByKind('fund');CONTRACTS.forEach(c=>{if(lc(c.workEmail)===AUTH.email&&c.status==='pending')out.push({ic:'📜',t:`Підтвердити трудовий договір від ${c.emp}`,sub:`${c.factory} · ${fmt(c.wage)} срібла · ${c.days} діб`,a:'tab',k:ls&&ls.id,hot:1});if(lc(c.workEmail)===AUTH.email&&c.status==='active'&&c.wageProp)out.push({ic:'📜',t:`Роботодавець пропонує знизити зарплату до ${fmt(c.wageProp)}`,a:'tab',k:ls&&ls.id,hot:1});if(c.status==='active'&&((lc(c.workEmail)===AUTH.email&&c.termEmp&&!c.termWork)||(lc(c.empEmail)===AUTH.email&&c.termWork&&!c.termEmp)))out.push({ic:'📜',t:'Запит на розірвання трудового договору',a:'tab',k:ls&&ls.id});});
+    LOANS.forEach(l=>{if(lc(l.whoEmail)!==AUTH.email)return;const sg=loanStage(l);if(['active','overdue','court'].includes(sg)){const due=loanDue(l);if(sg!=='active'||due-wkNowMs()<3*864e5)out.push({ic:'💳',t:sg==='active'?'Скоро строк повернення кредиту':'Кредит прострочено',sub:'залишок '+fmt(loanOut(l))+' срібла · до '+fmtDT(new Date(due).toISOString()),a:'tab',k:fs&&fs.id,hot:sg!=='active'});}});
+    if(isFin()||AUTH.admin){const n=LOANS.filter(l=>loanStage(l)==='pending').length;if(n)out.push({ic:'💳',t:`Заявки на кредит: ${n}`,a:'tab',k:fs&&fs.id});}if(isHetman()){const n=LOANS.filter(l=>loanStage(l)==='het').length;if(n)out.push({ic:'💳',t:`Кредити чекають погодження Гетьмана: ${n}`,a:'tab',k:fs&&fs.id,hot:1});}
+    if(laborOfficer()&&!AUTH.admin){const n=COMPLAINTS.filter(x=>x.status==='new').length;if(n)out.push({ic:'📣',t:`Скарги на зарплату: ${n}`,a:'tab',k:ls&&ls.id});}}catch(_){}
   (typeof CASES!=='undefined'?CASES:[]).forEach(c=>{const st=c.status||'open';if(!['open','hearing'].includes(st))return;const r=lc(c.defEmail)===AUTH.email?'ви відповідач':lc(c.email)===AUTH.email?'ви позивач':(c.wits||[]).map(lc).includes(AUTH.email)?'ви свідок':'';if(r){const cs=sectionByKind('court');out.push({ic:'⚖️',t:`Суд: справа №${c.no||''} «${c.title||''}»`,sub:r,a:'tab',k:cs?cs.id:'court'});}});
   if(isInterior()||AUTH.admin){const n=(typeof APPS!=='undefined'?APPS:[]).filter(x=>x.status==='open').length;if(n)out.push({ic:'🪪',t:`Заявки на громадянство: ${n}`,a:'tab',k:'players'});}
   APPTS.filter(x=>x.status==='new'&&lc(x.email)===AUTH.email).forEach(x=>out.push({ic:'⏳',t:`Призначення чекає бота: ${x.name||'звільнення'}`,sub:'до 15 хвилин',a:'tab',k:'power'}));
@@ -4617,6 +4628,8 @@ function renderInner(){chatMarkSeen();
     if(s.kind==='map'){html+=mapHtml(s,si)+'</section>';return;}
     if(s.kind==='power'){html+=powerHtml(s,si)+'</section>';return;}
     if(s.kind==='community'){html+=communityHtml(s,si)+'</section>';return;}
+    if(s.kind==='labor'){html+=laborHtml(s,si)+'</section>';return;}
+    if(s.kind==='fund'){html+=fundHtml(s,si)+'</section>';return;}
     if(s.kind==='history'){html+=historyHtml(s,si)+'</section>';return;}
     if(s.kind==='players'){html+=playersHtml(s,si)+'</section>';return;}
     if(s.kind==='court'){html+=courtHtml(s,si)+'</section>';return;}
@@ -4677,7 +4690,8 @@ app.addEventListener('input',e=>{
   if(a==='mapq'){mapSearch(t.value);return;}
   if(a==='lrenin'){LRENV=t.value;return;}
   if(a==='apn'){APN=t.value;return;}
-  if(a==='musof'||a==='musauto'||a==='musfile'||a==='season2')return;
+  if(a==='musof'||a==='musauto'||a==='musfile'||a==='season2'||a==='lcfimg')return;
+  if(a==='lf'||a==='lcf'||a==='lnf'||a==='fmf'){const O={lf:LF,lcf:LCF,lnf:LNF,fmf:FMF}[a];O[t.dataset.k]=t.value;if(a==='lnf'&&t.dataset.k==='kind')LNF.days=String(LOAN_T[t.value].days);if(t.tagName==='SELECT')render();return;}
   if(a==='wkin'){const u=t.dataset.u;const v=t.value.replace(/[^\d]/g,'');(WKIN[u]=WKIN[u]||{})[t.dataset.k]=v;if(t.value!==v&&t.value.replace(/\s/g,'')!==v)t.value=v;return;}
   if(a==='dpf'){const k=t.dataset.k,u=t.dataset.u;if(k==='tr')DPSEL.noTr=!t.checked;else if(k==='ic'){if(t.value)DPSEL.icons[u]=t.value;else delete DPSEL.icons[u];}else if(k==='act')DPSEL.act[u]=t.value;else if(k==='don'){if(t.value)DPSEL.don[u]=t.value;else delete DPSEL.don[u];}else if(k==='who'){if(t.value)DPSEL.who[u]=t.value;else delete DPSEL.who[u];}render();return;}
   if(a==='prland'){const p=myProfile();const v=t.value;(async()=>{try{await window.FB.saveProfile(AUTH.email,{about:p.about||'',land:v,tgcode:p.tgcode||''});PROFILES[AUTH.email]={...p,land:v};msg=v?'Землю обрано — її кімната з’явилась у чаті':'Землю прибрано';msgErr=false;}catch(e){msg='Не вдалося зберегти';msgErr=true;}render();})();return;}
@@ -4825,6 +4839,7 @@ app.addEventListener('change',e=>{
   else if(a==='musauto'){if(!AUTH.admin)return;const v=t.checked;musSaveCfg(g=>{g.musicAuto=v;},v?'Музика вмикатиметься автоматично':'Автоувімкнення вимкнено');}
   else if(a==='musof'){if(!AUTH.admin)return;const [sn,id]=String(t.dataset.u).split(':');const on=t.checked;musSaveCfg(g=>{const m=g.music[sn]=g.music[sn]||{};const off=new Set(m.off||[]);if(on)off.delete(id);else off.add(id);m.off=[...off];},'Плейлист оновлено');}
   else if(a==='musfile'){const f=t.files&&t.files[0];t.value='';musUpload(t.dataset.u,f);}
+  else if(a==='lcfimg'){const f=t.files&&t.files[0];t.value='';labUpload(f);}
   else if(a==='season2'){const g=govSec();if(!g||!AUTH.admin)return;const before=JSON.parse(saved);g.season=t.value;busy=true;render();(async()=>{try{await window.FB.save(state);await logEdit(before);saved=JSON.stringify(state);msg='Святкову тему змінено';msgErr=false;}catch(e){msg='Не вдалося зберегти';msgErr=true;state=JSON.parse(saved);}busy=false;render();})();}
   else if(a==='wkon'){const c=wkCfg(sec);c.off[t.dataset.l]=!t.checked;render();}
   else if(a==='wkt'){wkCfg(sec).groups[+t.dataset.g].treasury=t.checked;render();}
@@ -5232,6 +5247,11 @@ app.addEventListener('click',async e=>{
   if(a==='prej'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return;}busy=true;render();
     try{await window.FB.delProposal(b.dataset.id);PROPS=await window.FB.loadProposals();msg='Законопроєкт знято';}catch(err){msg='Не вдалося';msgErr=true;}
     busy=false;render();return;}
+  if(['ctnew','ctok','ctno','ctdel','ctwacc','ctwrej','ctterm','ctbreak','ctwage','ctsue','cmpnew','cmpdo','cmppaid','lnnew','lnok','lnhet','lnrej','lnissue','lnpay','lnsue'].includes(a)){if(busy)return;await labAct(a,b);return;}
+  if(a==='lv'){LV=b.dataset.k;render();return;}
+  if(a==='lfilt'){LFILT=b.dataset.k;render();return;}
+  if(a==='fundv'){FUNDV=b.dataset.k;render();return;}
+  if(a==='fmadd'){if(busy)return;await fundAdd();return;}
   if(a==='musdel'){if(!AUTH.admin)return;const sn=b.dataset.u,i=+b.dataset.k;const x=musCfg(sn).custom[i];if(!x)return;if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='?';return;}await musSaveCfg(g=>{const m=g.music[sn];m.custom=(m.custom||[]).filter((_,k)=>k!==i);},'Трек прибрано');if(x.path)try{await window.FB.deleteMusic(x.path);}catch(_){}return;}
   if(a==='rainnow'){try{rainStart(150000);}catch(_){}return;}
   if(a==='dpclose'){{const es=sectionByKind('economy');if(es){active=es.id;ECV='ov';}}DPIMP=null;DPDONE=null;DPSEL={icons:{},who:{},act:{},don:{},noTr:false};render();return;}
@@ -5616,7 +5636,7 @@ app.addEventListener('toggle',e=>{const d=e.target;if(d&&d.dataset&&d.dataset.o)
 let COMMENTS=[],PETS=[],PSIGNS={},CASES=[],CMD={},PD={title:'',text:''},CD={title:'',def:'',text:'',bill:'',kind:'civil',arts:[],art:'',closed:false,asPros:false},VD={},PETF='open';
 const PET_MS=7*24*3600*1000;
 const SW_KINDS=['laws','gov','players','ranks'];const SUB={};
-const SUB_LABEL={power:'Структура',community:'Огляд',parties:'Партії',church:'Церква',calendar:'Календар',court:'Суд',parliament:'Палата Земель',laws:'Кодекси й акти',doc:'Конституція',economy:'Економіка',awards:'Відзнаки',elections:'Вибори',map:'Карта',history:'Історія',gov:'Канцелярія',players:'Гравці',units:'Курені',ranks:'Звання'};
+const SUB_LABEL={labor:'Праця',fund:'Фонд',power:'Структура',community:'Огляд',parties:'Партії',church:'Церква',calendar:'Календар',court:'Суд',parliament:'Палата Земель',laws:'Кодекси й акти',doc:'Конституція',economy:'Економіка',awards:'Відзнаки',elections:'Вибори',map:'Карта',history:'Історія',gov:'Канцелярія',players:'Гравці',units:'Курені',ranks:'Звання'};
 let EMERG={cur:null,hist:[]},APPS=[],AP={name:'',profile:'',land:'',about:'',kind:'citizen'},APR={},RK={name:'',ladder:'mil',rank:'',reason:''},CAL={y:0,m:0,d:0},ES={hours:'48'};
 function emActive(){const c=EMERG&&EMERG.cur;return !!(c&&+c.untilMs>Date.now());}
 function voteHours(){return emActive()?12:24;}
@@ -5991,7 +6011,161 @@ function govHtml(s,si){const posts=s.posts||(s.posts=[]);let h='<div class="gov"
   if(editing&&AUTH.admin){const g=s;h+=`<div class="block"><h3>Герб на документах <small>друкується вгорі кожного документа-картинки</small></h3><div class="landtools"><img class="embprev" src="${esc(emblemSrc())}" alt="Герб"><button class="small" data-a="embpick" data-s="${si}">Завантажити інший герб</button></div></div>`;}
   else{h+=`<div class="block rtwrap">${roundTable(posts.filter(p=>p.perm!=='court'&&p.perm!=='arbiter'))}</div>`;h+=treatiesHtml();if(!AUTH.bot)h+=docForm();h+='<div class="leaders govposts rtlist">'+posts.map(p=>{const v=!String(p.name||'').trim();return `<div class="post${v?' vac':''}"><span class="t">${esc(p.title)}</span><span class="h">${v?'Вакантно':plink(p.name)}</span>${p.perm==='foreign'?'<span class="t perm">🤝 готує міжнародні угоди</span>':p.perm==='interior'?'<span class="t perm">🪪 громадянство, реєстр, протоколи</span>':p.perm==='court'?'<span class="t perm">⚖️ розглядає справи в Суді</span>':p.perm==='arbiter'?'<span class="t perm">⚖️ вирішує спори суддів</span>':p.perm==='prosecutor'?'<span class="t perm">🛡 обвинувачення від імені держави</span>':p.perm==='econ'?'<span class="t perm">💰 веде Економіку</span>':p.perm==='lands'?'<span class="t perm">🗺 веде Землі та Військо</span>':p.id==='hetman'?'<span class="t perm">✍️ підписує закони, видає укази</span>':''}</div>`}).join('')+'</div>';}
   return h+'</div>';}
+// ===================== Праця (Трудовий кодекс), Державний інвестиційний фонд, кредити =====================
+let CONTRACTS=[],COMPLAINTS=[],LOANS=[];
+let LF={work:'',factory:'',region:'',res:'Срібло',wage:'',days:'7',terms:''},LCF={target:'',factory:'',wage:'',note:'',img:''},LNF={kind:'cit',amount:'',days:'14',purpose:''},LV='reg',LFILT='active',FMF={kind:'grant',what:'',res:'Срібло',qty:'',who:''},LUP=null;
+const LAB_MIN={'Срібло':30000};
+const LAB_RES=['Срібло','Золото','Нафта','Вугілля','Руда'];
+const LOAN_T={biz:{name:'Кредит підприємству',pct:10,days:30,rate:5},cit:{name:'Позика громадянину',pct:3,days:14,rate:10}};
+const FUND_SHARE=0.05,FINE_SHARE=0.75,LOAN_CAP=0.6,HET_LIMIT=500000;
+function laborOfficer(){return !!(AUTH.email&&!AUTH.bot&&(AUTH.admin||isFin()||isInterior()||isHetman()||isJudge()));}
+function isCitizenMe(){const p=meAny();return !!(p&&!p.tourist&&!p.exiled);}
+function ctStatus(c){if(c.status==='active'&&c.end&&wkNowMs()>=c.end)return 'ended';return c.status||'pending';}
+const CT_ST={pending:['wait','⏳ Чекає підтвердження працівника'],active:['paid','✓ Чинний'],declined:['void','✕ Відхилено працівником'],ended:['void','Завершився'],terminated:['void','Розірвано за згодою'],broken:['debt','⚠ Розірвано роботодавцем достроково']};
+function empRep(name){const cs=CONTRACTS.filter(c=>c.emp===name);const ok=cs.filter(c=>['active','ended','terminated'].includes(ctStatus(c))).length;const br=cs.filter(c=>c.status==='broken').length;const cp=COMPLAINTS.filter(x=>x.target===name&&['warn','fine'].includes(x.status)).length;return {n:cs.length,ok,br,cp};}
+function laborStats(){const act=CONTRACTS.filter(c=>ctStatus(c)==='active');const sil=act.filter(c=>c.res==='Срібло');return {act:act.length,workers:new Set(act.map(c=>c.workEmail)).size,emps:new Set(act.map(c=>c.empEmail)).size,avg:sil.length?Math.round(sil.reduce((a,c)=>a+(+c.wage||0),0)/sil.length):0};}
+// ---------- Фонд: баланс і рух коштів ----------
+function fundCfg(){const es=sectionByKind('economy');if(!es)return null;es.fund=es.fund||{moves:[]};es.fund.moves=es.fund.moves||[];return es.fund;}
+function fundMoves(){const es=sectionByKind('economy');if(!es)return [];const out=[];const f=fundCfg();
+  try{const c=wkCfg(es);const tg={};c.groups.forEach(g=>{tg[g.sec]=g;});WKPAY.forEach(d=>{const g=tg[d.grp];if(!g||!g.treasury||String(d.lid||'').startsWith('fine_'))return;const its=parseNeeds(d.items||'').map(i=>({res:canonRes(es,i.res)||i.res,qty:Math.floor((+i.qty||0)*FUND_SHARE)})).filter(i=>i.qty>0);
+    if(its.length)out.push({kind:'auto',at:(d.paidAt||d.at)?new Date(d.paidAt||d.at).toISOString():null,who:d.name||d.land,what:'5% тижневого внеску · '+(d.land||''),items:its});});}catch(e){console.warn(e);}
+  COMPLAINTS.filter(x=>x.status==='fine'&&x.paid&&+x.fine).forEach(x=>out.push({kind:'fine',at:x.paidAt?new Date(x.paidAt).toISOString():null,who:x.target,what:'75% штрафу за порушення мінімальної зарплати',items:[{res:'Срібло',qty:Math.floor(+x.fine*FINE_SHARE)}]}));
+  LOANS.forEach(l=>{if(l.issuedAt)out.push({kind:'loan',at:new Date(l.issuedAt).toISOString(),who:l.who,what:(LOAN_T[l.kind]||{}).name+' · видано',items:[{res:l.res||'Срібло',qty:-(+l.amount||0)}]});(l.pays||[]).forEach(p=>{if(+p.amt)out.push({kind:'repay',at:p.at?new Date(p.at).toISOString():null,who:l.who,what:'Повернення кредиту',items:[{res:l.res||'Срібло',qty:+p.amt}]});});});
+  (f?f.moves:[]).forEach(m=>{const its=(m.items||[]).map(i=>({res:i.res,qty:+i.qty||0})).filter(i=>i.qty);if(its.length)out.push({kind:m.kind||'other',at:m.at||null,who:m.who||m.by||'',what:m.what||'',items:its,by:m.by});});
+  return out.sort((a,b)=>String(b.at||'').localeCompare(String(a.at||'')));}
+function fundBalance(){const m={};fundMoves().forEach(o=>o.items.forEach(i=>{m[i.res]=(m[i.res]||0)+i.qty;}));return m;}
+function loanOut(l){if(!l.issuedAt||l.status==='repaid')return 0;const tot=Math.round((+l.amount||0)*(1+(+l.rate||0)/100));return Math.max(0,tot+loanPenalty(l)-(l.pays||[]).reduce((a,p)=>a+(+p.amt||0),0));}
+function loanDue(l){return l.issuedAt?(+l.issuedAt)+(+l.days||0)*864e5:0;}
+function loanPenalty(l){const due=loanDue(l);if(!due)return 0;const now=wkNowMs();if(now<=due)return 0;const days=Math.floor((now-due)/864e5);const tot=Math.round((+l.amount||0)*(1+(+l.rate||0)/100));const paid=(l.pays||[]).reduce((a,p)=>a+(+p.amt||0),0);return Math.round(Math.max(0,tot-paid)*0.01*days);}
+function loanStage(l){if(l.status==='rejected')return 'rejected';if(l.status==='repaid')return 'repaid';if(!l.issuedAt){if(l.status==='pending'&&(+l.amount>HET_LIMIT)&&l.finOk&&!l.hetOk)return 'het';return l.finOk?'approved':'pending';}const due=loanDue(l);if(wkNowMs()>due){return wkNowMs()-due>=7*864e5?'court':'overdue';}return 'active';}
+const LN_ST={pending:['wait','⏳ На розгляді'],het:['wait','⏳ Чекає погодження Гетьмана'],approved:['part','✓ Схвалено, чекає видачі'],active:['paid','💰 Чинний'],overdue:['debt','⚠ Прострочено'],court:['debt','⚖️ Прострочено понад 7 днів — до Суду'],repaid:['void','✓ Погашено'],rejected:['void','✕ Відмовлено']};
+function loanLimits(){const bal=(fundBalance()['Срібло'])||0;const out=LOANS.reduce((a,l)=>a+((l.issuedAt&&l.status!=='repaid')?Math.max(0,(+l.amount||0)-(l.pays||[]).reduce((x,p)=>x+(+p.amt||0),0)):0),0);const total=bal+out;return {bal,out,total,cap:Math.floor(total*LOAN_CAP),free:Math.max(0,Math.floor(total*LOAN_CAP)-out),biz:Math.floor(bal*LOAN_T.biz.pct/100),cit:Math.floor(bal*LOAN_T.cit.pct/100)};}
+function loanBlock(email){email=lc(email);const mine=LOANS.filter(l=>lc(l.whoEmail)===email);if(mine.some(l=>['overdue','court'].includes(loanStage(l))))return 'у вас є прострочений кредит';return '';}
+// ---------- сторінка «Праця» ----------
+function laborHtml(s,si){const st=laborStats();const me=meAny();const myE=AUTH.email;
+  let h=`<div class="eco-stats lab-stats"><div class="es"><span class="k">Чинних договорів</span><b>${st.act}</b><span class="s">${st.workers} працівник(ів) · ${st.emps} роботодавц(ів)</span></div><div class="es"><span class="k">Середня зарплата на срібних фабриках</span><b>${st.avg?fmt(st.avg):'—'}</b><span class="s">мінімальна — ${fmt(LAB_MIN['Срібло'])} срібла</span></div><div class="es"><span class="k">Скарг на розгляді</span><b>${COMPLAINTS.filter(x=>x.status==='new').length}</b><span class="s">усього скарг: ${COMPLAINTS.length}</span></div></div>`;
+  h+=`<div class="esub">${[['reg','📜 Реєстр договорів'],['new','➕ Новий договір'],['emp','🏭 Роботодавці'],['cmp','📣 Скарги']].map(([k,l])=>`<button class="small${LV===k?' primary':''}" data-a="lv" data-k="${k}">${l}</button>`).join('')}</div>`;
+  // що чекає від мене
+  if(myE&&!AUTH.bot){const todo=CONTRACTS.filter(c=>(lc(c.workEmail)===myE&&(c.status==='pending'||(c.status==='active'&&(c.wageProp||c.termEmp))))||(lc(c.empEmail)===myE&&c.status==='active'&&c.termWork));if(todo.length)h+=`<div class="block lab-todo"><h3>Чекає вашої дії <small>${todo.length}</small></h3>${todo.map(c=>ctCard(c,true)).join('')}</div>`;}
+  if(LV==='new')return h+laborNewHtml();
+  if(LV==='emp')return h+laborEmpHtml();
+  if(LV==='cmp')return h+laborCmpHtml();
+  const L=CONTRACTS.filter(c=>LFILT==='all'||(LFILT==='active'?['active','pending'].includes(ctStatus(c)):LFILT==='mine'?(lc(c.workEmail)===myE||lc(c.empEmail)===myE):true)).sort((a,b)=>(b.at||0)-(a.at||0));
+  h+=`<div class="block"><h3>Реєстр трудових договорів <small>відкритий для всіх</small></h3><div class="afilter">${[['active','Чинні й нові'],['mine','Мої'],['all','Усі']].map(([k,l])=>`<button class="small${LFILT===k?' primary':''}" data-a="lfilt" data-k="${k}">${l}</button>`).join('')}</div>${L.length?L.map(c=>ctCard(c,false)).join(''):'<p class="empty">Договорів ще немає.</p>'}<p class="hint">Договір чинний лише після підтвердження працівником. Договір, якого немає в Реєстрі, вважається неукладеним (Трудовий кодекс, ст. 9).</p></div>`;
+  return h;}
+function ctCard(c,todo){const st=ctStatus(c);const S=CT_ST[st]||CT_ST.pending;const myE=AUTH.email;const isW=myE&&lc(c.workEmail)===myE&&!AUTH.bot,isE=myE&&lc(c.empEmail)===myE&&!AUTH.bot;
+  let x=`<div class="ctc ${S[0]}"><div class="ctch"><div><b>${plink(c.emp)}</b> → <b>${plink(c.work)}</b><div class="hint">🏭 ${esc(c.factory||'фабрика')}${c.region?' · '+esc(c.region):''} · ${esc(c.res||'')}</div></div><span class="lchip">${S[1]}</span></div>
+    <div class="ctcb"><span>💰 <b>${fmt(c.wage)}</b> срібла${c.wageProp?` <span class="tag warn">запропоновано знизити до ${fmt(c.wageProp)}</span>`:''}</span><span>📅 ${c.start?esc(fmtDT(new Date(c.start).toISOString()))+' – '+esc(fmtDT(new Date(c.end).toISOString())):'строк '+(+c.days||0)+' діб від підтвердження'}</span>${c.termEmp||c.termWork?`<span class="tag">запит на розірвання за згодою: ${c.termEmp?'роботодавець':''}${c.termEmp&&c.termWork?' і ':''}${c.termWork?'працівник':''}</span>`:''}</div>${c.terms?`<div class="hint ctt">Умови: ${esc(c.terms)}</div>`:''}`;
+  const btn=(a,l,cls)=>`<button class="small${cls?' '+cls:''}" data-a="${a}" data-id="${esc(c.id)}" ${busy?'disabled':''}>${l}</button>`;let b='';
+  if(isW&&c.status==='pending')b+=`<label class="chk"><input type="checkbox" id="lvl-${esc(c.id)}"> мій рівень у грі — 35 або вище</label>`+btn('ctok','✓ Підтвердити договір','primary')+btn('ctno','Відхилити','ghost');
+  if(isW&&st==='active'&&c.wageProp)b+=btn('ctwacc','Погодитися на нову зарплату')+btn('ctwrej','Не погоджуюся','ghost');
+  if(st==='active'&&(isW||isE)){const mineFlag=isW?c.termWork:c.termEmp;const other=isW?c.termEmp:c.termWork;b+=mineFlag?'':btn('ctterm',other?'Погодитися на розірвання':'Запропонувати розірвати за згодою','ghost');}
+  if(isE&&st==='active')b+=btn('ctwage','Змінити зарплату','ghost')+btn('ctbreak','Розірвати одноосібно','ghost danger');
+  if(isE&&c.status==='pending')b+=btn('ctdel','Скасувати','ghost');
+  if((isW||laborOfficer())&&['active','broken','ended','terminated'].includes(st))b+=btn('ctsue','⚖️ Подати позов за договором','ghost');
+  if(b)x+=`<div class="ctca">${b}</div>`;
+  return x+'</div>';}
+function laborNewHtml(){if(!AUTH.email)return '<p class="empty">Увійдіть, щоб укласти договір.</p>';if(!isCitizenMe()&&!AUTH.admin)return '<p class="empty">Укладати договори можуть громадяни Української Держави з реєстру гравців.</p>';
+  const min=LAB_MIN[LF.res];return `<div class="block labf"><h3>Новий трудовий договір <small>ви — роботодавець</small></h3>
+    <label class="fl">Працівник${plSelect('lf-work','data-a="lf" data-k="work"',LF.work,'— оберіть громадянина —')}</label>
+    <div class="erow"><label class="fl">Фабрика / підприємство<input type="text" id="lf-factory" data-a="lf" data-k="factory" maxlength="80" value="${esc(LF.factory)}" placeholder="Назва фабрики"></label><label class="fl">Уділ / місто<input type="text" id="lf-region" data-a="lf" data-k="region" maxlength="60" value="${esc(LF.region)}"></label><label class="fl">Ресурс<select id="lf-res" data-a="lf" data-k="res">${LAB_RES.map(r=>`<option${r===LF.res?' selected':''}>${r}</option>`).join('')}</select></label></div>
+    <div class="erow"><label class="fl">Зарплата (до податків), срібла<input type="text" inputmode="numeric" id="lf-wage" data-a="lf" data-k="wage" value="${esc(LF.wage)}" placeholder="${min?'не менше '+fmt(min):''}"></label><label class="fl">Строк, діб (від 7)<input type="text" inputmode="numeric" id="lf-days" data-a="lf" data-k="days" value="${esc(LF.days)}"></label></div>
+    <label class="fl">Умови дисципліни (необов'язково)<textarea id="lf-terms" data-a="lf" data-k="terms" maxlength="500" placeholder="Наприклад: не менше 5 змін на тиждень">${esc(LF.terms)}</textarea></label>
+    <p class="hint">Працівник має бути громадянином від 35 рівня в грі — він підтвердить це сам. Знизити зарплату в чинному договорі без згоди працівника не можна; дострокове одноосібне розірвання — порушення (штраф ×5/×10/×20 за рішенням Суду).</p>
+    <div class="landtools"><button class="primary" data-a="ctnew" ${busy?'disabled':''}>Надіслати договір працівнику</button></div></div>`;}
+function laborEmpHtml(){const names=[...new Set(CONTRACTS.map(c=>c.emp).concat(COMPLAINTS.map(x=>x.target)).filter(Boolean))];if(!names.length)return '<p class="empty">Роботодавців ще немає.</p>';
+  const rows=names.map(nm=>({nm,...empRep(nm),w:new Set(CONTRACTS.filter(c=>c.emp===nm&&ctStatus(c)==='active').map(c=>c.workEmail)).size})).sort((a,b)=>b.w-a.w||b.n-a.n);
+  return `<div class="block"><h3>Репутація роботодавців</h3><div class="tblwrap"><table class="bud"><thead><tr><th>Роботодавець</th><th class="num">Працівників зараз</th><th class="num">Договорів</th><th class="num">Виконано</th><th class="num">Розірвано достроково</th><th class="num">Підтверджених скарг</th></tr></thead><tbody>${rows.map(r=>`<tr><th>${plink(r.nm)}</th><td class="num">${r.w}</td><td class="num">${r.n}</td><td class="num">${r.ok}</td><td class="num${r.br?' neg':''}">${r.br}</td><td class="num${r.cp?' neg':''}">${r.cp}</td></tr>`).join('')}</tbody></table></div></div>`;}
+function cmpNext(target){const L=COMPLAINTS.filter(x=>x.target===target&&['warn','fine'].includes(x.status));if(!L.some(x=>x.status==='warn'))return {k:'warn',t:'Попередження (3 доби на виправлення)',fine:0};const fines=L.filter(x=>x.status==='fine').length;return fines?{k:'fine',t:'Штраф 400 000 (повторне порушення)',fine:400000}:{k:'fine',t:'Штраф 200 000',fine:200000};}
+function laborCmpHtml(){let h='';
+  if(AUTH.email&&!AUTH.bot&&(isCitizenMe()||AUTH.admin))h+=`<div class="block labf"><h3>Поскаржитися на зарплату нижче мінімальної</h3><label class="fl">Роботодавець${plSelect('lcf-target','data-a="lcf" data-k="target"',LCF.target,'— оберіть —')}</label>
+    <div class="erow"><label class="fl">Фабрика<input type="text" id="lcf-factory" data-a="lcf" data-k="factory" maxlength="80" value="${esc(LCF.factory)}"></label><label class="fl">Зарплата на фабриці, срібла<input type="text" inputmode="numeric" id="lcf-wage" data-a="lcf" data-k="wage" value="${esc(LCF.wage)}"></label></div>
+    <label class="fl">Пояснення<textarea id="lcf-note" data-a="lcf" data-k="note" maxlength="600">${esc(LCF.note)}</textarea></label>
+    <div class="erow"><label class="small musup">📎 Скріншот з гри<input type="file" accept="image/*" data-a="lcfimg" hidden></label>${LUP?`<span class="hint">завантаження ${LUP}%…</span>`:LCF.img?`<span class="hint">✓ скріншот додано</span>`:''}</div>
+    <div class="landtools"><button class="primary" data-a="cmpnew" ${busy?'disabled':''}>Подати скаргу</button></div><p class="hint">Скаргу розглядає Секретар внутрішніх справ або фінансів. Санкції: попередження, потім 200 000, повторно 400 000 срібла (Трудовий кодекс, ст. 6).</p></div>`;
+  const L=COMPLAINTS.slice().sort((a,b)=>(b.at||0)-(a.at||0));const off=laborOfficer();
+  h+=`<div class="block"><h3>Скарги <small>${L.length}</small></h3>${L.length?L.map(x=>{const st={new:['wait','⏳ На розгляді'],warn:['part','⚠ Попередження'],fine:['debt',`💸 Штраф ${fmt(x.fine)}${x.paid?' · сплачено':''}`],rejected:['void','✕ Відхилено']}[x.status]||['wait',''];const nx=cmpNext(x.target);
+    return `<div class="ctc ${st[0]}"><div class="ctch"><div><b>${plink(x.target)}</b> · 🏭 ${esc(x.factory||'')} <div class="hint">зарплата ${fmt(x.wage)} · скаржник ${plink(x.by)} · ${x.at?esc(fmtDT(new Date(x.at).toISOString())):''}</div></div><span class="lchip">${st[1]}</span></div>${x.note?`<div class="hint ctt">${esc(x.note)}</div>`:''}${x.img?`<a href="${esc(x.img)}" target="_blank" rel="noopener"><img class="cmpimg" src="${esc(x.img)}" alt="Скріншот"></a>`:''}
+      ${off&&x.status==='new'?`<div class="ctca"><span class="hint">Наступна санкція: <b>${esc(nx.t)}</b></span><button class="small primary" data-a="cmpdo" data-id="${esc(x.id)}" data-k="${nx.k}" data-f="${nx.fine}">Застосувати</button><button class="small ghost" data-a="cmpdo" data-id="${esc(x.id)}" data-k="rejected">Відхилити</button></div>`:''}
+      ${(isFin()||AUTH.admin)&&x.status==='fine'&&!x.paid&&!AUTH.bot?`<div class="ctca"><button class="small" data-a="cmppaid" data-id="${esc(x.id)}">✓ Штраф сплачено (75% → фонд)</button></div>`:''}</div>`;}).join(''):'<p class="empty">Скарг немає.</p>'}</div>`;
+  return h;}
+// ---------- сторінка «Фонд» ----------
+function fundHtml(s,si){const bal=fundBalance();const lim=loanLimits();const mv=fundMoves();const fe=(isFin()||AUTH.admin)&&!AUTH.bot;const cw=wkMonday(kyivToday());
+  const res=Object.entries(bal).filter(([,v])=>v);
+  let h=`<div class="block eco-hero"><div class="eh-main"><span class="k">У фонді зараз</span><span class="v">${fmt(bal['Срібло']||0)}<small> срібла</small></span><span class="s">окремий облік: гроші фонду лежать у казні гри разом з усім, а сайт веде їх окремо</span></div>${res.filter(([k])=>k!=='Срібло').length?`<div class="eh-res">${res.filter(([k])=>k!=='Срібло').map(([k,v])=>`<div class="${v>0?'':'neg'}"><span>${esc(k)}</span><b>${fmt(v)}</b></div>`).join('')}</div>`:''}</div>`;
+  h+=`<div class="eco-stats"><div class="es in"><span class="k">Можна видати кредитів зараз</span><b>${fmt(lim.free)}</b><span class="s">видано ${fmt(lim.out)} з ліміту ${fmt(lim.cap)} (60%)</span></div><div class="es"><span class="k">Найбільший кредит</span><b>${fmt(lim.biz)}</b><span class="s">підприємству (10% фонду) · громадянину ${fmt(lim.cit)} (3%)</span></div><div class="es"><span class="k">Надійшло за тиждень</span><b>+${fmt(mv.filter(o=>o.at&&wkMonday(kyivDate(Date.parse(o.at)))===cw).reduce((a,o)=>a+o.items.filter(i=>i.res==='Срібло'&&i.qty>0).reduce((x,i)=>x+i.qty,0),0))}</b><span class="s">срібла · ${esc(wkLabelOf(cw))}</span></div></div>`;
+  h+=`<div class="esub">${[['loans','💳 Кредити'],['jour','📒 Рух коштів'],['report','📄 Звіт для Палати']].map(([k,l])=>`<button class="small${(FUNDV||'loans')===k?' primary':''}" data-a="fundv" data-k="${k}">${l}</button>`).join('')}</div>`;
+  const V=FUNDV||'loans';
+  if(V==='jour'){if(fe)h+=`<div class="block labf"><h3>Записати рух коштів фонду</h3><div class="erow"><label class="fl">Тип<select id="fm-kind" data-a="fmf" data-k="kind">${[['grant','Субсидія фабриці (−)'],['invest','Інвестиція (−)'],['build','Будівництво (−)'],['income','Дохід від інвестицій (+)'],['donation','Пожертва у фонд (+)'],['labfine','Штраф за договором — 75% у фонд (+)'],['other','Інше (+/−)']].map(([k,l])=>`<option value="${k}"${FMF.kind===k?' selected':''}>${l}</option>`).join('')}</select></label><label class="fl">Ресурс<select id="fm-res" data-a="fmf" data-k="res">${LAB_RES.map(r=>`<option${r===FMF.res?' selected':''}>${r}</option>`).join('')}</select></label><label class="fl">${FMF.kind==='labfine'?'Повна сума штрафу':'Кількість'}${FMF.kind==='other'?' (з мінусом — витрата)':''}<input type="text" id="fm-qty" data-a="fmf" data-k="qty" value="${esc(FMF.qty)}"></label></div>
+    <div class="erow"><label class="fl">Кому / від кого${plSelect('fm-who','data-a="fmf" data-k="who"',FMF.who,'— не вказано —')}</label><label class="fl">Опис<input type="text" id="fm-what" data-a="fmf" data-k="what" maxlength="160" value="${esc(FMF.what)}" placeholder="Наприклад: субсидія на модернізацію рудника"></label></div><div class="landtools"><button class="primary small" data-a="fmadd" ${busy?'disabled':''}>Записати</button></div><p class="hint">5% тижневих внесків, штрафи за скаргами, видачу й повернення кредитів сайт рахує сам.</p></div>`;
+    const icon={auto:'📅',fine:'⚖️',labfine:'⚖️',loan:'💳',repay:'↩',grant:'🏭',invest:'📈',build:'🏗',income:'📈',donation:'🎁',other:'•'};
+    h+=`<div class="block"><h3>Рух коштів фонду</h3>${mv.length?`<div class="mvlist">${mv.slice(0,MORE.fundj?400:30).map(o=>`<div class="mv1 ${o.items.some(i=>i.qty<0)?'out':'in'}"><span class="mvic">${icon[o.kind]||'•'}</span><div class="mvt"><b>${o.who?plink(o.who):'Держава'}</b><span>${esc(o.what)}</span></div><div class="mvr">${o.items.map(i=>`<span class="mv ${i.qty<0?'out':'in'}">${i.qty<0?'−':'+'}${fmt(Math.abs(i.qty))} ${esc(resWord(sectionByKind('economy')||{},i.res))}</span>`).join('<br>')}<span class="mvd">${o.at?esc(fmtDT(o.at)):''}</span></div></div>`).join('')}</div>${mv.length>30&&!MORE.fundj?`<button class="small ghost" data-a="more" data-k="fundj">Показати все (${mv.length})</button>`:''}`:'<p class="empty">Руху коштів ще немає.</p>'}</div>`;return h;}
+  if(V==='report'){const wk=cw;const inW=o=>o.at&&wkMonday(kyivDate(Date.parse(o.at)))===wk;const sum=(f)=>mv.filter(o=>inW(o)&&f(o)).reduce((a,o)=>a+o.items.filter(i=>i.res==='Срібло').reduce((x,i)=>x+i.qty,0),0);
+    const txt=`Звіт Державного інвестиційного фонду за ${wkLabelOf(wk)}\n\nЗалишок: ${fmt(bal['Срібло']||0)} срібла\nНадійшло: 5% внесків ${fmt(sum(o=>o.kind==='auto'))}, штрафи ${fmt(sum(o=>o.kind==='fine'||o.kind==='labfine'))}, повернення кредитів ${fmt(sum(o=>o.kind==='repay'))}, інше ${fmt(sum(o=>['income','donation'].includes(o.kind)||(o.kind==='other'&&o.items.some(i=>i.qty>0))))}\nВитрачено: кредити ${fmt(-sum(o=>o.kind==='loan'))}, субсидії/інвестиції/будівництво ${fmt(-sum(o=>['grant','invest','build'].includes(o.kind)))}\nКредитів видано й не повернено: ${fmt(lim.out)} (ліміт ${fmt(lim.cap)})\nПрострочених кредитів: ${LOANS.filter(l=>['overdue','court'].includes(loanStage(l))).length}`;
+    return h+`<div class="block"><h3>Щотижневий звіт для Палати Земель</h3><pre class="fundrep">${esc(txt)}</pre><div class="landtools"><button class="small" data-a="tgcopy" data-k="${esc(txt)}">Скопіювати звіт</button></div></div>`;}
+  // кредити
+  if(AUTH.email&&!AUTH.bot&&(isCitizenMe()||AUTH.admin)){const T=LOAN_T[LNF.kind];const maxA=LNF.kind==='biz'?lim.biz:lim.cit;const blk=loanBlock(AUTH.email)||(LOANS.some(l=>lc(l.whoEmail)===AUTH.email&&l.kind===LNF.kind&&!['repaid','rejected'].includes(loanStage(l)))?'у вас уже є чинний кредит цього виду':'');
+    h+=`<div class="block labf"><h3>Подати заявку на кредит</h3><div class="erow"><label class="fl">Вид<select id="ln-kind" data-a="lnf" data-k="kind">${Object.entries(LOAN_T).map(([k,t])=>`<option value="${k}"${LNF.kind===k?' selected':''}>${t.name}</option>`).join('')}</select></label><label class="fl">Сума, срібла (до ${fmt(Math.min(maxA,lim.free))})<input type="text" inputmode="numeric" id="ln-amount" data-a="lnf" data-k="amount" value="${esc(LNF.amount)}"></label><label class="fl">Строк, діб (до ${T.days})<input type="text" inputmode="numeric" id="ln-days" data-a="lnf" data-k="days" value="${esc(LNF.days)}"></label></div>
+      <label class="fl">Мета<input type="text" id="ln-purpose" data-a="lnf" data-k="purpose" maxlength="200" value="${esc(LNF.purpose)}" placeholder="${LNF.kind==='biz'?'Розширення фабрики':'Особисті потреби'}"></label>
+      <p class="hint">Відсоток за весь строк — ${T.rate}%. Прострочка: пеня 1% на добу, після 7 діб — справа до Суду й заборона нових кредитів. ${blk?`<b class="neg">Зараз подати не можна: ${esc(blk)}.</b>`:''}</p><div class="landtools"><button class="primary" data-a="lnnew" ${busy||blk?'disabled':''}>Подати заявку</button></div></div>`;}
+  const L=LOANS.slice().sort((a,b)=>(b.at||0)-(a.at||0));
+  h+=`<div class="block"><h3>Реєстр кредитів <small>відкритий для всіх</small></h3>${L.length?L.map(l=>{const sg=loanStage(l);const S=LN_ST[sg];const out=loanOut(l);const pen=loanPenalty(l);const tot=Math.round((+l.amount||0)*(1+(+l.rate||0)/100));
+    let a='';const fin=(isFin()||AUTH.admin)&&!AUTH.bot,het=(isHetman()||AUTH.admin)&&!AUTH.bot;const btn=(k,t,c)=>`<button class="small${c?' '+c:''}" data-a="${k}" data-id="${esc(l.id)}" ${busy?'disabled':''}>${t}</button>`;
+    if(fin&&sg==='pending')a+=btn('lnok',+l.amount>HET_LIMIT?'Схвалити (далі — Гетьман)':'Схвалити','primary')+btn('lnrej','Відмовити','ghost');
+    if(het&&sg==='het')a+=btn('lnhet','Погодити як Гетьман','primary')+btn('lnrej','Відмовити','ghost');
+    if(fin&&sg==='approved')a+=btn('lnissue','✓ Видано в грі','primary');
+    if(fin&&['active','overdue','court'].includes(sg))a+=`<input type="text" inputmode="numeric" id="lnp-${esc(l.id)}" placeholder="сума" class="lnpay">`+btn('lnpay','Записати повернення');
+    if(sg==='court'&&(fin||laborOfficer()))a+=btn('lnsue','⚖️ До Суду','ghost');
+    return `<div class="ctc ${S[0]}"><div class="ctch"><div><b>${plink(l.who)}</b> · ${esc((LOAN_T[l.kind]||{}).name||'')} <div class="hint">${esc(l.purpose||'')}</div></div><span class="lchip">${S[1]}</span></div><div class="ctcb"><span>💰 <b>${fmt(l.amount)}</b> срібла · ${+l.rate||0}% · ${+l.days||0} діб</span>${l.issuedAt?`<span>📅 повернути до ${esc(fmtDT(new Date(loanDue(l)).toISOString()))}</span><span>до сплати: <b>${fmt(tot)}</b>${pen?` + пеня ${fmt(pen)}`:''} · залишок <b>${fmt(out)}</b></span>`:''}</div>${a?`<div class="ctca">${a}</div>`:''}</div>`;}).join(''):'<p class="empty">Кредитів ще немає.</p>'}</div>`;
+  return h;}
+let FUNDV='';
+// ---------- дії ----------
+async function labAct(a,b){const me=meAny();const myName=me?me.name:'';const err=t=>{msg=t;msgErr=true;render();};const ok=t=>{msg=t;msgErr=false;};const C=id=>CONTRACTS.find(c=>c.id===id);
+  const run=async(fn,okt)=>{busy=true;render();try{await fn();ok(okt);}catch(e){console.warn(e);msg='Не вдалося: '+(e&&e.code==='permission-denied'?'немає прав (або сервер ще не оновив ваші права — спробуйте за 15 хвилин)':(e&&e.code||'помилка мережі'));msgErr=true;}busy=false;render();};
+  if(a==='ctnew'){const w=plByName(LF.work);if(!w||!w.email)return err('Оберіть працівника з реєстру (у нього має бути пошта)');if(lc(w.email)===AUTH.email)return err('Не можна укласти договір із самим собою');if(w.tourist)return err('Працівник має бути громадянином, а не туристом');
+    const wage=+String(LF.wage).replace(/\D/g,'');const days=+String(LF.days).replace(/\D/g,'');if(!(wage>0))return err('Вкажіть зарплату');const min=LAB_MIN[LF.res];if(min&&wage<min)return err(`Мінімальна зарплата на ${LF.res==='Срібло'?'срібних фабриках':'цих фабриках'} — ${fmt(min)}`);if(!(days>=7&&days<=365))return err('Строк — від 7 до 365 діб');if(!String(LF.factory).trim())return err('Вкажіть фабрику');
+    return run(()=>window.FB.addLab('contracts',{emp:myName||AUTH.email,empEmail:AUTH.email,work:w.name,workEmail:lc(w.email),factory:String(LF.factory).trim().slice(0,80),region:String(LF.region).trim().slice(0,60),res:LF.res,wage,days,terms:String(LF.terms).trim().slice(0,500),status:'pending'}).then(()=>{LF={work:'',factory:LF.factory,region:LF.region,res:LF.res,wage:'',days:'7',terms:''};LV='reg';}),'Договір надіслано — працівник має підтвердити його у своєму кабінеті');}
+  const c=C(b.dataset.id);
+  if(a==='ctok'&&c){const cb=document.getElementById('lvl-'+c.id);if(!cb||!cb.checked)return err('Підтвердіть, що ваш рівень у грі — 35 або вище');const now=Date.now();return run(()=>window.FB.updLab('contracts',c.id,{status:'active',start:now,end:now+(+c.days||7)*864e5,lvlOk:true}),'Договір підтверджено — він чинний');}
+  if(a==='ctno'&&c)return run(()=>window.FB.updLab('contracts',c.id,{status:'declined'}),'Договір відхилено');
+  if(a==='ctdel'&&c)return run(()=>window.FB.delLab('contracts',c.id),'Договір скасовано');
+  if(a==='ctwacc'&&c)return run(()=>window.FB.updLab('contracts',c.id,{wage:+c.wageProp,wageProp:null}),'Нову зарплату погоджено');
+  if(a==='ctwrej'&&c)return run(()=>window.FB.updLab('contracts',c.id,{wageProp:null}),'Ви не погодилися на зниження зарплати — вона лишається');
+  if(a==='ctterm'&&c){const isW=lc(c.workEmail)===AUTH.email;const v=isW?{termWork:true}:{termEmp:true};const both=isW?c.termEmp:c.termWork;if(both)v.status='terminated';
+    return run(()=>window.FB.updLab('contracts',c.id,v),both?'Договір розірвано за згодою сторін':'Запит на розірвання надіслано іншій стороні');}
+  if(a==='ctbreak'&&c){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Це порушення договору (ст. 13) — точно розірвати?';b.classList.add('cfm');return;}return run(()=>window.FB.updLab('contracts',c.id,{status:'broken'}),'Договір розірвано одноосібно — працівник може подати позов');}
+  if(a==='ctwage'&&c){const v=prompt(`Нова зарплата (зараз ${c.wage}). Підвищення діє одразу, зниження — лише після згоди працівника:`,String(c.wage));if(v==null)return;const n=+String(v).replace(/\D/g,'');if(!(n>0))return err('Невірна сума');const min=LAB_MIN[c.res];if(min&&n<min)return err('Нижче мінімальної зарплати '+fmt(min));
+    return run(()=>window.FB.updLab('contracts',c.id,n>=+c.wage?{wage:n,wageProp:null}:{wageProp:n}),n>=+c.wage?'Зарплату підвищено':'Пропозицію знизити зарплату надіслано працівнику');}
+  if(a==='ctsue'&&c){const cs=sectionByKind('court');CD={title:'Порушення трудового договору',def:c.emp,text:`Трудовий договір у Реєстрі: роботодавець ${c.emp}, працівник ${c.work}, фабрика «${c.factory}»${c.region?' ('+c.region+')':''}, зарплата ${c.wage} срібла, строк ${c.days} діб${c.start?' (з '+fmtDT(new Date(c.start).toISOString())+')':''}. Статус: ${(CT_ST[ctStatus(c)]||[])[1]||''}.\n\nСуть порушення: `,bill:'',kind:'civil',arts:[],art:'',closed:false,asPros:false};COURT_V='cases';if(cs){active=cs.id;}render();setTimeout(()=>{const el=document.getElementById('cd-text');if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.focus();}},300);return;}
+  if(a==='cmpnew'){const t=plByName(LCF.target);if(!t)return err('Оберіть роботодавця');const wage=+String(LCF.wage).replace(/\D/g,'');if(!LCF.img&&!String(LCF.note).trim())return err('Додайте скріншот або пояснення');
+    return run(()=>window.FB.addLab('complaints',{by:myName||AUTH.email,byEmail:AUTH.email,target:t.name,targetEmail:lc(t.email||''),factory:String(LCF.factory).trim().slice(0,80),wage,img:LCF.img||'',note:String(LCF.note).trim().slice(0,600),status:'new'}).then(()=>{LCF={target:'',factory:'',wage:'',note:'',img:''};}),'Скаргу подано');}
+  const x=COMPLAINTS.find(y=>y.id===b.dataset.id);
+  if(a==='cmpdo'&&x&&laborOfficer()){const k=b.dataset.k;return run(()=>window.FB.updLab('complaints',x.id,{status:k,fine:+b.dataset.f||0,decidedBy:(myPost()||{}).name||myName,decidedAt:Date.now()}),k==='rejected'?'Скаргу відхилено':k==='warn'?'Винесено попередження':'Накладено штраф');}
+  if(a==='cmppaid'&&x)return run(()=>window.FB.updLab('complaints',x.id,{paid:true,paidAt:Date.now()}),'Штраф позначено сплаченим — 75% зараховано до фонду');
+  const l=LOANS.find(y=>y.id===b.dataset.id);
+  if(a==='lnnew'){const T=LOAN_T[LNF.kind];const lim=loanLimits();const amount=+String(LNF.amount).replace(/\D/g,'');const days=+String(LNF.days).replace(/\D/g,'');const maxA=Math.min(LNF.kind==='biz'?lim.biz:lim.cit,lim.free);
+    if(!(amount>0))return err('Вкажіть суму');if(amount>maxA)return err('Найбільша сума зараз — '+fmt(maxA)+' срібла');if(!(days>=1&&days<=T.days))return err('Строк — до '+T.days+' діб');if(!String(LNF.purpose).trim())return err('Вкажіть мету');
+    return run(()=>window.FB.addLab('loans',{kind:LNF.kind,who:myName||AUTH.email,whoEmail:AUTH.email,amount,days,purpose:String(LNF.purpose).trim().slice(0,200),rate:T.rate,status:'pending'}).then(()=>{LNF={kind:LNF.kind,amount:'',days:String(T.days),purpose:''};}),'Заявку подано — її розгляне Секретар фінансів');}
+  if(!l)return;
+  if(a==='lnok')return run(()=>window.FB.updLab('loans',l.id,{finOk:true,finBy:(myPost()||{}).name||myName,status:+l.amount>HET_LIMIT?'pending':'approved'}),+l.amount>HET_LIMIT?'Схвалено — тепер потрібне погодження Гетьмана':'Кредит схвалено');
+  if(a==='lnhet')return run(()=>window.FB.updLab('loans',l.id,{hetOk:true,status:'approved'}),'Погоджено Гетьманом');
+  if(a==='lnrej')return run(()=>window.FB.updLab('loans',l.id,{status:'rejected'}),'У кредиті відмовлено');
+  if(a==='lnissue'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно передали ресурси в грі?';b.classList.add('cfm');return;}return run(()=>window.FB.updLab('loans',l.id,{issuedAt:Date.now(),status:'active',res:'Срібло'}),'Кредит видано — строк пішов');}
+  if(a==='lnpay'){const el=document.getElementById('lnp-'+l.id);const v=+String(el&&el.value||'').replace(/\D/g,'');if(!(v>0))return err('Вкажіть суму повернення');const pays=(l.pays||[]).concat([{amt:v,at:Date.now(),by:(myPost()||{}).name||myName}]);const left=loanOut({...l,pays});
+    return run(()=>window.FB.updLab('loans',l.id,left<=0?{pays,status:'repaid'}:{pays}),left<=0?'Кредит погашено повністю':'Повернення записано · залишок '+fmt(left));}
+  if(a==='lnsue'){const cs=sectionByKind('court');CD={title:'Стягнення простроченого кредиту',def:l.who,text:`Кредит з Державного інвестиційного фонду: ${l.who}, ${l.amount} срібла під ${l.rate}% на ${l.days} діб, виданий ${fmtDT(new Date(l.issuedAt).toISOString())}, строк повернення ${fmtDT(new Date(loanDue(l)).toISOString())}. Залишок боргу з пенею: ${loanOut(l)} срібла.\n\nПрошу стягнути борг (Закон «Про державне кредитування», ст. 7).`,bill:'',kind:'civil',arts:[],art:'',closed:false,asPros:true};COURT_V='cases';if(cs)active=cs.id;render();return;}
+}
+async function fundAdd(){const es=sectionByKind('economy');if(!es||!(isFin()||AUTH.admin))return;const q=+String(FMF.qty).replace(/[^\d-]/g,'');if(!q){msg='Вкажіть кількість';msgErr=true;render();return;}
+  const neg=['grant','invest','build'].includes(FMF.kind);let qty=neg?-Math.abs(q):FMF.kind==='other'?q:Math.abs(q);let what=String(FMF.what||'').trim();
+  if(FMF.kind==='labfine'){qty=Math.floor(Math.abs(q)*FINE_SHARE);what=(what?what+' · ':'')+`75% штрафу ${fmt(Math.abs(q))} за порушення трудового договору (25% — працівнику)`;}
+  const before=JSON.stringify(es);const f=fundCfg();const mp=myPost();f.moves.push({kind:FMF.kind,what:what||({grant:'Субсидія',invest:'Інвестиція',build:'Будівництво',income:'Дохід від інвестицій',donation:'Пожертва у фонд',other:'Інше'}[FMF.kind]||''),who:FMF.who||'',items:[{res:FMF.res,qty:String(qty)}],by:mp?mp.name:'Адміністрація',at:new Date().toISOString()});
+  busy=true;render();try{await window.FB.saveEcon(es);saved=JSON.stringify(state);msg='Записано в рух коштів фонду';msgErr=false;FMF={kind:FMF.kind,what:'',res:FMF.res,qty:'',who:''};}catch(e){const i=state.sections.indexOf(es);if(i>=0)state.sections[i]=JSON.parse(before);msg='Не вдалося зберегти';msgErr=true;}busy=false;render();}
+async function labUpload(file){if(!file)return;if(!/^image\//.test(file.type||'')){msg='Потрібне зображення';msgErr=true;render();return;}if(file.size>5*1024*1024){msg='Зображення більше 5 МБ';msgErr=true;render();return;}
+  LUP=0;render();try{const r=await window.FB.uploadLaborFile(file,p=>{LUP=p;});LCF.img=r.url;LUP=null;msg='Скріншот додано';msgErr=false;}catch(e){console.warn(e);LUP=null;msg='Не вдалося завантажити скріншот';msgErr=true;}render();}
+
 function ensureSections(s){ensureGov(s);ensurePlayers(s);
+  if(!s.sections.some(x=>x.kind==='labor')){const i=s.sections.findIndex(x=>x.kind==='economy');s.sections.splice(i<0?s.sections.length:i+1,0,{id:'labor',kind:'labor',nav:'Праця',title:'Праця',note:'Трудові договори, мінімальна зарплата й скарги за Трудовим кодексом'});}
+  if(!s.sections.some(x=>x.kind==='fund')){const i=s.sections.findIndex(x=>x.kind==='labor');s.sections.splice(i<0?s.sections.length:i+1,0,{id:'fund',kind:'fund',nav:'Фонд',title:'Державний інвестиційний фонд',note:'Окрема скарбниця для розвитку промисловості й кредитів'});}
   if(!s.sections.some(x=>x.kind==='power')){const i=s.sections.findIndex(x=>x.kind==='parliament');s.sections.splice(i<0?s.sections.length:i,0,{id:'power',kind:'power',nav:'Структура',navTop:'Влада',title:'Влада Української Держави',note:'Хто чим керує, хто кого призначає'});}
   if(!s.sections.some(x=>x.kind==='community')){const i=s.sections.findIndex(x=>x.kind==='players');s.sections.splice(i<0?s.sections.length:i,0,{id:'community',kind:'community',nav:'Огляд',navTop:'Громада',title:'Громада',note:'Гравці, партії, вибори, відзнаки й Церква'});}
   if(!s.sections.some(x=>x.kind==='laws')){const i=s.sections.findIndex(x=>x.kind==='parliament');s.sections.splice(i<0?s.sections.length:i+1,0,defaultLaws());}
@@ -6054,6 +6228,9 @@ window.APP={sigs(m){SIGS=m||{};sigsLoaded=true;botReady();renderSoon();finalizeE
   parties(l){PARTIES=l||[];renderSoon();},
   appts(l){APPTS=l||[];renderSoon();},
   builds(l){BUILDS=l||[];renderSoon();},
+  contracts(l){CONTRACTS=l||[];renderSoon();},
+  complaints(l){COMPLAINTS=l||[];renderSoon();},
+  loans(l){LOANS=l||[];renderSoon();},
   coals(l){COALS=l||[];renderSoon();},
   wkpay(l){WKPAY=l||[];renderSoon();},
   apps(l){APPS=l||[];renderSoon();},
@@ -6328,6 +6505,13 @@ function uploadChatFile(path, file, onp){ STORE = STORE || getStorage(); const s
   const p = "chat/" + path.replace(/\/msgs$/, "").replace(/[|]/g, "~") + "/" + Date.now().toString(36) + "_" + safe;
   const r = sref(STORE, p); const task = uploadBytesResumable(r, file, { contentType: file.type || "application/octet-stream", customMetadata: { from: (auth.currentUser.email || "").toLowerCase() } });
   return new Promise((res, rej) => { task.on("state_changed", s => onp && onp(Math.round(s.bytesTransferred / Math.max(1, s.totalBytes) * 100)), rej, async () => { try { const url = await getDownloadURL(r); res({ url, name: String(file.name || "file").slice(0, 200), size: file.size, type: String(file.type || "").slice(0, 100), path: p }); } catch (e) { rej(e); } }); }); }
+const LAB_COLS = ["contracts", "complaints", "loans"];
+async function addLab(col, d){ if (!LAB_COLS.includes(col)) throw new Error("bad col"); const id = col[0] + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); await setDoc(doc(db, col, id), { ...d, at: serverTimestamp() }); return id; }
+async function updLab(col, id, v){ if (!LAB_COLS.includes(col)) throw new Error("bad col"); await updateDoc(doc(db, col, id), v); }
+async function delLab(col, id){ if (!LAB_COLS.includes(col)) throw new Error("bad col"); await deleteDoc(doc(db, col, id)); }
+function uploadLaborFile(file, onp){ STORE = STORE || getStorage(); const safe = String(file.name || "img").replace(/[^\w.\-]+/g, "_").slice(-80); const p = "labor/" + Date.now().toString(36) + "_" + safe; const r = sref(STORE, p);
+  const task = uploadBytesResumable(r, file, { contentType: file.type || "image/png" });
+  return new Promise((res, rej) => { task.on("state_changed", s => onp && onp(Math.round(s.bytesTransferred / Math.max(1, s.totalBytes) * 100)), rej, async () => { try { res({ url: await getDownloadURL(r), path: p }); } catch (e) { rej(e); } }); }); }
 function uploadMusic(file, onp){ STORE = STORE || getStorage(); const safe = String(file.name || "track").replace(/[^\w.\-а-яіїєґА-ЯІЇЄҐ ]+/g, "_").slice(-100); const p = "music/" + Date.now().toString(36) + "_" + safe; const r = sref(STORE, p);
   const task = uploadBytesResumable(r, file, { contentType: file.type || "audio/mpeg" });
   return new Promise((res, rej) => { task.on("state_changed", s => onp && onp(Math.round(s.bytesTransferred / Math.max(1, s.totalBytes) * 100)), rej, async () => { try { res({ url: await getDownloadURL(r), path: p }); } catch (e) { rej(e); } }); }); }
@@ -6399,6 +6583,9 @@ function watch(){
   onSnapshot(collection(db, "parties"), snap => window.APP.parties(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "appts"), snap => window.APP.appts(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "builds"), snap => window.APP.builds(listFrom(snap)), e => console.warn(e));
+  onSnapshot(collection(db, "contracts"), snap => window.APP.contracts(listFrom(snap)), e => console.warn(e));
+  onSnapshot(collection(db, "complaints"), snap => window.APP.complaints(listFrom(snap)), e => console.warn(e));
+  onSnapshot(collection(db, "loans"), snap => window.APP.loans(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "coalitions"), snap => window.APP.coals(listFrom(snap)), e => console.warn(e));
   if (!BOTMODE) onSnapshot(collection(db, "comments"), snap => window.APP.comments(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "petitions"), snap => window.APP.pets(listFrom(snap)), e => console.warn(e));
@@ -6431,7 +6618,7 @@ window.FB = {
   postComment, delComment, createPetition, signPetition, delPetition, petitionToBill, fileCase, decideCase, delCase, revokeNews, updCase, postNote, delNote,
   postSealed, delSealed, postProtocol, updProtocol, saveProfile, closeProposal, watchMsgs, watchDms, sendMsg, delMsg, watchPings, sendPings, delPings, chatBan, chatCleanup, setAdvocate, updAdvocate, delAdvocate, pardon, watchSealed,
   syncBallots, loadAllVotes, reopenBallot, createElection, updElection, delElection, applyCand, setCand, delCand, castVote, myVote, tallyElection,
-  applyCitizen, delApp, decideApp, saveRanks, setEmergency, foundAward, updAwardType, delAwardType, saveChurch, postTreaty, updTreaty, delTreaty, markWk, unmarkWk, uploadMusic, deleteMusic, createParty, updParty, delParty, addAppt, updAppt, addBuild, delBuild, updBuild, addEditLog, loadEditLog, uploadChatFile, createCoal, updCoal, delCoal,
+  applyCitizen, delApp, decideApp, saveRanks, setEmergency, foundAward, updAwardType, delAwardType, saveChurch, postTreaty, updTreaty, delTreaty, markWk, unmarkWk, uploadMusic, deleteMusic, addLab, updLab, delLab, uploadLaborFile, createParty, updParty, delParty, addAppt, updAppt, addBuild, delBuild, updBuild, addEditLog, loadEditLog, uploadChatFile, createCoal, updCoal, delCoal,
   login: () => { const p = new GoogleAuthProvider(); if (p.setCustomParameters) p.setCustomParameters({ prompt: 'select_account' }); return signInWithPopup(auth, p); },
   logout: () => signOut(auth),
 };
