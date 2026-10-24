@@ -1632,6 +1632,18 @@ html.sp body{background:radial-gradient(1100px 520px at 18% -160px,rgba(200,80,1
 .eco2 .esub button.primary{background:rgba(242,181,68,.16);border-color:var(--gold,#f2b544);color:var(--gold-hi,#ffdc8a)}
 .cullinks button,.cullinks button.small{background:transparent;border:0;box-shadow:none;color:var(--gold,#f2b544);padding:4px 2px;font-weight:600;margin-right:14px}
 .cullinks button:hover{text-decoration:underline}
+
+.accsw{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:5px 8px 5px 10px;color:var(--gold,#f2b544);max-width:220px}
+.accsw svg{width:16px;height:16px;flex:none}
+.accsw select{background:transparent;color:var(--cream,#f7ecd6);border:0;font:600 13px var(--f-body);cursor:pointer;max-width:170px;text-overflow:ellipsis}
+.accsw select option{background:#1b130b;color:#f7ecd6}
+.accl{list-style:none;margin:0 0 10px;padding:0;display:flex;flex-direction:column;gap:6px}
+.accl li{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:10px}
+.accl li.on{border-color:var(--gold,#f2b544);background:rgba(242,181,68,.08)}
+.accl li>span:nth-child(2){flex:1;min-width:0;display:flex;flex-direction:column}
+.accl li small{opacity:.7;overflow:hidden;text-overflow:ellipsis}
+.accav{width:32px;height:32px;border-radius:50%;object-fit:cover;flex:none;display:inline-flex;align-items:center;justify-content:center;background:var(--panel2);font-weight:700}
+@media (max-width:760px){.accsw{padding:4px 8px}.accsw select{font-size:12px;max-width:120px}}
 </style>
 
 </head><body>
@@ -3192,6 +3204,7 @@ function cabinetModal(){const me=meAny();const p=myProfile();const lands=landLis
   return `<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="cabm" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide cabm"><button class="small bmx" data-a="cabm" data-k="">✕ Закрити</button>
     <div class="cabh">${seatAv(me?me.name:'','cavbig')}<div><div class="hint">Мій кабінет</div><h3>${me?esc(me.name):esc(AUTH.email)}</h3>${me?`<div class="rkbs">${rankBadges(me.name)}</div><button class="small" data-a="dos" data-n="${esc(me.name)}">🪪 Мій паспорт громадянина →</button>`:'<p class="hint">Ви ще не в реєстрі гравців. Подайте заявку на громадянство.</p>'}</div></div>
     ${todoHtml(td)||'<p class="hint">Зараз від вас нічого не чекають 👌</p>'}
+    ${accBlock()}
     ${me?`<div class="block"><h3>Моя Земля <small>відкриває кімнату Землі в чаті</small></h3><label class="fl"><select id="pr-land" data-a="prland"><option value="">— не обрано —</option>${lands.map(x=>`<option value="${esc(x.l.id)}"${(p.land||'')===x.l.id?' selected':''}>${esc(x.name)}</option>`).join('')}</select></label>${!p.land&&sug?`<p class="hint">Підказка: ви посадовець Землі «${esc(cur(findLandById(state,sug).l).name)}».</p>`:''}</div>
     <div class="block"><h3>Сповіщення в Telegram <small>голосування, внески, виклики до Суду</small></h3>${code?`<p>Надішліть нашому боту в Telegram повідомлення:</p><div class="tgcode"><code>/start ${esc(code)}</code><button class="small" data-a="tgcopy" data-k="/start ${esc(code)}">Копіювати</button>${link?`<a class="gamebtn small" href="${esc(link)}" target="_blank" rel="noopener">Відкрити бота ↗</a>`:''}</div><p class="hint">Бот підключить ваш акаунт протягом хвилини. Відключити — команда /stop у боті.</p>`:`<div class="landtools"><button class="small primary" data-a="tgnew">🔔 Підключити сповіщення</button></div>`}</div>`:''}</div></div>`;}
 function changedSecs(before,after){const b={};(before.sections||[]).forEach(x=>{b[x.id]=JSON.stringify(x);});const out=[];(after.sections||[]).forEach(x=>{const j=JSON.stringify(x);if(b[x.id]!==j)out.push(x.id);});return out;}
@@ -4712,7 +4725,7 @@ function render0(){syncHetAdmin();const cm0=document.getElementById('chmsgs');co
   mapFit();hcLayout();try{hallAnim();}catch(_){}try{hwApply();}catch(_){}try{edCollapse();}catch(_){}{const ht=document.querySelector('.hcwrap:not(.editing)');if(ht&&ht.scrollWidth>ht.clientWidth+4)ht.scrollLeft=(ht.scrollWidth-ht.clientWidth)/2;}{const cm=document.getElementById('chmsgs');if(cm){const st=CHAT.stick||Date.now()<(CHAT.stickUntil||0)||!cmS||cmS.bot;
     if(st){cm.scrollTop=cm.scrollHeight;if(CHAT.msgs&&CHAT.stick){CHAT.stick=false;CHAT.stickUntil=Date.now()+3000;}}else cm.scrollTop=cmS.top;
     cm.querySelectorAll('img').forEach(im=>{if(!im.complete)im.addEventListener('load',()=>{const near=cm.scrollHeight-cm.scrollTop-cm.clientHeight<260;if(Date.now()<(CHAT.stickUntil||0)||near)cm.scrollTop=cm.scrollHeight;},{once:true});});}}
-  setTimeout(()=>{try{confEnsure();}catch(e){console.warn(e);}try{if(confManage()&&!AUTH.bot)confTick();}catch(e){console.warn(e);}try{chatEnsure();}catch(e){console.warn(e);}try{setFavicon();}catch(_){}},0);
+  setTimeout(()=>{try{accSync();}catch(e){console.warn(e);}try{confEnsure();}catch(e){console.warn(e);}try{if(confManage()&&!AUTH.bot)confTick();}catch(e){console.warn(e);}try{chatEnsure();}catch(e){console.warn(e);}try{setFavicon();}catch(_){}},0);
 }
 function chatMarkSeen(){try{const cs=sectionByKind('chat');if(!cs||active!==cs.id||!AUTH.email)return;const th=CHAT.th;if(isMob()&&CHAT.mview!=='thread')return;let t=0;if(th.startsWith('d:')){const d=(CHAT.dms||[]).find(x=>'d:'+x.id===th);if(d)t=Math.max(vms(d.last&&d.last.at),vms(d.at));}const ms=CHAT.msgs||[];const lm=ms[ms.length-1];if(lm)t=Math.max(t,vms(lm.at));if(t)(PINGS||[]).forEach(x=>{if(x.th===th&&vms(x.at)<=t+120000)t=Math.max(t,vms(x.at));});if(t&&t>(CHSEEN[th]||0))chSeen(th,t);}catch(_){}}
 function renderInner(){chatMarkSeen();
@@ -4732,7 +4745,7 @@ function renderInner(){chatMarkSeen();
   const chips=[['Земель',lands],['Представників',rp.filter(r=>r.name).length+' з '+rp.length],['Законів прийнято',passedN],['Оновлено',esc(state.updated),1]];
   if(AUTH.email&&!AUTH.bot){const me=meAny();const n=myTodo().length;bar=`<button type="button" class="cabbtn" data-a="cabm" data-k="1" title="Мій кабінет">${seatAv(me?me.name:'?','cabav')}${n?`<i class="nbadge">${n}</i>`:''}</button>`+bar;}
   window.__BAR=bar;const gerbImg=emblemSrc();
-  let html=`<header class="top top2"><div class="brand2">${gerbImg?`<img class="gerb" src="${esc(gerbImg)}" alt="Герб">`:'<span class="gerb none" aria-hidden="true"></span>'}<div><h1>Українська Держава${(()=>{const sn=seasonNow();return sn==='hw'?'<span class="hwpump" aria-hidden="true">🎃</span>':sn==='xm'?'<span class="xmtree" aria-hidden="true">🎄</span>':'';})()}</h1><a class="bsub" href="https://dragpolit.com" target="_blank" rel="noopener">Доповнення до гри DragPolit <span aria-hidden="true">↗</span></a></div></div><div class="bar">${langTop()}${status}${dupSel()}${bar}</div></header>`;
+  let html=`<header class="top top2"><div class="brand2">${gerbImg?`<img class="gerb" src="${esc(gerbImg)}" alt="Герб">`:'<span class="gerb none" aria-hidden="true"></span>'}<div><h1>Українська Держава${(()=>{const sn=seasonNow();return sn==='hw'?'<span class="hwpump" aria-hidden="true">🎃</span>':sn==='xm'?'<span class="xmtree" aria-hidden="true">🎄</span>':'';})()}</h1><a class="bsub" href="https://dragpolit.com" target="_blank" rel="noopener">Доповнення до гри DragPolit <span aria-hidden="true">↗</span></a></div></div><div class="bar">${langTop()}${accSwitch()}${status}${dupSel()}${bar}</div></header>`;
   if(emActive()){const c=EMERG.cur;const end=new Date(+c.untilMs).toISOString();html+=`<div class="emerg" role="status"><span class="emi" aria-hidden="true">🚨</span><div class="emt"><b>Надзвичайний стан</b>${c.reason?`<div>${esc(c.reason)}</div>`:''}<div class="hint">Запроваджено ${c.source==='law'?'законом'+(c.law?' «'+esc(c.law)+'»':''):'указом Гетьмана'+(c.decreeNo?' №'+esc(c.decreeNo):'')} · до ${esc(fmtDT(end))} · залишилось ${esc(timeLeft(end))} · законопроєкти голосуються 12 годин</div></div>${isHetman()&&c.source!=='law'?`<button class="small" data-a="emend" ${busy?'disabled':''}>Припинити</button>`:''}</div>`;}
   html+='<nav class="toc" aria-label="Розділи">'+state.sections.filter(s=>!s.tab&&navVis(s)).map(s=>`<button data-a="tab" data-id="${esc(s.id)}" ${s.id===active?'aria-current="page"':''}>${NAV_ICONS[s.id]?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${NAV_ICONS[s.id]}</svg>`:''}<span>${esc(s.navTop||s.nav||s.title)}</span>${s.kind==='chat'&&AUTH.email&&chatUnread()?`<i class="nbadge">${chatUnread()}</i>`:''}</button>`).join('')+'</nav>';
   html+=mobNav();
@@ -4741,7 +4754,7 @@ function renderInner(){chatMarkSeen();
   if(BILLM&&!MODALH){const b=allBills().find(x=>x.id===BILLM);if(b){const reps=landLeaders();const lead={};reps.forEach(r=>lead[r.land]=r.name);MODALH=`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="billm" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox"><button class="small bmx" data-a="billm" data-k="" aria-label="Закрити">✕ Закрити</button>${billCard(b,lead,myLands(),false)}</div></div>`;}else BILLM='';}
   if(ADMP&&!MODALH)MODALH=adminPanel();
   if(CABM&&!MODALH)MODALH=cabinetModal();
-  if(!MODALH){const w=welcomeHtml();if(w)MODALH=w;}
+  if(!MODALH){const w=accAddModal()||welcomeHtml();if(w)MODALH=w;}
   if(DPIMP&&!MODALH)MODALH=dpModal();
   if(swKids.length&&!(state.sections.find(s=>s.id===active)||{}).noSub){const par=state.sections.find(s=>s.id===active);html+='<div class="subnav" role="tablist" aria-label="Підрозділи">'+[par,...swKids].map(s=>{const lb=SUB_LABEL[s.kind]||s.nav||s.title;const ic=NAV_ICONS[s.kind==='parliament'?'parl':s.kind==='units'?'army':s.id]||NAV_ICONS[s.id];return `<button role="tab" data-a="sub" data-p="${esc(active)}" data-id="${esc(s.id)}" aria-selected="${s.id===swSel}"${s.id===swSel?' aria-current="page"':''}>${ic?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ic}</svg>`:''}<span>${esc(lb)}</span></button>`;}).join('')+'</div>';}
   state.sections.forEach((s,si)=>{
@@ -4826,6 +4839,7 @@ app.addEventListener('input',e=>{
   if(a==='mapq'){mapSearch(t.value);return;}
   if(a==='lrenin'){LRENV=t.value;return;}
   if(a==='apn'){APN=t.value;return;}
+  if(a==='accsw'){const v=t.value;if(v==='add')accAdd();else if(v!==''&&+v!==accSlot())accGo(+v);return;}
   if(a==='langsel'){const v=t.value;if(['uk','en','ru','es'].includes(v)&&v!==LANG){LANG=v;try{localStorage.setItem('ud-lang',LANG);}catch(_){}render();}return;}
   if(a==='chtrl'){CHTR.l=t.value;CHTR.text='';render();return;}
   if(a==='chtrt'){CHTR.text=t.value;return;}
@@ -5428,7 +5442,11 @@ app.addEventListener('click',async e=>{
     busy=false;render();return;}
   if(a==='login'){if(inApp()){msg='Ви відкрили сайт усередині Telegram, Instagram чи іншого застосунку — Google там не дозволяє входити. Натисніть ⋮ або «…» і виберіть «Відкрити в браузері» (Chrome чи Safari).';msgErr=true;render();return;}
     window.FB.login().catch(err=>{const c=err&&err.code||'';msg=c==='auth/popup-closed-by-user'||c==='auth/cancelled-popup-request'?'Вхід скасовано':c==='auth/popup-blocked'?'Браузер заблокував вікно входу. Дозвольте спливаючі вікна для цього сайту й спробуйте ще раз.':c==='auth/unauthorized-domain'?'Цей домен ще не дозволено для входу (адміністратор має додати його у Firebase).':c==='auth/network-request-failed'?'Немає з’єднання з Google. Перевірте інтернет і спробуйте ще раз.':'Не вдалося увійти ('+c+'). Спробуйте відкрити сайт у Chrome чи Safari, а не всередині Telegram/Instagram.';msgErr=true;render();});return;}
-  if(a==='logout'){editing=false;state=JSON.parse(saved);window.FB.logout();return;}
+  if(a==='logout'){editing=false;state=JSON.parse(saved);const s0=accSlot();window.FB.logout().then(()=>{const L=accList().filter(x=>x.slot!==s0);accSave(L);if(L.length)accGo(L[0].slot);});return;}
+  if(a==='accadd'){accAdd();return;}
+  if(a==='accgo'){accGo(+b.dataset.k);return;}
+  if(a==='accback'){try{localStorage.removeItem('ud-addacc');}catch(_){}accGo(+b.dataset.k||0);return;}
+  if(a==='accrm'){const k=+b.dataset.k;if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Вийти?';return;}if(k===accSlot()){const L=accList().filter(x=>x.slot!==k);window.FB.logout().then(()=>{accSave(L);if(L.length)accGo(L[0].slot);});}else{accSave(accList().filter(x=>x.slot!==k));msg='Акаунт прибрано зі списку. Щоб повністю вийти з нього, перейдіть у нього й натисніть «Вийти».';msgErr=false;render();}return;}
   if(a==='cab'){CAB=b.dataset.k||'';const ps=sectionByKind('parliament');if(ps)active=ps.id;DOSSIER=null;try{history.replaceState(null,'','#'+(CAB?'cab/'+CAB:active));}catch(_){}render();window.scrollTo(0,0);return;}
   if(a==='cabgo'){const k=b.dataset.k;CAB='';DOSSIER=null;if(k.startsWith('court:')){const cs=sectionByKind('court');active=cs?cs.id:'court';COURT_V=k.slice(6);}else{delete SUB[k];active=k;}try{history.replaceState(null,'','#'+active);}catch(_){}render();window.scrollTo(0,0);return;}
   if(a==='hjump'){{const e0=document.getElementById(b.dataset.to);const d=e0&&e0.querySelector('details[data-o]');if(d&&!d.open){OPEN.add(d.dataset.o);render();}}const el=document.getElementById(b.dataset.to);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});const f=el.querySelector('input,textarea');if(f)setTimeout(()=>{try{f.focus({preventScroll:true});}catch(_){}},350);}return;}
@@ -6585,11 +6603,35 @@ async function confAct(a,b){const run=async(fn,ok)=>{busy=true;render();try{awai
 }
 function imgToData(file,max,cb){if(!file||!/^image\//.test(file.type||'')){cb(null);return;}const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{let w=im.width,h=im.height;const k=Math.min(1,max/Math.max(w,h));w=Math.round(w*k);h=Math.round(h*k);const cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(im,0,0,w,h);let out=cv.toDataURL('image/webp',0.85);if(!/^data:image\/webp/.test(out))out=cv.toDataURL('image/png');cb(out);};im.onerror=()=>cb(null);im.src=r.result;};r.readAsDataURL(file);}
 
+
+// ===== Кілька акаунтів: перемикання без виходу =====
+const ACC_MAX=6;let ACC_T=0;
+function accList(){try{return (JSON.parse(localStorage.getItem('ud-accs')||'[]')||[]).filter(a=>a&&a.email&&a.slot!=null);}catch(_){return [];}}
+function accSave(L){try{localStorage.setItem('ud-accs',JSON.stringify(L.slice(0,ACC_MAX)));}catch(_){}}
+function accSlot(){return +window.__SLOT||0;}
+function accAdding(){try{const v=JSON.parse(localStorage.getItem('ud-addacc')||'null');return v&&v.to===accSlot()?String(v.from):null;}catch(_){return null;}}
+function accGo(slot){try{localStorage.setItem('ud-slot',String(slot||0));}catch(_){}msg='Перемикаю акаунт…';msgErr=false;render();setTimeout(()=>location.reload(),50);}
+function accAdd(){const L=accList();const used=new Set([accSlot(),...L.map(a=>a.slot)]);let n=-1;for(let i=0;i<10;i++){if(!used.has(i)){n=i;break;}}if(n<0||L.length>=ACC_MAX){msg='Можна зберегти до '+ACC_MAX+' акаунтів';msgErr=true;render();return;}try{localStorage.setItem('ud-addacc',JSON.stringify({from:accSlot(),to:n}));}catch(_){}accGo(n);}
+function accSync(){if(!AUTH.ready||AUTH.bot||!window.FB)return;const L=accList();const s=accSlot();const i=L.findIndex(a=>a.slot===s);
+  if(AUTH.email){if(accAdding()!=null)try{localStorage.removeItem('ud-addacc');}catch(_){}
+    const dup=L.find(a=>a.email===AUTH.email&&a.slot!==s);
+    if(dup){if(ACC_T)return;ACC_T=1;window.FB.logout().catch(()=>{}).then(()=>{accSave(accList().filter(a=>a.slot!==s));msg='Цей акаунт уже додано — перемикаю на нього';accGo(dup.slot);});return;}
+    const p=meAny();const e={slot:s,email:AUTH.email,name:p?p.name:'',av:p?avatarOf(p):''};
+    if(i<0)L.push(e);else{if(L[i].email===e.email&&L[i].name===e.name&&L[i].av===e.av)return;L[i]=e;}accSave(L);}
+  else if(i>=0){L.splice(i,1);accSave(L);}}
+function accLabel(a){return (a.name||'')+(a.name?' · ':'')+String(a.email||'').replace(/^(.{3}).*(@.*)$/,'$1…$2');}
+function accSwitch(){if(AUTH.bot)return '';const L=accList().slice().sort((x,y)=>x.slot-y.slot);const s=accSlot();if(L.length<2&&!(L.length===1&&L[0].slot!==s))return '';
+  return `<label class="accsw" data-notr title="Перемкнути акаунт"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg><select data-a="accsw" aria-label="Перемкнути акаунт">${L.map(a=>`<option value="${a.slot}"${a.slot===s?' selected':''}>${esc(a.name||a.email)}</option>`).join('')}${L.some(a=>a.slot===s)?'':'<option value="" selected>— не ввійшли —</option>'}${L.length<ACC_MAX?'<option value="add">＋ Додати акаунт</option>':''}</select></label>`;}
+function accBlock(){if(AUTH.bot||!AUTH.email)return '';const L=accList().slice().sort((x,y)=>x.slot-y.slot);const s=accSlot();
+  return `<div class="block accblk" data-notr><h3>Акаунти <small>перемикайтеся без виходу</small></h3>${L.length>1?`<ul class="accl">${L.map(a=>`<li class="${a.slot===s?'on':''}">${a.av?`<img class="accav" src="${esc(a.av)}" alt="">`:`<span class="accav none">${esc((a.name||a.email||'?').slice(0,1).toUpperCase())}</span>`}<span><b>${esc(a.name||'Без імені на сайті')}</b><small>${esc(a.email)}</small></span>${a.slot===s?'<span class="tag">зараз</span>':`<button class="small" data-a="accgo" data-k="${a.slot}">Перейти</button>`}<button class="chx" data-a="accrm" data-k="${a.slot}" title="Вийти з цього акаунта">✕</button></li>`).join('')}</ul>`:'<p class="hint">Маєте другий акаунт Google (наприклад, для іншого персонажа)? Додайте його — і перемикайтеся одним кліком, без виходу.</p>'}${L.length<ACC_MAX?'<div><button class="small primary" data-a="accadd">＋ Додати акаунт</button></div>':''}</div>`;}
+function accAddModal(){const prev=accAdding();if(prev==null||AUTH.email||!AUTH.ready||AUTH.bot)return '';
+  return `<div class="bmodal" role="dialog" aria-modal="true" aria-label="Додати акаунт"><div class="bmbox welc"><h3>Додати ще один акаунт</h3><p>Увійдіть через Google <b>іншим</b> акаунтом. Після цього між акаунтами можна буде перемикатися в кабінеті й угорі сторінки — без виходу.</p><div class="welbtns"><button class="primary" data-a="login">🔑 Увійти через Google</button></div><div><button class="small ghost" data-a="accback" data-k="${esc(prev)}">Скасувати</button></div></div></div>`;}
+
 // ===== Вітальне вікно: увійти або подати заявку =====
 let WELC_OFF=false,WELC_AT=0;
 function welcomeSeen(){if(WELC_OFF)return true;try{return sessionStorage.getItem('ud-welc')==='1';}catch(_){return false;}}
 function welcomeOff(){WELC_OFF=true;try{sessionStorage.setItem('ud-welc','1');}catch(_){}}
-function welcomeHtml(){if(!AUTH.ready||AUTH.bot||welcomeSeen()||/[?&]bot=1/.test(location.search)||!state.sections.length||editing)return '';
+function welcomeHtml(){if(accAdding()!=null)return '';if(!AUTH.ready||AUTH.bot||welcomeSeen()||/[?&]bot=1/.test(location.search)||!state.sections.length||editing)return '';
   if(!AUTH.email){WELC_AT=0;return `<div class="bmodal" role="dialog" aria-modal="true" aria-label="Вітаємо"><button type="button" class="bmback" data-a="welx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox welc"><button class="small bmx" data-a="welx">✕</button><div class="wellang">${langBtns()}</div><img class="welgerb" src="${esc(emblemSrc())}" alt=""><h3>Вітаємо в Українській Державі!</h3><p>Це доповнення до гри DragPolit: Палата Земель і закони, Суд, економіка, військо й чат держави.</p><div class="welbtns"><button class="primary" data-a="login">🔑 Увійти через Google</button></div><p class="hint">Ще не зареєстровані? Увійдіть через Google — і сайт одразу запропонує подати заявку на громадянство, туристичну реєстрацію або заявку делегата Конфедерації.</p><div><button class="small ghost" data-a="welx">Просто подивитися сайт</button></div></div></div>`;}
   if(!WELC_AT){WELC_AT=Date.now();setTimeout(renderSoon,3200);return '';}if(Date.now()-WELC_AT<3000)return '';
   const p=plByEmail(AUTH.email);const ap=myApp();if(p||(ap&&ap.status==='open')||myConf()||(CONF.myApp&&CONF.myApp.status==='open')||AUTH.admin)return '';
@@ -6708,7 +6750,10 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithCustomToken, si
 const OWN_AUTH = /(^|\.)ukr-derzhava\.in\.ua$/.test(location.hostname)
   && await fetch("/__/firebase/init.json", { cache: "no-store" }).then(r => r.ok).catch(() => false);
 if (OWN_AUTH) firebaseConfig.authDomain = location.hostname;
-const fbApp = initializeApp(firebaseConfig);
+// кілька акаунтів Google: кожен акаунт живе у своєму «слоті» (окремий екземпляр Firebase зі своїм входом)
+const SLOT = /[?&]bot=1/.test(location.search) ? 0 : (() => { try { const v = +localStorage.getItem("ud-slot"); return v > 0 && v < 10 ? v : 0; } catch (_) { return 0; } })();
+const fbApp = SLOT ? initializeApp(firebaseConfig, "ud-acc" + SLOT) : initializeApp(firebaseConfig);
+window.__SLOT = SLOT;
 const BOTMODE = /[?&]bot=1/.test(location.search);
 // Кеш у браузері: при повторному відкритті сайту протягом ~30 хв база рахує лише змінені документи, а не все заново.
 let db; try { db = BOTMODE ? getFirestore(fbApp) : initializeFirestore(fbApp, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) }); } catch (e) { console.warn(e); db = getFirestore(fbApp); }
@@ -6938,7 +6983,7 @@ async function markWk(d){ const id = d.wk + "_" + d.lid + (d.part && /^[a-z0-9]{
 async function unmarkWk(id){ await deleteDoc(doc(db, "wkpay", id)); }
 // Партії та коаліції
 let STORE = null;
-function uploadChatFile(path, file, onp){ STORE = STORE || getStorage(); const safe = String(file.name || "file").replace(/[^\w.\-а-яіїєґА-ЯІЇЄҐ ]+/g, "_").slice(-120);
+function uploadChatFile(path, file, onp){ STORE = STORE || getStorage(fbApp); const safe = String(file.name || "file").replace(/[^\w.\-а-яіїєґА-ЯІЇЄҐ ]+/g, "_").slice(-120);
   const p = "chat/" + path.replace(/\/msgs$/, "").replace(/[|]/g, "~") + "/" + Date.now().toString(36) + "_" + safe;
   const r = sref(STORE, p); const task = uploadBytesResumable(r, file, { contentType: file.type || "application/octet-stream", customMetadata: { from: (auth.currentUser.email || "").toLowerCase() } });
   return new Promise((res, rej) => { task.on("state_changed", s => onp && onp(Math.round(s.bytesTransferred / Math.max(1, s.totalBytes) * 100)), rej, async () => { try { const url = await getDownloadURL(r); res({ url, name: String(file.name || "file").slice(0, 200), size: file.size, type: String(file.type || "").slice(0, 100), path: p }); } catch (e) { rej(e); } }); }); }
@@ -6946,7 +6991,7 @@ const LAB_COLS = ["contracts", "complaints", "loans"];
 async function addLab(col, d){ if (!LAB_COLS.includes(col)) throw new Error("bad col"); const id = col[0] + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); await setDoc(doc(db, col, id), { ...d, at: serverTimestamp() }); return id; }
 async function updLab(col, id, v){ if (!LAB_COLS.includes(col)) throw new Error("bad col"); await updateDoc(doc(db, col, id), v); }
 async function delLab(col, id){ if (!LAB_COLS.includes(col)) throw new Error("bad col"); await deleteDoc(doc(db, col, id)); }
-function uploadLaborFile(file, onp){ STORE = STORE || getStorage(); const safe = String(file.name || "img").replace(/[^\w.\-]+/g, "_").slice(-80); const p = "labor/" + Date.now().toString(36) + "_" + safe; const r = sref(STORE, p);
+function uploadLaborFile(file, onp){ STORE = STORE || getStorage(fbApp); const safe = String(file.name || "img").replace(/[^\w.\-]+/g, "_").slice(-80); const p = "labor/" + Date.now().toString(36) + "_" + safe; const r = sref(STORE, p);
   const task = uploadBytesResumable(r, file, { contentType: file.type || "image/png" });
   return new Promise((res, rej) => { task.on("state_changed", s => onp && onp(Math.round(s.bytesTransferred / Math.max(1, s.totalBytes) * 100)), rej, async () => { try { res({ url: await getDownloadURL(r), path: p }); } catch (e) { rej(e); } }); }); }
 const CC_PATH = /^(confmembers|confdel|confapps|confmotions|confvotes|culture)\/[^/]+$|^confed\/main$/;
@@ -6967,13 +7012,13 @@ function watchConf(email, see){ CONF_UN.forEach(u => { try { u(); } catch (_) {}
   });
   CONF_UN.push(onSnapshot(doc(db, "confed", "main"), s => window.APP.conf("main", s.exists() ? s.data() : {}), e => console.warn(e)));
 }
-function uploadCulture(file, onp){ STORE = STORE || getStorage(); const safe = String(file.name || "file").replace(/[^\w.\-а-яіїєґА-ЯІЇЄҐ ]+/g, "_").slice(-90); const p = "culture/" + Date.now().toString(36) + "_" + safe; const r = sref(STORE, p);
+function uploadCulture(file, onp){ STORE = STORE || getStorage(fbApp); const safe = String(file.name || "file").replace(/[^\w.\-а-яіїєґА-ЯІЇЄҐ ]+/g, "_").slice(-90); const p = "culture/" + Date.now().toString(36) + "_" + safe; const r = sref(STORE, p);
   const task = uploadBytesResumable(r, file, { contentType: file.type || "application/octet-stream" });
   return new Promise((res, rej) => { task.on("state_changed", s => onp && onp(Math.round(s.bytesTransferred / Math.max(1, s.totalBytes) * 100)), rej, async () => { try { res({ url: await getDownloadURL(r), path: p }); } catch (e) { rej(e); } }); }); }
-function uploadMusic(file, onp){ STORE = STORE || getStorage(); const safe = String(file.name || "track").replace(/[^\w.\-а-яіїєґА-ЯІЇЄҐ ]+/g, "_").slice(-100); const p = "music/" + Date.now().toString(36) + "_" + safe; const r = sref(STORE, p);
+function uploadMusic(file, onp){ STORE = STORE || getStorage(fbApp); const safe = String(file.name || "track").replace(/[^\w.\-а-яіїєґА-ЯІЇЄҐ ]+/g, "_").slice(-100); const p = "music/" + Date.now().toString(36) + "_" + safe; const r = sref(STORE, p);
   const task = uploadBytesResumable(r, file, { contentType: file.type || "audio/mpeg" });
   return new Promise((res, rej) => { task.on("state_changed", s => onp && onp(Math.round(s.bytesTransferred / Math.max(1, s.totalBytes) * 100)), rej, async () => { try { res({ url: await getDownloadURL(r), path: p }); } catch (e) { rej(e); } }); }); }
-async function deleteMusic(path){ if (!/^music\//.test(path || "")) return; STORE = STORE || getStorage(); await deleteObject(sref(STORE, path)); }
+async function deleteMusic(path){ if (!/^music\//.test(path || "")) return; STORE = STORE || getStorage(fbApp); await deleteObject(sref(STORE, path)); }
 async function addEditLog(d){ const u = auth.currentUser; await setDoc(doc(db, "editlog", "e" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5)), { ...d, email: (u.email || "").toLowerCase(), at: serverTimestamp() }); }
 async function loadEditLog(){ const s = await getDocs(query(collection(db, "editlog"), orderBy("at", "desc"), limit(120))); return listFrom(s); }
 async function addBuild(d){ const u = auth.currentUser; await setDoc(doc(db, "builds", "b" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)), { ...d, email: (u.email || "").toLowerCase(), at: serverTimestamp() }); }
