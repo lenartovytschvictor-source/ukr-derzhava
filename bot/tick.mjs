@@ -128,6 +128,39 @@ async function checkProfiles() {
   if (n) console.log(`Перевірено профілів: ${n}`);
 }
 
+
+// ---- щоденна резервна копія всієї бази у приватне сховище Firebase (backups/…; клієнти туди доступу не мають)
+async function dumpRef(ref, depth) {
+  const out = {};
+  const snap = await ref.get();
+  for (const d of snap.docs) {
+    const v = { data: d.data() };
+    if (depth < 3) { const subs = await d.ref.listCollections(); if (subs.length) { v.subs = {}; for (const c of subs) v.subs[c.id] = await dumpRef(c, depth + 1); } }
+    out[d.id] = v;
+  }
+  return out;
+}
+async function dailyBackup() {
+  const db = admin.firestore();
+  const day = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Kiev" }).format(new Date());
+  const ref = db.doc("botstate/backup"); const st = await ref.get();
+  if (st.exists && st.data().day === day) return;
+  const cols = await db.listCollections(); const all = {};
+  for (const c of cols) { if (c.id === "botstate") continue; all[c.id] = await dumpRef(c, 0); }
+  const bucket = admin.storage().bucket(process.env.BACKUP_BUCKET || "ukr-derzhava.firebasestorage.app");
+  const json = JSON.stringify({ at: new Date().toISOString(), collections: all });
+  await bucket.file(`backups/${day}.json`).save(json, { contentType: "application/json", resumable: false });
+  const stDoc = await db.doc("site/state").get();
+  if (stDoc.exists && stDoc.data().json) await bucket.file(`backups/${day}-state.json`).save(stDoc.data().json, { contentType: "application/json", resumable: false });
+  // зберігаємо останні 30 днів
+  const [files] = await bucket.getFiles({ prefix: "backups/" });
+  const days = [...new Set(files.map(f => (/backups\/(\d{4}-\d{2}-\d{2})/.exec(f.name) || [])[1]).filter(Boolean))].sort();
+  const old = days.slice(0, Math.max(0, days.length - 30));
+  for (const f of files) { const m = /backups\/(\d{4}-\d{2}-\d{2})/.exec(f.name); if (m && old.includes(m[1])) await f.delete().catch(() => {}); }
+  await ref.set({ day, at: Date.now(), size: json.length });
+  console.log(`Резервна копія за ${day}: ${Math.round(json.length / 1024)} КБ`);
+}
+
 const browser = await chromium.launch();
 try {
   const page = await browser.newPage();
@@ -144,6 +177,7 @@ try {
   try { await tgWeekly(page); } catch (err) { console.log("Звіт: помилка", err.message); }
   try { await saveSummary(page); } catch (err) { console.log("Зведення: помилка", err.message); }
   try { await checkProfiles(); } catch (err) { console.log("Профілі: помилка", err.message); }
+  try { await dailyBackup(); } catch (err) { console.log("Резервна копія: помилка", err.message); }
 } finally {
   await browser.close();
 }
