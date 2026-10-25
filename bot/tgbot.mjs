@@ -40,7 +40,8 @@ async function handle(m) {
     const code = (args[0] || "").trim().toUpperCase();
     if (!code) return reply(chat, HELP);
     if (!priv) return reply(chat, "Підключайте сповіщення в особистих повідомленнях із ботом.");
-    const q = await db.collection("profiles").where("tgcode", "==", code).limit(1).get();
+    let q = await db.collection("tgcodes").where("code", "==", code).limit(1).get();
+    if (q.empty) q = await db.collection("profiles").where("tgcode", "==", code).limit(1).get();
     if (q.empty) return reply(chat, "❌ Код не знайдено. Створіть новий у «Моєму кабінеті» на сайті.");
     const email = q.docs[0].id;
     await db.doc("tglinks/" + email).set({ chat, user: m.from && (m.from.username || m.from.first_name) || "", at: Date.now() });
