@@ -1655,6 +1655,8 @@ html.sp body{background:radial-gradient(1100px 520px at 18% -160px,rgba(200,80,1
 .cdel>.chx{margin-left:2px}
 .cdel>b{display:inline-flex;align-items:center;gap:6px}
 .plcf{max-width:180px;padding:4px 6px}
+@media (max-width:760px){.door.r{grid-template-columns:minmax(0,1fr) 38px!important;text-align:right!important}.door.r .arch{order:2!important}}
+@media (max-width:760px){.musbtn{width:40px;height:40px;padding:0;justify-content:center;opacity:.9}.musbtn .mt,.musbtn .mx{display:none}}
 </style>
 
 </head><body>
@@ -3214,7 +3216,7 @@ function myTodo(){if(!AUTH.email||AUTH.bot)return [];const out=[];const ml=myLan
   return out;}
 function todoHtml(list,title){if(!list.length)return '';return `<div class="block todo"><h3>${title||'Що від мене чекають'} <small>${list.length}</small></h3><ul class="todol">${list.map(x=>`<li class="${x.hot?'hot':''}"><span class="ti">${x.ic}</span><span class="tt"><b>${esc(x.t)}</b>${x.sub?`<small>${esc(x.sub)}</small>`:''}</span><button class="small${x.hot?' primary':''}" data-a="${esc(x.a)}" ${x.a==='tab'?`data-id="${esc(x.k)}"`:`data-k="${esc(x.k)}"`}${x.v?` data-v="${esc(x.v)}"`:''}>Перейти</button></li>`).join('')}</ul></div>`;}
 function cabinetModal(){const me=meAny();const p=myProfile();const lands=landList(state);const sug=suggestLand();const td=myTodo();const tgBot=((govSec()||{}).tgBot||'ukr_derzhava_bot').replace(/^@/,'');
-  const code=p.tgcode||'';const link=tgBot&&code?`https://t.me/${encodeURIComponent(tgBot)}?start=${encodeURIComponent(code)}`:'';
+  const code=TGCODE||p.tgcode||'';const link=tgBot&&code?`https://t.me/${encodeURIComponent(tgBot)}?start=${encodeURIComponent(code)}`:'';
   return `<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="cabm" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide cabm"><button class="small bmx" data-a="cabm" data-k="">✕ Закрити</button>
     <div class="cabh">${seatAv(me?me.name:'','cavbig')}<div><div class="hint">Мій кабінет</div><h3>${me?esc(me.name):esc(AUTH.email)}</h3>${me?`<div class="rkbs">${rankBadges(me.name)}</div><button class="small" data-a="dos" data-n="${esc(me.name)}">🪪 Мій паспорт громадянина →</button>`:'<p class="hint">Ви ще не в реєстрі гравців. Подайте заявку на громадянство.</p>'}</div></div>
     ${todoHtml(td)||'<p class="hint">Зараз від вас нічого не чекають 👌</p>'}
@@ -4734,12 +4736,14 @@ function render(){const real=state;if(!editing)state=viewState();try{render0();}
 // Гетьман має ті самі права, що й адміністрація
 function syncHetAdmin(){if(!AUTH||AUTH.bot)return;let h=false;try{h=!!(state&&state.sections&&isHetman());}catch(_){}AUTH.admin=!!AUTH.base||h;}
 function render0(){syncHetAdmin();const cm0=document.getElementById('chmsgs');const cmS=cm0?{top:cm0.scrollTop,bot:cm0.scrollHeight-cm0.scrollTop-cm0.clientHeight<60}:null;const ae=document.activeElement;const fid=ae&&ae.id&&app.contains(ae)?ae.id:null;let s0=null,s1=null;try{s0=ae.selectionStart;s1=ae.selectionEnd;}catch(_){}
-  renderInner();document.documentElement.lang=LANG;if(LANG==='en')trTree(app);if(LANG!=='uk')try{autoTr(app);}catch(e){console.warn(e);}app.querySelectorAll('nav.toc,.subnav').forEach(nv=>{if(nv.scrollWidth>nv.clientWidth){const c=nv.querySelector('[aria-current]');if(c)nv.scrollLeft=Math.max(0,c.offsetLeft-nv.clientWidth/2+c.offsetWidth/2);}});
+  const cfKeep=[...app.querySelectorAll('button[data-confirm="1"]')].map(b=>({a:b.dataset.a,k:b.dataset.k,id:b.dataset.id,c:b.dataset.c,t:b.textContent,cls:b.className,ts:+b.dataset.cft||Date.now()})).filter(x=>Date.now()-x.ts<10000);
+  renderInner();if(cfKeep.length)try{cfKeep.forEach(x=>{const b=[...app.querySelectorAll('button[data-a="'+CSS.escape(x.a||'')+'"]')].find(y=>y.dataset.k===x.k&&y.dataset.id===x.id&&y.dataset.c===x.c);if(b){b.dataset.confirm='1';b.dataset.cft=String(x.ts);b.textContent=x.t;if(/\bcfm\b/.test(x.cls))b.classList.add('cfm');}});}catch(_){}
+  document.documentElement.lang=LANG;if(LANG==='en')trTree(app);if(LANG!=='uk')try{autoTr(app);}catch(e){console.warn(e);}app.querySelectorAll('nav.toc,.subnav').forEach(nv=>{if(nv.scrollWidth>nv.clientWidth){const c=nv.querySelector('[aria-current]');if(c)nv.scrollLeft=Math.max(0,c.offsetLeft-nv.clientWidth/2+c.offsetWidth/2);}});
   if(fid){const el=document.getElementById(fid);if(el&&el!==document.activeElement){el.focus({preventScroll:true});try{if(s0!=null)el.setSelectionRange(s0,s1);}catch(_){}}}
   mapFit();hcLayout();try{hallAnim();}catch(_){}try{hwApply();}catch(_){}try{edCollapse();}catch(_){}{const ht=document.querySelector('.hcwrap:not(.editing)');if(ht&&ht.scrollWidth>ht.clientWidth+4)ht.scrollLeft=(ht.scrollWidth-ht.clientWidth)/2;}{const cm=document.getElementById('chmsgs');if(cm){const st=CHAT.stick||Date.now()<(CHAT.stickUntil||0)||!cmS||cmS.bot;
     if(st){cm.scrollTop=cm.scrollHeight;if(CHAT.msgs&&CHAT.stick){CHAT.stick=false;CHAT.stickUntil=Date.now()+3000;}}else cm.scrollTop=cmS.top;
     cm.querySelectorAll('img').forEach(im=>{if(!im.complete)im.addEventListener('load',()=>{const near=cm.scrollHeight-cm.scrollTop-cm.clientHeight<260;if(Date.now()<(CHAT.stickUntil||0)||near)cm.scrollTop=cm.scrollHeight;},{once:true});});}}
-  setTimeout(()=>{try{accSync();}catch(e){console.warn(e);}try{confEnsure();}catch(e){console.warn(e);}try{if(confManage()&&!AUTH.bot)confTick();}catch(e){console.warn(e);}try{chatEnsure();}catch(e){console.warn(e);}try{setFavicon();}catch(_){}},0);
+  setTimeout(()=>{try{tgEnsure();tgMigrate();}catch(e){console.warn(e);}try{accSync();}catch(e){console.warn(e);}try{confEnsure();}catch(e){console.warn(e);}try{if(confManage()&&!AUTH.bot)confTick();}catch(e){console.warn(e);}try{chatEnsure();}catch(e){console.warn(e);}try{setFavicon();}catch(_){}},0);
 }
 function chatMarkSeen(){try{const cs=sectionByKind('chat');if(!cs||active!==cs.id||!AUTH.email)return;const th=CHAT.th;if(isMob()&&CHAT.mview!=='thread')return;let t=0;if(th.startsWith('d:')){const d=(CHAT.dms||[]).find(x=>'d:'+x.id===th);if(d)t=Math.max(vms(d.last&&d.last.at),vms(d.at));}const ms=CHAT.msgs||[];const lm=ms[ms.length-1];if(lm)t=Math.max(t,vms(lm.at));if(t)(PINGS||[]).forEach(x=>{if(x.th===th&&vms(x.at)<=t+120000)t=Math.max(t,vms(x.at));});if(t&&t>(CHSEEN[th]||0))chSeen(th,t);}catch(_){}}
 function renderInner(){chatMarkSeen();
@@ -4869,7 +4873,7 @@ app.addEventListener('input',e=>{
   if(a==='lf'||a==='lcf'||a==='lnf'||a==='fmf'){const O={lf:LF,lcf:LCF,lnf:LNF,fmf:FMF}[a];O[t.dataset.k]=t.value;if(a==='lnf'&&t.dataset.k==='kind')LNF.days=String(LOAN_T[t.value].days);if(t.tagName==='SELECT')render();return;}
   if(a==='wkin'){const u=t.dataset.u;const v=t.value.replace(/[^\d]/g,'');(WKIN[u]=WKIN[u]||{})[t.dataset.k]=v;if(t.value!==v&&t.value.replace(/\s/g,'')!==v)t.value=v;return;}
   if(a==='dpf'){const k=t.dataset.k,u=t.dataset.u;if(k==='tr')DPSEL.noTr=!t.checked;else if(k==='ic'){if(t.value)DPSEL.icons[u]=t.value;else delete DPSEL.icons[u];}else if(k==='act')DPSEL.act[u]=t.value;else if(k==='don'){if(t.value)DPSEL.don[u]=t.value;else delete DPSEL.don[u];}else if(k==='who'){if(t.value)DPSEL.who[u]=t.value;else delete DPSEL.who[u];}render();return;}
-  if(a==='prland'){const p=myProfile();const v=t.value;(async()=>{try{await window.FB.saveProfile(AUTH.email,{about:p.about||'',land:v,tgcode:p.tgcode||''});PROFILES[AUTH.email]={...p,land:v};msg=v?'Землю обрано — її кімната з’явилась у чаті':'Землю прибрано';msgErr=false;}catch(e){msg='Не вдалося зберегти';msgErr=true;}render();})();return;}
+  if(a==='prland'){const p=myProfile();const v=t.value;(async()=>{try{await window.FB.saveProfile(AUTH.email,{about:p.about||'',land:v});PROFILES[AUTH.email]={...p,land:v};msg=v?'Землю обрано — її кімната з’явилась у чаті':'Землю прибрано';msgErr=false;}catch(e){msg='Не вдалося зберегти';msgErr=true;}render();})();return;}
   if(a==='bff'){const k=t.dataset.k;BF[k]=t.type==='checkbox'?t.checked:t.value;if(k==='type'||k==='n'){const el=document.querySelector('.bform .bcost');if(el){const T=bldType(BF.type);const n=Math.max(1,Math.floor(+BF.n||1));el.textContent='Вартість: '+(Object.entries(T.cost||{}).filter(([,v])=>+v).map(([kk,v])=>fmt(v*n)+' '+resWord(sectionByKind('economy')||{},kk)).join(' + ')||'—');}if(k==='type')mapSelUpd();}return;}
   if(a==='actas'){ACTAS=t.value;try{localStorage.setItem('ud-actas',ACTAS);}catch(_){}DOSSIER=null;render();return;}
   if(a==='chd'){CHD[t.dataset.k]=t.value;return;}
@@ -5664,7 +5668,7 @@ app.addEventListener('click',async e=>{
   else if(a==='cabm'){CABM=!!b.dataset.k;}
   else if(a==='tgbotsave'){const g=govSec();const el=document.getElementById('tgbotn');if(!g||!AUTH.admin||!el)return;const before=JSON.parse(saved);g.tgBot=el.value.trim();busy=true;render();try{await window.FB.save(state);await logEdit(before);saved=JSON.stringify(state);msg='Збережено';msgErr=false;}catch(e){msg='Не вдалося';msgErr=true;state=JSON.parse(saved);}busy=false;}
   else if(a==='tgcopy'){try{await navigator.clipboard.writeText(b.dataset.k);msg='Скопійовано';msgErr=false;}catch(_){msg=b.dataset.k;msgErr=false;}}
-  else if(a==='tgnew'){const p=myProfile();const code='UD'+Math.random().toString(36).slice(2,8).toUpperCase();try{await window.FB.saveProfile(AUTH.email,{about:p.about||'',land:p.land||'',tgcode:code});PROFILES[AUTH.email]={...p,tgcode:code};msg='Код створено';msgErr=false;}catch(e){msg='Не вдалося: '+(e&&e.code||'');msgErr=true;}}
+  else if(a==='tgnew'){const p=myProfile();const code='UD'+Math.random().toString(36).slice(2,8).toUpperCase();try{await window.FB.saveTgCode(AUTH.email,code);TGCODE=code;if(p.tgcode){await window.FB.saveProfile(AUTH.email,{about:p.about||'',land:p.land||''});const q={...p};delete q.tgcode;PROFILES[AUTH.email]=q;}msg='Код створено';msgErr=false;}catch(e){msg='Не вдалося: '+(e&&e.code||'');msgErr=true;}}
   else if(a==='bkdown'){if(!AUTH.admin)return;try{const blob=new Blob([JSON.stringify(state,null,1)],{type:'application/json'});const u=URL.createObjectURL(blob);const x=document.createElement('a');x.href=u;x.download='ukr-derzhava-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(x);x.click();x.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);msg='Копію завантажено';msgErr=false;}catch(e){msg='Не вдалося';msgErr=true;}}
   else if(a==='bkup'){if(!AUTH.admin)return;const inp=document.createElement('input');inp.type='file';inp.accept='application/json,.json';inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{try{const st=JSON.parse(r.result);if(!st||!Array.isArray(st.sections))throw new Error('bad');if(!confirm('Перезаписати всі дані сайту копією з файлу «'+f.name+'»?'))return;const before=JSON.parse(saved);ensureSections(st);state=st;busy=true;render();await window.FB.save(state);await logEdit(before);saved=JSON.stringify(state);msg='Дані відновлено з копії';msgErr=false;}catch(e){console.warn(e);msg='Файл не схожий на копію сайту';msgErr=true;try{state=JSON.parse(saved);}catch(_){}}busy=false;render();};r.readAsText(f);};inp.click();return;}
   else if(a==='elrev'){if(!AUTH.admin)return;const e=ELOG.find(x=>x.id===b.dataset.k);if(!e)return;if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно повернути?';return;}
@@ -6684,7 +6688,9 @@ function accAddModal(){const prev=accAdding();if(prev==null||AUTH.email||!AUTH.r
   return `<div class="bmodal" role="dialog" aria-modal="true" aria-label="Додати акаунт"><div class="bmbox welc"><h3>Додати ще один акаунт</h3><p>Увійдіть через Google <b>іншим</b> акаунтом. Після цього між акаунтами можна буде перемикатися в кабінеті й угорі сторінки — без виходу.</p><div class="welbtns"><button class="primary" data-a="login">🔑 Увійти через Google</button></div><div><button class="small ghost" data-a="accback" data-k="${esc(prev)}">Скасувати</button></div></div></div>`;}
 
 // ===== Вітальне вікно: увійти або подати заявку =====
-let WELC_OFF=false,WELC_AT=0;
+let WELC_OFF=false,WELC_AT=0,TGCODE=null,TG_KEY=null,TG_MIG=false;
+function tgEnsure(){if(!window.FB||!window.FB.watchTgCode)return;const k=AUTH.email||'';if(k===TG_KEY)return;TG_KEY=k;TGCODE=null;TG_MIG=false;window.FB.watchTgCode(k);}
+async function tgMigrate(){const p=myProfile();if(TG_MIG||TGCODE==null||!AUTH.email||AUTH.bot||!p||!p.tgcode)return;TG_MIG=true;try{if(!TGCODE)await window.FB.saveTgCode(AUTH.email,p.tgcode);await window.FB.saveProfile(AUTH.email,{about:p.about||'',land:p.land||''});const q={...p};delete q.tgcode;PROFILES[AUTH.email]=q;}catch(e){console.warn('tg migrate',e);}}
 function welcomeSeen(){if(WELC_OFF)return true;try{return sessionStorage.getItem('ud-welc')==='1';}catch(_){return false;}}
 function welcomeOff(){WELC_OFF=true;try{sessionStorage.setItem('ud-welc','1');}catch(_){}}
 function welcomeHtml(){if(accAdding()!=null)return '';if(!AUTH.ready||AUTH.bot||welcomeSeen()||/[?&]bot=1/.test(location.search)||!state.sections.length||editing)return '';
@@ -6765,6 +6771,7 @@ window.APP={sigs(m){SIGS=m||{};sigsLoaded=true;botReady();renderSoon();finalizeE
   complaints(l){COMPLAINTS=l||[];renderSoon();},
   loans(l){LOANS=l||[];renderSoon();},
   culture(l){CULTURE=l||[];renderSoon();},
+  tgcode(v){TGCODE=v;renderSoon();},
   conf(k,v){if(k==='main')CONF.main=v||{};else if(k==='myApp')CONF.myApp=v;else if(k==='myDel')CONF.myDel=v;else CONF[k]=v||[];CONF.seen[k]=true;renderSoon();},
   coals(l){COALS=l||[];renderSoon();},
   wkpay(l){WKPAY=l||[];renderSoon();},
@@ -7107,7 +7114,11 @@ async function postSealed(cid, n){ await setDoc(doc(db, "cases", cid, "sealed", 
 async function delSealed(cid, id){ await deleteDoc(doc(db, "cases", cid, "sealed", id)); }
 async function postProtocol(p){ const id = uid8("r"); await setDoc(doc(db, "protocols", id), { no: p.no, name: p.name, offEmail: p.offEmail || "", art: p.art, text: p.text || "", evidence: p.evidence || "", sanc: p.sanc || [], by: p.by || "", role: p.role || "", email: myMail(), at: serverTimestamp(), status: "active" }); return id; }
 async function updProtocol(id, v){ await updateDoc(doc(db, "protocols", id), v); }
-async function saveProfile(email, v){ const d = { about: String(v.about || "").slice(0, 2000), email, at: serverTimestamp() }; if (v.land != null) d.land = String(v.land || "").slice(0, 40); else if (window.__PROF && window.__PROF(email).land) d.land = window.__PROF(email).land; if (v.tgcode != null) d.tgcode = String(v.tgcode || "").slice(0, 20); else if (window.__PROF && window.__PROF(email).tgcode) d.tgcode = window.__PROF(email).tgcode; await setDoc(doc(db, "profiles", email), d); }
+async function saveProfile(email, v){ const d = { about: String(v.about || "").slice(0, 2000), email, at: serverTimestamp() }; if (v.land != null) d.land = String(v.land || "").slice(0, 40); else if (window.__PROF && window.__PROF(email).land) d.land = window.__PROF(email).land; await setDoc(doc(db, "profiles", email), d); }
+// код підключення Telegram — приватний (бачить лише власник і бот)
+async function saveTgCode(email, code){ await setDoc(doc(db, "tgcodes", email), { code: String(code || "").slice(0, 20), at: serverTimestamp() }); }
+let TG_UN = null;
+function watchTgCode(email){ if (TG_UN) { try { TG_UN(); } catch (_) {} TG_UN = null; } if (!email || email === "bot") { window.APP.tgcode(null); return; } TG_UN = onSnapshot(doc(db, "tgcodes", email), s => window.APP.tgcode(s.exists() ? (s.data().code || "") : ""), e => window.APP.tgcode("")); }
 async function setAdvocate(email, v){ await setDoc(doc(db, "advocates", email), { ...v, at: serverTimestamp() }); }
 async function updAdvocate(email, v){ await updateDoc(doc(db, "advocates", email), v); }
 async function delAdvocate(email){ await deleteDoc(doc(db, "advocates", email)); }
@@ -7179,7 +7190,7 @@ window.FB = {
   postComment, delComment, createPetition, signPetition, delPetition, petitionToBill, fileCase, decideCase, delCase, revokeNews, updCase, postNote, delNote,
   postSealed, delSealed, postProtocol, updProtocol, saveProfile, closeProposal, watchMsgs, watchDms, sendMsg, delMsg, watchPings, sendPings, delPings, chatBan, chatCleanup, setAdvocate, updAdvocate, delAdvocate, pardon, watchSealed,
   syncBallots, loadAllVotes, reopenBallot, createElection, updElection, delElection, applyCand, setCand, delCand, castVote, myVote, tallyElection,
-  applyCitizen, delApp, decideApp, saveRanks, setEmergency, foundAward, updAwardType, delAwardType, saveChurch, postTreaty, updTreaty, delTreaty, markWk, unmarkWk, uploadMusic, deleteMusic, addLab, updLab, delLab, uploadLaborFile, cset, cupd, cdel, watchConf, uploadCulture, createParty, updParty, delParty, addAppt, updAppt, addBuild, delBuild, updBuild, addEditLog, loadEditLog, uploadChatFile, createCoal, updCoal, delCoal,
+  applyCitizen, delApp, decideApp, saveRanks, setEmergency, foundAward, updAwardType, delAwardType, saveChurch, postTreaty, updTreaty, delTreaty, markWk, unmarkWk, uploadMusic, deleteMusic, addLab, updLab, delLab, uploadLaborFile, cset, cupd, cdel, watchConf, uploadCulture, saveTgCode, watchTgCode, createParty, updParty, delParty, addAppt, updAppt, addBuild, delBuild, updBuild, addEditLog, loadEditLog, uploadChatFile, createCoal, updCoal, delCoal,
   login: () => { const p = new GoogleAuthProvider(); if (p.setCustomParameters) p.setCustomParameters({ prompt: 'select_account' }); return signInWithPopup(auth, p); },
   logout: () => signOut(auth),
 };
