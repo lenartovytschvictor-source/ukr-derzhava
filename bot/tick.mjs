@@ -128,6 +128,49 @@ async function checkProfiles() {
   if (n) console.log(`Перевірено профілів: ${n}`);
 }
 
+// ---- Окрема група Конфедерації: лише події Конфедерації (голосування й рішення Ради, вступ/вихід держав,
+// запити про допомогу, зміни Статуту). ID групи вказує Голова Ради на сайті: Конфедерація → ⚙️ Налаштування.
+async function confedTelegram(page) {
+  if (!TG.token) return;
+  let feed = null;
+  for (let i = 0; i < 20; i++) {
+    feed = await page.evaluate(() => (window.__tgConfFeed ? window.__tgConfFeed() : null));
+    if (!feed || feed.ready) break;
+    await sleep(1000);
+  }
+  if (!feed) { console.log("Конфедерація: на сайті ще немає стрічки — пропускаю"); return; }
+  if (!feed.chat) { console.log("Конфедерація: групу не вказано в налаштуваннях — пропускаю"); return; }
+  if (!feed.ready) { console.log("Конфедерація: дані не завантажились — спробую наступного разу"); return; }
+  const ref = admin.firestore().doc("botstate/tgconfed");
+  const snap = await ref.get();
+  const st = snap.exists ? snap.data() : {};
+  const first = st.chat !== feed.chat;            // нова група (або перший запуск) — вітаємось
+  const sent = (!first && st.sent) || {};
+  const now = Date.now();
+  const fresh = feed.items.filter(e => !sent[hid(e.id)]);
+  const mark = e => { sent[hid(e.id)] = now; };
+  let n = 0, greeted = false;
+  try {
+    if (first) {
+      const recent = fresh.filter(e => now - e.at < 6 * 3600000).slice(-5);
+      fresh.forEach(e => { if (!recent.includes(e)) mark(e); });
+      await tgSendTo(feed.chat, `🤝 <b>Бот ${feed.name ? "«" + feed.name + "»" : "Конфедерації"} підключено</b>\n\nТут з’являтимуться голосування й рішення Ради, вступ і вихід держав, запити про допомогу та зміни Статуту.`);
+      greeted = true;
+      await sleep(1200);
+      for (const e of recent) { await tgSendTo(feed.chat, e.text); mark(e); n++; await sleep(1200); }
+    } else {
+      for (const e of fresh.slice(0, 10)) { await tgSendTo(feed.chat, e.text); mark(e); n++; await sleep(1200); }
+    }
+  } catch (err) {
+    console.log("Конфедерація: не вдалося надіслати:", err.message);
+    if (/chat not found|kicked|not a member|have no rights|bot was blocked/i.test(err.message)) console.log("Конфедерація: додайте бота в групу адміністратором і перевірте ID групи");
+  }
+  for (const [k, t] of Object.entries(sent)) if (now - t > 7 * 86400000) delete sent[k];
+  // якщо привітання не пройшло (бота ще не додали) — chat не запам'ятовуємо, наступного разу спробуємо знову
+  await ref.set({ chat: !first || greeted ? feed.chat : (st.chat || ""), sent, at: now });
+  console.log(`Конфедерація: надіслано ${n}, нових подій ${fresh.length}`);
+}
+
 
 // ---- щоденна резервна копія всієї бази у приватне сховище Firebase (backups/…; клієнти туди доступу не мають)
 async function dumpRef(ref, depth) {
@@ -174,6 +217,7 @@ try {
   await page.waitForTimeout(4000);
   try { await telegram(page); } catch (err) { console.log("Telegram: помилка", err.message); }
   try { await tgPersonal(page); } catch (err) { console.log("Особисті: помилка", err.message); }
+  try { await confedTelegram(page); } catch (err) { console.log("Конфедерація: помилка", err.message); }
   try { await tgWeekly(page); } catch (err) { console.log("Звіт: помилка", err.message); }
   try { await saveSummary(page); } catch (err) { console.log("Зведення: помилка", err.message); }
   try { await checkProfiles(); } catch (err) { console.log("Профілі: помилка", err.message); }
