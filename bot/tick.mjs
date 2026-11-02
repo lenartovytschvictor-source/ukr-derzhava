@@ -98,8 +98,10 @@ async function tgPersonal(page) {
   await ref.set({ sent, at: now });
   console.log(`Особисті сповіщення: ${n}`);
 }
-async function tgSendTo(chat, text) {
-  const r = await fetch(`https://api.telegram.org/bot${TG.token}/sendMessage`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ chat_id: chat, text, parse_mode: "HTML", disable_web_page_preview: true }) });
+async function tgSendTo(chat, text, thread) {
+  const body = { chat_id: chat, text, parse_mode: "HTML", disable_web_page_preview: true };
+  if (thread) body.message_thread_id = Number(thread);
+  const r = await fetch(`https://api.telegram.org/bot${TG.token}/sendMessage`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
   const j = await r.json().catch(() => ({})); if (!j.ok) throw new Error(`${j.error_code || r.status} ${j.description || ""}`); return true;
 }
 async function tgWeekly(page) {
@@ -144,7 +146,8 @@ async function confedTelegram(page) {
   const ref = admin.firestore().doc("botstate/tgconfed");
   const snap = await ref.get();
   const st = snap.exists ? snap.data() : {};
-  const first = st.chat !== feed.chat;            // нова група (або перший запуск) — вітаємось
+  const where = feed.chat + (feed.thread ? "/" + feed.thread : "");
+  const first = st.chat !== where;            // нова група (або перший запуск) — вітаємось
   const sent = (!first && st.sent) || {};
   const now = Date.now();
   const fresh = feed.items.filter(e => !sent[hid(e.id)]);
@@ -154,12 +157,12 @@ async function confedTelegram(page) {
     if (first) {
       const recent = fresh.filter(e => now - e.at < 6 * 3600000).slice(-5);
       fresh.forEach(e => { if (!recent.includes(e)) mark(e); });
-      await tgSendTo(feed.chat, `🤝 <b>Бот ${feed.name ? "«" + feed.name + "»" : "Конфедерації"} підключено</b>\n\nТут з’являтимуться голосування й рішення Ради, вступ і вихід держав, запити про допомогу та зміни Статуту.`);
+      await tgSendTo(feed.chat, `🤝 <b>Бот ${feed.name ? "«" + feed.name + "»" : "Конфедерації"} підключено</b>\n\nТут з’являтимуться голосування й рішення Ради, вступ і вихід держав, запити про допомогу та зміни Статуту.`, feed.thread);
       greeted = true;
       await sleep(1200);
-      for (const e of recent) { await tgSendTo(feed.chat, e.text); mark(e); n++; await sleep(1200); }
+      for (const e of recent) { await tgSendTo(feed.chat, e.text, feed.thread); mark(e); n++; await sleep(1200); }
     } else {
-      for (const e of fresh.slice(0, 10)) { await tgSendTo(feed.chat, e.text); mark(e); n++; await sleep(1200); }
+      for (const e of fresh.slice(0, 10)) { await tgSendTo(feed.chat, e.text, feed.thread); mark(e); n++; await sleep(1200); }
     }
   } catch (err) {
     console.log("Конфедерація: не вдалося надіслати:", err.message);
@@ -167,7 +170,7 @@ async function confedTelegram(page) {
   }
   for (const [k, t] of Object.entries(sent)) if (now - t > 7 * 86400000) delete sent[k];
   // якщо привітання не пройшло (бота ще не додали) — chat не запам'ятовуємо, наступного разу спробуємо знову
-  await ref.set({ chat: !first || greeted ? feed.chat : (st.chat || ""), sent, at: now });
+  await ref.set({ chat: !first || greeted ? where : (st.chat || ""), sent, at: now });
   console.log(`Конфедерація: надіслано ${n}, нових подій ${fresh.length}`);
 }
 
