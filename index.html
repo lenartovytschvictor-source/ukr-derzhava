@@ -4196,7 +4196,8 @@ function confHelpHtml(){const me0=myConf();const myCid=me0?me0.cid:(isHetman()?'
 function confSetHtml(){const M=confMain();const extra=M.charterLangs||[];
   return `<section class="cfcard"><h3>⚙️ Символи й налаштування Конфедерації</h3><div class="cfsetg"><div class="cfseti">${confEmbHtml('cfemb sm')}<label class="small upl">🛡 Завантажити герб<input type="file" accept="image/*" data-a="cfsetimg" data-k="emblem" hidden></label>${M.emblem?'<button class="small ghost" data-a="cfsetdel" data-k="emblem">Прибрати</button>':''}</div><div class="cfseti">${M.flag?`<img class="cfflagbig" src="${esc(M.flag)}" alt="">`:'<div class="cfflagbig none">🏳</div>'}<label class="small upl">🏳 Завантажити прапор<input type="file" accept="image/*" data-a="cfsetimg" data-k="flag" hidden></label>${M.flag?'<button class="small ghost" data-a="cfsetdel" data-k="flag">Прибрати</button>':''}</div></div>
     <label class="fl">Гасло Конфедерації<input type="text" id="cfs-motto" maxlength="120" value="${esc(M.motto||'')}" placeholder="Напр.: Напад на одного — напад на всіх"></label>
-    <label class="fl">Telegram-група Конфедерації (ID чату або @назва)<input type="text" id="cfs-tg" maxlength="80" value="${esc(M.tgGroup||'')}" placeholder="-1001234567890 або @rus_confed"></label><p class="hint">Додайте бота в групу адміністратором. Туди йтимуть лише події Конфедерації: голосування й рішення Ради, вступ і вихід держав, запити про допомогу, зміни Статуту.</p>
+    <label class="fl">Telegram-група Конфедерації — ID, @назва або посилання на повідомлення з потрібної гілки<input type="text" id="cfs-tg" maxlength="120" value="${esc(M.tgGroup||'')}" placeholder="https://t.me/c/3737224731/6693/6695 або -1001234567890"></label>
+    <label class="fl">Гілка (тема) групи — номер, необов’язково<input type="text" id="cfs-tgth" maxlength="12" inputmode="numeric" value="${esc(M.tgThread||'')}" placeholder="напр. 6693; порожньо — загальна гілка"></label><p class="hint">Найпростіше: у Telegram натисніть на будь-яке повідомлення в потрібній гілці → «Копіювати посилання» і вставте його в перше поле — ID групи й номер гілки визначаться самі. Бота треба додати в групу адміністратором. Туди йтимуть лише події Конфедерації: голосування й рішення Ради, вступ і вихід держав, запити про допомогу, зміни Статуту.</p>
     <div class="fl"><span>Мови Статуту, крім мов сайту</span><div class="cflangset">${CONF_EXTRA_LANGS.map(([k,n])=>`<label class="chk"><input type="checkbox" id="cfs-l-${k}"${extra.includes(k)?' checked':''}> ${esc(n)}</label>`).join('')}</div></div>
     <div><button class="small primary" data-a="cfsetsave" ${busy?'disabled':''}>Зберегти</button></div></section>`;}
 // ---- дії ----
@@ -4216,10 +4217,15 @@ async function confAct2(a,b){const k=b.dataset.k;const run=async(fn,ok)=>{busy=t
   if(a==='cfhclose'){await run(()=>window.FB.cset('confhelp/'+k,{status:'closed',closedAt:Date.now()},true),'Запит закрито');return true;}
   if(a==='cfsetdel'&&confManage()){await run(()=>window.FB.cset('confed/main',{[k]:''},true),'Прибрано');return true;}
   if(a==='cfsetsave'&&confManage()){const v=id=>((document.getElementById(id)||{}).value||'').trim();const langs=CONF_EXTRA_LANGS.filter(([l])=>(document.getElementById('cfs-l-'+l)||{}).checked).map(x=>x[0]);
-    const upd={motto:v('cfs-motto').slice(0,120),tgGroup:v('cfs-tg').slice(0,80),charterLangs:langs};await run(()=>window.FB.cset('confed/main',upd,true),'Налаштування збережено');return true;}
+    const tg=tgParse(v('cfs-tg'),v('cfs-tgth'));if(tg.err){msg=tg.err;msgErr=true;render();return true;}const upd={motto:v('cfs-motto').slice(0,120),tgGroup:tg.chat,tgThread:tg.thread,charterLangs:langs};await run(()=>window.FB.cset('confed/main',upd,true),'Налаштування збережено');return true;}
   return false;}
 function confInput2(a,t){if(a==='cfsetimg')return true;if(a==='cfhf'){CFH[t.dataset.k]=t.value;return true;}if(a==='cfhr'){CFHR[t.dataset.k]=t.value;return true;}return false;}
 function confChange2(a,t){if(a==='cfsetimg'&&confManage()){const f=t.files&&t.files[0];t.value='';const k=t.dataset.k;imgToData(f,k==='flag'?480:360,async d=>{if(!d){msg='Потрібне зображення';msgErr=true;render();return;}busy=true;render();try{await window.FB.cset('confed/main',{[k]:d},true);msg=k==='flag'?'Прапор збережено':'Герб збережено';msgErr=false;}catch(e){msg='Не вдалося: '+(e&&e.code==='permission-denied'?'немає права':(e&&e.code||''));msgErr=true;}busy=false;render();});return true;}return false;}
+// посилання t.me/c/<id>/<гілка>/<повідомлення> → ID групи -100<id> і номер гілки
+function tgParse(raw,th){let chat=String(raw||'').trim(),thread=String(th||'').trim().replace(/[^0-9]/g,'');let m=/t\.me\/c\/(\d+)(?:\/(\d+))?(?:\/(\d+))?/.exec(chat);
+  if(m){chat='-100'+m[1];if(m[3])thread=m[2];}else if((m=/t\.me\/([A-Za-z0-9_]{4,})(?:\/(\d+))?(?:\/(\d+))?/.exec(chat))){chat='@'+m[1];if(m[3])thread=m[2];}
+  if(chat&&!/^(-?\d{5,}|@[A-Za-z0-9_]{4,})$/.test(chat))return {err:'Не розпізнав групу: вставте ID (-100…), @назву або посилання на повідомлення'};
+  return {chat,thread};}
 // ---- стрічка Конфедерації для окремої Telegram-групи (бот забирає звідси) ----
 window.__tgConfFeed=()=>{const H=x=>String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');const M=CONF.main||{};const chat=String(M.tgGroup||'').trim();const ready=!!(CONF.seen&&CONF.seen.main&&CONF.seen.motions);if(!chat||!ready)return {ready,chat,items:[]};const site=location.origin+'/';const now=Date.now(),cut=now-48*36e5;const out=[];const add=(id,t,text)=>{if(t&&t>=cut&&t<=now+60000)out.push({id,at:t,text:text+`\n<a href="${site}#confed">Сторінка Конфедерації</a>`});};
   const nm=cid=>(confMember(cid)||{}).name||'';
@@ -4228,7 +4234,7 @@ window.__tgConfFeed=()=>{const H=x=>String(x==null?'':x).replace(/&/g,'&amp;').r
   confMembers().forEach(m=>{if(m.joinedAt&&m.id!=='ud')add('cj:'+m.id,+m.joinedAt,`🤝 <b>${H(m.name)}</b> приєдналася до Конфедерації`);if(m.leftAt)add('cl:'+m.id,+m.leftAt,`🚪 <b>${H(m.name)}</b> ${m.status==='expelled'?'виключена з':'вийшла з'} Конфедерації`);});
   (CONF.help||[]).forEach(x=>{add('ch:'+x.id,+x.ts,`🆘 <b>${H(nm(x.cid))} просить допомоги</b>\n${H(x.title||'')}${x.need?'\nПотрібно: '+H(x.need):''}`);(x.resp||[]).forEach((r,i)=>add('chr:'+x.id+':'+i,+r.ts,`🤝 <b>${H(nm(r.cid))}</b> відгукнулася на запит «${H(x.title||'')}»: ${H(r.text||'')}`));});
   if(M.charterAt)add('chart:'+M.charterAt,+M.charterAt,`📖 <b>Оновлено Статут ${H(confNameG())}</b>${charterNoNow()?' · рішення '+H(charterNoNow()):''}`);
-  return {ready,chat,name:confName(),items:out.sort((a,b)=>a.at-b.at)};};
+  return {ready,chat,thread:String(M.tgThread||''),name:confName(),items:out.sort((a,b)=>a.at-b.at)};};
 // ===================== Автопереклад чату (крім особистих повідомлень) =====================
 let CHTR_ON=(()=>{try{return localStorage.getItem('ud-chtr')!=='0';}catch(_){return true;}})();const CHTRC={},CHTR_ORIG=new Set(),CHTR_Q=new Set();let CHTR_T=0;
 function chTrHtml(m,th){if(!m.text)return '';const plain=`<div class="cht">${fmtMsg(m.text)}</div>`;if(th.startsWith('d:')||!CHTR_ON)return plain;const tl=LANG||'uk';const k=m.id+'|'+tl;const r=CHTRC[k];
