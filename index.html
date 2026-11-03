@@ -1805,6 +1805,27 @@ html.sp body{background:radial-gradient(1100px 520px at 18% -160px,rgba(200,80,1
 .emerg.exile{border-color:#6b8fd6;background:rgba(80,120,200,.12)}
 .tdterr{margin:8px 0}.tdtl{padding-left:18px;margin:6px 0}
 .tdterr .erow{display:flex;gap:6px;flex-wrap:wrap}.tdterr .erow input{flex:1;min-width:160px}
+/* ===== Карта 3.0 ===== */
+.m3bar{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:0 0 10px}
+.m3seg{display:flex;gap:2px;padding:3px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.035);flex:1 1 360px;max-width:560px}
+.m3seg button{flex:1 1 0;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:7px 10px;border:0;border-radius:10px;background:transparent;color:var(--muted);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.m3seg button:hover{color:var(--cream,#fff);background:rgba(255,255,255,.05)}
+.m3seg button.on{background:linear-gradient(180deg,#f0c766,#d9a531);color:#1a1405}
+.m3act{display:flex;gap:6px}
+.m3newc{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:0 0 10px}.m3newc input[type=text]{flex:1 1 220px}.m3newc input[type=color]{width:42px;height:34px;padding:2px;border-radius:8px}
+.m3leg{margin-top:10px}.m3leg>summary{cursor:pointer;font-weight:600;font-size:13.5px;color:var(--muted);padding:4px 0}.m3leg[open]>summary{margin-bottom:6px}
+.m3all{flex-basis:100%;margin-top:4px}.m3all summary{cursor:pointer;font-size:13px;color:var(--muted)}.m3all>div{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:6px;max-height:220px;overflow:auto}
+.hatchl{background:repeating-linear-gradient(-45deg,#b33 0 3px,transparent 3px 7px),#4f4b47!important;outline:1px dashed #e0403a}
+.mhatch path{pointer-events:none}.mhatch .m3lost{stroke:#ff5a4e;stroke-width:1.6px;stroke-dasharray:5 3;vector-effect:non-scaling-stroke}
+.m3st{font-size:13.5px;padding:6px 10px;border-radius:9px;border:1px solid}.m3st.lost{background:rgba(200,50,50,.13);color:#f3a49c;border-color:rgba(200,50,50,.35)}.m3st.occ{background:rgba(120,80,60,.18);color:#e6bfa8;border-color:rgba(160,100,70,.4)}.m3st.el{background:rgba(242,181,68,.12);color:#f2c46a;border-color:rgba(242,181,68,.35)}
+div#m3mount{aspect-ratio:1.73}
+.m3v-conf .mreg:not(.our){cursor:default}
+@media (max-width:760px){
+ .m3seg{max-width:none;flex-basis:100%}.m3seg button{font-size:13px;padding:7px 4px;gap:4px}.m3act{margin-left:auto}.m3t{display:none}
+ .mapsvg,div#m3mount{aspect-ratio:auto!important;height:64vh!important}
+ .mapwrap.hasside .mside{position:fixed;left:0;right:0;bottom:0;z-index:960;max-height:58vh;overflow:auto;border-radius:18px 18px 0 0;box-shadow:0 -12px 30px rgba(0,0,0,.55);padding-bottom:calc(16px + env(safe-area-inset-bottom));animation:m3up .18s ease-out}
+}
+@keyframes m3up{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
 </style>
 
 </head><body>
@@ -3777,7 +3798,7 @@ function mapSideHtml(res){const G=window.MAPGEO;const r0=MAPSEL&&G.__by[MAPSEL];
   land=mapRsHtml(r0,e)+land;
   const hist=rn&&(rn.hist||[]).length?`<details class="mhist"><summary>Історія назви · ${rn.hist.length}</summary><ol>${rn.hist.slice().reverse().map(x=>`<li><s>${esc(x.from||'')}</s> → <b>${esc(x.to||'')}</b><small class="hint">${x.date?' · '+esc(x.date):''}${x.law?' · закон «'+esc(x.law)+'»':x.by?' · '+esc(x.by):''}</small></li>`).join('')}</ol></details>`:'';
   const canProp=our&&!AUTH.bot&&npLands().length&&!editing;
-  return `<div class="mside" id="mside"><div class="mshead">${badge}<button type="button" class="small ghost mx" data-a="mapsel" data-u="" aria-label="Закрити">✕</button></div><h3>${esc(name)}</h3>${name!==r0.g?`<div class="hint">Назва у грі: «${esc(r0.g)}»</div>`:''}${our?armsHtml(r0.id,r0):''}${rel}${land}${our?buildsHtml(r0.id):''}${hist}
+  return `<div class="mside" id="mside"><div class="mshead">${badge}<button type="button" class="small ghost mx" data-a="mapsel" data-u="" aria-label="Закрити">✕</button></div><h3>${esc(name)}</h3>${name!==r0.g?`<div class="hint">Назва у грі: «${esc(r0.g)}»</div>`:''}${our?armsHtml(r0.id,r0):''}${rel}${land}${our?buildsHtml(r0.id):''}${m3SideExtra(r0,e)}${hist}
     <div class="mbtns"><button type="button" class="small ghost" data-a="mapfocus" data-u="${esc(r0.id)}">🎯 Наблизити</button><a class="gamebtn small" href="${GAME_REGION}${encodeURIComponent(r0.id)}" target="_blank" rel="noopener">🎮 У грі ↗</a>${canMapEd()&&!MAPEDIT&&!MAPV?`<button type="button" class="small primary" data-a="mapedit">✏️ Редагувати</button>`:''}${canProp?`<button type="button" class="small" data-a="mapren" data-u="${esc(r0.id)}">✏️ Перейменувати законом</button>`:''}</div>
     ${MAP_L==='conf'?confSideHtml(r0):''}${MAPEDIT&&canMapEd()&&!MAPV&&MAP_L!=='conf'?mapEdSide(r0,e):''}</div>`;}
 function mapEdSide(r0,e){const rs=regStOf(r0.id);const ov=((udilSec()||{}).udils)||{};const asg=r0.id in ov?ov[r0.id]:null;
@@ -4247,6 +4268,179 @@ async function chTrOne(text,tl){const r=await fetch('https://translate.googleapi
 async function chTrRun(){const tl=LANG||'uk';const ms=(CHAT.msgs||[]).filter(m=>CHTR_Q.has(m.id)&&m.text&&!CHTRC[m.id+'|'+tl]).slice(-40);CHTR_Q.clear();if(!ms.length)return;let got=0;
   const q=ms.slice();const work=async()=>{while(q.length){const m=q.shift();const k=m.id+'|'+tl;try{const r=await chTrOne(String(m.text).slice(0,4000),tl);const same=!r.t||r.src===tl||r.t.replace(/\s+/g,' ').trim()===String(m.text).replace(/\s+/g,' ').trim();CHTRC[k]={t:same?'':r.t,src:r.src,same};got++;}catch(e){CHTRC[k]={same:true};}}};
   await Promise.all([work(),work(),work()]);if(got)renderSoon();}
+
+// ===================== КАРТА 3.0 (03.11.2026): три пов’язані карти — Україна, Політична, Конфедерація =====================
+// Одна основа: кожен регіон має власника (політична карта) і статус (свій / окупований / втрачений).
+// • Україна — Землі, уділи, міста; чужі держави лише тлом.
+// • Політична — увесь світ, УД одним кольором; тут вирішується, кому належать регіони.
+// • Конфедерація — держави-члени (за їхніми державами з політичної карти), решта притемнена.
+// Втрачені й окуповані регіони видно на всіх трьох картах. Карта малюється один раз, далі лише перефарбовується.
+const M3_VIEWS=[['lands','🇺🇦','Україна'],['pol','🌍','Політична'],['conf','🤝','Конфедерація']];
+const M3={svg:null,geo:null,els:null,ovS:'',pend:null,nolink:false};
+const M3_DARK='#2a2521',M3_DIM='#221e1b';
+function polOvMap(){return MAPV&&MAPV.pol?MAPV.pol:(((udilSec()||{}).polOv)||{});}
+function polCMap(){return ((udilSec()||{}).polC)||{};}
+// власник регіону з політичної карти: застосовуємо до r.cid, тож уся решта коду (Землі, Конфедерація, підписи) бачить ті самі кордони
+function m3ApplyPol(){const G=window.MAPGEO;if(!G)return;const R=mapRegs();Object.entries(polCMap()).forEach(([k,v])=>{if(Array.isArray(v))G.countries[k]=v;});const ov=polOvMap();
+  R.forEach(r=>{if(r.cid0===undefined)r.cid0=r.cid;r.cid=(r.id in ov)?String(ov[r.id]):r.cid0;});}
+function m3Ours(cid){const G=window.MAPGEO;return !!G&&G.ours.includes(String(cid));}
+function m3CName(cid){const G=window.MAPGEO;if(cid==null)return 'як у грі';if(cid==='')return 'нічия земля';if(m3Ours(cid))return 'Українська Держава';return ((G&&G.countries[cid])||[cid])[0];}
+function m3CountryByName(n){const G=window.MAPGEO;const k=mapNorm(n);if(!k||!G)return null;if(/україн/.test(k)&&/держав/.test(k))return G.ours[0];const e=Object.entries(G.countries).find(([id,c])=>mapNorm(c[0])===k);return e?e[0]:null;}
+// ---- ядро карти (копія з доповненням: спершу застосовуємо політичну карту) ----
+function mapResolve(){m3ApplyPol();const idx=mapLandIdx();const ov=MAPV?MAPV.ov:(((udilSec()||{}).udils)||{});const res={};const byName=n=>{const k=mapNorm(n);return k?idx.find(x=>(x.l.flags||[]).some(f=>mapNorm(f.name)===k))||null:null;};
+  mapRegs().forEach(r=>{let e=null;if(r.id in ov)e=ov[r.id]?idx.find(x=>x.l.id===ov[r.id])||null:null;else if(mapOurs(r)||m3Ours(r.cid0))e=byName(r.au);if(e&&MAPV&&MAPV.hidden.has(e.l.id))e=null;res[r.id]=e;});return res;}
+// регіон «втрачений» / «окупований» для показу на всіх картах
+function m3Mark(r,e){const rs=regStOf(r.id);if(rs&&(e||mapOurs(r)||m3Ours(r.cid0)))return rs.st==='lost'?'lost':'occ';if(e&&e.lost)return 'lost';return '';}
+function mapFill(r,e){
+  if(MAP_L==='conf'){const ci=(window.__mci||{})[r.id];return ci?ci.m.col:(r.cid?M3_DIM:'#1e1b18');}
+  if(MAP_L==='pol'){const c=window.MAPGEO.countries[r.cid];if(mapOurs(r))return (c&&c[1])||'#3f7fd0';return c&&c[1]?c[1]:'#3a3530';}
+  if(e)return e.lost?MAP_KINDS.lost[0]:mapColor(e.l);
+  if(mapOurs(r))return MAP_KINDS[ARB_CAPS.includes(r.id)?'domcap':'cap'][0];
+  if(mapVassal(r.cid))return MAP_VAS_C;
+  return M3_DARK;}
+function confMapIdx(){const res=window.__mres||mapResolve();const out={};const ms=confMapMembers();const ud=ms.find(x=>x.id==='ud');
+  if(ud)mapRegs().forEach(r=>{const e=res[r.id];const rs=regStOf(r.id);if(((e&&!e.lost)||mapOurs(r))&&!(rs&&rs.st==='lost'))out[r.id]={m:ud,st:rs?'occ':''};});
+  ms.forEach(m=>{if(m.id==='ud')return;const g=(m.gcid||[]).map(String);const add=new Set(m.mapAdd||[]),del=new Set(m.mapDel||[]);const occ=m.mapOcc||{};
+    mapRegs().forEach(r=>{if(del.has(r.id))return;if(g.includes(String(r.cid))||add.has(r.id)){out[r.id]={m,st:occ[r.id]?'occ':''};}});});
+  return out;}
+// ---- журнал, історія, відміна: додаємо власників регіонів ----
+function mapStateAt(ms){const us=udilSec()||{};const ov=JSON.parse(JSON.stringify(us.udils||{}));const regSt=JSON.parse(JSON.stringify(us.regSt||{}));const pol=JSON.parse(JSON.stringify(us.polOv||{}));const lst={},unlost=new Set(),relost=new Set(),hidden=new Set();
+  mapLog().slice().sort((a,b)=>b.at-a.at).forEach(e=>{if(e.at<=ms)return;
+    if(e.t==='as'){if(e.from==null)delete ov[e.rid];else ov[e.rid]=e.from;}
+    else if(e.t==='rs'){if(e.from)regSt[e.rid]=e.from;else delete regSt[e.rid];}
+    else if(e.t==='po'){if(e.from==null)delete pol[e.rid];else pol[e.rid]=e.from;}
+    else if(e.t==='ls')lst[e.lid]=e.from||'land';
+    else if(e.t==='ll')unlost.add(e.lid);
+    else if(e.t==='lr')relost.add(e.lid);
+    else if(e.t==='ln')hidden.add(e.lid);});
+  return {ms,ov,regSt,pol,lst,unlost,relost,hidden};}
+function mapSnap(){const us=udilSec()||{};const lst={};landSecs().forEach(sec=>(sec.lands||[]).forEach(l=>{lst[l.id]=l.st||'';}));return JSON.stringify({u:us.udils||{},r:us.regSt||{},n:us.regNames||{},p:us.polOv||{},pc:us.polC||{},lst,logN:(us.mapLog||[]).length});}
+function mapUndo(){const s=MAPUNDO.pop();if(!s)return;const o=JSON.parse(s);const us=udilSec();if(!us)return;us.udils=o.u;us.regSt=o.r;us.regNames=o.n;us.polOv=o.p||{};us.polC=o.pc||{};landSecs().forEach(sec=>(sec.lands||[]).forEach(l=>{if(l.id in o.lst){if(o.lst[l.id])l.st=o.lst[l.id];else delete l.st;}}));if(us.mapLog&&us.mapLog.length>o.logN)us.mapLog.length=o.logN;m3ApplyPol();mapSaveSoon('Скасовано');render();}
+function mapLogText(e){const R=mapRegName(e.rid),Ln=e.name||mapLandName(e.lid)||'Земля';const st=o=>o?(o.st==='lost'?'втрачений':'тимчасово окупований')+(o.by?' ('+o.by+')':''):'під контролем держави';
+  switch(e.t){
+    case 'as':return `🗺 ${R}: ${e.from?'«'+(mapLandName(e.from)||'?')+'»':'як у грі'} → ${e.to?'«'+(mapLandName(e.to)||'?')+'»':e.to===''?'без Землі':'як у грі'}`;
+    case 'rs':return `${e.to?(e.to.st==='lost'?'💔':'⛓'):'🕊'} ${R}: ${st(e.to)}${e.to&&e.to.note?' · '+e.to.note:''}`;
+    case 'po':return `🌍 ${R}: ${m3CName(e.from)} → ${m3CName(e.to)}`;
+    case 'pc':return `🏳 Нова держава на карті: «${e.name||''}»`;
+    case 'ls':return `🏛 «${Ln}»: ${landStName(e.from)} → ${landStName(e.to)}${e.note?' · '+e.note:''}`;
+    case 'ln':return `✨ Утворено «${Ln}»`;
+    case 'll':return `💔 Втрачено «${Ln}»${e.note?' · '+e.note:''}`;
+    case 'lr':return `🕊 Відновлено «${Ln}»`;
+    case 'lm':return `🔀 «${Ln}» об’єднано з «${mapLandName(e.to)||'?'}»`;
+    case 'lrn':return `✏️ «${e.from||''}» → «${e.to||''}»`;
+    case 'rn':return `✏️ ${e.from||''} → ${e.to||''}`;
+    case 'tr':return `🤝 Договір «${e.name||''}»: ${e.note||''}`;
+    default:return e.note||'';}}
+// ---- зв’язок карт: статус на карті України ↔ власник на політичній ----
+function polRaw(rid,to){const us=udilSec();const G=window.MAPGEO;const r=G.__by[rid];us.polOv=us.polOv||{};const from=(rid in us.polOv)?us.polOv[rid]:null;
+  const norm=to==null||String(to)===String(r.cid0)?null:String(to);if(from===norm||(from==null&&norm==null))return false;if(norm==null)delete us.polOv[rid];else us.polOv[rid]=norm;mapLogAdd({t:'po',rid,from,to:norm});m3ApplyPol();return true;}
+function polSet(rid,to){const us=udilSec();const G=window.MAPGEO;const r=G&&G.__by[rid];if(!us||!r)return false;m3ApplyPol();const was=r.cid,tgt=to==null?r.cid0:String(to);if(String(was)===String(tgt))return false;
+  const wasO=m3Ours(was),nowO=m3Ours(tgt);M3.nolink=true;try{
+    if(wasO&&!nowO){const e=mapResolve()[rid];if(e&&!e.lost){if(!((us.udils||{}).hasOwnProperty(rid)))mapAssign(rid,e.l.id);mapSetRegSt(rid,'lost',tgt?m3CName(tgt):'','');}}
+    if(nowO&&regStOf(rid))mapSetRegSt(rid,'','','');
+    polRaw(rid,to);return true;}finally{M3.nolink=false;}}
+function mapSetRegSt(rid,st,by,note){const us=udilSec();if(!us)return false;us.regSt=us.regSt||{};const from=us.regSt[rid]?JSON.parse(JSON.stringify(us.regSt[rid])):null;
+  let to=null;if(st==='occ'||st==='lost')to={st,by:String(by||'').slice(0,80),at:today(),note:String(note||'').slice(0,200)};
+  if(!to&&!from)return false;if(to&&from&&from.st===to.st&&from.by===to.by&&from.note===to.note)return false;
+  if(to)us.regSt[rid]=to;else delete us.regSt[rid];mapLogAdd({t:'rs',rid,from,to});
+  if(!M3.nolink&&window.MAPGEO){const G=window.MAPGEO;const r=G.__by[rid];
+    if(r&&to&&to.st==='lost'){const c=m3CountryByName(to.by);if(c&&!m3Ours(c)){const e=mapResolve()[rid];if(e&&!((us.udils||{}).hasOwnProperty(rid)))mapAssign(rid,e.l.id);polRaw(rid,c);}}
+    if(r&&!to&&from&&from.st==='lost'&&!m3Ours(r.cid)){polRaw(rid,m3Ours(r.cid0)?null:G.ours[0]);}}
+  return true;}
+// ---- пензель: на політичній карті малюємо державами ----
+function mapBrushTargets(){if(MAP_L==='pol'){const G=window.MAPGEO;const o=[['','— кому належить регіон —'],['p:'+G.ours[0],'🇺🇦 Українська Держава']];
+    Object.entries(G.countries).filter(([k])=>!m3Ours(k)).sort((a,b)=>String(a[1][0]).localeCompare(String(b[1][0]),'uk')).forEach(([k,c])=>o.push(['p:'+k,'🏳 '+c[0]]));o.push(['p:','⬜ Нічия земля'],['pgame','↺ Як у грі']);return o;}
+  const o=[['','— оберіть, що малювати —']];landSecs().forEach(sec=>(sec.lands||[]).forEach(l=>o.push(['l:'+l.id,'🗺 '+cur(l).name+(sec.short?' · '+sec.short:'')])));
+  o.push(['none','⬜ Без Землі (лише позначка держави)'],['game','↺ Як у грі'],['occ','⛓ Тимчасово окупований'],['lost','💔 Втрачений'],['free','🕊 Звільнено / під контролем']);return o;}
+function mapBrush(rid){if(!canMapEd()||!MAPBR)return;const snap=mapSnap();const ok=(()=>{
+    if(MAP_L==='pol'){if(MAPBR==='pgame')return polSet(rid,null);if(MAPBR.startsWith('p:'))return polSet(rid,MAPBR.slice(2));return false;}
+    if(MAPBR.startsWith('p:')||MAPBR==='pgame')return false;
+    if(MAPBR.startsWith('l:'))return mapAssign(rid,MAPBR.slice(2));
+    if(MAPBR==='none')return mapAssign(rid,'');
+    if(MAPBR==='game')return mapAssign(rid,null);
+    if(MAPBR==='occ'||MAPBR==='lost'){const by=(document.getElementById('map-brby')||{}).value||'';return mapSetRegSt(rid,MAPBR,by,'');}
+    if(MAPBR==='free')return mapSetRegSt(rid,'','','');return false;})();
+  if(ok){MAPUNDO.push(snap);if(MAPUNDO.length>40)MAPUNDO.shift();mapSaveSoon('Карту оновлено');render();}}
+// ---- редагування в картці регіону ----
+function mapEdSide(r0,e){
+  if(MAP_L==='pol'){const G=window.MAPGEO;const opts=mapBrushTargets().filter(x=>x[0].startsWith('p:'));const cur0=String(r0.cid);
+    return `<div class="mapedbox"><div class="mapedt">✏️ Кому належить регіон</div><select data-a="m3own" data-u="${esc(r0.id)}">${opts.map(([v,t])=>`<option value="${esc(v.slice(2))}"${v.slice(2)===cur0?' selected':''}>${esc(t)}</option>`).join('')}</select>${(polOvMap()[r0.id]!=null)?`<button class="small ghost" data-a="m3owngame" data-u="${esc(r0.id)}">↺ Як у грі (${esc(m3CName(r0.cid0))})</button>`:''}<p class="hint">Віддасте регіон УД іншій державі — на карті України він стане «втраченим» у своїй Землі. Повернете — знову буде своїм.</p></div>`;}
+  const rs=regStOf(r0.id);const ov=((udilSec()||{}).udils)||{};const asg=r0.id in ov?ov[r0.id]:null;
+  return `<div class="mapedbox"><div class="mapedt">✏️ Редагування</div><label class="fl">Належить Землі<select id="map-as" data-a="mapas" data-u="${esc(r0.id)}"><option value=""${asg===''?' selected':''}>— без Землі —</option>${mapLandIdx().map(x=>`<option value="${esc(x.l.id)}"${e&&e.l.id===x.l.id?' selected':''}>${esc(cur(x.l).name)}${x.lost?' (втрачена)':''}</option>`).join('')}</select></label>${asg!=null?`<button class="small ghost" data-a="mapreset" data-u="${esc(r0.id)}">↺ Як у грі${r0.au?' ('+esc(r0.au)+')':''}</button>`:''}
+    <label class="fl">Статус уділу<select id="map-rs">${REG_ST.map(([v,t])=>`<option value="${v}"${(rs?rs.st:'')===v?' selected':''}>${esc(t)}</option>`).join('')}</select></label><input type="text" id="map-rs-by" list="m3ctry" maxlength="80" value="${esc(rs?rs.by||'':'')}" placeholder="Ким окуповано / кому відійшов"><input type="text" id="map-rs-note" maxlength="200" value="${esc(rs?rs.note||'':'')}" placeholder="Примітка: договір, дата…"><button class="small" data-a="maprsset" data-u="${esc(r0.id)}">Зберегти статус</button>${rs?`<div class="hint">З ${esc(rs.at||'')}</div>`:''}<p class="hint">Якщо «кому відійшов» — держава зі списку, регіон перейде до неї й на політичній карті.</p>
+    <div class="erow"><input type="text" id="map-rn" maxlength="80" value="${esc(mapName(r0))}" placeholder="Назва уділу"><button class="small ghost" data-a="maprn" data-u="${esc(r0.id)}">✏️ Назва</button></div></div>`;}
+// додаткове в картці регіону: те, що раніше було окремими шарами (устрій, очільник, єпархія, вибори)
+function m3SideExtra(r0,e){let h='';
+  if(e&&!e.lost){const nm=cur(e.l).name;let el=[];try{el=elActive().filter(x=>x.post&&x.post.kind==='land'&&x.post.key===nm);}catch(_){}if(el.length)h+=`<div class="m3st el">🗳 Тривають вибори очільника Землі</div>`;}
+  if(MAP_L!=='lands'&&!mapOurs(r0)){const c=window.MAPGEO.countries[r0.cid];if(c)h+=`<div class="hint">🌍 Належить: <b>${esc(c[0])}</b>${c[2]?' · '+esc(c[2]):''}</div>`;}
+  return h;}
+// ---- нова держава на політичній карті ----
+function m3NewCountry(name,color){const us=udilSec();if(!us)return '';name=String(name||'').trim().slice(0,80);if(!name)return '';us.polC=us.polC||{};const id='u'+Date.now().toString(36);us.polC[id]=[name,/^#[0-9a-f]{6}$/i.test(color)?color:'#8a6fd1',''];mapLogAdd({t:'pc',name});m3ApplyPol();return id;}
+// ---- малювання: статична частина створюється один раз ----
+function m3Static(){const G=window.MAPGEO;if(M3.svg&&M3.geo===G)return M3.svg;const R=mapRegs();
+  const p=r=>`<path d="${r.d}" class="mreg${r.city?' city':''}" data-u="${r.id}"/>`;
+  const s=`<svg id="mapsvg" class="mapsvg" viewBox="${G.vb.join(' ')}" role="img" aria-label="Карта"><rect x="${G.box[0]-4000}" y="${G.box[1]-4000}" width="${G.box[2]+8000}" height="${G.box[3]+8000}" class="msea"/><defs><pattern id="mhp" patternUnits="userSpaceOnUse" width="30" height="30" patternTransform="rotate(45)"><rect width="11" height="30" fill="rgba(20,6,6,.6)"/></pattern><pattern id="mhl" patternUnits="userSpaceOnUse" width="26" height="26" patternTransform="rotate(-45)"><rect width="9" height="26" fill="rgba(190,40,40,.55)"/></pattern></defs><g id="m3r">${R.filter(r=>!r.city).map(p).join('')}${R.filter(r=>r.city).map(p).join('')}</g><g id="m3o"></g></svg>`;
+  const d=document.createElement('div');d.innerHTML=s;M3.svg=d.firstElementChild;M3.geo=G;M3.els={};M3.svg.querySelectorAll('path.mreg').forEach(x=>M3.els[x.dataset.u]=x);M3.ovS='';return M3.svg;}
+function m3Mount(){const mt=document.getElementById('m3mount');if(!mt||!M3.pend||!window.MAPGEO)return;const sv=m3Static();mt.replaceWith(sv);const P=M3.pend;
+  for(const id in P.f){const el=M3.els[id];if(!el)continue;const f=P.f[id];if(el.getAttribute('fill')!==f){el.setAttribute('fill',f);el.style.setProperty('--sf',f);}const c=P.c[id];if(el.getAttribute('class')!==c)el.setAttribute('class',c);}
+  if(P.ov!==M3.ovS){sv.querySelector('#m3o').innerHTML=P.ov;M3.ovS=P.ov;}
+  sv.setAttribute('class',P.cls);
+  document.querySelectorAll('#map-brby').forEach(i=>i.setAttribute('list','m3ctry'));const lg=document.getElementById('m3leg');if(lg)lg.ontoggle=()=>{M3.leg=lg.open;};}
+function mapLegend(res){const G=window.MAPGEO;const R=mapRegs();const used=new Map();
+  const mk={lost:0,occ:0};R.forEach(r=>{const m=m3Mark(r,res[r.id]);if(m)mk[m]++;});
+  const marks=(mk.occ?`<span class="mlg"><i class="hatchi"></i>Тимчасово окуповано · ${mk.occ}</span>`:'')+(mk.lost?`<span class="mlg"><i class="hatchl"></i>Втрачено · ${mk.lost}</span>`:'');
+  if(MAP_L==='conf')return confMapMembers().map(m=>`<span class="mlg"><i style="background:${m.col}"></i>${esc(m.name)}</span>`).join('')+marks;
+  if(MAP_L==='pol'){const cs=new Map();R.forEach(r=>{if(r.cid&&G.countries[r.cid])cs.set(r.cid,(cs.get(r.cid)||0)+1);});const ud=[...cs.keys()].filter(m3Ours);const rest=[...cs.keys()].filter(k=>!m3Ours(k)).sort((a,b)=>String(G.countries[a][0]).localeCompare(String(G.countries[b][0])));
+    return ud.map(k=>`<span class="mlg"><i style="background:${G.countries[k][1]}"></i><b>Українська Держава</b></span>`).join('')+marks+`<details class="m3all"><summary>Усі держави на карті · ${rest.length}</summary><div>${rest.map(k=>`<span class="mlg"><i style="background:${G.countries[k][1]}"></i>${esc(G.countries[k][0])}</span>`).join('')}</div></details>`;}
+  R.forEach(r=>{const e=res[r.id];if(e&&!e.lost)used.set(e.l.id,[mapColor(e.l),cur(e.l).name]);});
+  return [...used.values()].map(([c,n])=>`<button type="button" class="mlg" data-a="landm" data-k="${esc(n)}"><i style="background:${c}"></i>${esc(n)}</button>`).join('')+`<span class="mlg"><i style="background:${MAP_KINDS.cap[0]}"></i>Столичний регіон</span>`+((G.vassal||[]).map(c=>G.countries[c]).filter(Boolean).map(c=>`<span class="mlg"><i style="background:${MAP_VAS_C}"></i>${esc(c[0])} · васал</span>`).join(''))+marks+`<span class="mlg"><b class="mkc">◆</b>Місто</span><span class="mlg"><b class="mkc cap">★</b>Столиця</span>`;}
+function mapHtml0(s,si){const G=window.MAPGEO;
+  if(!G){loadMapGeo();return `<div class="block"><p class="hint">${window.__mapErr?'Не вдалося завантажити карту. Перевірте, чи файл mapgeo.js лежить поруч з index.html.':'Завантажую карту…'}</p></div>`;}
+  if(!M3_VIEWS.some(v=>v[0]===MAP_L))MAP_L='lands';
+  const R=mapRegs();const res=mapResolve();window.__mres=res;const can=canMapEd();window.__mci=MAP_L==='conf'?confMapIdx():null;
+  if(MAPSEL&&!G.__by[MAPSEL])MAPSEL='';
+  // заливка й класи регіонів
+  const F={},C={};R.forEach(r=>{const e=res[r.id];const f=mapFill(r,e);F[r.id]=f;const our=mapOurs(r)||!!e||(MAP_L==='conf'&&!!(window.__mci||{})[r.id]);C[r.id]='mreg'+(our?' our':'')+(r.city?' city':'')+(MAPSEL===r.id?' sel':'');});
+  // підписи
+  const z=mapZ0();const k=z.w/(window.__mapPW||1000);const sc=(x,y)=>`class="msc" data-x="${(+x).toFixed(1)}" data-y="${(+y).toFixed(1)}" transform="translate(${(+x).toFixed(1)} ${(+y).toFixed(1)}) scale(${k.toFixed(4)})"`;
+  const lc={};R.forEach(r=>{const e=res[r.id];if(!e||e.lost)return;const o=lc[e.l.id]||(lc[e.l.id]={x:0,y:0,a:0,e});const w=Math.max(r.a,0.3);o.x+=r.x*w;o.y+=r.y*w;o.a+=w;});
+  let ov='';
+  const marks=R.filter(r=>!r.city).map(r=>[r,m3Mark(r,res[r.id])]).filter(x=>x[1]);const cOcc=MAP_L==='conf'?R.filter(r=>((window.__mci||{})[r.id]||{}).st==='occ'&&!m3Mark(r,res[r.id])):[];
+  if(marks.length||cOcc.length)ov+=`<g class="mhatch">${marks.map(([r,m])=>`<path d="${r.d}" fill="url(#${m==='lost'?'mhl':'mhp'})"${m==='lost'?' class="m3lost"':''}/>`).join('')}${cOcc.map(r=>`<path d="${r.d}" fill="url(#mhp)"/>`).join('')}</g>`;
+  ov+='<g class="mbds">'+R.filter(r=>!r.city&&(MAP_L==='lands'?(mapOurs(r)||res[r.id]||mapVassal(r.cid)):MAP_L==='conf'?!!(window.__mci||{})[r.id]:mapOurs(r))).map(r=>`<path d="${r.d}"/>`).join('')+'</g>';
+  if(MAP_L==='pol'){const cl={};R.forEach(r=>{if(!r.cid)return;const o=cl[r.cid]||(cl[r.cid]={a:0,big:null});o.a+=r.a;if(!o.big||r.a>o.big.a)o.big=r;});
+    Object.entries(cl).forEach(([cid,o])=>{if(o.a<25||!G.countries[cid])return;const c=o.big;let sx=0,sy=0,sa=0;R.forEach(r=>{if(r.cid===c.cid&&Math.hypot(r.x-c.x,r.y-c.y)<350){sx+=r.x*r.a;sy+=r.y*r.a;sa+=r.a;}});const u=m3Ours(cid);ov+=`<g ${sc(sx/sa,sy/sa)}><text class="mctry${u?' uni':''}" style="font-size:${u?13:9.1}px">${esc(u?'Українська Держава':G.countries[cid][0])}</text></g>`;});}
+  if(MAP_L==='lands')Object.values(lc).forEach(o=>{const c=cur(o.e.l);ov+=`<g class="mland" data-a="landm" data-k="${esc(c.name)}"><g ${sc(o.x/o.a,o.y/o.a)}>${c.img?`<image href="${esc(c.img)}" x="-13" y="-22" width="26" height="16" preserveAspectRatio="xMidYMid slice"/>`:''}<text y="7" class="mlbl" style="font-size:10.5px">${esc(c.name.replace(/ Земля$/,''))}</text></g></g>`;});
+  if(MAP_L==='conf')ov+=confLabels(R,sc);
+  if(MAP_L==='lands'){ov+=mapBuildSvg(sc);
+    R.forEach(r=>{if(!r.city||!(mapOurs(r)||res[r.id]))return;const cap=mapIsCap(r,res);
+      ov+=`<g class="mcity${cap?' cap':''}${MAPSEL===r.id?' sel':''}" data-u="${r.id}"><g ${sc(r.x,r.y)}>${cap?'<path class="mcm" d="M0,-7.5 L2,-2.4 L7.1,-2.4 L3,0.9 L4.5,6.1 L0,3 L-4.5,6.1 L-3,0.9 L-7.1,-2.4 L-2,-2.4 Z"/>':'<rect class="mcm" x="-3.3" y="-3.3" width="6.6" height="6.6" rx="1.2" transform="rotate(45)"/>'}<text class="mcn" y="${cap?-10:-7.5}">${esc(mapName(r))}</text></g></g>`;});}
+  const brushOn=MAPEDIT&&MAPTOOL==='brush'&&(MAP_L==='conf'?confCanAny():can)&&!MAPV;
+  M3.pend={f:F,c:C,ov,cls:`mapsvg m3v-${MAP_L}${brushOn?' brush':''}${z.w<G.vb[2]*0.55?' zin':''}${MAPCN?' cn':''}${BPLACE?' placing':''}`};
+  const side=mapSideHtml(res);
+  const ours=R.filter(r=>{const e=res[r.id];return e&&!e.lost;});const nC=ours.filter(r=>r.city).length,nL=Object.keys(lc).length;
+  const nMk={lost:0,occ:0};R.forEach(r=>{const m=m3Mark(r,res[r.id]);if(m&&!r.city)nMk[m]++;});
+  const stat=MAP_L==='lands'?`${ours.length-nC} уділів · ${nC} міст · ${nL} Земель`:MAP_L==='conf'?`${confMapMembers().length} держав · ${Object.keys(window.__mci||{}).length} регіонів`:`${R.filter(r=>mapOurs(r)&&!r.city).length} регіонів УД`;
+  const canEd=(can||(MAP_L==='conf'&&confCanAny()))&&!MAPHIST;
+  let h=`<div class="m3bar"><div class="m3seg" role="tablist">${M3_VIEWS.map(([k,ic,l])=>`<button type="button" role="tab" class="${MAP_L===k?'on':''}" aria-selected="${MAP_L===k}" data-a="mapl" data-k="${k}"><span>${ic}</span>${l}</button>`).join('')}</div><div class="m3act"><button type="button" class="small${MAPHIST?' primary':' ghost'}" data-a="maphist" title="Історія змін">🕓<span class="m3t"> Історія</span></button>${canEd?`<button type="button" class="small${MAPEDIT?' primary':' ghost'}" data-a="mapedit" title="Редагувати карту">✏️<span class="m3t"> ${MAPEDIT?'Готово':'Редагувати'}</span></button>`:''}</div></div>`;
+  h+=mapEdBar();
+  if(MAPEDIT&&MAP_L==='pol'&&can&&!MAPV)h+=`<div class="m3newc"><input type="text" id="m3nc-n" maxlength="80" placeholder="Нова держава на карті (якої немає в списку)"><input type="color" id="m3nc-c" value="#8a6fd1" aria-label="Колір"><button type="button" class="small" data-a="m3newc">➕ Додати</button></div>`;
+  if(MAPV)h+=`<p class="hint warn">🕓 Карта станом на ${esc(mapDT(MAPV.ms))}. Редагування вимкнено, доки ви дивитеся історію.</p>`;if(exileMode()&&MAP_L==='lands')h+=`<p class="hint warn">🏛 Жодна Земля зараз не під контролем держави — уряд діє у вигнанні.</p>`;
+  if(LANDED&&can&&!MODALH)MODALH=`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="landed" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide"><button class="small bmx" data-a="landed">✕ Закрити</button>${landEdHtml()}</div></div>`;
+  h+=`<datalist id="m3ctry">${Object.values(G.countries).map(c=>`<option value="${esc(c[0])}">`).join('')}</datalist>`;
+  h+=`<div class="mapwrap${side?' hasside':''}"><div class="mapbox" id="mapbox"><div id="m3mount" class="mapsvg"></div><div class="mtip" id="mtip" hidden></div>
+    <div class="msearch"><input type="search" id="map-q" data-a="mapq" autocomplete="off" placeholder="🔍 Уділ, місто чи Земля" aria-label="Пошук на карті"><div class="msug" id="map-sug" hidden></div></div>
+    <div class="mctl"><button type="button" data-a="mapz" data-k="in" aria-label="Наблизити" title="Наблизити">＋</button><button type="button" data-a="mapz" data-k="out" aria-label="Віддалити" title="Віддалити">－</button><button type="button" data-a="mapz" data-k="0" aria-label="Уся держава" title="Уся держава">⤢</button>${MAP_L==='lands'?`<button type="button" class="${MAPCN?'on':''}" data-a="mapcn" aria-pressed="${MAPCN}" title="Назви всіх міст">🏙</button><button type="button" class="${MAPBLD?'on':''}" data-a="mapbld" aria-pressed="${MAPBLD}" title="Будівлі на карті">🏗</button>`:''}<button type="button" data-a="mapfs" title="На весь екран" aria-label="На весь екран">⛶</button></div>
+    <div class="mstat">${stat}${nMk.occ?' · ⛓ '+nMk.occ:''}${nMk.lost?' · 💔 '+nMk.lost:''}</div>${BPLACE?`<div class="mplace">📍 Клікніть місце всередині регіону <button class="small ghost" data-a="bplacex">Скасувати</button></div>`:''}</div>${side}</div>
+    <details class="m3leg" id="m3leg"${(M3.leg==null?innerWidth>760:M3.leg)?' open':''}><summary>Легенда</summary><div class="mlegend">${mapLegend(res)}</div></details>`;
+  if(LANDM){const x=mapLandIdx().find(q=>cur(q.l).name===LANDM);if(x&&!MODALH)MODALH=`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="landm" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide"><button class="small bmx" data-a="landm" data-k="">✕ Закрити</button>${landInfo(x.l)}</div></div>`;}
+  return h;}
+// ---- дії ----
+async function m3Click(a,b){
+  if(a==='m3newc'&&canMapEd()){const n=(document.getElementById('m3nc-n')||{}).value||'';const c=(document.getElementById('m3nc-c')||{}).value||'';if(!n.trim()){msg='Вкажіть назву держави';msgErr=true;render();return true;}const snap=mapSnap();const id=m3NewCountry(n,c);if(id){MAPUNDO.push(snap);MAPBR='p:'+id;MAPTOOL='brush';mapSaveSoon('Державу додано — малюйте її регіони пензлем');}render();return true;}
+  if(a==='m3owngame'&&canMapEd()){const snap=mapSnap();if(polSet(b.dataset.u,null)){MAPUNDO.push(snap);mapSaveSoon('Повернуто як у грі');}render();return true;}
+  return false;}
+function m3Change(a,t){if(a==='m3own'&&canMapEd()){const snap=mapSnap();if(polSet(t.dataset.u,t.value)){MAPUNDO.push(snap);mapSaveSoon('Власника регіону змінено');}render();return true;}return false;}
 
 // вибір регіону без повного перемальовування сторінки
 function mapSelUpd(){const sv=document.getElementById('mapsvg');const wrap=document.querySelector('.mapwrap');if(!sv||!wrap){render();return;}
@@ -5389,7 +5583,7 @@ function render(){const real=state;if(!editing)state=viewState();try{render0();}
 function syncHetAdmin(){if(!AUTH||AUTH.bot)return;let h=false;try{h=!!(state&&state.sections&&isHetman());}catch(_){}AUTH.admin=!!AUTH.base||h;}
 function render0(){syncHetAdmin();const cm0=document.getElementById('chmsgs');const cmS=cm0?{top:cm0.scrollTop,bot:cm0.scrollHeight-cm0.scrollTop-cm0.clientHeight<60}:null;const ae=document.activeElement;const fid=ae&&ae.id&&app.contains(ae)?ae.id:null;let s0=null,s1=null;try{s0=ae.selectionStart;s1=ae.selectionEnd;}catch(_){}
   const cfKeep=[...app.querySelectorAll('button[data-confirm="1"]')].map(b=>({a:b.dataset.a,k:b.dataset.k,id:b.dataset.id,c:b.dataset.c,t:b.textContent,cls:b.className,ts:+b.dataset.cft||Date.now()})).filter(x=>Date.now()-x.ts<10000);
-  renderInner();if(cfKeep.length)try{cfKeep.forEach(x=>{const b=[...app.querySelectorAll('button[data-a="'+CSS.escape(x.a||'')+'"]')].find(y=>y.dataset.k===x.k&&y.dataset.id===x.id&&y.dataset.c===x.c);if(b){b.dataset.confirm='1';b.dataset.cft=String(x.ts);b.textContent=x.t;if(/\bcfm\b/.test(x.cls))b.classList.add('cfm');}});}catch(_){}
+  renderInner();try{m3Mount();}catch(e){console.warn(e);}if(cfKeep.length)try{cfKeep.forEach(x=>{const b=[...app.querySelectorAll('button[data-a="'+CSS.escape(x.a||'')+'"]')].find(y=>y.dataset.k===x.k&&y.dataset.id===x.id&&y.dataset.c===x.c);if(b){b.dataset.confirm='1';b.dataset.cft=String(x.ts);b.textContent=x.t;if(/\bcfm\b/.test(x.cls))b.classList.add('cfm');}});}catch(_){}
   document.documentElement.lang=LANG;if(LANG==='en')trTree(app);if(LANG!=='uk')try{autoTr(app);}catch(e){console.warn(e);}app.querySelectorAll('nav.toc,.subnav').forEach(nv=>{if(nv.scrollWidth>nv.clientWidth){const c=nv.querySelector('[aria-current]');if(c)nv.scrollLeft=Math.max(0,c.offsetLeft-nv.clientWidth/2+c.offsetWidth/2);}});
   if(fid){const el=document.getElementById(fid);if(el&&el!==document.activeElement){el.focus({preventScroll:true});try{if(s0!=null)el.setSelectionRange(s0,s1);}catch(_){}}}
   mapFit();hcLayout();try{hallAnim();}catch(_){}try{hwApply();}catch(_){}try{edCollapse();}catch(_){}{const ht=document.querySelector('.hcwrap:not(.editing)');if(ht&&ht.scrollWidth>ht.clientWidth+4)ht.scrollLeft=(ht.scrollWidth-ht.clientWidth)/2;}{const cm=document.getElementById('chmsgs');if(cm){const st=CHAT.stick||Date.now()<(CHAT.stickUntil||0)||!cmS||cmS.bot;
@@ -5504,6 +5698,7 @@ function docHtml(){
 app.addEventListener('input',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;
   if(confInput2(a,t))return;
+  if(a==='m3own')return;
   if(mapEdInput(a,t))return;
   if(a==='hvr'){HV[t.dataset.id]=t.value;return;}
   if(a==='am'){AM[t.dataset.k]=t.value;if(t.dataset.k==='pk'){const r=MERIT_REASONS.find(x=>x[0]===t.value);if(r)AM.pn=String(r[2]);render();}if(t.dataset.k==='name'||t.dataset.k==='to')render();return;}
@@ -5675,6 +5870,7 @@ app.addEventListener('input',e=>{
 app.addEventListener('change',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;
   if(confChange2(a,t))return;
+  if(m3Change(a,t))return;
   if(a==='maphd'){const v=+t.value;MAPHD=v>=Date.now()-6e5?null:v;render();return;}const sec=state.sections[+t.dataset.s];
   if(a==='dr'){sec.donations[+t.dataset.p].res=t.value;render();}
   else if(a==='season'){sec.season=t.value;render();}
@@ -5724,6 +5920,7 @@ app.addEventListener('click',async e=>{
   if(a==='culfx'){CULF[b.dataset.k]=null;render();return;}
   if(['culsend','culok','culrej','culdel','culpl'].includes(a)){if(busy)return;await culAct(a,b);return;}
   if(await confAct2(a,b))return;
+  if(await m3Click(a,b))return;
   if(a==='confv'){CONFV=b.dataset.k;CFDEC='';render();{const t=document.querySelector('.cftabs');if(t){const r=t.getBoundingClientRect();if(r.top<0)t.scrollIntoView({block:'start'});const on=t.querySelector('.on');if(on)setTimeout(()=>{const tt=document.querySelector('.cftabs'),o2=tt&&tt.querySelector('.on');if(o2)tt.scrollLeft=Math.max(0,o2.offsetLeft-tt.clientWidth/2+o2.offsetWidth/2);},30);}}return;}
   if(a==='chv'){CHV=b.dataset.k;render();return;}
   if((a==='chtrsave'||a==='chtrdel')&&confManage()){const TR=Object.assign({},(CONF.main&&CONF.main.charterTr)||{});const l=CHTR.l;if(a==='chtrsave'){const ta=document.querySelector('textarea[data-a=chtrt]');const v=String(ta?ta.value:CHTR.text||'').trim();if(!v){msg='Вставте текст перекладу';msgErr=true;render();return;}TR[l]={text:v.slice(0,20000),ts:Date.now()};}else delete TR[l];busy=true;render();try{await window.FB.cset('confed/main',{charterTr:TR},true);CHTR.text='';CHTR.open=true;CHV=a==='chtrsave'?l:'';msg=a==='chtrsave'?'Переклад збережено':'Переклад видалено';msgErr=false;}catch(e){msg='Не вдалося: '+(e&&e.code||'');msgErr=true;}busy=false;render();return;}
