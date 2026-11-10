@@ -1935,6 +1935,112 @@ body.cm nav.toc button{color:var(--cream)}
 body.cml .chcomp{background:var(--panel2)}body.cml .chcomp textarea,body.cml .chcomp input{background:var(--panel)!important;color:var(--cream)!important;border-color:var(--line2)!important}
 body.cm .chcomp button.primary,body.cm .chsend{background:var(--gold)!important;color:var(--bg)!important;border-color:var(--gold)!important}
 .m5grow{display:flex;gap:6px;margin:6px 0;align-items:center}.m5grow input{flex:1;min-width:0}
+/* ---- 10.11: кнопка «Додати допис», вікно, прапори-картинки ---- */
+.m5bar{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;margin:0 0 14px}.m5bar .m5filter{margin:0}
+.m5newb{flex:0 0 auto;white-space:nowrap}
+.m5fab{display:none;position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:40;width:56px;height:56px;border-radius:50%;border:0;background:var(--gold);color:var(--bg);font-size:30px;line-height:1;box-shadow:0 8px 22px rgba(0,0,0,.35);cursor:pointer}
+@media (max-width:760px){.m5newb{display:none}.m5fab{display:block}}
+.m5cm .bmbox{max-width:620px}.m5cm h3{margin:0 0 12px}.m5cm .m5row textarea{min-height:140px}.m5cm .m5tools{padding-left:0;margin-top:14px}.m5cm .m5chips{flex:none}.m5cm .m5imgp{margin-left:0}
+.m5lbl{margin:12px 0 6px}.m5sp{flex:1}
+.m5fe{width:1.15em;height:1.15em;vertical-align:-.2em;display:inline-block}
+.m5svg{width:1.25em;height:1.25em;vertical-align:-.25em;display:inline-block}.m5mi.big .m5svg,.m5mi.big .m5fe{width:34px;height:34px}
+/* ---- адмін-панель і форми в кольорах ком’юніті ---- */
+body.cm :is(.bmbox,header,.m5card) :is(input,select,textarea):not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]){background:var(--bg2)!important;color:var(--cream)!important;border:1px solid var(--line2)!important;background-image:none!important}
+body.cm option{background:var(--panel);color:var(--cream)}
+body.cm :is(.bmbox,header) button:not([class*="m5"]):not(.bmback){background:var(--panel2);background-image:none;color:var(--cream);border-color:var(--line2);-webkit-text-fill-color:currentColor;text-shadow:none}
+body.cm :is(.bmbox,header) button:not([class*="m5"]):not(.bmback):is(.primary,[aria-current="page"],[aria-pressed="true"],.on){background:var(--gold);color:var(--bg);border-color:var(--gold)}
+body.cm :is(.bmbox,header) button.ghost:not([class*="m5"]){background:transparent}
+body.cm :is(.bmbox,header) button.danger:not([class*="m5"]){background:transparent;color:#c0574a;border-color:color-mix(in srgb,#c0574a 45%,transparent)}
+body.cm header button.cabbtn{background:none!important;border:0!important}
+body.cm .bmbox :is(.tblwrap,.block,.kpi,details){background:var(--panel)!important;background-image:none!important;border-color:var(--line)!important;color:var(--cream);box-shadow:none}
+body.cm .bmbox :is(th,td){border-color:var(--line)!important;color:var(--cream)}
+body.cm .bmbox :is(h2,h3,h4,b,strong,summary){color:var(--cream)}
+body.cm .bmbox .hint{color:var(--muted)}
+body.cm .bmbox{background:var(--panel);color:var(--cream);border-color:var(--line2)}
+
+/* ===== 10.11: Історія на головній · Уряд · Орден Білого Лотоса ===== */
+.m6hist .m6tl{list-style:none;margin:0 0 10px;padding:0 0 0 4px;display:grid;gap:0;max-height:330px;overflow:auto}
+.m6tl li{display:flex;gap:10px;align-items:center;padding:6px 0 6px 12px;border-left:2px solid var(--line2);position:relative}
+.m6tl li:before{content:"";position:absolute;left:-5px;top:50%;width:8px;height:8px;border-radius:50%;background:var(--gold);transform:translateY(-50%)}
+.m6tl li.end{opacity:.62}.m6tl li.end:before{background:var(--muted)}
+.m6tl b{display:block;font-size:13.5px;line-height:1.25}.m6tl small{color:var(--muted);font-size:12px}
+.m6tf{width:30px;height:20px;flex:0 0 auto;border-radius:3px;overflow:hidden;display:grid;place-items:center;background:var(--panel2);font-size:12px}.m6tf img{width:100%;height:100%;object-fit:cover}
+.m6hev{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:10px;margin-bottom:10px;font-size:13.5px}
+.m6hbtn{width:100%}
+/* уряд */
+.m6pem{position:absolute;top:-4px;right:-4px;width:24px;height:24px;object-fit:contain;border-radius:50%;background:var(--panel);border:1px solid var(--line2);padding:1px;z-index:2}
+.m4seat{position:absolute}.m4seat .m4av{position:relative}
+.m6gp .m6row{display:flex;gap:8px;align-items:center;margin:6px 0}.m6gp .m6row input{flex:1;min-width:0}
+.m6emi{width:56px;height:56px;border-radius:12px;display:grid;place-items:center;background:var(--panel2);overflow:hidden;flex:0 0 auto}.m6emi img{width:100%;height:100%;object-fit:contain}.m6emi.sm{width:34px;height:34px;border-radius:50%}
+.m6em{display:flex;gap:12px;align-items:center;margin:8px 0 12px}
+.m6up{display:inline-flex;align-items:center;gap:4px;cursor:pointer;padding:4px 9px;border:1px solid var(--line);border-radius:6px;font-size:12px;font-weight:600}
+.m6chk{display:flex;gap:8px;align-items:flex-start;margin-top:8px;font-size:13px}
+/* орден: спільне */
+body.m6ord{--lotus:#d9a3b5}
+body.cml.m6ord{--lotus:#a8576f}
+.m6o{display:block}
+.m6hero{display:flex;gap:16px;align-items:center;margin:4px 0 18px}.m6hero h2{margin:0;font-size:26px;color:var(--cream)}.m6hero p{margin:4px 0 0}
+.m6lotus{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--lotus,#d9a3b5) 16%,var(--panel));color:var(--lotus,#d9a3b5);border:1px solid color-mix(in srgb,var(--lotus,#d9a3b5) 40%,transparent);flex:0 0 auto}.m6lotus .m5svg{width:34px;height:34px}
+.m6me b .m5svg{color:var(--lotus,#d9a3b5)}
+.m6grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}
+.m6txt{line-height:1.6;font-size:15px;white-space:pre-wrap}
+.m6mem{display:flex;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line)}.m6mem:first-of-type{border-top:0}
+.m6mem.master{padding:4px 0 10px}.m6mem.master .m5av{border-color:var(--lotus,#d9a3b5);box-shadow:0 0 0 3px color-mix(in srgb,var(--lotus,#d9a3b5) 25%,transparent)}
+.m6sub{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:6px 0 2px;font-weight:700}
+.m6o textarea,.m6o input[type=text],.m6o input[type=date],.m6o select,.m6bm textarea,.m6bm input[type=text]{width:100%;box-sizing:border-box;border-radius:10px;border:1px solid var(--line2);background:var(--bg2);color:var(--cream);padding:9px 11px;font:inherit}
+.m6o .fl,.m6bm .fl{display:grid;gap:5px;margin:8px 0;font-size:13px;color:var(--muted)}
+/* карта островів */
+body.cm{--m6sea1:#2a3b44;--m6sea2:#1b242b;--m6wave:rgba(220,230,235,.12);--m6land:#3a362f;--m6coast:#8f8577;--m6isl:#5a6a52;--m6txt:#e9e4da}
+body.cml{--m6sea1:#bcd0d6;--m6sea2:#9db6bf;--m6wave:rgba(255,255,255,.35);--m6land:#e3d8c3;--m6coast:#8b7c66;--m6isl:#a9b98f;--m6txt:#2a2620}
+.m6map{width:100%;height:auto;border-radius:12px;display:block}
+.m6mt{font:700 22px Georgia,serif;letter-spacing:.3em;fill:var(--m6txt);opacity:.55}
+.m6ml{font:600 13px Inter,system-ui,sans-serif;fill:var(--m6txt);color:var(--lotus,#d9a3b5)}
+.m6cmp{color:var(--m6txt);opacity:.6;font:600 11px Inter,sans-serif}.m6cmp text{fill:currentColor}
+/* календар */
+.m6ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.m6ch h3{margin:0}.m6ch .m5lnk{font-size:22px;padding:2px 12px}
+.m6cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.m6wd{font-size:11.5px;color:var(--muted);text-align:center;padding:4px 0;font-weight:700}
+.m6d{min-height:62px;border-radius:9px;background:var(--bg2);padding:5px 6px;font-size:13px;display:flex;flex-direction:column;gap:3px;overflow:hidden}
+.m6d.e{background:transparent}.m6d.t{outline:2px solid var(--gold)}
+.m6d.h{background:color-mix(in srgb,var(--lotus,#d9a3b5) 18%,var(--bg2))}
+.m6d i{font-style:normal;font-size:11px;line-height:1.2;color:var(--cream);background:color-mix(in srgb,var(--lotus,#d9a3b5) 35%,transparent);border-radius:5px;padding:2px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m6form{display:grid;grid-template-columns:170px minmax(0,1fr);gap:10px}
+.m6ht{font-size:13px;margin-top:3px;color:var(--cream);opacity:.85}
+/* бібліотека */
+.m6lh{display:flex;gap:12px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;margin:0 0 14px}.m6lh h3{margin:0 0 4px;font-size:20px}.m6lh p{margin:0}
+.m6case{border-radius:14px;background:linear-gradient(180deg,#3b2a1c,#2a1d12);padding:18px 18px 2px;box-shadow:inset 0 0 0 6px #4a3522,0 18px 36px rgba(0,0,0,.35)}
+.m6shelf{display:flex;align-items:flex-end;gap:3px;min-height:250px;padding:0 10px;border-bottom:16px solid #6b4a2c;box-shadow:0 6px 0 #3a2716;margin-bottom:22px}
+.m6bk{all:unset;box-sizing:border-box;position:relative;flex:0 0 auto;border-radius:3px 3px 2px 2px;display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,color-mix(in srgb,var(--bc) 78%,#000),var(--bc) 18%,var(--bc) 70%,color-mix(in srgb,var(--bc) 70%,#000));color:var(--bi);box-shadow:inset 0 0 0 1px rgba(0,0,0,.25),2px 0 4px rgba(0,0,0,.4);cursor:pointer;transition:transform .15s}
+.m6bk:hover,.m6bk:focus-visible{transform:translateY(-10px)}.m6bk:focus-visible{outline:2px solid #f0d9a0;outline-offset:2px}
+.m6bk span{writing-mode:vertical-rl;transform:rotate(180deg);font:600 13px Georgia,serif;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:78%}
+.m6bk i{position:absolute;bottom:5px;left:0;right:0;text-align:center;font-style:normal;font-size:9px;opacity:.7}
+.m6bk:before,.m6bk:after{content:"";position:absolute;left:0;right:0;height:2px;background:rgba(255,215,140,.55)}.m6bk:before{top:14px}.m6bk:after{bottom:20px}
+.m6empty{text-align:center;margin-top:-6px}
+/* читалка і письмо */
+.m6bm .bmbox{max-width:980px}
+.m6wr{max-width:720px!important}
+.m6wtop{display:flex;gap:16px;align-items:stretch}
+.m6prev{flex:0 0 auto;min-height:150px;border-radius:3px;background:var(--bc);color:var(--bi);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25),2px 2px 6px rgba(0,0,0,.3);transition:width .2s}
+.m6prev span{writing-mode:vertical-rl;transform:rotate(180deg);font:600 13px Georgia,serif;white-space:nowrap;overflow:hidden;max-height:130px}
+.m6sw{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.m6c{all:unset;box-sizing:border-box;width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.18);cursor:pointer;position:relative}.m6c.on{outline:2px solid var(--gold);outline-offset:2px}
+.m6cc{background:conic-gradient(#c33,#cc3,#3c3,#3cc,#33c,#c3c,#c33);overflow:hidden}.m6cc input{opacity:0;position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
+.m6wr textarea{min-height:280px;font:15px/1.6 Georgia,serif}
+.m6cover{background:var(--bc);color:var(--bi);border-radius:10px;padding:14px 18px;margin:0 0 14px;display:flex;flex-direction:column;gap:2px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.2)}.m6cover b{font:700 22px Georgia,serif}.m6cover small{opacity:.8}
+.m6spread{display:grid;grid-template-columns:1fr;gap:0;background:#f3ead7;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.35),inset 0 0 0 1px rgba(0,0,0,.1);color:#2b2419}
+.m6spread.two{grid-template-columns:1fr 1fr;background:linear-gradient(90deg,#efe5cf 0,#f6eedc 46%,#e2d6bb 50%,#f6eedc 54%,#efe5cf 100%)}
+.m6pg{position:relative;min-height:440px;padding:30px 34px 40px;box-sizing:border-box}
+.m6pt{font:16px/1.7 Georgia,'Times New Roman',serif;white-space:pre-wrap;overflow-wrap:anywhere}
+.m6pn{position:absolute;bottom:12px;left:0;right:0;text-align:center;font:12px Georgia,serif;opacity:.55}
+.m6nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+.m6bact{margin-top:12px;justify-content:flex-end}
+nav.toc.m6osub button[aria-current="page"]{background:var(--lotus,#d9a3b5)!important;border-color:var(--lotus,#d9a3b5)!important;color:#1d1a1f!important}
+@media (max-width:860px){.m6grid{grid-template-columns:1fr}.m6form{grid-template-columns:1fr}.m6d{min-height:44px;font-size:12px}.m6d i{display:none}.m6d.h span{font-weight:800;color:var(--lotus)}.m6pg{min-height:60vh;padding:22px 20px 36px}.m6shelf{min-height:220px}}
+@media (max-width:760px){nav.toc.m5sub{display:flex!important;overflow-x:auto;flex-wrap:nowrap}}
+.m6li{color:var(--lotus,#d9a3b5)}
+body.cml nav.toc.m6osub button[aria-current="page"]{color:#fff!important}
+body.cm .hclab{stroke:var(--panel)}body.cml .hclab{fill:#b2402f}
+@media (max-width:760px){.m6hist .m6tl,.m6hist .m6hev{display:none}.m6hist h3{margin-bottom:8px}.m6hero h2{font-size:21px}.m6lotus{width:46px;height:46px}.m6lotus .m5svg{width:26px;height:26px}}
 </style>
 
 </head><body>
@@ -2280,9 +2386,9 @@ function myHomeLands(){const p=myProfile();return p.land&&findLandById(state,p.l
 function suggestLand(){let r='';landSecs().forEach(sec=>(sec.lands||[]).forEach(l=>{const h=landHead(l);if(!r&&h.name&&emailOf(h.name)===AUTH.email)r=l.id;Object.values(l.dz||{}).forEach(d=>{if(!r&&d&&d.name&&emailOf(d.name)===AUTH.email)r=l.id;});}));return r;}
 function myPartyIds(){if(!AUTH.email||typeof PARTIES==='undefined')return [];return PARTIES.filter(p=>p.status==='active'&&(lc(p.leaderEmail)===AUTH.email||(p.memEmails||[]).map(lc).includes(AUTH.email))).map(p=>p.id);}
 function chatCanWrite(th){return chatReg()||(th==='r:confed'&&!!myConf());}
-function chatRooms(){const out=m5UdOn()?[ROOMS[0],...m5Groups(),...ROOMS.slice(1)]:[ROOMS[0],...m5Groups()];if(!m5UdOn())return out;if(confAccess())out.push(['confed','🤝','Конфедерація','делегати Ради й Канцелярія УД']);myHomeLands().forEach(id=>{const f=findLandById(state,id);if(f)out.push(['land_'+id,'🗺','Земля: '+cur(f.l).name.replace(/ Земля$/,''),'громадяни Землі та її посадовці']);});
+function chatRooms(){const out=m5UdOn()?[ROOMS[0],...m5Groups(),...ROOMS.slice(1)]:[ROOMS[0],...m5Groups()];if(m6Gov()){const pi=out.findIndex(r=>r[0]==='parl');if(pi>=0)out.splice(pi,1);}if(m6OrdIn()||(AUTH.admin&&m6On('order')))out.splice(1,0,['ord','🌸','Орден Білого Лотоса','учні й Магістр']);if(!m5UdOn())return out;if(confAccess())out.push(['confed','🤝','Конфедерація','делегати Ради й Канцелярія УД']);myHomeLands().forEach(id=>{const f=findLandById(state,id);if(f)out.push(['land_'+id,'🗺','Земля: '+cur(f.l).name.replace(/ Земля$/,''),'громадяни Землі та її посадовці']);});
   myPartyIds().forEach(id=>{const p=partyById(id);if(p)out.push(['party_'+id,'🎨','Партія: '+(p.short||p.name),'члени партії']);});return out;}
-function roomOk(r){if(!AUTH.email)return false;if(r==='confed')return confAccess();if(String(r).startsWith('land_'))return myHomeLands().includes(r.slice(5))||AUTH.admin;if(String(r).startsWith('party_'))return myPartyIds().includes(r.slice(6))||AUTH.admin;if(AUTH.admin)return true;if(r==='general'||String(r).startsWith('cg_'))return !!plByEmail(AUTH.email)||!!myMember();if(r==='parl')return myLands().length>0;if(r==='gov')return isGov();if(r==='court')return !!myCourtPost()||isPros();if(r==='church')return isClergy();return false;}
+function roomOk(r){if(!AUTH.email)return false;if(r==='ord')return m6OrdIn()||AUTH.admin;if(r==='confed')return confAccess();if(String(r).startsWith('land_'))return myHomeLands().includes(r.slice(5))||AUTH.admin;if(String(r).startsWith('party_'))return myPartyIds().includes(r.slice(6))||AUTH.admin;if(AUTH.admin)return true;if(r==='general'||String(r).startsWith('cg_'))return !!plByEmail(AUTH.email)||!!myMember();if(r==='parl')return myLands().length>0;if(r==='gov')return isGov();if(r==='court')return !!myCourtPost()||isPros();if(r==='church')return isClergy();return false;}
 function chatReg(){return (!!plByEmail(AUTH.email)&&!(plByEmail(AUTH.email)||{}).exiled)||!!myMember();}
 function chatMod(){return AUTH.admin||isInterior();}
 function chatBanned(e){const u=+CHATBANS[lc(e||AUTH.email)]||0;return u>Date.now()?u:0;}
@@ -4059,7 +4165,7 @@ function parlReps(){return landLeaders().filter(r=>!r.occ).concat(depReps());}
 function seatName(k){k=String(k||'');if(!k.startsWith('dep:'))return k;const d=depReps().find(r=>r.land===k);return 'Депутат'+(d&&d.name?' '+d.name:'');}
 function depOf(email){email=lc(email);return DEPS.find(d=>lc(d.email)===email)||null;}
 function depEligible(p){return !!(p&&p.email&&!p.tourist&&!p.exiled);}
-function depsHtml(){const act=depActive();const req=DEPS.filter(d=>d.status==='req');const inv=DEPS.filter(d=>d.status==='inv');const mine=AUTH.email?depOf(AUTH.email):null;const meP=AUTH.email?plByEmail(AUTH.email):null;const can=canDeps();const free=DEP_MAX-act.length;
+function depsHtml0(){const act=depActive();const req=DEPS.filter(d=>d.status==='req');const inv=DEPS.filter(d=>d.status==='inv');const mine=AUTH.email?depOf(AUTH.email):null;const meP=AUTH.email?plByEmail(AUTH.email):null;const can=canDeps();const free=DEP_MAX-act.length;
   let h=`<div class="block deps"><h3>🎖 Призначені депутати <small>${act.length} з ${DEP_MAX}${exileMode()?' · Палата працює у вигнанні':''}</small></h3><p class="hint">Окрім представників Земель, у Палаті може бути до ${DEP_MAX} депутатів, яких призначає Гетьман або Секретар Внутрішніх Справ. Депутатом може бути лише громадянин УД; голос — такий самий, як у представника Землі.</p>`;
   h+=act.length?`<ul class="deplist">${act.map(d=>{const p=plByEmail(d.email);return `<li><b>${p?plink(p.name):esc(d.name||d.email)}</b><span class="hint">з ${esc(d.since||'')}${d.byName?' · призначив '+esc(d.byName):''}</span>${can?`<button class="small ghost" data-a="depdel" data-k="${esc(d.email)}">Зняти</button>`:''}${!can&&mine&&mine===d?`<button class="small ghost" data-a="depdel" data-k="${esc(d.email)}">Скласти мандат</button>`:''}</li>`;}).join('')}</ul>`:'<p class="empty">Призначених депутатів поки немає.</p>';
   if(can){if(req.length)h+=`<div class="depsub">Заявки</div><ul class="deplist">${req.map(d=>`<li><b>${esc(d.name||d.email)}</b><span class="hint">${d.note?esc(d.note):''}</span>${free>0?`<button class="small primary" data-a="depok" data-k="${esc(d.email)}">Призначити</button>`:''}<button class="small ghost" data-a="depdel" data-k="${esc(d.email)}">Відхилити</button></li>`).join('')}</ul>`;
@@ -5740,7 +5846,7 @@ function renderInner(){chatMarkSeen();
     editing=ED&&scopeAllows(s);
     {}
     html+=`<section class="sec" id="${esc(s.id)}"><h2>${esc(s.title)}${s.note?`<small>${esc(s.note)}</small>`:''}${!ED&&!AUTH.bot&&secEditScope(s)?`<button type="button" class="small ghost secedit" data-a="secedit" data-k="${esc(s.id)}" title="Редагувати цей розділ">✏️ Редагувати</button>`:''}</h2>`;
-    if(!editing){const x4=m4Sec(s,si);if(x4!=null){html+=x4+'</section>';return;}}
+    if(!editing||/^order/.test(s.kind||'')){const x4=m4Sec(s,si);if(x4!=null){html+=x4+'</section>';return;}}
     if(s.kind==='economy'){html+=(editing?econHtml(s,si):econView(s,si))+'</section>';return;}
     if(s.kind==='parliament'){html+=(AUTH.admin&&!editing&&!AUTH.bot?`<div class="landtools" style="justify-content:flex-end;margin:-6px 0 8px"><button class="small ghost" data-a="admtick" ${busy?'disabled':''} title="Те саме, що робить бот раз на 15 хвилин">🔄 Підбити підсумки зараз</button></div>`:'')+parlHtml(s,si)+(editing?'':committeesBlock())+'</section>';return;}
     if(s.kind==='doc'){html+=constHtml(s,si)+'</section>';return;}
@@ -5810,6 +5916,7 @@ function docHtml(){
 app.addEventListener('input',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;
   if(confInput2(a,t))return;
+  if(m6Input(a,t))return;
   if(m5Input(a,t))return;
   if(a==='m3own')return;
   if(mapEdInput(a,t))return;
@@ -5983,6 +6090,7 @@ app.addEventListener('input',e=>{
 app.addEventListener('change',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;
   if(confChange2(a,t))return;
+  if(m6Change(a,t))return;
   if(m5Change(a,t))return;
   if(m3Change(a,t))return;
   if(a==='maphd'){const v=+t.value;MAPHD=v>=Date.now()-6e5?null:v;render();return;}const sec=state.sections[+t.dataset.s];
@@ -6036,6 +6144,7 @@ app.addEventListener('click',async e=>{
   if(await confAct2(a,b))return;
   if(await m3Click(a,b))return;
   if(await m4Click(a,b))return;
+  if(await m6Click(a,b))return;
   if(await m5Click(a,b))return;
   if(a==='confv'){CONFV=b.dataset.k;CFDEC='';render();{const t=document.querySelector('.cftabs');if(t){const r=t.getBoundingClientRect();if(r.top<0)t.scrollIntoView({block:'start'});const on=t.querySelector('.on');if(on)setTimeout(()=>{const tt=document.querySelector('.cftabs'),o2=tt&&tt.querySelector('.on');if(o2)tt.scrollLeft=Math.max(0,o2.offsetLeft-tt.clientWidth/2+o2.offsetWidth/2);},30);}}return;}
   if(a==='chv'){CHV=b.dataset.k;render();return;}
@@ -7794,7 +7903,7 @@ if(window.APP_READY)window.APP_READY();
 // ===================== НОВА СТРУКТУРА САЙТУ (06.11.2026) =====================
 // Головна · Влада (Канцелярія — круглий стіл, Землі, Палата, Суд) · Право · Держава (Карта, Економіка) · Військо (Звання) · Громада
 // Конфедерація прихована з меню, чат — плаваюча кнопка.
-function restructure(s){const S=s.sections;const by=k=>S.find(x=>x.kind===k);const ud=S.find(x=>x.id==='ud')||S.find(x=>!x.kind&&x.lands);
+function restructure4(s){const S=s.sections;const by=k=>S.find(x=>x.kind===k);const ud=S.find(x=>x.id==='ud')||S.find(x=>!x.kind&&x.lands);
   const parl=by('parliament'),laws=by('laws'),doc=by('doc'),pl=by('players'),gov=by('gov'),econ=by('economy'),aw=by('awards'),court=by('court'),units=by('units'),church=by('church'),home=by('home'),power=by('power'),comm=by('community'),chs=by('chat'),map=by('map'),ranks=by('ranks'),conf=by('confed');
   const sub=(c,p,sw=true)=>{if(c&&p&&c!==p){c.tab=p.id;c.sw=sw;delete c.hideView;}};const hide=(c,p)=>{if(c&&p&&c!==p){c.tab=p.id;c.sw=false;c.hideView=true;}};
   S.forEach(x=>{delete x.navTop;});
@@ -7826,15 +7935,15 @@ function m4Sec(s,si){
   return null;}
 // ---- Канцелярія: круглий стіл ----
 const M4_SEATS=['hetman','pysar','fin','def','pros','mvs','mzs','press'];
-function m4Kanc(){const g=govSec();const P=id=>((g&&g.posts)||[]).find(x=>x.id===id);const a=myAuth();const seats=M4_SEATS.map(P).filter(Boolean);const N=seats.length;const em=emblemSrc();
+function m4Kanc0(){const g=govSec();const P=id=>((g&&g.posts)||[]).find(x=>x.id===id);const a=myAuth();const seats=M4_SEATS.map(P).filter(Boolean);const N=seats.length;const em=emblemSrc();
   const seat=(p,i)=>{const ang=-Math.PI/2+i*2*Math.PI/N;const x=50+42*Math.cos(ang),y=50+40*Math.sin(ang);const v=!filledP(p);const act=actingFor('gov',p.id);const live=doorLive(p);
-    return `<button type="button" class="m4seat${p.id==='hetman'?' big':''}${v?' vac':''}" style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%" data-a="cab" data-k="${esc(p.id)}" title="${esc(p.title)}: ${esc(v?'вакантно':p.name)}">${seatAv(v?'':p.name,'m4av')}<span class="m4p">${esc(p.title)}</span><span class="m4n">${v?(act?'в.о. '+esc(act):'Вакантно'):esc(p.name)}</span>${live?`<span class="m4l">${esc(live)}</span>`:''}</button>`;};
+    return `<button type="button" class="m4seat${p.id==='hetman'?' big':''}${v?' vac':''}" style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%" data-a="cab" data-k="${esc(p.id)}" title="${esc(p.title)}: ${esc(v?'вакантно':p.name)}">${seatAv(v?'':p.name,'m4av')}${m6PostEm(p.id)}<span class="m4p">${esc(p.title)}</span><span class="m4n">${v?(act?'в.о. '+esc(act):'Вакантно'):esc(p.name)}</span>${live?`<span class="m4l">${esc(live)}</span>`:''}</button>`;};
   let h=`<p class="hint pwlead">Хто призначає, той і звільняє. Сила рішення: <b>закон Палати → Гетьман → Писар</b>. Натисніть на крісло, щоб відкрити кабінет посади.</p>
   <div class="block m4table"><div class="m4tbl"><div class="m4desk">${em?`<img src="${esc(em)}" alt="Герб Української Держави">`:'<b>УД</b>'}</div>${seats.map(seat).join('')}</div></div>`;
   const gc=p=>powCard({k:'gov:'+p.id,title:p.title,name:p.name,ap:p.ap,can:canApGov(a,p),cab:p.id,acting:actingFor('gov',p.id),pend:pendFor('gov',p.id),small:true});
   const canAny=seats.some(p=>canApGov(a,p));
   h+=`<details class="block m4ap"${canAny&&OPEN.has('m4ap')?' open':''} data-o="m4ap"><summary>👤 Призначення посад ${canAny?'<small>ви можете призначати</small>':'<small>хто обіймає посади</small>'}</summary><div class="pwgrid">${seats.map(gc).join('')}</div></details>`;
-  const cs=sectionByKind('court');h+=`<p class="hint">⚖️ Суддів Генерального Суду призначає Палата Земель — вкладка <button type="button" class="lnk" data-a="sub" data-p="${esc((sectionByKind('power')||{}).id||'')}" data-id="${esc(cs?cs.id:'court')}">Суд</button>.</p>`;
+  const cs=sectionByKind('court');h+=`<p class="hint">⚖️ Суддів Генерального Суду призначає Палата Земель — вкладка <button type="button" class="lnk" ${m6Gov()?'data-a="tab"':`data-a="sub" data-p="${esc((sectionByKind('power')||{}).id||'')}"`} data-id="${esc(cs?cs.id:'court')}">Суд</button>.</p>`;
   return h;}
 // ---- Землі: прапори з осавулами, вікно Землі ----
 function m4Lands(){const idx=mapLandIdx().filter(x=>landBr(x.sec)==='ud');const a=myAuth();
@@ -7889,7 +7998,7 @@ function m4LandRsSum(l){const c=m4LandRsCnt(l);return (c.occ?` <span class="pill
 const CM_NAME='Українське ком’юніті DP';
 const CM_CATS=[['politics','Політика','#7d93b0'],['war','Війна','#b5776b'],['econ','Економіка','#7fa08a'],['fun','Жарти','#c2a66b'],['events','Події','#9a86a8'],['other','Інше','#8f8a84']];
 const CM_COUNTRIES=[['UA','🇺🇦','Україна'],['PL','🇵🇱','Польща'],['ES','🇪🇸','Іспанія'],['BY','🇧🇾','Білорусь'],['GE','🇬🇪','Грузія'],['KZ','🇰🇿','Казахстан'],['MD','🇲🇩','Молдова'],['RO','🇷🇴','Румунія'],['LT','🇱🇹','Литва'],['DE','🇩🇪','Німеччина'],['US','🇺🇸','США'],['GB','🇬🇧','Велика Британія'],['XX','🌍','Інша країна']];
-let FEED=[],MEMBERS=[],FEEDCAT='all',FDF={text:'',cat:'politics',img:''},FDOPEN=new Set(),FDC={},FDCT={},FDTR={},FDTRQ=new Set(),FDTRT=0,FDORIG=new Set(),PLAYM=false,M5PLQ='',M5REG={name:'',country:'UA',profile:''},M5SKIP=false,LASTUD='';
+let FEED=[],MEMBERS=[],FEEDCAT='all',FDF={text:'',cat:'politics',img:''},FDOPEN=new Set(),FDC={},FDCT={},FDTR={},FDTRQ=new Set(),FDTRT=0,FDORIG=new Set(),PLAYM=false,M5PLQ='',M5REG={name:'',country:'UA',profile:''},M5SKIP=false,LASTUD='',FDM=false;
 let CMTHEME=(()=>{try{return localStorage.getItem('cm-theme')||'dark';}catch(_){return 'dark';}})();
 try{window.APP.feed=l=>{FEED=(l||[]).slice().sort((a,b)=>m5At(b)-m5At(a));renderSoon();};window.APP.members=l=>{MEMBERS=l||[];window.__m5memLoaded=true;renderSoon();};}catch(_){}
 function m5At(p){const v=vms(p&&p.at);return v||Date.now();}
@@ -7898,6 +8007,8 @@ function myMember(){if(!AUTH.email)return null;const e=lc(AUTH.email);return MEM
 function m5Name(){const p=plByEmail(AUTH.email);const m=myMember();return (m&&m.name)||(p&&p.name)||String(AUTH.email||'').split('@')[0];}
 function m5Flag(email){const m=MEMBERS.find(x=>lc(x.id)===lc(email));const c=m&&CM_COUNTRIES.find(x=>x[0]===m.country);if(c)return c[1];return plByEmail(email)?'🇺🇦':'';}
 function m5CanPost(){return !!(AUTH.email&&!AUTH.bot&&(myMember()||plByEmail(AUTH.email)||AUTH.admin));}
+const M6_LOTUS='<svg class="m5svg" viewBox="0 0 32 32" aria-hidden="true"><g fill="currentColor"><path d="M16 5c3 3.4 4.2 7 4.2 10.4 0 3.3-1.7 6-4.2 7.6-2.5-1.6-4.2-4.3-4.2-7.6C11.8 12 13 8.4 16 5z"/><path opacity=".75" d="M5 11.5c4 .3 7.1 2.4 8.9 5.4 1.3 2.2 1.6 4.4 1.1 6.4-2.2.3-4.5-.3-6.5-2C6 19.2 4.9 15.6 5 11.5zm22 0c.1 4.1-1 7.7-3.5 9.8-2 1.7-4.3 2.3-6.5 2-.5-2-.2-4.2 1.1-6.4 1.8-3 4.9-5.1 8.9-5.4z"/><path opacity=".5" d="M3 20c3.2-.6 6.6.3 9.6 2.6L16 25l3.4-2.4c3-2.3 6.4-3.2 9.6-2.6-1.5 3.4-5.6 6.2-13 6.2S4.5 23.4 3 20z"/></g></svg>';
+function m5Em(t){t=String(t||'');if(t==='🪷'||t==='lotus')return M6_LOTUS;if(t==='🇺🇦')return '<svg class="m5fe" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="10" fill="#0057b7"/><rect y="10" width="30" height="10" fill="#ffd700"/></svg>';return esc(t).replace(/(?:\uD83C[\uDDE6-\uDDFF]){2}/g,f=>`<img class="m5fe" alt="${f}" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/${[...f].map(c=>c.codePointAt(0).toString(16)).join('-')}.svg" loading="lazy">`);}
 // ---------- модулі ----------
 function m5Mods(){const M=state.modules||{};return {ud:Object.assign({on:true,name:'Україна',ic:'🇺🇦'},M.ud||{})};}
 function m5ModOf(s){if(!s)return '';if(s.kind==='feed'||s.kind==='chat')return '';return 'ud';}
@@ -7911,7 +8022,7 @@ function m5Toc(){const top=state.sections.filter(s=>!s.tab&&navVis(s));const cur
   const core=top.filter(s=>!m5ModOf(s)&&s.kind!=='chat');const ud=top.filter(s=>m5ModOf(s)==='ud');
   const btn=(s,lab)=>`<button data-a="tab" data-id="${esc(s.id)}" ${s.id===active?'aria-current="page"':''}>${NAV_ICONS[s.id]?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${NAV_ICONS[s.id]}</svg>`:''}<span>${esc(lab||s.navTop||s.nav||s.title)}</span></button>`;
   let h='<nav class="toc m5main" aria-label="Розділи">'+core.map(s=>btn(s)).join('');
-  if(ud.length&&(M.ud.on!==false||AUTH.admin))h+=`<button data-a="m5mod" data-k="ud" ${inUd?'aria-current="page"':''}><span class="m5mi">${esc(M.ud.ic||'🇺🇦')}</span><span>${esc(M.ud.name||'Україна')}${M.ud.on===false?' · вимкнено':''}</span></button>`;
+  if(ud.length&&(M.ud.on!==false||AUTH.admin))h+=`<button data-a="m5mod" data-k="ud" ${inUd?'aria-current="page"':''}><span class="m5mi">${m5Em(M.ud.ic||'🇺🇦')}</span><span>${esc(M.ud.name||'Україна')}${M.ud.on===false?' · вимкнено':''}</span></button>`;
   h+='</nav>';
   if(inUd)h+=`<nav class="toc m5sub" aria-label="${esc(M.ud.name||'Україна')}">${ud.map(s=>btn(s)).join('')}</nav>`;
   return h;}
@@ -7921,22 +8032,24 @@ function m5Logo(){return `<span class="m5logo" aria-hidden="true"><svg viewBox="
 function mobNav(){const cur=state.sections.find(s=>s.id===active);if(m5ModOf(cur)==='ud')return mobNav0();const top=state.sections.filter(s=>!s.tab&&navVis(s));const feed=top.find(s=>s.kind==='feed');const ud=top.find(s=>m5ModOf(s)==='ud');const M=m5Mods();const un=AUTH.email?chatUnread():0;const cs=sectionByKind('chat');
   const it=(attr,ic,lab,on,badge)=>`<button ${attr}${on?' aria-current="page"':''}>${ic}<span>${esc(lab)}</span>${badge?`<i class="nbadge">${badge}</i>`:''}</button>`;
   const svg=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
-  return `<nav class="mnav" aria-label="Розділи">${feed?it(`data-a="tab" data-id="${esc(feed.id)}"`,svg('<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>'),'Головна',active===feed.id&&!PLAYM):''}${ud&&(M.ud.on!==false||AUTH.admin)?it('data-a="m5mod" data-k="ud"',`<span class="m5mi">${esc(M.ud.ic||'🇺🇦')}</span>`,M.ud.name||'Україна',false):''}${it('data-a="m5pl"',svg('<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.5a5 5 0 0 1 5 5"/>'),'Гравці',PLAYM)}${cs?it('data-a="m5chat"',svg('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12Z"/>'),'Чат',active===cs.id,un):''}</nav>`;}
+  return `<nav class="mnav" aria-label="Розділи">${feed?it(`data-a="tab" data-id="${esc(feed.id)}"`,svg('<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>'),'Головна',active===feed.id&&!PLAYM):''}${ud&&(M.ud.on!==false||AUTH.admin)?it('data-a="m5mod" data-k="ud"',`<span class="m5mi">${m5Em(M.ud.ic||'🇺🇦')}</span>`,M.ud.name||'Україна',false):''}${it('data-a="m5pl"',svg('<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.5a5 5 0 0 1 5 5"/>'),'Гравці',PLAYM)}${cs?it('data-a="m5chat"',svg('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12Z"/>'),'Чат',active===cs.id,un):''}</nav>`;}
 // ---------- стрічка ----------
 function m5Cat(k){return CM_CATS.find(c=>c[0]===k)||CM_CATS[5];}
 function m5Feed(){const can=m5CanPost();const L=FEED.filter(p=>(!p.hidden||AUTH.admin||lc(p.by)===lc(AUTH.email))&&(FEEDCAT==='all'||p.cat===FEEDCAT));
   let h='<div class="m5wrap"><div class="m5col">';
-  if(can)h+=`<div class="m5card m5comp"><div class="m5row">${seatAv(m5Name(),'m5av')}<textarea id="m5-text" data-a="m5txt" rows="${FDF.text?4:2}" maxlength="3000" placeholder="Що нового у вашій державі?">${esc(FDF.text)}</textarea></div>${FDF.img?`<div class="m5imgp"><img src="${esc(FDF.img)}" alt=""><button type="button" class="small ghost" data-a="m5imgx">✕ Прибрати фото</button></div>`:''}<div class="m5tools"><div class="m5chips">${CM_CATS.map(([k,l,c])=>`<button type="button" class="m5chip${FDF.cat===k?' on':''}" style="--c:${c}" data-a="m5cat" data-k="${k}">${l}</button>`).join('')}</div><label class="m5chip m5ph">🖼 Фото<input type="file" accept="image/*" data-a="m5img" hidden></label><button type="button" class="m5btn" data-a="m5post" ${busy?'disabled':''}>Опублікувати</button></div></div>`;
+  if(false){}
   else if(!AUTH.email)h+=`<div class="m5card m5join"><b>Ласкаво просимо до ${esc(CM_NAME)}!</b><p class="hint">Тут гравці DragPolit діляться новинами своїх держав. Увійдіть, щоб публікувати й коментувати.</p><button type="button" class="m5btn" data-a="login">Увійти через Google</button></div>`;
   else if(!AUTH.bot)h+=`<div class="m5card m5join"><b>Створіть профіль, щоб публікувати</b><p class="hint">Це займає пів хвилини і не потребує схвалення адміністрації.</p><button type="button" class="m5btn" data-a="m5reg">🪪 Створити профіль</button></div>`;
-  h+=`<div class="m5filter"><button type="button" class="m5chip${FEEDCAT==='all'?' on':''}" data-a="m5f" data-k="all">Усе</button>${CM_CATS.map(([k,l,c])=>`<button type="button" class="m5chip${FEEDCAT===k?' on':''}" style="--c:${c}" data-a="m5f" data-k="${k}">${l}</button>`).join('')}</div>`;
+  h+=`<div class="m5bar"><div class="m5filter"><button type="button" class="m5chip${FEEDCAT==='all'?' on':''}" data-a="m5f" data-k="all">Усе</button>${CM_CATS.map(([k,l,c])=>`<button type="button" class="m5chip${FEEDCAT===k?' on':''}" style="--c:${c}" data-a="m5f" data-k="${k}">${l}</button>`).join('')}</div>${can?'<button type="button" class="m5btn m5newb" data-a="m5new">＋ Додати допис</button>':''}</div>${can?'<button type="button" class="m5fab" data-a="m5new" aria-label="Додати допис">＋</button>':''}`;
   h+=L.length?L.map(m5PostHtml).join(''):`<div class="m5card"><p class="hint">${FEEDCAT==='all'?'Дописів ще немає — станьте першим!':'У цій категорії ще немає дописів.'}</p></div>`;
-  h+='</div><aside class="m5side">'+m5Events()+'</aside></div>';
+  h+='</div><aside class="m5side">'+m5Events()+m6HistCard()+'</aside></div>';
   if(PLAYM&&!MODALH)MODALH=m5Players();
+  if(FDM&&can&&!MODALH)MODALH=m5Compose();
   return h;}
+function m5Compose(){return `<div class="bmodal m5cm" role="dialog" aria-modal="true" aria-label="Новий допис"><button type="button" class="bmback" data-a="m5newx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m5comp"><button class="small bmx" data-a="m5newx">✕ Закрити</button><h3>Новий допис</h3><div class="m5row">${seatAv(m5Name(),'m5av')}<textarea id="m5-text" data-a="m5txt" rows="6" maxlength="3000" placeholder="Чим хочете поділитися?">${esc(FDF.text)}</textarea></div>${FDF.img?`<div class="m5imgp"><img src="${esc(FDF.img)}" alt=""><button type="button" class="small ghost" data-a="m5imgx">✕ Прибрати фото</button></div>`:''}<div class="hint m5lbl">Категорія</div><div class="m5chips">${CM_CATS.map(([k,l,c])=>`<button type="button" class="m5chip${FDF.cat===k?' on':''}" style="--c:${c}" data-a="m5cat" data-k="${k}">${l}</button>`).join('')}</div><div class="m5tools"><label class="m5chip m5ph">🖼 Додати фото<input type="file" accept="image/*" data-a="m5img" hidden></label><span class="m5sp"></span><button type="button" class="m5btn" data-a="m5post" ${busy?'disabled':''}>Опублікувати</button></div></div></div>`;}
 function m5PostHtml(p){const c=m5Cat(p.cat);const me=m5Key(AUTH.email);const re=p.re||{};const cnt={};Object.values(re).forEach(v=>{if(v)cnt[v]=(cnt[v]||0)+1;});const mine=re[me]||'';const rep=p.rep||{};const nrep=Object.keys(rep).length;const own=lc(p.by)===lc(AUTH.email);
   const t=m5Tr(p);const open=FDOPEN.has(p.id);
-  return `<article class="m5card m5post${p.hidden?' m5hid':''}"><header class="m5ph">${seatAv(p.name||'?','m5av')}<div><b>${esc(p.name||'')} ${esc(m5Flag(p.by))}</b><div class="hint">${esc(m5Ago(m5At(p)))}</div></div><span class="m5tag" style="--c:${c[2]}">${esc(c[1])}</span></header>
+  return `<article class="m5card m5post${p.hidden?' m5hid':''}"><header class="m5ph">${seatAv(p.name||'?','m5av')}<div><b>${esc(p.name||'')} ${m5Em(m5Flag(p.by))}</b><div class="hint">${esc(m5Ago(m5At(p)))}</div></div><span class="m5tag" style="--c:${c[2]}">${esc(c[1])}</span></header>
     ${p.hidden?`<p class="hint">🙈 Допис приховано після скарг${AUTH.admin?' — бачать лише адміністрація й автор':''}.</p>`:''}<div class="m5txt" data-notr>${fmtMsg(t.text)}</div>${t.tr?`<button type="button" class="chtrb" data-a="m5orig" data-k="${esc(p.id)}" data-notr>${t.orig?'🌐 показати переклад':'🌐 перекладено'+(t.src?' ('+esc(langNm(t.src))+')':'')+' · оригінал'}</button>`:''}
     ${p.img?`<img class="m5pimg" src="${esc(p.img)}" alt="" loading="lazy">`:''}
     <footer class="m5acts">${['👍','😂','😮','😢'].map(e=>`<button type="button" class="m5re${mine===e?' on':''}" data-a="m5re" data-k="${esc(p.id)}" data-e="${e}" ${AUTH.email&&m5CanPost()?'':'disabled'}>${e}${cnt[e]?' '+cnt[e]:''}</button>`).join('')}<button type="button" class="m5re" data-a="m5cm" data-k="${esc(p.id)}">💬 ${+p.nc||0}</button><span class="m5sp"></span>${own||AUTH.admin?`<button type="button" class="m5lnk" data-a="m5del" data-k="${esc(p.id)}">Видалити</button>`:''}${AUTH.admin&&p.hidden?`<button type="button" class="m5lnk" data-a="m5unhide" data-k="${esc(p.id)}">Повернути</button>`:''}${!own&&AUTH.email&&m5CanPost()&&!p.hidden?`<button type="button" class="m5lnk" data-a="m5rep" data-k="${esc(p.id)}" ${rep[me]?'disabled':''}>${rep[me]?'Скаргу надіслано':'Поскаржитися'}${nrep?' · '+nrep:''}</button>`:''}</footer>
@@ -7953,8 +8066,9 @@ async function m5TrRun(){const tl=LANG||'uk';const ps=FEED.filter(p=>FDTRQ.has(p
   await Promise.all([work(),work(),work()]);if(got)renderSoon();}
 // найближчі події (свята, вибори, голосування з календаря)
 function m5Events(){let out=[];try{const now=new Date();for(let k=0;k<2;k++){const d0=new Date(now.getFullYear(),now.getMonth()+k,1);const ev=calEvents(d0.getFullYear(),d0.getMonth());Object.entries(ev).forEach(([day,arr])=>{const dt=new Date(d0.getFullYear(),d0.getMonth(),+day);if(dt<new Date(now.getFullYear(),now.getMonth(),now.getDate()))return;arr.forEach(e=>out.push({dt,e}));});}}catch(e){console.warn(e);}
+  try{m6OrdHols().forEach(x=>out.push({dt:m6Next(x.md),e:{ic:'🪷',tx:x.name,sub:'свято Ордену Білого Лотоса'}}));}catch(e){}
   out.sort((a,b)=>a.dt-b.dt);out=out.slice(0,6);const MN=['СІЧ','ЛЮТ','БЕР','КВІ','ТРА','ЧЕР','ЛИП','СЕР','ВЕР','ЖОВ','ЛИС','ГРУ'];
-  return `<div class="m5card"><h3>📅 Найближчі події</h3>${out.length?out.map(({dt,e})=>`<div class="m5ev"><div class="m5d">${dt.getDate()}<small>${MN[dt.getMonth()]}</small></div><div><b>${esc(e.ic||'')} ${esc(e.tx||'')}</b>${e.sub?`<div class="hint">${esc(e.sub)}</div>`:''}</div></div>`).join(''):'<p class="hint">Найближчим часом подій немає.</p>'}</div>`;}
+  return `<div class="m5card"><h3>📅 Найближчі події</h3>${out.length?out.map(({dt,e})=>`<div class="m5ev"><div class="m5d">${dt.getDate()}<small>${MN[dt.getMonth()]}</small></div><div><b>${m5Em(e.ic||'')} ${esc(e.tx||'')}</b>${e.sub?`<div class="hint">${esc(e.sub)}</div>`:''}</div></div>`).join(''):'<p class="hint">Найближчим часом подій немає.</p>'}</div>`;}
 // ---------- гравці ----------
 function m5AllPlayers(){const out=[];const seen=new Set();const ud=m5UdOn()?players():[];
   MEMBERS.forEach(m=>{const e=lc(m.id);seen.add(e);const p=ud.find(x=>lc(x.email)===e);const c=CM_COUNTRIES.find(x=>x[0]===m.country);out.push({name:m.name||(p&&p.name)||e.split('@')[0],flag:c?c[1]:'',country:c?c[2]:'',ud:!!p,udName:p&&p.name,ok:m.verified===true,email:e,profile:m.profile});});
@@ -7962,7 +8076,7 @@ function m5AllPlayers(){const out=[];const seen=new Set();const ud=m5UdOn()?play
   return out.sort((a,b)=>String(a.name).localeCompare(String(b.name),'uk'));}
 function m5Players(){const q=M5PLQ.trim().toLowerCase();const L=m5AllPlayers().filter(p=>!q||String(p.name).toLowerCase().includes(q)||String(p.country).toLowerCase().includes(q));const M=m5Mods();
   return `<div class="bmodal m5pm" role="dialog" aria-modal="true" aria-label="Гравці"><button type="button" class="bmback" data-a="m5pl" data-k="0" tabindex="-1" aria-label="Закрити"></button><div class="bmbox"><button class="small bmx" data-a="m5pl" data-k="0">✕ Закрити</button><h3>👥 Гравці ком’юніті <small>${m5AllPlayers().length}</small></h3><input type="search" id="m5-plq" data-a="m5plq" value="${esc(M5PLQ)}" placeholder="🔍 Пошук гравця чи країни" autocomplete="off">
-    <div class="m5pl">${L.map(p=>`<div class="m5pli">${seatAv(p.udName||p.name,'m5av')}<div class="m5pln"><b>${esc(p.name)} ${esc(p.flag)}</b><div>${p.ud&&M.ud.on!==false?`<span class="m5bd">${esc(M.ud.ic||'🇺🇦')} ${esc(M.ud.name||'Україна')}</span>`:''}${p.ok?'<span class="m5bd ok">✓ профіль підтверджено</span>':''}${p.country&&!p.ud?`<span class="m5bd">${esc(p.country)}</span>`:''}</div></div>${p.ud&&p.udName?`<button type="button" class="m5lnk" data-a="dos" data-n="${esc(p.udName)}">Профіль</button>`:p.profile?`<a class="m5lnk" href="${esc(/^https?:/.test(p.profile)?p.profile:'https://dragpolit.com/profile/'+String(p.profile).replace(/\D/g,''))}" target="_blank" rel="noopener">DragPolit ↗</a>`:''}</div>`).join('')||'<p class="hint">Нікого не знайдено.</p>'}</div></div></div>`;}
+    <div class="m5pl">${L.map(p=>`<div class="m5pli">${seatAv(p.udName||p.name,'m5av')}<div class="m5pln"><b>${esc(p.name)} ${m5Em(p.flag)}</b><div>${p.ud&&M.ud.on!==false?`<span class="m5bd">${m5Em(M.ud.ic||'🇺🇦')} ${esc(M.ud.name||'Україна')}</span>`:''}${p.ok?'<span class="m5bd ok">✓ профіль підтверджено</span>':''}${p.country&&!p.ud?`<span class="m5bd">${esc(p.country)}</span>`:''}</div></div>${p.ud&&p.udName?`<button type="button" class="m5lnk" data-a="dos" data-n="${esc(p.udName)}">Профіль</button>`:p.profile?`<a class="m5lnk" href="${esc(/^https?:/.test(p.profile)?p.profile:'https://dragpolit.com/profile/'+String(p.profile).replace(/\D/g,''))}" target="_blank" rel="noopener">DragPolit ↗</a>`:''}</div>`).join('')||'<p class="hint">Нікого не знайдено.</p>'}</div></div></div>`;}
 // ---------- реєстрація без адміністрації ----------
 function m5Reg(){if(!AUTH.email||AUTH.bot||M5SKIP||myMember()||plByEmail(AUTH.email)||!window.__m5memLoaded)return '';
   return `<div class="bmodal" role="dialog" aria-modal="true" aria-label="Профіль ком’юніті"><button type="button" class="bmback" data-a="m5regx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m5reg"><button class="small bmx" data-a="m5regx">✕ Пізніше</button><h3>🪪 Профіль ${esc(CM_NAME)}</h3><p class="hint">Профіль створюється одразу, без схвалення. Бот сам перевірить ваш профіль у грі й поставить позначку «✓ підтверджено».</p>
@@ -7974,7 +8088,7 @@ function m5Reg(){if(!AUTH.email||AUTH.bot||M5SKIP||myMember()||plByEmail(AUTH.em
 function m5Groups(){const G=state.chatGroups||[['cg_war','⚔️','Війна','обговорення війн і фронтів'],['cg_trade','💰','Торгівля','купівля й продаж ресурсів'],['cg_flood','😂','Флуд','про все й ні про що']];return G;}
 function m5ModsAdmin(){const M=m5Mods();const G=m5Groups();
   return `<div class="block"><h3>🧩 Модулі</h3><p class="hint">Вимкнений модуль зникає з меню для всіх, крім адміністрації. Дані не видаляються — увімкніть, і все повернеться.</p>
-    <div class="m5mod"><span class="m5mi big">${esc(M.ud.ic)}</span><div style="flex:1"><b>${esc(M.ud.name)}</b><div class="hint">усі сторінки колишньої Української Держави</div><div class="erow"><input type="text" id="m5m-ud-name" maxlength="40" value="${esc(M.ud.name)}" placeholder="Назва модуля"><input type="text" id="m5m-ud-ic" maxlength="4" value="${esc(M.ud.ic)}" style="max-width:70px" aria-label="Значок"></div></div><button type="button" class="small ${M.ud.on!==false?'primary':'ghost'}" data-a="m5modtg" data-k="ud">${M.ud.on!==false?'✅ Увімкнено':'⛔ Вимкнено'}</button></div>
+    <div class="m5mod"><span class="m5mi big">${m5Em(M.ud.ic)}</span><div style="flex:1"><b>${esc(M.ud.name)}</b><div class="hint">усі сторінки колишньої Української Держави</div><div class="erow"><input type="text" id="m5m-ud-name" maxlength="40" value="${esc(M.ud.name)}" placeholder="Назва модуля"><input type="text" id="m5m-ud-ic" maxlength="4" value="${esc(M.ud.ic)}" style="max-width:70px" aria-label="Значок"></div></div><button type="button" class="small ${M.ud.on!==false?'primary':'ghost'}" data-a="m5modtg" data-k="ud">${M.ud.on!==false?'✅ Увімкнено':'⛔ Вимкнено'}</button></div>
     <div class="landtools"><button type="button" class="small" data-a="m5modsave">Зберегти назву</button></div></div>
     <div class="block"><h3>💬 Групи чату ком’юніті</h3><p class="hint">«🌐 Загальний» є завжди. Тут — додаткові групи, доступні всім зареєстрованим.</p>${G.map((g,i)=>`<div class="m5grow"><input type="text" id="m5g-ic-${i}" value="${esc(g[1])}" maxlength="4" style="max-width:64px" aria-label="Значок"><input type="text" id="m5g-n-${i}" value="${esc(g[2])}" maxlength="30" placeholder="Назва"><input type="text" id="m5g-d-${i}" value="${esc(g[3]||'')}" maxlength="80" placeholder="Опис"><button type="button" class="small ghost" data-a="m5gdel" data-k="${i}">✕</button></div>`).join('')}<div class="landtools"><button type="button" class="small ghost" data-a="m5gadd">➕ Група</button><button type="button" class="small primary" data-a="m5gsave">Зберегти групи</button></div></div>`;}
 // ---------- дії ----------
@@ -7983,6 +8097,8 @@ async function m5Click(a,b){const k=b.dataset.k;const run=async(fn,ok)=>{busy=tr
   if(a==='m5pl'){PLAYM=k!=='0'&&!PLAYM;if(PLAYM){const f=sectionByKind('feed');if(f&&m5ModOf(state.sections.find(s=>s.id===active))){}}render();if(PLAYM)setTimeout(()=>{const i=document.getElementById('m5-plq');if(i&&innerWidth>760)i.focus();},30);return true;}
   if(a==='m5chat'){const c=sectionByKind('chat');if(c){PLAYM=false;active=c.id;try{history.replaceState(null,'','#'+c.id);}catch(_){}render();window.scrollTo(0,0);}return true;}
   if(a==='m5mod'){const top=state.sections.filter(s=>!s.tab&&navVis(s)&&m5ModOf(s)==='ud');const t=top.find(s=>s.id===LASTUD)||top[0];if(t){active=t.id;PLAYM=false;try{history.replaceState(null,'','#'+t.id);}catch(_){}render();window.scrollTo(0,0);}return true;}
+  if(a==='m5new'){FDM=true;render();setTimeout(()=>{const t=document.getElementById('m5-text');if(t)t.focus();},30);return true;}
+  if(a==='m5newx'){FDM=false;render();return true;}
   if(a==='m5cat'){FDF.cat=k;render();return true;}
   if(a==='m5f'){FEEDCAT=k;render();return true;}
   if(a==='m5imgx'){FDF.img='';render();return true;}
@@ -7994,7 +8110,7 @@ async function m5Click(a,b){const k=b.dataset.k;const run=async(fn,ok)=>{busy=tr
   if(a==='m5post'){if(!m5CanPost())return true;const t=(document.getElementById('m5-text')||{}).value||FDF.text;const text=String(t||'').trim();if(!text&&!FDF.img){msg='Напишіть щось';msgErr=true;render();return true;}
     const mm=myMember();const mine=FEED.filter(p=>lc(p.by)===lc(AUTH.email)).map(m5At);const last=mine.length?Math.max(...mine):0;if(mm&&!plByEmail(AUTH.email)&&!AUTH.admin&&Date.now()-(+mm.since||0)<864e5&&Date.now()-last<6e5){msg='Нові профілі можуть публікувати раз на 10 хвилин — спробуйте трохи згодом';msgErr=true;render();return true;}
     const d={text:text.slice(0,3000),cat:FDF.cat,name:m5Name().slice(0,40)};if(FDF.img)d.img=FDF.img;
-    await run(()=>window.FB.cmPost(d),'Опубліковано');if(!msgErr){FDF={text:'',cat:FDF.cat,img:''};}return true;}
+    await run(()=>window.FB.cmPost(d),'Опубліковано');if(!msgErr){FDF={text:'',cat:FDF.cat,img:''};FDM=false;render();}return true;}
   if(a==='m5re'){const p=FEED.find(x=>x.id===k);if(!p)return true;const me=m5Key(AUTH.email);const cur=(p.re||{})[me]||'';const v=cur===b.dataset.e?'':b.dataset.e;p.re=Object.assign({},p.re,{[me]:v});render();try{await window.FB.cmReact(k,me,v);}catch(e){console.warn(e);msg='Не вдалося';msgErr=true;render();}return true;}
   if(a==='m5rep'){const p=FEED.find(x=>x.id===k);if(!p)return true;const me=m5Key(AUTH.email);const n=Object.keys(p.rep||{}).filter(x=>x!==me).length+1;await run(()=>window.FB.cmReport(k,me,n>=3),n>=3?'Допис приховано до перевірки':'Скаргу надіслано');return true;}
   if(a==='m5del'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно видалити?';return true;}await run(()=>window.FB.cmDel(k),'Видалено');return true;}
@@ -8018,6 +8134,249 @@ function m5Post(){const cur=state.sections.find(s=>s.id===active);const inUd=m5M
   if(!m5UdOn()&&inUd&&!AUTH.admin&&!AUTH.bot){const f=sectionByKind('feed');if(f){active=f.id;renderSoon();}}}
 
 function navVis(s){if(s.navHide||s.kind==='confed'||s.kind==='chat')return false;if(m5ModOf(s)==='ud'&&!m5UdOn()&&!AUTH.admin)return false;return true;}
+
+// ===================== 10.11.2026: «Україна» (закони голосує Уряд) · Історія на головній · Орден Білого Лотоса =====================
+let GOVT=null,G6ED=false,G6={t:{},img:{},em:''};
+let ORD={},ORDL=false,ORDM=[],BOOKS=[],ORDAPP='',ORDED=false,ORDF={about:'',isl:''},BKW=null,BKR=null,BKP=0,BKTX={},OCF={md:'',name:'',text:''},LASTORD='',OCAL=null;
+try{
+  window.APP.govt=d=>{GOVT=d||null;m6ApplyGovt();renderSoon();};
+  window.APP.order=d=>{ORD=d||{};ORDL=true;renderSoon();};
+  window.APP.ordm=l=>{ORDM=l||[];renderSoon();};
+  window.APP.books=l=>{BOOKS=(l||[]).slice().sort((a,b)=>(+a.at0||0)-(+b.at0||0)||String(a.id).localeCompare(String(b.id)));renderSoon();};
+}catch(_){}
+// ---------- модулі ----------
+function m5Mods(){const M=state.modules||{};return {ud:Object.assign({on:true,name:'Україна',ic:'🇺🇦',gov:true},M.ud||{}),order:Object.assign({on:true,name:'Орден Білого Лотоса',ic:'🪷'},M.order||{})};}
+function m5ModOf(s){if(!s)return '';const k=s.kind||'';if(k==='feed'||k==='chat'||k==='history')return '';if(/^order/.test(k))return 'order';return 'ud';}
+function m6On(k){return m5Mods()[k].on!==false;}
+function m6Gov(st){const M=((st||state)&&(st||state).modules)||{};return !(M.ud&&M.ud.gov===false);}
+function m5Ensure(s){if(!s.sections.some(x=>x.kind==='feed'))s.sections.unshift({id:'feed',kind:'feed',title:'Головна',nav:'Головна'});
+  const f=s.sections.find(x=>x.kind==='feed');delete f.tab;f.navTop='Головна';s.sections=[f,...s.sections.filter(x=>x!==f)];
+  [['order','order','Орден Білого Лотоса','Про Орден'],['ordcal','ordercal','Календар свят Ордену','Календар свят'],['ordlib','orderlib','Бібліотека Ордену','Бібліотека']].forEach(([id,kind,title,nav])=>{let x=s.sections.find(q=>q.kind===kind);if(!x){x={id,kind,title,nav};s.sections.push(x);}delete x.tab;delete x.hideView;x.navTop=nav;});
+  s.modules=s.modules||{};s.modules.ud=s.modules.ud||{on:true,name:'Україна',ic:'🇺🇦'};s.modules.order=s.modules.order||{on:true,name:'Орден Білого Лотоса',ic:'🪷'};}
+function navVis(s){if(s.navHide||s.m6off||s.kind==='confed'||s.kind==='chat')return false;const m=m5ModOf(s);if(m&&!m6On(m)&&!AUTH.admin)return false;return true;}
+// ---------- структура: «Україна» = Новини та укази · Уряд · Право · Суд · Церква · Військо ----------
+function restructure(s){restructure4(s);try{m6Struct(s);}catch(e){console.warn(e);}try{m6ApplyTo(s);}catch(e){console.warn(e);}}
+function m6Struct(s){const S=s.sections;const by=k=>S.find(x=>x.kind===k);S.forEach(x=>{delete x.m6off;});
+  const hist=by('history');if(hist){delete hist.tab;delete hist.hideView;hist.navTop='Історія';hist.nav='Історія';}
+  if(!m6Gov(s))return;
+  const home=by('home'),power=by('power'),parl=by('parliament'),el=by('elections'),pl=by('players'),laws=by('laws'),court=by('court'),church=by('church'),ranks=by('ranks'),units=by('units'),doc=by('doc'),gov=by('gov');
+  const P=power||home;const sub=x=>{if(x&&P&&x!==P){x.tab=P.id;x.sw=true;delete x.hideView;delete x.navTop;}};
+  const hide=x=>{if(!x||x===P||x===home)return;x.m6off=true;x.tab=P.id;x.sw=false;x.hideView=true;delete x.navTop;};
+  const top=(x,l)=>{if(!x)return;delete x.tab;delete x.hideView;x.navTop=l;};
+  top(home,'Новини та укази');if(home){home.nav='Новини';if(home.title==='Головна')home.title='Новини та укази';}top(power,'Уряд');if(power)power.nav='Уряд';top(laws,'Право');top(court,'Суд');top(church,'Церква');top(ranks,'Військо');
+  sub(parl);if(parl)parl.nav='Закони уряду';sub(el);sub(pl);if(pl)pl.nav='Громадяни';
+  if(gov&&P&&gov!==P){gov.tab=P.id;gov.sw=false;gov.hideView=true;delete gov.navTop;}
+  if(units&&ranks){units.tab=ranks.id;delete units.navTop;}
+  if(doc&&laws){doc.tab=laws.id;doc.sw=false;doc.hideView=true;delete doc.navTop;}
+  S.filter(x=>!x.kind&&x.lands).forEach(hide);['map','economy','labor','fund','parties','awards','calendar','culture','community'].forEach(k=>hide(by(k)));
+  const conf=by('confed');if(conf){conf.navHide=true;}
+  const feed=by('feed');const tops=[feed,hist,home,power,laws,court,church,ranks].filter(Boolean);const ord=S.filter(x=>/^order/.test(x.kind||''));
+  const order=[...tops,...ord,...S.filter(x=>!x.tab&&!tops.includes(x)&&!ord.includes(x))];const out=[];
+  const KO=['parliament','elections','players','gov'];const ko=c=>{const i=KO.indexOf(c.kind);return i<0?50:i;};
+  order.forEach(t=>{if(out.includes(t))return;out.push(t);S.filter(c=>c.tab===t.id&&!out.includes(c)).sort((x,y)=>ko(x)-ko(y)).forEach(c=>out.push(c));});S.forEach(c=>{if(!out.includes(c))out.push(c);});s.sections=out;
+  if(typeof SUB_LABEL!=='undefined')Object.assign(SUB_LABEL,{power:'Уряд',parliament:'Закони уряду',elections:'Вибори',players:'Громадяни'});}
+// ---------- Уряд голосує за закони замість Палати ----------
+function m6Seats(){const g=govSec();return M4_SEATS.map(id=>((g&&g.posts)||[]).find(p=>p.id===id)).filter(Boolean);}
+function parlReps(){if(!m6Gov())return landLeaders().filter(r=>!r.occ).concat(depReps());
+  const ban=(()=>{try{return bans().vote;}catch(_){return new Set();}})();
+  return m6Seats().filter(p=>p.id!=='hetman').map(p=>{const nm=String(p.name||'').trim();const n=nm==='0'?'':nm;const e=n?lc(emailOf(n)||''):'';return {land:'gov:'+p.id,lid:'',sec:'gov',name:n,post:p.title,prev:'',dep:true,email:e,banned:!!(e&&ban.has(e))};});}
+function seatName(k){k=String(k||'');if(k.startsWith('gov:')){const p=govPost(state,k.slice(4));return p?p.title+(String(p.name||'').trim()?' '+p.name:''):k.slice(4);}
+  if(!k.startsWith('dep:'))return k;const d=depReps().find(r=>r.land===k);return 'Депутат'+(d&&d.name?' '+d.name:'');}
+// назви посад і емблеми, які встановлює лідер (site/govt)
+function m6ApplyTo(st){if(!st||!GOVT)return;const g=govSec(st);if(!g)return;const T=GOVT.t||{};(g.posts||[]).forEach(p=>{const t=String(T[p.id]||'').trim();if(t)p.title=t.slice(0,60);});}
+function m6ApplyGovt(){try{m6ApplyTo(state);if(typeof saved==='string'&&saved){const sv=JSON.parse(saved);m6ApplyTo(sv);saved=JSON.stringify(sv);}}catch(e){console.warn(e);}}
+function emblemSrc(){const g=govSec();return (GOVT&&GOVT.em)||(g&&g.emblem&&g.emblem.img)||DEFAULT_EMBLEM;}
+function m6PostEm(id){const s=GOVT&&GOVT.img&&GOVT.img[id];return s?`<img class="m6pem" src="${esc(s)}" alt="">`:'';}
+function m6Leader(){const p=govPost(state,'hetman');return (p&&String(p.title||'').trim())||'Гетьман';}
+function m4Kanc(){return m4Kanc0()+m6GovPanel();}
+function depsHtml(){return m6Gov()?'':depsHtml0.apply(null,arguments);}
+function m6GovPanel(){if(!m6Gov())return '';const can=isHetman()||AUTH.admin;if(!can)return '';const seats=m6Seats();
+  if(!G6ED)return `<div class="block m6gp"><h3>✏️ Назви посад і емблеми <small>${esc(m6Leader())} може перейменувати свою посаду й посади уряду</small></h3><div class="landtools"><button type="button" class="small" data-a="m6ged">Змінити назви й емблеми</button></div></div>`;
+  return `<div class="block m6gp"><h3>✏️ Назви посад і емблеми</h3><p class="hint">Назва з’явиться всюди на сайті: за столом, у законах, указах і кабінетах. Емблема — маленький знак біля крісла.</p>
+    <div class="m6em"><span class="m6emi">${G6.em?`<img src="${esc(G6.em)}" alt="">`:`<img src="${esc(emblemSrc())}" alt="">`}</span><div><b>Герб у центрі столу</b><div class="landtools"><label class="small m6up">🖼 Завантажити<input type="file" accept="image/*" data-a="m6gem" data-k="" hidden></label>${G6.em?'<button type="button" class="small ghost" data-a="m6gemx" data-k="">Прибрати</button>':''}</div></div></div>
+    ${seats.map(p=>`<div class="m6row"><span class="m6emi sm">${G6.img[p.id]?`<img src="${esc(G6.img[p.id])}" alt="">`:'·'}</span><input type="text" id="m6t-${esc(p.id)}" data-a="m6gt" data-k="${esc(p.id)}" maxlength="60" value="${esc(G6.t[p.id]!=null?G6.t[p.id]:p.title)}" aria-label="Назва посади"><label class="small m6up">🖼<input type="file" accept="image/*" data-a="m6gem" data-k="${esc(p.id)}" hidden></label>${G6.img[p.id]?`<button type="button" class="small ghost" data-a="m6gemx" data-k="${esc(p.id)}" aria-label="Прибрати емблему">✕</button>`:''}</div>`).join('')}
+    <div class="landtools"><button type="button" class="small primary" data-a="m6gsave" ${busy?'disabled':''}>Зберегти</button><button type="button" class="small ghost" data-a="m6gedx">Скасувати</button></div></div>`;}
+// слова на сторінках «України»: Палата Земель → Уряд, Гетьман → назва посади лідера
+function m6Decl(t,c){const m=/^(.*?)(\S+)$/.exec(t);if(!m||!c)return t;let pre=m[1],w=m[2];const L=w.slice(-1).toLowerCase();
+  if(/[бвгґджзклмнпрстфхцчшщ]/.test(L))w+=({g:'а',d:'ові',i:'ом'})[c];else if(L==='ь')w=w.slice(0,-1)+({g:'я',d:'еві',i:'ем'})[c];else if(L==='а')w=w.slice(0,-1)+({g:'и',d:'і',i:'ою'})[c];return pre+w;}
+let M6RX=null,M6RXK='';
+function m6Rules(){const L=m6Leader();const k=L;if(M6RX&&M6RXK===k)return M6RX;const R=[];const B='(?![А-Яа-яІіЇїЄєҐґ’ʼ\'])';
+  R.push([/Влада Української Держави/g,'Уряд України'],[/Української Держави/g,'України'],[/Українська Держава/g,'Україна'],[/Українську Державу/g,'Україну'],[/Українській Державі/g,'Україні'],[/Представників у Палаті/g,'Членів уряду'],[/Палат(?:а|у) Земель/g,'Уряд'],[/Палати Земель/g,'Уряду'],[/Палатою Земель/g,'Урядом'],[/Палаті Земель/g,'Уряді'],
+    [new RegExp('Палата'+B,'g'),'Уряд'],[new RegExp('Палату'+B,'g'),'Уряд'],[new RegExp('Палати'+B,'g'),'Уряду'],[new RegExp('Палатою'+B,'g'),'Урядом'],[new RegExp('Палаті'+B,'g'),'Уряді'],
+    [new RegExp('Представники'+B,'g'),'Члени уряду'],[new RegExp('Представників'+B,'g'),'членів уряду'],[new RegExp('Представник'+B,'g'),'Член уряду'],[new RegExp('Представника'+B,'g'),'члена уряду'],[new RegExp('Представникам'+B,'g'),'членам уряду']);
+  if(L!=='Гетьман')R.push([new RegExp('Гетьманом'+B,'g'),m6Decl(L,'i')],[new RegExp('Гетьман(?:ові|у)'+B,'g'),m6Decl(L,'d')],[new RegExp('Гетьмана'+B,'g'),m6Decl(L,'g')],[new RegExp('Гетьман'+B,'g'),L]);
+  M6RX=R;M6RXK=k;return R;}
+function m6Words(){const root=document.getElementById('app')||document.body;const R=m6Rules();const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{const p=n.parentElement;if(!p||p.closest('textarea,input,script,style,[data-notr],.m5txt,.lawtx,.ctext'))return NodeFilter.FILTER_REJECT;return /Палат|Гетьман|Представник|Держав/.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_SKIP;}});
+  const L=[];while(w.nextNode())L.push(w.currentNode);L.forEach(n=>{let v=n.nodeValue;R.forEach(([rx,to])=>{v=v.replace(rx,to);});if(v!==n.nodeValue)n.nodeValue=v;});}
+// ---------- навігація з кількома модулями ----------
+function m5Toc(){const top=state.sections.filter(s=>!s.tab&&navVis(s));const cur=state.sections.find(s=>s.id===active);const inM=m5ModOf(cur);const M=m5Mods();
+  const core=top.filter(s=>!m5ModOf(s)&&s.kind!=='chat');
+  const btn=(s,lab)=>`<button data-a="tab" data-id="${esc(s.id)}" ${s.id===active?'aria-current="page"':''}>${NAV_ICONS[s.id]&&!m5ModOf(s)?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${NAV_ICONS[s.id]}</svg>`:''}<span>${esc(lab||s.navTop||s.nav||s.title)}</span></button>`;
+  let h='<nav class="toc m5main" aria-label="Розділи">'+core.map(s=>btn(s)).join('');
+  ['ud','order'].forEach(k=>{const L=top.filter(s=>m5ModOf(s)===k);if(L.length&&(M[k].on!==false||AUTH.admin))h+=`<button data-a="m5mod" data-k="${k}" ${inM===k?'aria-current="page"':''}><span class="m5mi">${m5Em(M[k].ic)}</span><span>${esc(M[k].name)}${M[k].on===false?' · вимкнено':''}</span></button>`;});
+  h+='</nav>';
+  if(inM){const L=top.filter(s=>m5ModOf(s)===inM);h+=`<nav class="toc m5sub${inM==='order'?' m6osub':''}" aria-label="${esc(M[inM].name)}">${L.map(s=>btn(s)).join('')}</nav>`;}
+  return h;}
+function mobNav(){const cur=state.sections.find(s=>s.id===active);if(m5ModOf(cur)==='ud')return mobNav0();const top=state.sections.filter(s=>!s.tab&&navVis(s));const feed=top.find(s=>s.kind==='feed');const M=m5Mods();const un=AUTH.email?chatUnread():0;const cs=sectionByKind('chat');const inM=m5ModOf(cur);
+  const it=(attr,ic,lab,on,badge)=>`<button ${attr}${on?' aria-current="page"':''}>${ic}<span>${esc(lab)}</span>${badge?`<i class="nbadge">${badge}</i>`:''}</button>`;
+  const svg=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const mod=k=>top.some(s=>m5ModOf(s)===k)&&(M[k].on!==false||AUTH.admin)?it(`data-a="m5mod" data-k="${k}"`,`<span class="m5mi">${m5Em(M[k].ic)}</span>`,k==='order'?'Орден':M[k].name,inM===k):'';
+  return `<nav class="mnav" aria-label="Розділи">${feed?it(`data-a="tab" data-id="${esc(feed.id)}"`,svg('<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>'),'Головна',active===feed.id&&!PLAYM):''}${mod('ud')}${mod('order')}${it('data-a="m5pl"',svg('<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.5a5 5 0 0 1 5 5"/>'),'Гравці',PLAYM)}${cs?it('data-a="m5chat"',svg('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12Z"/>'),'Чат',active===cs.id,un):''}</nav>`;}
+function m5Post(){const cur=state.sections.find(s=>s.id===active);const inM=m5ModOf(cur);const inUd=inM==='ud';if(inUd)LASTUD=active;if(inM==='order')LASTORD=active;const b=document.body;
+  b.classList.toggle('cm',!inUd);b.classList.toggle('cml',!inUd&&CMTHEME==='light');b.classList.toggle('cmd',!inUd&&CMTHEME!=='light');b.classList.toggle('m6ord',inM==='order');
+  if(inM&&!m6On(inM)&&!AUTH.admin&&!AUTH.bot){const f=sectionByKind('feed');if(f){active=f.id;renderSoon();return;}}
+  if(cur&&cur.m6off&&!AUTH.bot){const h=sectionByKind('home');if(h&&h!==cur){active=h.id;renderSoon();return;}}
+  if(inUd&&m6Gov()){try{m6Words();}catch(e){console.warn(e);}}}
+function m4Sec(s,si){
+  if(s.kind==='order')return m6Order();if(s.kind==='orderlib')return m6Lib();if(s.kind==='ordercal')return m6Cal();
+  if(editing)return null;
+  if(s.kind==='feed')return m5Feed();
+  if(s.kind==='power'&&!CAB)return m4Kanc();
+  if(!s.kind&&s.lands&&s.id===((state.sections.find(x=>x.id==='ud')||{}).id))return m4Lands();
+  if(s.kind==='ranks')return m4RanksTop()+ranksHtml(s,si);
+  return null;}
+// ---------- Історія ком’юніті на головній ----------
+function m6HistCard(){const h=sectionByKind('history');if(!h)return '';const tree=(h.tree||[]).slice();const ev=(h.events||[]);if(!tree.length&&!ev.length)return '';
+  const last=ev.slice(-2).reverse();
+  return `<div class="m5card m6hist"><h3>📜 Історія ком’юніті</h3>${tree.length?`<ol class="m6tl">${tree.map(n=>`<li class="${n.ended?'end':''}"><span class="m6tf">${n.img?`<img src="${esc(n.img)}" alt="">`:'🏳'}</span><span><b>${esc(n.name||'')}</b>${n.date?`<small>${esc(n.date)}${n.ended&&!/існув/.test(n.date)?' · припинила існування':''}</small>`:n.ended?'<small>припинила існування</small>':''}</span></li>`).join('')}</ol>`:''}
+    ${last.length?`<div class="m6hev">${last.map(e=>`<div><span class="hint">${esc(e.ic||'•')} ${esc(e.date||'')}</span><div><b>${esc(e.title||'')}</b></div></div>`).join('')}</div>`:''}
+    <button type="button" class="m5btn sm m6hbtn" data-a="tab" data-id="${esc(h.id)}">Уся історія →</button></div>`;}
+// ============================== ОРДЕН БІЛОГО ЛОТОСА ==============================
+const OR_COLORS=['#2f4a7a','#7a2f3a','#2f6b55','#c9a227','#6b4f8f','#3a3a3a','#ece4d2','#9c5a2c','#3f7a8c','#a83e32'];
+function m6Master(){return lc(ORD.master||'');}
+function m6IsMaster(){return !!(AUTH.email&&m6Master()&&lc(AUTH.email)===m6Master());}
+function m6MyOrd(){if(!AUTH.email)return null;return ORDM.find(x=>lc(x.id)===lc(AUTH.email))||null;}
+function m6OrdIn(){const m=m6MyOrd();return m6IsMaster()||!!(m&&m.st==='ok');}
+function m6CanOrd(){return m6IsMaster()||AUTH.admin;}
+function m6NameOf(e){e=lc(e);const m=MEMBERS.find(x=>lc(x.id)===e);const p=plByEmail(e);const o=ORDM.find(x=>lc(x.id)===e);return (m&&m.name)||(p&&p.name)||(o&&o.name)||String(e).split('@')[0];}
+function m6Isl(){const L=Array.isArray(ORD.isl)&&ORD.isl.length?ORD.isl:['Острів Лотоса','Тихий острів','Острів Світанку'];return L.slice(0,8);}
+function m6Map(){const isl=m6Isl();const P=[[455,190,46,30],[548,250,30,20],[392,288,26,18],[610,170,20,14],[505,330,18,12],[660,280,16,11],[350,210,15,10],[580,355,14,10]];
+  const shape=(x,y,rx,ry,i)=>{const pts=[];for(let k=0;k<14;k++){const a=k/14*Math.PI*2;const r=1+0.18*Math.sin(a*3+i)+0.1*Math.cos(a*5+i*2);pts.push([(x+Math.cos(a)*rx*r).toFixed(1),(y+Math.sin(a)*ry*r).toFixed(1)]);}return 'M'+pts.map(p=>p.join(',')).join('L')+'Z';};
+  return `<svg class="m6map" viewBox="0 0 760 420" role="img" aria-label="Острови Ордену біля Іспанії"><defs><radialGradient id="m6sea" cx="60%" cy="55%" r="75%"><stop offset="0" stop-color="var(--m6sea1)"/><stop offset="1" stop-color="var(--m6sea2)"/></radialGradient><pattern id="m6wv" width="40" height="14" patternUnits="userSpaceOnUse"><path d="M0 7q10-6 20 0t20 0" fill="none" stroke="var(--m6wave)" stroke-width="1"/></pattern></defs>
+    <rect width="760" height="420" fill="url(#m6sea)"/><rect width="760" height="420" fill="url(#m6wv)" opacity=".5"/>
+    <path d="M0 0H300L285 40 300 78 262 120 248 168 210 205 196 250 160 290 118 318 92 360 40 380 0 372Z" fill="var(--m6land)" stroke="var(--m6coast)" stroke-width="2"/>
+    <text x="70" y="150" class="m6mt">ІСПАНІЯ</text>
+    ${isl.map((n,i)=>{const [x,y,rx,ry]=P[i];return `<path d="${shape(x,y,rx,ry,i)}" fill="var(--m6isl)" stroke="var(--m6coast)" stroke-width="1.5"/>${i===0?`<g transform="translate(${x-14},${y-16}) scale(.9)" class="m6ml">${M6_LOTUS.replace('class="m5svg"','width="32" height="32"')}</g>`:''}<text x="${x}" y="${y+ry+18}" text-anchor="middle" class="m6ml">${esc(n)}</text>`;}).join('')}
+    <g transform="translate(700,60)" class="m6cmp"><circle r="22" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M0-20L5 0 0 20-5 0Z" fill="currentColor"/><text y="-26" text-anchor="middle">Пн</text></g></svg>`;}
+function m6OrdHead(){const M=m5Mods().order;const n=ORDM.filter(x=>x.st==='ok').length;
+  return `<div class="m6hero"><span class="m6lotus">${M6_LOTUS}</span><div><h2>${esc(M.name)}</h2><p class="hint">${m6Master()?'Магістр: <b>'+esc(ORD.masterName||m6NameOf(m6Master()))+'</b> · ':''}${n} ${n===1?'учень':n>1&&n<5?'учні':'учнів'} · острови біля Іспанії</p></div></div>`;}
+function m6Order(){let h='<div class="m6o">'+m6OrdHead();const can=m6CanOrd();
+  h+='<div class="m6grid"><div>';
+  if(ORDED&&can){h+=`<div class="m5card"><h3>✏️ Про Орден</h3><label class="fl">Опис Ордену<textarea id="m6-about" rows="6" maxlength="3000" placeholder="Хто ми, у що віримо, наші правила">${esc(ORDF.about)}</textarea></label><label class="fl">Острови (через кому)<input type="text" id="m6-isl" maxlength="300" value="${esc(ORDF.isl)}" placeholder="Острів Лотоса, Тихий острів"></label><div class="landtools"><button type="button" class="m5btn sm" data-a="m6osave" ${busy?'disabled':''}>Зберегти</button><button type="button" class="m5lnk" data-a="m6oedx">Скасувати</button></div></div>`;}
+  else h+=`<div class="m5card m6about">${ORD.about?`<div class="m6txt">${fmtMsg(ORD.about)}</div>`:`<p class="hint">Орден Білого Лотоса — братство учнів і їхнього Магістра на островах біля Іспанії.${can?' Додайте опис Ордену.':''}</p>`}${can?'<div class="landtools"><button type="button" class="m5lnk" data-a="m6oed">✏️ Змінити опис і острови</button></div>':''}</div>`;
+  h+=`<div class="m5card m6mapc"><h3>🗺 Острови Ордену</h3>${m6Map()}</div>`;
+  h+='</div><aside>';
+  // вступ
+  const me=m6MyOrd();
+  if(!AUTH.email)h+=`<div class="m5card"><b>Хочете стати учнем?</b><p class="hint">Увійдіть, щоб подати заявку Магістрові.</p><button type="button" class="m5btn sm" data-a="login">Увійти</button></div>`;
+  else if(m6IsMaster())h+=`<div class="m5card m6me"><b>${M6_LOTUS} Ви — Магістр Ордену</b><p class="hint">Приймаєте учнів, ведете календар свят і опис Ордену.</p></div>`;
+  else if(me&&me.st==='ok')h+=`<div class="m5card m6me"><b>${M6_LOTUS} Ви — учень Ордену</b><p class="hint">Можете писати книги для бібліотеки й спілкуватися в чаті Ордену.</p><button type="button" class="m5lnk" data-a="m6leave">Покинути Орден</button></div>`;
+  else if(me)h+=`<div class="m5card"><b>⏳ Заявку подано</b><p class="hint">Магістр розгляне її найближчим часом.</p><button type="button" class="m5lnk" data-a="m6leave">Відкликати заявку</button></div>`;
+  else if(!AUTH.bot&&(myMember()||plByEmail(AUTH.email)))h+=`<div class="m5card"><b>Стати учнем Ордену</b><p class="hint">Напишіть кілька слів Магістрові — чому хочете приєднатися.</p><textarea id="m6-app" data-a="m6app" rows="3" maxlength="500" placeholder="Кілька слів про себе">${esc(ORDAPP)}</textarea><div class="landtools"><button type="button" class="m5btn sm" data-a="m6apply" ${busy?'disabled':''}>Подати заявку</button></div></div>`;
+  else if(!AUTH.bot)h+=`<div class="m5card"><b>Стати учнем Ордену</b><p class="hint">Спершу створіть профіль ком’юніті.</p><button type="button" class="m5btn sm" data-a="m5reg">🪪 Створити профіль</button></div>`;
+  // заявки (Магістр)
+  const pend=ORDM.filter(x=>x.st!=='ok');
+  if(can&&pend.length)h+=`<div class="m5card"><h3>📨 Заявки <small>${pend.length}</small></h3>${pend.map(x=>`<div class="m6mem">${seatAv(x.name||m6NameOf(x.id),'m5avs')}<div><b>${esc(x.name||m6NameOf(x.id))}</b>${x.msg?`<div class="hint">${esc(x.msg)}</div>`:''}</div><span class="m5sp"></span><button type="button" class="m5btn sm" data-a="m6acc" data-k="${esc(x.id)}">Прийняти</button><button type="button" class="m5lnk" data-a="m6rej" data-k="${esc(x.id)}">Відхилити</button></div>`).join('')}</div>`;
+  // ієрархія
+  const st=ORDM.filter(x=>x.st==='ok');
+  h+=`<div class="m5card"><h3><span class="m6li">${M6_LOTUS}</span> Ієрархія</h3><div class="m6mem master">${m6Master()?seatAv(ORD.masterName||m6NameOf(m6Master()),'m5av'):'<span class="m5av">?</span>'}<div><small class="hint">Магістр Ордену</small><div><b>${m6Master()?esc(ORD.masterName||m6NameOf(m6Master())):'ще не обрано'}</b></div></div></div>
+    <div class="m6sub">Учні <small>${st.length}</small></div>${st.length?st.map(x=>`<div class="m6mem">${seatAv(x.name||m6NameOf(x.id),'m5avs')}<b>${esc(x.name||m6NameOf(x.id))}</b><span class="m5sp"></span>${can?`<button type="button" class="m5lnk" data-a="m6rej" data-k="${esc(x.id)}">Виключити</button>`:''}</div>`).join(''):'<p class="hint">Учнів поки немає.</p>'}</div>`;
+  h+='</aside></div></div>';return h;}
+// ---------- календар свят ----------
+function m6Hols(){return (Array.isArray(ORD.hols)?ORD.hols:[]).filter(x=>x&&x.md&&x.name);}
+function m6OrdHols(){return m6On('order')?m6Hols():[];}
+function m6Next(md){const [m,d]=String(md).split('-').map(Number);const now=new Date();const t0=new Date(now.getFullYear(),now.getMonth(),now.getDate());let dt=new Date(now.getFullYear(),m-1,d);if(dt<t0)dt=new Date(now.getFullYear()+1,m-1,d);return dt;}
+const M6MN=['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'];
+const M6MG=['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
+function m6Cal(){if(!OCAL){const n=new Date();OCAL={y:n.getFullYear(),m:n.getMonth()};}const H=m6Hols();const can=m6CanOrd();const {y,m}=OCAL;
+  const first=(new Date(y,m,1).getDay()+6)%7;const dim=new Date(y,m+1,0).getDate();const now=new Date();const by={};H.forEach(x=>{const [mm,dd]=x.md.split('-').map(Number);if(mm===m+1)(by[dd]=by[dd]||[]).push(x);});
+  let g='';for(let i=0;i<first;i++)g+='<div class="m6d e"></div>';for(let d=1;d<=dim;d++){const hs=by[d]||[];const td=now.getFullYear()===y&&now.getMonth()===m&&now.getDate()===d;g+=`<div class="m6d${hs.length?' h':''}${td?' t':''}"><span>${d}</span>${hs.map(x=>`<i title="${esc(x.name)}">${esc(x.name)}</i>`).join('')}</div>`;}
+  const up=H.map(x=>({x,dt:m6Next(x.md)})).sort((a,b)=>a.dt-b.dt);
+  let h='<div class="m6o">'+m6OrdHead()+'<div class="m6grid"><div>';
+  h+=`<div class="m5card"><div class="m6ch"><button type="button" class="m5lnk" data-a="m6cm" data-k="-1" aria-label="Попередній місяць">‹</button><h3>${M6MN[m]} ${y}</h3><button type="button" class="m5lnk" data-a="m6cm" data-k="1" aria-label="Наступний місяць">›</button></div><div class="m6cal">${['Пн','Вт','Ср','Чт','Пт','Сб','Нд'].map(d=>`<div class="m6wd">${d}</div>`).join('')}${g}</div></div>`;
+  if(can)h+=`<div class="m5card"><h3>➕ Нове свято</h3><div class="m6form"><label class="fl">Дата<input type="date" id="m6h-d" value="${OCF.md?y+'-'+OCF.md:''}"></label><label class="fl">Назва<input type="text" id="m6h-n" maxlength="80" value="${esc(OCF.name)}" placeholder="День Білого Лотоса"></label></div><label class="fl">Опис (необов’язково)<textarea id="m6h-t" rows="2" maxlength="500" placeholder="Як святкуємо">${esc(OCF.text)}</textarea></label><div class="landtools"><button type="button" class="m5btn sm" data-a="m6hadd" ${busy?'disabled':''}>Додати свято</button></div></div>`;
+  h+='</div><aside><div class="m5card"><h3><span class="m6li">${M6_LOTUS}</span> Свята Ордену</h3>';
+  h+=up.length?up.map(({x,dt},i)=>{const days=Math.round((dt-new Date(new Date().toDateString()))/864e5);return `<div class="m5ev"><div class="m5d">${dt.getDate()}<small>${M6MG[dt.getMonth()].slice(0,3).toUpperCase()}</small></div><div style="flex:1"><b>${esc(x.name)}</b><div class="hint">${days===0?'сьогодні':days===1?'завтра':'через '+days+' '+(days%10===1&&days%100!==11?'день':[2,3,4].includes(days%10)&&![12,13,14].includes(days%100)?'дні':'днів')}</div>${x.text?`<div class="m6ht">${esc(x.text)}</div>`:''}</div>${can?`<button type="button" class="m5lnk" data-a="m6hdel" data-k="${esc(x.md+'|'+x.name)}" aria-label="Прибрати">✕</button>`:''}</div>`;}).join(''):`<p class="hint">Свят ще немає.${can?' Додайте перше ліворуч.':''}</p>`;
+  h+='</div></aside></div></div>';return h;}
+// ---------- бібліотека: полиця з книгами ----------
+function m6Np(text){const P=m6Pages(text);return Math.max(1,P.length);}
+function m6Pages(text){text=String(text||'').replace(/\r/g,'');const parts=text.split(/\n-{3,}\n/);const out=[];const MAX=1400;
+  parts.forEach(pt=>{const paras=pt.split(/\n/);let cur='';paras.forEach(p=>{while(p.length>MAX){if(cur){out.push(cur);cur='';}let cut=p.lastIndexOf(' ',MAX);if(cut<MAX*0.6)cut=MAX;out.push(p.slice(0,cut));p=p.slice(cut).trimStart();}
+      if((cur+'\n'+p).length>MAX&&cur){out.push(cur);cur=p;}else cur=cur?cur+'\n'+p:p;});if(cur.trim())out.push(cur);});
+  return out.length?out:[''];}
+function m6Hash(s){let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))|0;return Math.abs(h);}
+function m6Ink(hex){const m=/^#?([0-9a-f]{6})$/i.exec(hex||'');if(!m)return '#fff';const n=parseInt(m[1],16);const r=n>>16,g=(n>>8)&255,b=n&255;return (0.299*r+0.587*g+0.114*b)>150?'#2a2620':'#f6f0e2';}
+function m6BookW(np){return Math.round(Math.max(18,Math.min(78,14+Math.sqrt(np)*6)));}
+function m6Lib(){const can=m6OrdIn()||AUTH.admin;const B=BOOKS;let h='<div class="m6o">'+m6OrdHead();
+  h+=`<div class="m6lh"><div><h3>📚 Бібліотека Ордену</h3><p class="hint">${B.length} ${B.length===1?'книга':B.length>1&&B.length<5?'книги':'книг'} · товщина корінця — кількість сторінок · натисніть на книгу, щоб читати</p></div>${can?'<button type="button" class="m5btn" data-a="m6bnew">＋ Написати книгу</button>':''}</div>`;
+  const W=Math.min(1060,Math.max(300,(innerWidth||1100)-60))-40;const rows=[];let row=[],w=0;B.forEach(b=>{const bw=m6BookW(+b.np||1)+3;if(w+bw>W&&row.length){rows.push(row);row=[];w=0;}row.push(b);w+=bw;});if(row.length)rows.push(row);while(rows.length<2)rows.push([]);
+  h+=`<div class="m6case">${rows.map(r=>`<div class="m6shelf">${r.map(b=>{const c=/^#[0-9a-f]{6}$/i.test(b.color||'')?b.color:'#3a3a3a';const hh=180+m6Hash(b.id)%56;return `<button type="button" class="m6bk" style="--bc:${c};--bi:${m6Ink(c)};width:${m6BookW(+b.np||1)}px;height:${hh}px" data-a="m6bopen" data-k="${esc(b.id)}" title="${esc(b.title)} — ${esc(b.name||'')}, ${+b.np||1} с."><span>${esc(b.title)}</span><i>${+b.np||1}</i></button>`;}).join('')}</div>`).join('')}</div>`;
+  if(!B.length)h+=`<p class="hint m6empty">Полиця поки порожня.${can?' Напишіть першу книгу!':' Книги пишуть учні й Магістр Ордену.'}</p>`;
+  h+='</div>';
+  if(BKW&&!MODALH)MODALH=m6Write();else if(BKR&&!MODALH)MODALH=m6Read();
+  return h;}
+function m6Write(){const np=m6Np(BKW.text);return `<div class="bmodal m6bm" role="dialog" aria-modal="true" aria-label="Книга"><button type="button" class="bmback" data-a="m6bx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m6wr"><button class="small bmx" data-a="m6bx">✕ Закрити</button><h3>${BKW.id?'✏️ Редагувати книгу':'📖 Нова книга'}</h3>
+  <div class="m6wtop"><div class="m6prev" style="--bc:${esc(BKW.color)};--bi:${m6Ink(BKW.color)};width:${m6BookW(np)}px"><span>${esc(BKW.title||'Назва')}</span></div><div style="flex:1;min-width:0"><label class="fl">Назва<input type="text" id="m6b-title" data-a="m6bt" maxlength="80" value="${esc(BKW.title)}" placeholder="Назва книги"></label><div class="hint m5lbl">Колір корінця</div><div class="m6sw">${OR_COLORS.map(c=>`<button type="button" class="m6c${BKW.color===c?' on':''}" style="background:${c}" data-a="m6bc" data-k="${c}" aria-label="Колір ${c}"></button>`).join('')}<label class="m6c m6cc" title="Свій колір"><input type="color" data-a="m6bcc" value="${esc(BKW.color)}" aria-label="Свій колір"></label></div></div></div>
+  <label class="fl">Текст книги<textarea id="m6b-text" data-a="m6btx" rows="14" maxlength="150000" placeholder="Пишіть тут. Щоб почати нову сторінку, поставте окремий рядок із трьох дефісів: ---">${esc(BKW.text)}</textarea></label>
+  <div class="m5tools" style="padding-left:0"><span class="hint" id="m6b-np">${np} ${np===1?'сторінка':np<5?'сторінки':'сторінок'}</span><span class="m5sp"></span><button type="button" class="m5btn" data-a="m6bsave" ${busy?'disabled':''}>${BKW.id?'Зберегти':'Поставити на полицю'}</button></div></div></div>`;}
+function m6Read(){const b=BOOKS.find(x=>x.id===BKR);if(!b)return '';const tx=BKTX[b.id];const own=AUTH.email&&lc(b.by)===lc(AUTH.email);const canDel=own||m6CanOrd();
+  let body;if(tx==null)body='<p class="hint">Відкриваю книгу…</p>';else{const P=m6Pages(tx);const two=innerWidth>900;const step=two?2:1;if(BKP>=P.length)BKP=Math.max(0,P.length-1);if(two&&BKP%2)BKP--;
+    const pg=i=>i<P.length?`<div class="m6pg"><div class="m6pt" data-notr>${fmtMsg(P[i])}</div><span class="m6pn">${i+1}</span></div>`:'<div class="m6pg blank"></div>';
+    body=`<div class="m6spread${two?' two':''}">${pg(BKP)}${two?pg(BKP+1):''}</div><div class="m6nav"><button type="button" class="m5btn sm" data-a="m6bp" data-k="${-step}" ${BKP<=0?'disabled':''}>‹ Назад</button><span class="hint">${two&&BKP+1<P.length?`сторінки ${BKP+1}–${BKP+2}`:`сторінка ${BKP+1}`} з ${P.length}</span><button type="button" class="m5btn sm" data-a="m6bp" data-k="${step}" ${BKP+step>=P.length?'disabled':''}>Далі ›</button></div>`;}
+  return `<div class="bmodal m6bm" role="dialog" aria-modal="true" aria-label="${esc(b.title)}"><button type="button" class="bmback" data-a="m6bx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m6rd" style="--bc:${esc(b.color||'#3a3a3a')};--bi:${m6Ink(b.color)}"><button class="small bmx" data-a="m6bx">✕ Закрити</button><div class="m6cover"><b>${esc(b.title)}</b><small>${esc(b.name||m6NameOf(b.by))} · ${+b.np||1} с.</small></div>${body}${own||canDel?`<div class="landtools m6bact">${own?`<button type="button" class="m5lnk" data-a="m6bedit" data-k="${esc(b.id)}">✏️ Редагувати</button>`:''}${canDel?`<button type="button" class="m5lnk" data-a="m6bdel" data-k="${esc(b.id)}">Зняти з полиці</button>`:''}</div>`:''}</div></div>`;}
+// ---------- адмін-панель: модулі ----------
+function m5ModsAdmin(){const M=m5Mods();const G=m5Groups();const card=(k,desc,extra)=>`<div class="m5mod"><span class="m5mi big">${m5Em(M[k].ic)}</span><div style="flex:1;min-width:0"><b>${esc(M[k].name)}</b><div class="hint">${desc}</div><div class="m5grow"><input type="text" id="m5m-${k}-name" maxlength="40" value="${esc(M[k].name)}" placeholder="Назва модуля"><input type="text" id="m5m-${k}-ic" maxlength="4" value="${esc(M[k].ic)}" style="max-width:70px" aria-label="Значок"></div>${extra||''}</div><button type="button" class="small ${M[k].on!==false?'primary':'ghost'}" data-a="m5modtg" data-k="${k}">${M[k].on!==false?'✅ Увімкнено':'⛔ Вимкнено'}</button></div>`;
+  const pl=m5AllPlayers();
+  return `<div class="block"><h3>🧩 Модулі</h3><p class="hint">Вимкнений модуль зникає з меню для всіх, крім адміністрації. Дані не видаляються — увімкніть, і все повернеться.</p>
+    ${card('ud','Новини та укази, Уряд, Право, Суд, Церква, Військо',`<label class="chk m6chk"><input type="checkbox" data-a="m6govtg"${M.ud.gov!==false?' checked':''}> Закони голосує Уряд, лідер підписує (Палату, Землі, Карту, Економіку сховано)</label>`)}
+    ${card('order','Магістр і учні, календар свят, бібліотека, острови біля Іспанії',`<label class="fl">Магістр Ордену<select id="m6-master"><option value="">— не обрано —</option>${pl.map(p=>`<option value="${esc(p.email)}"${lc(p.email)===m6Master()?' selected':''}>${esc(p.name)}</option>`).join('')}</select></label>`)}
+    <div class="landtools"><button type="button" class="small primary" data-a="m5modsave">Зберегти</button></div></div>
+    <div class="block"><h3>💬 Групи чату ком’юніті</h3><p class="hint">«🌐 Загальний» є завжди. Тут — додаткові групи, доступні всім зареєстрованим.</p>${G.map((g,i)=>`<div class="m5grow"><input type="text" id="m5g-ic-${i}" value="${esc(g[1])}" maxlength="4" style="max-width:64px" aria-label="Значок"><input type="text" id="m5g-n-${i}" value="${esc(g[2])}" maxlength="30" placeholder="Назва"><input type="text" id="m5g-d-${i}" value="${esc(g[3]||'')}" maxlength="80" placeholder="Опис"><button type="button" class="small ghost" data-a="m5gdel" data-k="${i}">✕</button></div>`).join('')}<div class="landtools"><button type="button" class="small ghost" data-a="m5gadd">➕ Група</button><button type="button" class="small primary" data-a="m5gsave">Зберегти групи</button></div></div>`;}
+// ---------- дії ----------
+async function m6Click(a,b){const k=b.dataset.k;const run=async(fn,ok)=>{busy=true;render();try{await fn();if(ok){msg=ok;msgErr=false;}}catch(e){console.warn(e);msg='Не вдалося'+(e&&e.code==='permission-denied'?': немає права':'');msgErr=true;}busy=false;render();};
+  const v=id=>((document.getElementById(id)||{}).value||'').trim();
+  if(a==='m5mod'&&k==='order'){const top=state.sections.filter(s=>!s.tab&&navVis(s)&&m5ModOf(s)==='order');const t=top.find(s=>s.id===LASTORD)||top[0];if(t){active=t.id;PLAYM=false;try{history.replaceState(null,'','#'+t.id);}catch(_){}render();window.scrollTo(0,0);}return true;}
+  if(AUTH.admin&&a==='m5modtg'){const key=k==='order'?'order':'ud';state.modules=state.modules||{};const M=m5Mods();state.modules[key]=Object.assign({},M[key],{on:M[key].on===false});await run(async()=>{await window.FB.save(state);saved=JSON.stringify(state);},state.modules[key].on?'Модуль увімкнено':'Модуль вимкнено');return true;}
+  if(AUTH.admin&&a==='m5modsave'){const M=m5Mods();state.modules=state.modules||{};['ud','order'].forEach(key=>{state.modules[key]=Object.assign({},M[key],{name:v('m5m-'+key+'-name')||M[key].name,ic:v('m5m-'+key+'-ic')||M[key].ic});});
+    const ms=v('m6-master');await run(async()=>{await window.FB.save(state);saved=JSON.stringify(state);if(ms!==m6Master())await window.FB.ordSave({master:ms,masterName:ms?m6NameOf(ms):''});},'Збережено');return true;}
+  if(AUTH.admin&&a==='m6govtg'){state.modules=state.modules||{};const M=m5Mods();state.modules.ud=Object.assign({},M.ud,{gov:M.ud.gov===false});restructure(state);await run(async()=>{await window.FB.save(state);saved=JSON.stringify(state);},state.modules.ud.gov?'Закони тепер голосує Уряд':'Повернено Палату Земель');return true;}
+  // уряд: назви посад і емблеми
+  if(a==='m6ged'){G6={t:Object.assign({},(GOVT&&GOVT.t)||{}),img:Object.assign({},(GOVT&&GOVT.img)||{}),em:(GOVT&&GOVT.em)||''};G6ED=true;render();return true;}
+  if(a==='m6gedx'){G6ED=false;render();return true;}
+  if(a==='m6gemx'){if(k)delete G6.img[k];else G6.em='';render();return true;}
+  if(a==='m6gsave'){m6Seats().forEach(p=>{const t=v('m6t-'+p.id);if(t)G6.t[p.id]=t.slice(0,60);});const d={t:G6.t,img:G6.img,em:G6.em};await run(()=>window.FB.setGovt(d),'Назви посад збережено');if(!msgErr){GOVT=Object.assign({},GOVT,d);m6ApplyGovt();M6RX=null;G6ED=false;render();}return true;}
+  // орден
+  if(a==='m6oed'){ORDF={about:ORD.about||'',isl:m6Isl().join(', ')};ORDED=true;render();return true;}
+  if(a==='m6oedx'){ORDED=false;render();return true;}
+  if(a==='m6osave'){const about=(document.getElementById('m6-about')||{}).value||'';const isl=v('m6-isl').split(',').map(x=>x.trim()).filter(Boolean).slice(0,8);await run(()=>window.FB.ordSave({about:about.slice(0,3000),isl}),'Збережено');if(!msgErr){ORDED=false;render();}return true;}
+  if(a==='m6apply'){const t=String(ORDAPP||'').trim();await run(()=>window.FB.ordApply({name:m5Name().slice(0,40),msg:t.slice(0,500)}),'Заявку надіслано Магістрові');ORDAPP='';return true;}
+  if(a==='m6leave'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return true;}await run(()=>window.FB.ordDel(lc(AUTH.email)),'Готово');return true;}
+  if(a==='m6acc'){await run(()=>window.FB.ordSet(k,'ok'),'Новий учень Ордену');return true;}
+  if(a==='m6rej'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return true;}await run(()=>window.FB.ordDel(k),'Готово');return true;}
+  if(a==='m6cm'){OCAL.m+=+k;if(OCAL.m<0){OCAL.m=11;OCAL.y--;}if(OCAL.m>11){OCAL.m=0;OCAL.y++;}render();return true;}
+  if(a==='m6hadd'){const d=v('m6h-d');const name=v('m6h-n');const text=v('m6h-t');OCF={md:d?d.slice(5):'',name,text};if(!/^\d{2}-\d{2}$/.test(OCF.md)||!name){msg='Вкажіть дату й назву свята';msgErr=true;render();return true;}
+    const H=m6Hols().concat([{md:OCF.md,name:name.slice(0,80),text:text.slice(0,500)}]).slice(0,120);await run(()=>window.FB.ordSave({hols:H}),'Свято додано');if(!msgErr){ORD.hols=H;OCF={md:'',name:'',text:''};render();}return true;}
+  if(a==='m6hdel'){const H=m6Hols().filter(x=>x.md+'|'+x.name!==k);await run(()=>window.FB.ordSave({hols:H}),'Прибрано');if(!msgErr){ORD.hols=H;render();}return true;}
+  // книги
+  if(a==='m6bnew'){BKW={id:'',title:'',color:OR_COLORS[m6Hash(Date.now())%OR_COLORS.length],text:''};render();setTimeout(()=>{const t=document.getElementById('m6b-title');if(t)t.focus();},30);return true;}
+  if(a==='m6bx'){BKW=null;BKR=null;render();return true;}
+  if(a==='m6bc'){BKW.color=k;render();return true;}
+  if(a==='m6bopen'){BKR=k;BKP=0;render();if(BKTX[k]==null)window.FB.bookText(k).then(t=>{BKTX[k]=t||'';renderSoon();}).catch(e=>{console.warn(e);BKTX[k]='';renderSoon();});return true;}
+  if(a==='m6bp'){BKP=Math.max(0,BKP+(+k));render();return true;}
+  if(a==='m6bedit'){const bk=BOOKS.find(x=>x.id===k);if(!bk)return true;BKW={id:bk.id,title:bk.title||'',color:bk.color||'#3a3a3a',text:BKTX[k]||''};BKR=null;render();return true;}
+  if(a==='m6bdel'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно зняти?';return true;}await run(()=>window.FB.bookDel(k),'Книгу знято з полиці');BKR=null;render();return true;}
+  if(a==='m6bsave'){BKW.title=v('m6b-title');BKW.text=(document.getElementById('m6b-text')||{}).value||BKW.text;if(!BKW.title||!BKW.text.trim()){msg='Потрібні назва й текст';msgErr=true;render();return true;}
+    const id=BKW.id||('b'+Date.now().toString(36)+Math.random().toString(36).slice(2,5));const np=Math.min(500,m6Np(BKW.text));const meta={title:BKW.title.slice(0,80),color:/^#[0-9a-f]{6}$/i.test(BKW.color)?BKW.color:'#3a3a3a',np,name:m5Name().slice(0,40)};
+    await run(()=>window.FB.bookSave(id,meta,BKW.text.slice(0,150000),!!BKW.id),BKW.id?'Збережено':'Книга на полиці');if(!msgErr){BKTX[id]=BKW.text;BKW=null;render();}return true;}
+  return false;}
+function m6Input(a,t){if(a==='m6app'){ORDAPP=t.value;return true;}if(a==='m6gt'){G6.t[t.dataset.k]=t.value;return true;}
+  if(a==='m6bt'&&BKW){BKW.title=t.value;const p=document.querySelector('.m6prev span');if(p)p.textContent=t.value||'Назва';return true;}
+  if(a==='m6btx'&&BKW){BKW.text=t.value;const np=m6Np(t.value);const e=document.getElementById('m6b-np');if(e)e.textContent=np+' '+(np===1?'сторінка':np<5?'сторінки':'сторінок');const p=document.querySelector('.m6prev');if(p)p.style.width=m6BookW(np)+'px';return true;}
+  if(a==='m6bcc'&&BKW){BKW.color=t.value;const p=document.querySelector('.m6prev');if(p){p.style.setProperty('--bc',t.value);p.style.setProperty('--bi',m6Ink(t.value));}return true;}
+  if(a==='m6gem'||a==='m6govtg')return true;return false;}
+function m6Change(a,t){if(a==='m6gem'){const f=t.files&&t.files[0];const k=t.dataset.k;t.value='';imgToData(f,k?96:320,d=>{if(!d){msg='Потрібне зображення';msgErr=true;}else if(k)G6.img[k]=d;else G6.em=d;render();});return true;}
+  if(a==='m6bcc'&&BKW){BKW.color=t.value;render();return true;}
+  if(a==='m6govtg')return true;return false;}
 
 })();
 </script>
@@ -8373,6 +8732,10 @@ async function revokeNews(id, r){ await updateDoc(doc(db, "news", id), { revoked
 
 // live updates: new bills, votes, decisions and edits appear without reloading the page
 function watch(){
+  onSnapshot(doc(db, "site", "govt"), s => window.APP.govt && window.APP.govt(s.exists() ? s.data() : null), e => console.warn(e));
+  onSnapshot(doc(db, "site", "order"), s => window.APP.order && window.APP.order(s.exists() ? s.data() : {}), e => { console.warn(e); window.APP.order && window.APP.order({}); });
+  onSnapshot(collection(db, "ordm"), s => window.APP.ordm && window.APP.ordm(listFrom(s)), e => console.warn(e));
+  onSnapshot(collection(db, "books"), s => window.APP.books && window.APP.books(listFrom(s)), e => console.warn(e));
   onSnapshot(query(collection(db, "posts"), orderBy("at", "desc"), limit(150)), snap => window.APP.feed && window.APP.feed(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "members"), snap => window.APP.members && window.APP.members(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "proposals"), snap => window.APP.props(listFrom(snap)), e => console.warn(e));
@@ -8429,7 +8792,16 @@ async function cmUnhide(id){ await updateDoc(doc(db, "posts", id), { hidden: fal
 async function cmCmts(id){ const s = await getDocs(collection(db, "posts", id, "cmts")); return s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => ((a.at && a.at.seconds) || 0) - ((b.at && b.at.seconds) || 0)); }
 async function cmCmt(id, d, nc){ const cid = "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); await setDoc(doc(db, "posts", id, "cmts", cid), { ...d, by: myMail(), at: serverTimestamp() }); await updateDoc(doc(db, "posts", id), { nc }); }
 async function cmCdel(id, cid, nc){ await deleteDoc(doc(db, "posts", id, "cmts", cid)); try { await updateDoc(doc(db, "posts", id), { nc }); } catch (e) {} }
+async function setGovt(d){ await setDoc(doc(db, "site", "govt"), { t: d.t || {}, img: d.img || {}, em: d.em || "", by: myMail(), at: serverTimestamp() }); }
+async function ordSave(d){ await setDoc(doc(db, "site", "order"), d, { merge: true }); }
+async function ordApply(d){ await setDoc(doc(db, "ordm", myMail()), { name: d.name || "", msg: d.msg || "", st: "pend", at: Date.now() }); }
+async function ordSet(email, st){ await updateDoc(doc(db, "ordm", email), { st }); }
+async function ordDel(email){ await deleteDoc(doc(db, "ordm", email)); }
+async function bookSave(id, meta, text, upd){ if (upd) await updateDoc(doc(db, "books", id), { ...meta, up: Date.now() }); else await setDoc(doc(db, "books", id), { ...meta, by: myMail(), at: serverTimestamp(), at0: Date.now() }); await setDoc(doc(db, "booktx", id), { text, by: myMail() }); }
+async function bookText(id){ const s = await getDoc(doc(db, "booktx", id)); return s.exists() ? (s.data().text || "") : ""; }
+async function bookDel(id){ await deleteDoc(doc(db, "booktx", id)); await deleteDoc(doc(db, "books", id)); }
 window.FB = {
+  setGovt, ordSave, ordApply, ordSet, ordDel, bookSave, bookText, bookDel,
   cmMember, cmPost, cmReact, cmReport, cmDel, cmUnhide, cmCmts, cmCmt, cmCdel,
   save, saveEcon, saveLands, savePlayers, syncAccess, depSet, depDel, loadVotes, loadProposals, vote, ovote, sign, propose, delProposal,
   postNews, delNews, giveAward, revokeAward, delAward,
