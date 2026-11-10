@@ -2070,6 +2070,7 @@ body.cml svg.hcedges .hclg rect{fill:#fff7f3}body.cml svg.hcedges .hclg text{fil
 .m6he>input{width:100%}
 .m6gm .m6row{display:flex;gap:8px;align-items:center;margin:6px 0}.m6gm .m6row input{flex:1;min-width:0}
 .m6gm .m6em{display:flex;gap:12px;align-items:center;margin:8px 0 12px}
+.m6lead{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:10px}.m6leadf{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.m6leadf select{min-width:220px}
 </style>
 
 </head><body>
@@ -8102,7 +8103,7 @@ function m5Events(){let out=[];try{const now=new Date();for(let k=0;k<2;k++){con
   out.sort((a,b)=>a.dt-b.dt);out=out.slice(0,6);const MN=['СІЧ','ЛЮТ','БЕР','КВІ','ТРА','ЧЕР','ЛИП','СЕР','ВЕР','ЖОВ','ЛИС','ГРУ'];
   return `<div class="m5card"><h3>📅 Найближчі події</h3>${out.length?out.map(({dt,e})=>`<div class="m5ev"><div class="m5d">${dt.getDate()}<small>${MN[dt.getMonth()]}</small></div><div><b>${m5Em(e.ic||'')} ${esc(e.tx||'')}</b>${e.sub?`<div class="hint">${esc(e.sub)}</div>`:''}</div></div>`).join(''):'<p class="hint">Найближчим часом подій немає.</p>'}</div>`;}
 // ---------- гравці ----------
-function m5AllPlayers(){const out=[];const seen=new Set();const ud=m5UdOn()?players():[];
+function m5AllPlayers(){const out=[];const seen=new Set();const ud=players().filter(x=>String(x.name||"").trim());
   MEMBERS.forEach(m=>{const e=lc(m.id);seen.add(e);const p=ud.find(x=>lc(x.email)===e);const c=CM_COUNTRIES.find(x=>x[0]===m.country);out.push({name:m.name||(p&&p.name)||e.split('@')[0],flag:c?c[1]:'',country:c?c[2]:'',ud:!!p,udName:p&&p.name,ok:m.verified===true,email:e,profile:m.profile});});
   ud.forEach(p=>{const e=lc(p.email);if(e&&seen.has(e))return;if(e)seen.add(e);out.push({name:p.name,flag:'🇺🇦',country:'Україна',ud:true,udName:p.name,ok:true,email:e});});
   return out.sort((a,b)=>String(a.name).localeCompare(String(b.name),'uk'));}
@@ -8434,7 +8435,9 @@ function m6Words(){const root=document.getElementById('app')||document.body;cons
 // ---------- сторінка Уряду: стіл + закони, без півкола ----------
 function m4Kanc(){if(!m6Gov())return m4Kanc0();const can=isHetman()||AUTH.admin;
   let h='';if(can&&!AUTH.bot)h+=`<div class="m6gbar"><span class="hint">${esc(m6Leader())} може перейменувати посади уряду й поставити емблеми</span><button type="button" class="small primary" data-a="m6ged">✏️ Назви посад і емблеми</button></div>`;
-  h+=m4Kanc0()+m6GovLaws();if(G6ED&&can&&!MODALH)MODALH=`<div class="bmodal" role="dialog" aria-modal="true" aria-label="Назви посад"><button type="button" class="bmback" data-a="m6gedx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m6gm"><button class="small bmx" data-a="m6gedx">✕ Закрити</button>${m6GovPanel()}</div></div>`;return h;}
+  h+=m4Kanc0();if(AUTH.admin&&!AUTH.bot)h+=m6LeadAdmin();h+=m6GovLaws();if(G6ED&&can&&!MODALH)MODALH=`<div class="bmodal" role="dialog" aria-modal="true" aria-label="Назви посад"><button type="button" class="bmback" data-a="m6gedx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m6gm"><button class="small bmx" data-a="m6gedx">✕ Закрити</button>${m6GovPanel()}</div></div>`;return h;}
+function m6LeadAdmin(){const p=govPost(state,'hetman');if(!p)return '';const cur=String(p.name||'').trim();const pl=players().filter(x=>!x.tourist&&String(x.name||'').trim());
+  return `<div class="block m6lead"><div><b>🛡 Лідер України</b> <span class="hint">· зміна лише для адміністрації; звичайно лідера обирають на виборах (вкладка «Вибори»)</span></div><div class="m6leadf"><select id="m6-lead" aria-label="Новий лідер"><option value="">— вакантно —</option>${pl.map(x=>`<option value="${esc(x.name)}"${x.name===cur?' selected':''}>${esc(x.name)}</option>`).join('')}</select><button type="button" class="small primary" data-a="m6lead" ${busy?'disabled':''}>Призначити ${esc(m6Decl(m6Leader(),"i"))}</button></div></div>`;}
 function m6GovPanel(){const seats=m6Seats();return `<h3>✏️ Назви посад і емблеми</h3><p class="hint">Нова назва з’явиться за столом, у кабінетах, профілях і нових документах. Старі закони й укази залишаться з назвою, яка діяла, коли їх підписали.</p>
     <div class="m6em"><span class="m6emi"><img src="${esc(G6.em||emblemSrc())}" alt=""></span><div><b>Герб у центрі столу</b><div class="landtools"><label class="small m6up">🖼 Завантажити<input type="file" accept="image/*" data-a="m6gem" data-k="" hidden></label>${G6.em?'<button type="button" class="small ghost" data-a="m6gemx" data-k="">Прибрати</button>':''}</div></div></div>
     ${seats.map(p=>`<div class="m6row"><span class="m6emi sm">${G6.img[p.id]?`<img src="${esc(G6.img[p.id])}" alt="">`:'<span aria-hidden="true">·</span>'}</span><input type="text" id="m6t-${esc(p.id)}" data-a="m6gt" data-k="${esc(p.id)}" maxlength="60" value="${esc(G6.t[p.id]!=null?G6.t[p.id]:p.title)}" aria-label="Назва посади"><label class="small m6up" title="Емблема посади">🖼<input type="file" accept="image/*" data-a="m6gem" data-k="${esc(p.id)}" hidden></label>${G6.img[p.id]?`<button type="button" class="small ghost" data-a="m6gemx" data-k="${esc(p.id)}" aria-label="Прибрати емблему">✕</button>`:''}</div>`).join('')}
@@ -8511,6 +8514,8 @@ async function m7Click(a,b){const k=b.dataset.k;const run=async(fn,ok)=>{busy=tr
   if(a==='m6gsave'){const T=Object.assign({},(GOVT&&GOVT.t)||{});const H=m6Hist().slice();const now=Date.now();
     m6Seats().forEach(p=>{const t=v('m6t-'+p.id).slice(0,60);if(!t)return;const cur=String(T[p.id]||p.title||'').trim();if(t!==cur){H.push({id:p.id,t,at:now});}T[p.id]=t;});
     const d={t:T,img:G6.img,em:G6.em,hist:H.slice(-80)};await run(()=>window.FB.setGovt(d),'Назви посад збережено');if(!msgErr){GOVT=Object.assign({},GOVT,d);m6ApplyGovt();m6RulesFor.c={};G6ED=false;render();}return true;}
+  if(a==='m6lead'&&AUTH.admin){const nm=v('m6-lead');const p=govPost(state,'hetman');if(!p)return true;if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent=nm?'Точно: '+nm+'?':'Точно звільнити?';return true;}
+    p.name=nm;p.email='';try{syncArmyHetman(state,nm);}catch(_){}await run(async()=>{await window.FB.save(state);saved=JSON.stringify(state);},nm?nm+' — тепер '+m6Leader():'Посада лідера вакантна');return true;}
   if(a==='m6hadd2'){const it={day:+v('m6hd'),month:+v('m6hm'),name:v('m6hn').slice(0,80),text:v('m6ht').slice(0,200)};HOLF={day:it.day,month:it.month,name:it.name,text:it.text};if(!it.name){msg='Вкажіть назву свята';msgErr=true;render();return true;}
     const L=HOLS.concat([it]).slice(0,100);await run(()=>window.FB.setHols(L),'Свято додано до календаря');if(!msgErr){HOLS=L;HOLF={day:'',month:'',name:'',text:''};render();}return true;}
   if(a==='m6hdel2'){const L=HOLS.filter((_,i)=>i!==+k);await run(()=>window.FB.setHols(L),'Прибрано');if(!msgErr){HOLS=L;render();}return true;}
