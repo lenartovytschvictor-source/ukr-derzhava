@@ -1868,6 +1868,73 @@ div#m3mount{aspect-ratio:1.73}
  .m4step{flex:none;height:auto!important;min-height:0;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;text-align:left}
  .m4step .m4ins{transform:none;margin:0}.m4step small{margin-left:auto}.m4who{margin:0;flex-basis:100%;justify-content:flex-start}.m4who:has(i.hint){display:none}.m4you{position:static;transform:none}}
 .m4lt{gap:4px}.m4rs{font-size:11px;padding:1px 7px;vertical-align:middle}
+/* ===== Ком’юніті: нейтральні тони (вугільний + льон), світла й темна теми ===== */
+body.cm{--bg:#18171c;--bg2:#1d1c22;--panel:#24232a;--panel2:#2d2c33;--line:rgba(216,209,195,.13);--line2:rgba(216,209,195,.28);--gold:#d8d1c3;--gold-hi:#f1ece2;--gold-soft:#b9b2a6;--cream:#ece8e0;--muted:#9a9495;--vacant:#b9b2a6;background:var(--bg)!important;color:var(--cream)}
+body.cml{--bg:#e9e5dd;--bg2:#e2ddd3;--panel:#f4f1eb;--panel2:#e8e3d9;--line:rgba(40,38,46,.13);--line2:rgba(40,38,46,.28);--gold:#2a2a33;--gold-hi:#18171c;--gold-soft:#3b3a44;--cream:#23222a;--muted:#6f6a64;--vacant:#55504a;color:#23222a}
+body.cm .leaves,body.cm .leaf,body.cm .snow,body.cm canvas.fx{display:none!important}
+body.cm header.top2{background:color-mix(in srgb,var(--bg) 92%,transparent);border-bottom:1px solid var(--line)}
+body.cm h1,body.cm .brand2 h1{background:none!important;-webkit-text-fill-color:currentColor!important;color:var(--cream)!important;text-shadow:none!important;font-family:Inter,system-ui,sans-serif!important;letter-spacing:0!important}
+body.cm .bsub{color:var(--muted)!important}
+.m5logo{display:inline-grid;place-items:center;width:46px;height:46px;color:var(--gold,#d8d1c3);flex:0 0 auto}.m5logo svg{width:100%;height:100%}
+body:not(.cm) .m5logo{color:#f2b544}
+.m5ib{position:relative;display:inline-grid;place-items:center;width:40px;height:40px;border-radius:12px;border:1px solid var(--line2);background:var(--panel);color:var(--cream);cursor:pointer;padding:0}
+.m5ib svg{width:20px;height:20px}.m5ib .nbadge{position:absolute;top:-6px;right:-6px}
+.m5mi{font-size:16px;line-height:1}.m5mi.big{font-size:30px}
+nav.toc.m5main{border-bottom:0}
+nav.toc.m5sub{margin-top:-4px;padding-top:6px;border-top:1px dashed var(--line2);font-size:.95em}
+body.cm nav.toc button[aria-current="page"]{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+body.cm .sec>h2{display:none}
+#feed>h2{display:none}
+/* стрічка */
+.m5wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.m5col{min-width:0}.m5side{position:sticky;top:12px;display:grid;gap:14px}
+.m5card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin:0 0 14px;color:var(--cream)}
+.m5card h3{margin:0 0 10px;font-size:15px}
+.m5row{display:flex;gap:12px;align-items:flex-start}.m5row textarea{flex:1;min-height:46px;resize:vertical;border-radius:12px;border:1px solid var(--line2);background:var(--bg2);color:var(--cream);padding:11px 13px;font:inherit;font-size:15px}
+.m5av{width:42px;height:42px;border-radius:50%;flex:0 0 auto;object-fit:cover;display:inline-grid;place-items:center;font-weight:700;background:var(--panel2);color:var(--cream);border:1px solid var(--line2)}
+.m5avs{width:30px;height:30px;border-radius:50%;flex:0 0 auto;object-fit:cover;display:inline-grid;place-items:center;font-size:12px;font-weight:700;background:var(--panel2);color:var(--cream)}
+.m5tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;padding-left:54px}.m5chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.m5chip{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;border:1px solid var(--line2);background:var(--panel2);color:var(--cream);font:inherit;font-size:13px;cursor:pointer}
+.m5chip.on{background:var(--c,var(--gold));border-color:var(--c,var(--gold));color:#fff;font-weight:700}
+.m5filter .m5chip.on:not([style]){background:var(--gold);color:var(--bg)}
+.m5btn{padding:9px 16px;border-radius:11px;border:0;background:var(--gold);color:var(--bg);font:inherit;font-weight:700;font-size:14px;cursor:pointer}.m5btn.sm{padding:7px 12px;font-size:13px}.m5btn:disabled{opacity:.6}
+.m5imgp{margin:10px 0 0 54px;display:flex;gap:10px;align-items:flex-start}.m5imgp img{max-height:140px;border-radius:10px}
+.m5filter{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 14px}
+.m5ph{display:flex;gap:10px;align-items:center}.m5ph b{font-size:15px}.m5ph .hint{font-size:12.5px}
+.m5tag{margin-left:auto;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;color:var(--c);background:color-mix(in srgb,var(--c) 18%,transparent)}
+.m5txt{margin:10px 0 0;line-height:1.6;font-size:15.5px;white-space:pre-wrap;word-break:break-word}
+.m5pimg{display:block;max-width:100%;max-height:520px;border-radius:12px;margin:12px 0 0}
+.m5acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:12px}.m5sp{flex:1}
+.m5re{padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--cream);font:inherit;font-size:13.5px;cursor:pointer}.m5re.on{background:var(--panel2);border-color:var(--gold)}.m5re:disabled{cursor:default;opacity:.8}
+.m5lnk{background:none;border:0;padding:4px 6px;color:var(--muted);font:inherit;font-size:12.5px;cursor:pointer;text-decoration:none}.m5lnk:hover{color:var(--cream);text-decoration:underline}
+.m5hid{opacity:.6;border-style:dashed}
+.m5cmts{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);display:grid;gap:10px}.m5cmt{display:flex;gap:9px;align-items:flex-start;font-size:14.5px}.m5cmt>div{flex:1}
+.m5crow{display:flex;gap:8px}.m5crow input{flex:1;border-radius:10px;border:1px solid var(--line2);background:var(--bg2);color:var(--cream);padding:8px 11px;font:inherit}
+.m5join{text-align:center}.m5join p{margin:6px 0 12px}
+.m5ev{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--line)}.m5ev b{font-size:14px}.m5ev .hint{font-size:12px}
+.m5d{flex:0 0 46px;text-align:center;border-radius:10px;background:var(--panel2);padding:4px 0;font-weight:800;font-size:17px}.m5d small{display:block;font-size:10px;color:var(--muted);font-weight:600}
+/* гравці */
+.m5pm .bmbox{max-width:560px}.m5pm h3 small{color:var(--muted);font-weight:400}
+.m5pm input[type=search]{width:100%;box-sizing:border-box;margin:6px 0 10px;border-radius:10px;border:1px solid var(--line2);background:var(--bg2);color:var(--cream);padding:9px 12px;font:inherit}
+.m5pl{display:grid;gap:2px;max-height:62vh;overflow:auto}.m5pli{display:flex;gap:10px;align-items:center;padding:8px 4px;border-top:1px solid var(--line)}.m5pln{flex:1}.m5pln b{font-size:14.5px}
+.m5bd{display:inline-block;margin:3px 4px 0 0;font-size:11.5px;padding:2px 8px;border-radius:999px;background:var(--panel2);color:var(--cream);border:1px solid var(--line)}.m5bd.ok{color:#8fbf9a;border-color:rgba(143,191,154,.4)}
+.m5reg .fl{display:grid;gap:5px;margin:10px 0;font-size:14px}.m5reg input,.m5reg select{border-radius:10px;border:1px solid var(--line2);background:var(--bg2);color:var(--cream);padding:9px 12px;font:inherit}
+.m5mod{display:flex;gap:14px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:12px}
+body.cm .bmbox{background:var(--panel);color:var(--cream);border-color:var(--line2)}
+body.cm .block{background:var(--panel);border-color:var(--line)}
+body.cm button.small{background:var(--panel2);color:var(--cream);border-color:var(--line2)}body.cm button.small.primary{background:var(--gold);color:var(--bg)}
+body.cm input,body.cm textarea,body.cm select{color:var(--cream)}
+body.cml .mnav{background:color-mix(in srgb,var(--panel) 96%,transparent)!important;border-color:var(--line2)!important}
+body.cm .mnav button[aria-current="page"]{color:var(--gold)}
+@media (max-width:860px){.m5wrap{grid-template-columns:1fr}.m5side{position:static;order:-1}.m5side .m5ev:nth-of-type(n+4){display:none}.m5tools{padding-left:0}.m5imgp{margin-left:0}}
+@media (max-width:760px){.m5ib{width:36px;height:36px}.m5logo{width:36px;height:36px}}
+body.cm #hwfx,body.cm #aurain{display:none!important}
+body.cm .toc{background:var(--panel)!important;border-color:var(--line)!important}
+body.cm nav.toc button{color:var(--cream)}
+@media (max-width:760px){.top2 .bar>button.m5ib[data-a=m5theme]{display:inline-grid!important}}
+body.cml .chcomp{background:var(--panel2)}body.cml .chcomp textarea,body.cml .chcomp input{background:var(--panel)!important;color:var(--cream)!important;border-color:var(--line2)!important}
+body.cm .chcomp button.primary,body.cm .chsend{background:var(--gold)!important;color:var(--bg)!important;border-color:var(--gold)!important}
+.m5grow{display:flex;gap:6px;margin:6px 0;align-items:center}.m5grow input{flex:1;min-width:0}
 </style>
 
 </head><body>
@@ -2200,7 +2267,7 @@ function landsChron(s){const names=(s.lands||[]).map(l=>cur(l).name);const lg=la
   return `<div class="block lchron"><h3>📜 Літопис Земель <small>хто й коли очолив Землю, які Землі внесено, перейменовано чи втрачено</small></h3>${lg.length?'<ol class="chrl">'+lg.slice(0,MORE['lchr'+s.id]?200:10).map(e=>`<li><span class="ci">${e.ic}</span><div><div>${esc(e.tx)}</div><div class="hint">${esc(fmtDT(e.at))}${e.by?' · '+esc(e.by):''}</div></div></li>`).join('')+'</ol>'+(lg.length>10?moreBtn('lchr'+s.id,lg.length):''):'<p class="empty">Події з’являтимуться тут самі, щойно Генеральний Писар чи закон змінить Землі: новий Осавул, нова Земля, перейменування, втрата.</p>'}</div>`;}
 
 // ---------- KK: чат — кімнати, особисті повідомлення, модерація ----------
-const ROOMS=[['general','🏛','Загальний','усі громадяни й туристи'],['parl','🗳','Палата Земель','Представники Земель'],['gov','✍️','Уряд','Гетьман і Секретарі'],['court','⚖️','Суд','судді й Прокурор'],['church','✝','Церква','Патріарх і духовенство']];
+const ROOMS=[['general','🌐','Загальний','усе ком’юніті'],['parl','🗳','Палата Земель','Представники Земель'],['gov','✍️','Уряд','Гетьман і Секретарі'],['court','⚖️','Суд','судді й Прокурор'],['church','✝','Церква','Патріарх і духовенство']];
 const CHAT_IMG_DAYS=15;
 let PINGS=[],PINGSUB='',PINGUN=null;
 let CHAT={mview:'list',reply:null,mq:null,hl:'',th:'r:general',msgs:null,sub:'',unsub:null,limit:50,draft:{},img:null,zoom:'',dms:[],dmsub:'',dmunsub:null,err:''},CHATBANS={};
@@ -2213,10 +2280,10 @@ function myHomeLands(){const p=myProfile();return p.land&&findLandById(state,p.l
 function suggestLand(){let r='';landSecs().forEach(sec=>(sec.lands||[]).forEach(l=>{const h=landHead(l);if(!r&&h.name&&emailOf(h.name)===AUTH.email)r=l.id;Object.values(l.dz||{}).forEach(d=>{if(!r&&d&&d.name&&emailOf(d.name)===AUTH.email)r=l.id;});}));return r;}
 function myPartyIds(){if(!AUTH.email||typeof PARTIES==='undefined')return [];return PARTIES.filter(p=>p.status==='active'&&(lc(p.leaderEmail)===AUTH.email||(p.memEmails||[]).map(lc).includes(AUTH.email))).map(p=>p.id);}
 function chatCanWrite(th){return chatReg()||(th==='r:confed'&&!!myConf());}
-function chatRooms(){const out=ROOMS.slice();if(confAccess())out.push(['confed','🤝','Конфедерація','делегати Ради й Канцелярія УД']);myHomeLands().forEach(id=>{const f=findLandById(state,id);if(f)out.push(['land_'+id,'🗺','Земля: '+cur(f.l).name.replace(/ Земля$/,''),'громадяни Землі та її посадовці']);});
+function chatRooms(){const out=m5UdOn()?[ROOMS[0],...m5Groups(),...ROOMS.slice(1)]:[ROOMS[0],...m5Groups()];if(!m5UdOn())return out;if(confAccess())out.push(['confed','🤝','Конфедерація','делегати Ради й Канцелярія УД']);myHomeLands().forEach(id=>{const f=findLandById(state,id);if(f)out.push(['land_'+id,'🗺','Земля: '+cur(f.l).name.replace(/ Земля$/,''),'громадяни Землі та її посадовці']);});
   myPartyIds().forEach(id=>{const p=partyById(id);if(p)out.push(['party_'+id,'🎨','Партія: '+(p.short||p.name),'члени партії']);});return out;}
-function roomOk(r){if(!AUTH.email)return false;if(r==='confed')return confAccess();if(String(r).startsWith('land_'))return myHomeLands().includes(r.slice(5))||AUTH.admin;if(String(r).startsWith('party_'))return myPartyIds().includes(r.slice(6))||AUTH.admin;if(AUTH.admin)return true;if(r==='general')return !!plByEmail(AUTH.email);if(r==='parl')return myLands().length>0;if(r==='gov')return isGov();if(r==='court')return !!myCourtPost()||isPros();if(r==='church')return isClergy();return false;}
-function chatReg(){return !!plByEmail(AUTH.email)&&!(plByEmail(AUTH.email)||{}).exiled;}
+function roomOk(r){if(!AUTH.email)return false;if(r==='confed')return confAccess();if(String(r).startsWith('land_'))return myHomeLands().includes(r.slice(5))||AUTH.admin;if(String(r).startsWith('party_'))return myPartyIds().includes(r.slice(6))||AUTH.admin;if(AUTH.admin)return true;if(r==='general'||String(r).startsWith('cg_'))return !!plByEmail(AUTH.email)||!!myMember();if(r==='parl')return myLands().length>0;if(r==='gov')return isGov();if(r==='court')return !!myCourtPost()||isPros();if(r==='church')return isClergy();return false;}
+function chatReg(){return (!!plByEmail(AUTH.email)&&!(plByEmail(AUTH.email)||{}).exiled)||!!myMember();}
 function chatMod(){return AUTH.admin||isInterior();}
 function chatBanned(e){const u=+CHATBANS[lc(e||AUTH.email)]||0;return u>Date.now()?u:0;}
 function dmPair(a,b){return [lc(a),lc(b)].sort().join('|');}
@@ -2244,7 +2311,7 @@ function chatEnsure(){if(!window.FB||!window.FB.watchMsgs)return;
 function pingNew(x){return vms(x.at)>(CHSEEN['pings']||0)&&!(x.th&&vms(x.at)<=(CHSEEN[x.th]||0));}
 function chatUnread(){let n=PINGS.filter(pingNew).length;(CHAT.dms||[]).forEach(d=>{const t=vms(d.last&&d.last.at)||vms(d.at);if(d.last&&d.last.from!==AUTH.email&&t>(CHSEEN['d:'+d.id]||0))n++;});return n;}
 function chatHtml(s,only){if(only==='confed'){if(!confAccess())return '';CHAT.th='r:confed';}if(!AUTH.email)return `<div class="block"><h3>Чат</h3><p class="hint">Увійдіть через Google, щоб читати й писати в чаті.</p><div><button class="small" data-a="login">Увійти через Google</button></div></div>`;
-  if(!only&&!plByEmail(AUTH.email)&&!AUTH.admin)return `<div class="block"><h3>Чат</h3><p class="hint">Писати в чаті можуть громадяни й зареєстровані туристи. Подайте заявку на сторінці «Гравці».</p><div><button class="small" data-a="tab" data-id="players">🪪 Реєстрація</button></div></div>`;
+  if(!only&&!plByEmail(AUTH.email)&&!myMember()&&!AUTH.admin)return `<div class="block"><h3>Чат</h3><p class="hint">Щоб писати в чаті, створіть профіль ком’юніті — це займає пів хвилини й не потребує схвалення.</p><div><button class="small" data-a="m5reg">🪪 Створити профіль</button></div></div>`;
   const th=CHAT.th;const dms=(CHAT.dms||[]).slice().sort((a,b)=>(vms(b.last&&b.last.at)||vms(b.at))-(vms(a.last&&a.last.at)||vms(a.at)));
   const roomBtn=([k,ic,l,d])=>{const ok=roomOk(k);return ok?`<button type="button" class="chth${th==='r:'+k?' on':''}" data-a="chth" data-k="r:${k}"><span class="ic">${ic}</span><span><b>${l}</b><small>${d}</small></span></button>`:'';};
   const dmBtn=d=>{const o=dmOther(d.id);const t=vms(d.last&&d.last.at)||vms(d.at);const un=d.last&&d.last.from!==AUTH.email&&t>(CHSEEN['d:'+d.id]||0)&&th!=='d:'+d.id;const p=plByEmail(o);return `<button type="button" class="chth dm${th==='d:'+d.id?' on':''}" data-a="chth" data-k="d:${esc(d.id)}">${seatAv(p?p.name:'?','chav')}<span><b>${esc(nameByEmail(o))}</b><small>${esc(String((d.last&&d.last.text)||'').slice(0,40))}</small></span>${un?'<i class="dot"></i>':''}</button>`;};
@@ -3445,10 +3512,11 @@ function cabinetModal(){const me=meAny();const p=myProfile();const lands=landLis
 function changedSecs(before,after){const b={};(before.sections||[]).forEach(x=>{b[x.id]=JSON.stringify(x);});const out=[];(after.sections||[]).forEach(x=>{const j=JSON.stringify(x);if(b[x.id]!==j)out.push(x.id);});return out;}
 async function logEdit(beforeState){try{const after=state;const ids=changedSecs(beforeState||{sections:[]},after);if(!ids.length||!window.FB.addEditLog)return;const bs={};(beforeState.sections||[]).forEach(x=>{if(ids.includes(x.id))bs[x.id]=x;});
   const mp=myPost();const me=meAny();await window.FB.addEditLog({by:mp?mp.title+' '+mp.name:(me?me.name:AUTH.email),scope:EDIT_SCOPE||'all',secs:ids.map(id=>{const x=after.sections.find(q=>q.id===id);return {id,title:x?x.title:id};}),before:(()=>{const js=JSON.stringify(bs);return js.length<=900000?js:'';})()});ELOGLOADED=false;}catch(e){console.warn('editlog',e);}}
-function adminPanel(){if(!AUTH.admin||AUTH.bot)return '';const g=govSec();const tabs=[['log','🧾 Журнал змін'],['roles','🔑 Ролі й доступи'],['season','🎉 Святкові теми'],['backup','💾 Резервні копії'],['tools','🛠 Інструменти']];
+function adminPanel(){if(!AUTH.admin||AUTH.bot)return '';const g=govSec();const tabs=[['log','🧾 Журнал змін'],['mods','🧩 Модулі'],['roles','🔑 Ролі й доступи'],['season','🎉 Святкові теми'],['backup','💾 Резервні копії'],['tools','🛠 Інструменти']];
   let b='';
   if(ADMP==='log'){if(!ELOGLOADED&&window.FB.loadEditLog){ELOGLOADED=true;window.FB.loadEditLog().then(l=>{ELOG=l;renderSoon();}).catch(()=>{});}
     b=ELOG.length?`<ul class="elog">${ELOG.slice().reverse().slice(0,80).map(e=>`<li><div><b>${esc((e.secs||[]).map(x=>x.title).join(', '))}</b><div class="hint">${esc(fmtDT(new Date(e.at||0).toISOString()))} · ${esc(e.by||'')}</div></div>${e.before&&e.before.length>2?`<button class="small ghost" data-a="elrev" data-k="${esc(e.id)}">↺ Повернути як було</button>`:''}</li>`).join('')}</ul>`:'<p class="empty">Змін ще не записано. Кожне збереження розділу з’являтиметься тут, і його можна буде відкотити.</p>';}
+  else if(ADMP==='mods'){b=m5ModsAdmin();}
   else if(ADMP==='roles'){const r=window.__rolesOf?window.__rolesOf(JSON.parse(JSON.stringify(state))):{};const L=[['hetman','Гетьман (права адміністрації)'],['lands','Писарі (Землі, уділи, гравці)'],['dlands','Домініальний Писар'],['econ','Секретар Фінансів'],['decon','Секретар Фінансів АРБ'],['def','Секретар Оборони'],['interior','Секретар Внутрішніх Справ'],['dinterior','Секретар Внутрішніх Справ АРБ'],['foreign','Секретар Міжнародних Справ'],['court','Судді'],['prosecutor','Генеральний Прокурор'],['patriarch','Патріарх'],['cvk','ЦВК'],['culture','Прес-секретар (Секретар Культури)'],['chanc','Канцелярія УД (бачить Раду Конфедерації)']];
     b=`<p class="hint">Ролі рахуються самі з посад (бот оновлює їх у базі раз на 15 хвилин). Змінити людину на посаді — на сторінці «Влада».</p><div class="tblwrap"><table class="bud"><tbody>${L.map(([k,t])=>`<tr><th>${esc(t)}</th><td>${(r[k]||[]).map(e=>esc((plByEmail(e)||{}).name||e)).join(', ')||'<span class="hint">—</span>'}</td></tr>`).join('')}</tbody></table></div>`;}
   else if(ADMP==='season'){b=`<label class="fl">Що показувати<select id="season2" data-a="season2">${[['auto','Автоматично за календарем'],['au','🍂 Осінь'],['hw','🎃 Хелловін'],['xm','🎄 Зимові свята'],['sp','🌸 Весна'],['df','🛡 День захисників'],['ind','🇺🇦 День Незалежності'],['off','Вимкнути святкове оформлення']].map(([v,l])=>`<option value="${v}"${((g&&g.season==='on'?'hw':g&&g.season)||'auto')===v?' selected':''}>${l}</option>`).join('')}</select></label><p class="hint">Автоматично: 🍂 осінь 1.09–30.11 · 🛡 1 жовтня · 🎃 25.10–1.11 · 🎄 5.12 (з 6:00)–10.01 · 🌸 березень–травень · 🇺🇦 24 серпня. Зараз: <b>${esc(({au:'осінь',hw:'Хелловін',xm:'зимові свята',sp:'весна',df:'День захисників',ind:'День Незалежності'})[seasonNow()]||'без теми')}</b>.</p>${seasonNow()==='au'?`<p class="hint">🌧 Восени інколи (раз на 15–35 хв) на 2–3 хвилини йде дощ.</p><button class="small" data-a="rainnow">🌧 Показати дощ зараз</button>`:''}${musAdminHtml()}`;}
@@ -5610,7 +5678,7 @@ function inApp(){const u=navigator.userAgent||'';return /Telegram|FBAN|FBAV|Inst
 let MMORE=false,PD2={name:'',res:'Срібло',qty:''};
 function isMob(){try{return matchMedia('(max-width:760px)').matches;}catch(_){return false;}}
 function navVis(s){return s.kind!=='confed'||confAccess()||s.id===active;}
-function mobNav(){const top=state.sections.filter(s=>!s.tab&&navVis(s));const by=k=>top.find(s=>s.kind===k)||null;const ud=top.find(s=>s.id==='ud')||top.find(s=>!s.kind&&s.lands);
+function mobNav0(){const top=state.sections.filter(s=>!s.tab&&navVis(s));const by=k=>top.find(s=>s.kind===k)||null;const ud=top.find(s=>s.id==='ud')||top.find(s=>!s.kind&&s.lands);
   const MAINK=['home','power','laws','map','players'];let main=top.filter(s=>MAINK.includes(s.kind)).slice(0,5);if(main.length<4)main=top.slice(0,6);let rest=top.filter(s=>!main.includes(s));
   const ic=s=>NAV_ICONS[s.kind==='parliament'?'parl':s.kind==='units'?'army':s.id]||NAV_ICONS[s.id]||NAV_ICONS[s.kind]||'';
   const lab=s=>({home:'Головна',chat:'Чат',parliament:'Палата'})[s.kind]||s.navTop||s.nav||s.title;
@@ -5625,7 +5693,7 @@ function render(){const real=state;if(!editing)state=viewState();try{render0();}
 function syncHetAdmin(){if(!AUTH||AUTH.bot)return;let h=false;try{h=!!(state&&state.sections&&isHetman());}catch(_){}AUTH.admin=!!AUTH.base||h;}
 function render0(){syncHetAdmin();const cm0=document.getElementById('chmsgs');const cmS=cm0?{top:cm0.scrollTop,bot:cm0.scrollHeight-cm0.scrollTop-cm0.clientHeight<60}:null;const ae=document.activeElement;const fid=ae&&ae.id&&app.contains(ae)?ae.id:null;let s0=null,s1=null;try{s0=ae.selectionStart;s1=ae.selectionEnd;}catch(_){}
   const cfKeep=[...app.querySelectorAll('button[data-confirm="1"]')].map(b=>({a:b.dataset.a,k:b.dataset.k,id:b.dataset.id,c:b.dataset.c,t:b.textContent,cls:b.className,ts:+b.dataset.cft||Date.now()})).filter(x=>Date.now()-x.ts<10000);
-  renderInner();try{m3Mount();}catch(e){console.warn(e);}try{m4Post();}catch(e){console.warn(e);}if(cfKeep.length)try{cfKeep.forEach(x=>{const b=[...app.querySelectorAll('button[data-a="'+CSS.escape(x.a||'')+'"]')].find(y=>y.dataset.k===x.k&&y.dataset.id===x.id&&y.dataset.c===x.c);if(b){b.dataset.confirm='1';b.dataset.cft=String(x.ts);b.textContent=x.t;if(/\bcfm\b/.test(x.cls))b.classList.add('cfm');}});}catch(_){}
+  renderInner();try{m3Mount();}catch(e){console.warn(e);}try{m4Post();}catch(e){console.warn(e);}try{m5Post();}catch(e){console.warn(e);}if(cfKeep.length)try{cfKeep.forEach(x=>{const b=[...app.querySelectorAll('button[data-a="'+CSS.escape(x.a||'')+'"]')].find(y=>y.dataset.k===x.k&&y.dataset.id===x.id&&y.dataset.c===x.c);if(b){b.dataset.confirm='1';b.dataset.cft=String(x.ts);b.textContent=x.t;if(/\bcfm\b/.test(x.cls))b.classList.add('cfm');}});}catch(_){}
   document.documentElement.lang=LANG;if(LANG==='en')trTree(app);if(LANG!=='uk')try{autoTr(app);}catch(e){console.warn(e);}app.querySelectorAll('nav.toc,.subnav').forEach(nv=>{if(nv.scrollWidth>nv.clientWidth){const c=nv.querySelector('[aria-current]');if(c)nv.scrollLeft=Math.max(0,c.offsetLeft-nv.clientWidth/2+c.offsetWidth/2);}});
   if(fid){const el=document.getElementById(fid);if(el&&el!==document.activeElement){el.focus({preventScroll:true});try{if(s0!=null)el.setSelectionRange(s0,s1);}catch(_){}}}
   mapFit();hcLayout();try{hallAnim();}catch(_){}try{hwApply();}catch(_){}try{edCollapse();}catch(_){}{const ht=document.querySelector('.hcwrap:not(.editing)');if(ht&&ht.scrollWidth>ht.clientWidth+4)ht.scrollLeft=(ht.scrollWidth-ht.clientWidth)/2;}{const cm=document.getElementById('chmsgs');if(cm){const st=CHAT.stick||Date.now()<(CHAT.stickUntil||0)||!cmS||cmS.bot;
@@ -5643,7 +5711,7 @@ function renderInner(){chatMarkSeen();
   let bar='';
   if(editing) bar=`<button class="primary" data-a="save" ${busy?'disabled':''}>Зберегти</button><button class="ghost" data-a="cancel">Скасувати</button>`;
   else if(AUTH.admin) bar=`<button data-a="admp" data-k="log">⚙️ Адмін-панель</button><button class="ghost small" data-a="logout" title="${esc(AUTH.email)}">Вийти</button>`;
-  else if(AUTH.email) bar=`<span class="status">${plByEmail(AUTH.email)?plink(plByEmail(AUTH.email).name):esc(AUTH.email)}${myLand()?' · Представник: '+esc(myLand()):''}</span>${!plByEmail(AUTH.email)&&!AUTH.bot&&!(myApp()&&myApp().status==='open')&&!myConf()&&!(CONF.myApp&&CONF.myApp.status==='open')?'<button class="small primary" data-a="welgo" data-k="">🪪 Реєстрація</button>':''}<button class="ghost small" data-a="logout">Вийти</button>`;
+  else if(AUTH.email) bar=`<span class="status">${plByEmail(AUTH.email)?plink(plByEmail(AUTH.email).name):esc(myMember()?myMember().name:AUTH.email)}${myLand()?' · Представник: '+esc(myLand()):''}</span>${m5UdOn()&&!myMember()&&!plByEmail(AUTH.email)&&!AUTH.bot&&!(myApp()&&myApp().status==='open')&&!myConf()&&!(CONF.myApp&&CONF.myApp.status==='open')?'<button class="small primary" data-a="welgo" data-k="">🪪 Реєстрація</button>':''}<button class="ghost small" data-a="logout">Вийти</button>`;
   else if(AUTH.ready) bar=`${inApp()?'<span class="status err">Щоб увійти, відкрийте сайт у Chrome чи Safari (⋮ → «Відкрити в браузері»)</span>':''}<button class="small" data-a="login">Увійти через Google</button>`;
   const status=msg?`<span class="status${msgErr?' err':''}">${esc(msg)}</span>`:(editing&&dirty?'<span class="status">Є незбережені зміни</span>':'');
   const lands=state.sections.filter(x=>!x.kind&&x.lands&&x.id!=='army'&&!/курін|військ/i.test(x.title||'')).reduce((n,x)=>n+x.lands.length,0);
@@ -5651,10 +5719,10 @@ function renderInner(){chatMarkSeen();
   const chips=[['Земель',lands],['Представників',rp.filter(r=>r.name).length+' з '+rp.length],['Законів прийнято',passedN],['Оновлено',esc(state.updated),1]];
   if(AUTH.email&&!AUTH.bot){const me=meAny();const n=myTodo().length;bar=`<button type="button" class="cabbtn" data-a="cabm" data-k="1" title="Мій кабінет">${seatAv(me?me.name:'?','cabav')}${n?`<i class="nbadge">${n}</i>`:''}</button>`+bar;}
   window.__BAR=bar;const gerbImg=emblemSrc();
-  let html=`<header class="top top2"><div class="brand2">${gerbImg?`<img class="gerb" src="${esc(gerbImg)}" alt="Герб">`:'<span class="gerb none" aria-hidden="true"></span>'}<div><h1>Українська Держава${(()=>{const sn=seasonNow();return sn==='hw'?'<span class="hwpump" aria-hidden="true">🎃</span>':sn==='xm'?'<span class="xmtree" aria-hidden="true">🎄</span>':'';})()}</h1><a class="bsub" href="https://dragpolit.com" target="_blank" rel="noopener">Доповнення до гри DragPolit <span aria-hidden="true">↗</span></a></div></div><div class="bar">${srchTop()}${langTop()}${accSwitch()}${status}${dupSel()}${bar}</div></header>`;
+  let html=`<header class="top top2"><div class="brand2">${m5Logo()}<div><h1>${esc(CM_NAME)}${(()=>{const sn=seasonNow();return sn==='hw'?'<span class="hwpump" aria-hidden="true">🎃</span>':sn==='xm'?'<span class="xmtree" aria-hidden="true">🎄</span>':'';})()}</h1><a class="bsub" href="https://dragpolit.com" target="_blank" rel="noopener">Доповнення до гри DragPolit <span aria-hidden="true">↗</span></a></div></div><div class="bar">${srchTop()}${langTop()}${m5Btns()}${accSwitch()}${status}${dupSel()}${bar}</div></header>`;
   if(exileMode())html+=`<div class="emerg exile" role="status"><span class="emi" aria-hidden="true">🏛</span><div class="emt"><b>Уряд Української Держави у вигнанні</b><div class="hint">Жодна Земля зараз не під контролем держави. Гетьман, Канцелярія, Суд і Палата Земель (призначені депутати) продовжують роботу.</div></div></div>`;
   if(emActive()){const c=EMERG.cur;const end=new Date(+c.untilMs).toISOString();html+=`<div class="emerg" role="status"><span class="emi" aria-hidden="true">🚨</span><div class="emt"><b>Надзвичайний стан</b>${c.reason?`<div>${esc(c.reason)}</div>`:''}<div class="hint">Запроваджено ${c.source==='law'?'законом'+(c.law?' «'+esc(c.law)+'»':''):'указом Гетьмана'+(c.decreeNo?' №'+esc(c.decreeNo):'')} · до ${esc(fmtDT(end))} · залишилось ${esc(timeLeft(end))} · законопроєкти голосуються 12 годин</div></div>${isHetman()&&c.source!=='law'?`<button class="small" data-a="emend" ${busy?'disabled':''}>Припинити</button>`:''}</div>`;}
-  html+='<nav class="toc" aria-label="Розділи">'+state.sections.filter(s=>!s.tab&&navVis(s)).map(s=>`<button data-a="tab" data-id="${esc(s.id)}" ${s.id===active?'aria-current="page"':''}>${NAV_ICONS[s.id]?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${NAV_ICONS[s.id]}</svg>`:''}<span>${esc(s.navTop||s.nav||s.title)}</span>${s.kind==='chat'&&AUTH.email&&chatUnread()?`<i class="nbadge">${chatUnread()}</i>`:''}</button>`).join('')+'</nav>';
+  html+=m5Toc();
   html+=mobNav();
   const ED=editing;
   if(ED){const sc=EDIT_SCOPE.startsWith('sec:')?(state.sections.find(x=>x.id===EDIT_SCOPE.slice(4))||{}).title:({econ:'Економіка',lands:'Землі, Військо й Гравці',players:'Гравці',ranks:'Звання',church:'Церква'})[EDIT_SCOPE]||'Увесь сайт';html+=`<div class="edbar" role="region" aria-label="Редагування"><span>✏️ Редагування: <b>${esc(sc||'')}</b>${JSON.stringify(state)!==saved?' · <i>є незбережені зміни</i>':''}</span><button class="primary small" data-a="save" ${busy?'disabled':''}>Зберегти</button><button class="ghost small" data-a="cancel">Скасувати</button></div>`;}
@@ -5662,7 +5730,7 @@ function renderInner(){chatMarkSeen();
   if(ADMP&&!MODALH)MODALH=adminPanel();
   if(CABM&&!MODALH)MODALH=cabinetModal();
   if(SRCHM&&!MODALH)MODALH=srchModal();
-  if(!MODALH){const w=accAddModal()||welcomeHtml();if(w)MODALH=w;}
+  if(!MODALH){const w=accAddModal()||m5Reg()||(m5UdOn()?welcomeHtml():'');if(w)MODALH=w;}
   if(DPIMP&&!MODALH)MODALH=dpModal();
   if(swKids.length&&!(state.sections.find(s=>s.id===active)||{}).noSub){const par=state.sections.find(s=>s.id===active);html+='<div class="subnav" role="tablist" aria-label="Підрозділи">'+[par,...swKids].map(s=>{const lb=SUB_LABEL[s.kind]||s.nav||s.title;const ic=NAV_ICONS[s.kind==='parliament'?'parl':s.kind==='units'?'army':s.id]||NAV_ICONS[s.id];return `<button role="tab" data-a="sub" data-p="${esc(active)}" data-id="${esc(s.id)}" aria-selected="${s.id===swSel}"${s.id===swSel?' aria-current="page"':''}>${ic?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ic}</svg>`:''}<span>${esc(lb)}</span></button>`;}).join('')+'</div>';}
   state.sections.forEach((s,si)=>{
@@ -5713,7 +5781,7 @@ function renderInner(){chatMarkSeen();
   if(ZOOM&&!MODALH)MODALH=`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="zoomx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide imgzoom"><button class="small bmx" data-a="zoomx">✕ Закрити</button><img src="${esc(ZOOM)}" alt=""></div></div>`;
   html+=MODALH;MODALH='';
   html+=`<datalist id="plist">${players().map(p=>`<option value="${esc(p.name)}">`).join('')}</datalist>`;
-  html+=`<footer class="foot"><span>Українська Держава · доповнення до гри <a href="https://dragpolit.com" target="_blank" rel="noopener">DragPolit</a></span><span></span></footer>`;
+  html+=`<footer class="foot"><span>${esc(CM_NAME)} · доповнення до гри <a href="https://dragpolit.com" target="_blank" rel="noopener">DragPolit</a></span><span></span></footer>`;
   app.innerHTML=html;
 }
 function pickAvatar(cb){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const S=128,cv=document.createElement('canvas');cv.width=S;cv.height=S;const k=Math.max(S/im.width,S/im.height);const w=im.width*k,h=im.height*k;cv.getContext('2d').drawImage(im,(S-w)/2,(S-h)/2,w,h);cb(cv.toDataURL('image/jpeg',0.85));};im.src=r.result;};r.readAsDataURL(f);};inp.click();}
@@ -5742,6 +5810,7 @@ function docHtml(){
 app.addEventListener('input',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;
   if(confInput2(a,t))return;
+  if(m5Input(a,t))return;
   if(a==='m3own')return;
   if(mapEdInput(a,t))return;
   if(a==='hvr'){HV[t.dataset.id]=t.value;return;}
@@ -5914,6 +5983,7 @@ app.addEventListener('input',e=>{
 app.addEventListener('change',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;
   if(confChange2(a,t))return;
+  if(m5Change(a,t))return;
   if(m3Change(a,t))return;
   if(a==='maphd'){const v=+t.value;MAPHD=v>=Date.now()-6e5?null:v;render();return;}const sec=state.sections[+t.dataset.s];
   if(a==='dr'){sec.donations[+t.dataset.p].res=t.value;render();}
@@ -5966,6 +6036,7 @@ app.addEventListener('click',async e=>{
   if(await confAct2(a,b))return;
   if(await m3Click(a,b))return;
   if(await m4Click(a,b))return;
+  if(await m5Click(a,b))return;
   if(a==='confv'){CONFV=b.dataset.k;CFDEC='';render();{const t=document.querySelector('.cftabs');if(t){const r=t.getBoundingClientRect();if(r.top<0)t.scrollIntoView({block:'start'});const on=t.querySelector('.on');if(on)setTimeout(()=>{const tt=document.querySelector('.cftabs'),o2=tt&&tt.querySelector('.on');if(o2)tt.scrollLeft=Math.max(0,o2.offsetLeft-tt.clientWidth/2+o2.offsetWidth/2);},30);}}return;}
   if(a==='chv'){CHV=b.dataset.k;render();return;}
   if((a==='chtrsave'||a==='chtrdel')&&confManage()){const TR=Object.assign({},(CONF.main&&CONF.main.charterTr)||{});const l=CHTR.l;if(a==='chtrsave'){const ta=document.querySelector('textarea[data-a=chtrt]');const v=String(ta?ta.value:CHTR.text||'').trim();if(!v){msg='Вставте текст перекладу';msgErr=true;render();return;}TR[l]={text:v.slice(0,20000),ts:Date.now()};}else delete TR[l];busy=true;render();try{await window.FB.cset('confed/main',{charterTr:TR},true);CHTR.text='';CHTR.open=true;CHV=a==='chtrsave'?l:'';msg=a==='chtrsave'?'Переклад збережено':'Переклад видалено';msgErr=false;}catch(e){msg='Не вдалося: '+(e&&e.code||'');msgErr=true;}busy=false;render();return;}
@@ -7742,12 +7813,13 @@ function restructure(s){const S=s.sections;const by=k=>S.find(x=>x.kind===k);con
   if(chs){delete chs.tab;chs.navHide=true;}
   const top=[home,power||parl,laws,map,ranks,pl,conf,chs].filter(Boolean);const order=[...top,...S.filter(x=>!x.tab&&!top.includes(x))];const out=[];
   const KO=['parliament','court','economy','parties','elections','awards','church','calendar','culture','history'];const ko=c=>{const i=KO.indexOf(c.kind);return i<0?(c.kind?50:-1):i;};order.forEach(t=>{out.push(t);S.filter(c=>c.tab===t.id&&!out.includes(c)).sort((x,y)=>ko(x)-ko(y)).forEach(c=>out.push(c));S.filter(c=>c.tab&&!out.includes(c)&&out.some(o=>o.id===c.tab)).forEach(c=>out.push(c));});S.forEach(c=>{if(!out.includes(c))out.push(c);});s.sections=out;
-  try{m4Labels();}catch(_){}}
+  try{m4Labels();}catch(_){}try{m5Ensure(s);}catch(e){console.warn(e);}}
 function m4Labels(){if(typeof SUB_LABEL!=='undefined')Object.assign(SUB_LABEL,{power:'Канцелярія',map:'Карта',economy:'Економіка',players:'Гравці',ranks:'Звання',culture:'Культура',history:'Історія'});
   if(typeof NAV_ICONS!=='undefined'){NAV_ICONS.map=NAV_ICONS.map||NAV_ICONS.ud;NAV_ICONS.pl=NAV_ICONS.pl||NAV_ICONS.community;NAV_ICONS.ranks=NAV_ICONS.ranks||NAV_ICONS.army;}}
 function navVis(s){if(s.navHide||s.kind==='confed'||s.kind==='chat')return false;return true;}
 // ---------- рендер нових сторінок (лише перегляд; редагування — старі редактори) ----------
 function m4Sec(s,si){
+  if(s.kind==='feed')return m5Feed();
   if(s.kind==='power'&&!CAB)return m4Kanc();
   if(!s.kind&&s.lands&&s.id===((state.sections.find(x=>x.id==='ud')||{}).id))return m4Lands();
   if(s.kind==='ranks')return m4RanksTop()+ranksHtml(s,si);
@@ -7810,6 +7882,142 @@ async function m4Click(a,b){
 function m4RsBadge(rid){const rs=regStOf(rid);if(!rs)return '';return ` <span class="pill ${rs.st==='lost'?'rejected':'review'} m4rs">${rs.st==='lost'?'💔 втрачено':'⛓ окуповано'}${rs.by?' · '+esc(rs.by):''}</span>`;}
 function m4LandRsCnt(l){const out={occ:0,lost:0};try{if(!window.MAPGEO)return out;const res=mapResolve();mapRegs().forEach(r=>{const e=res[r.id];if(!e||e.l.id!==l.id)return;const rs=regStOf(r.id);if(rs)out[rs.st==='lost'?'lost':'occ']++;});}catch(_){}return out;}
 function m4LandRsSum(l){const c=m4LandRsCnt(l);return (c.occ?` <span class="pill review">⛓ окуповано уділів: ${c.occ}</span>`:'')+(c.lost?` <span class="pill rejected">💔 втрачено уділів: ${c.lost}</span>`:'');}
+
+// ===================== УКРАЇНСЬКЕ КОМ’ЮНІТІ DP (10.11.2026) =====================
+// Ядро: Головна (стрічка дописів із категоріями) · Гравці (кнопка вгорі) · Чат із групами (кнопка вгорі) · світла/темна тема.
+// Усе інше — модулі (поки «Україна» = колишня Українська Держава), адмін вмикає/вимикає їх в адмін-панелі.
+const CM_NAME='Українське ком’юніті DP';
+const CM_CATS=[['politics','Політика','#7d93b0'],['war','Війна','#b5776b'],['econ','Економіка','#7fa08a'],['fun','Жарти','#c2a66b'],['events','Події','#9a86a8'],['other','Інше','#8f8a84']];
+const CM_COUNTRIES=[['UA','🇺🇦','Україна'],['PL','🇵🇱','Польща'],['ES','🇪🇸','Іспанія'],['BY','🇧🇾','Білорусь'],['GE','🇬🇪','Грузія'],['KZ','🇰🇿','Казахстан'],['MD','🇲🇩','Молдова'],['RO','🇷🇴','Румунія'],['LT','🇱🇹','Литва'],['DE','🇩🇪','Німеччина'],['US','🇺🇸','США'],['GB','🇬🇧','Велика Британія'],['XX','🌍','Інша країна']];
+let FEED=[],MEMBERS=[],FEEDCAT='all',FDF={text:'',cat:'politics',img:''},FDOPEN=new Set(),FDC={},FDCT={},FDTR={},FDTRQ=new Set(),FDTRT=0,FDORIG=new Set(),PLAYM=false,M5PLQ='',M5REG={name:'',country:'UA',profile:''},M5SKIP=false,LASTUD='';
+let CMTHEME=(()=>{try{return localStorage.getItem('cm-theme')||'dark';}catch(_){return 'dark';}})();
+try{window.APP.feed=l=>{FEED=(l||[]).slice().sort((a,b)=>m5At(b)-m5At(a));renderSoon();};window.APP.members=l=>{MEMBERS=l||[];window.__m5memLoaded=true;renderSoon();};}catch(_){}
+function m5At(p){const v=vms(p&&p.at);return v||Date.now();}
+function m5Key(e){return String(e||'').toLowerCase().replace(/[^a-z0-9]/g,'_');}
+function myMember(){if(!AUTH.email)return null;const e=lc(AUTH.email);return MEMBERS.find(m=>lc(m.id)===e)||null;}
+function m5Name(){const p=plByEmail(AUTH.email);const m=myMember();return (m&&m.name)||(p&&p.name)||String(AUTH.email||'').split('@')[0];}
+function m5Flag(email){const m=MEMBERS.find(x=>lc(x.id)===lc(email));const c=m&&CM_COUNTRIES.find(x=>x[0]===m.country);if(c)return c[1];return plByEmail(email)?'🇺🇦':'';}
+function m5CanPost(){return !!(AUTH.email&&!AUTH.bot&&(myMember()||plByEmail(AUTH.email)||AUTH.admin));}
+// ---------- модулі ----------
+function m5Mods(){const M=state.modules||{};return {ud:Object.assign({on:true,name:'Україна',ic:'🇺🇦'},M.ud||{})};}
+function m5ModOf(s){if(!s)return '';if(s.kind==='feed'||s.kind==='chat')return '';return 'ud';}
+function m5Ensure(s){if(!s.sections.some(x=>x.kind==='feed'))s.sections.unshift({id:'feed',kind:'feed',title:'Головна',nav:'Головна'});
+  const f=s.sections.find(x=>x.kind==='feed');delete f.tab;f.navTop='Головна';s.sections=[f,...s.sections.filter(x=>x!==f)];
+  const home=s.sections.find(x=>x.kind==='home');if(home)home.navTop='Огляд';
+  s.modules=s.modules||{ud:{on:true,name:'Україна',ic:'🇺🇦'}};}
+function m5UdOn(){return m5Mods().ud.on!==false;}
+// ---------- навігація ----------
+function m5Toc(){const top=state.sections.filter(s=>!s.tab&&navVis(s));const cur=state.sections.find(s=>s.id===active);const inUd=m5ModOf(cur)==='ud';const M=m5Mods();
+  const core=top.filter(s=>!m5ModOf(s)&&s.kind!=='chat');const ud=top.filter(s=>m5ModOf(s)==='ud');
+  const btn=(s,lab)=>`<button data-a="tab" data-id="${esc(s.id)}" ${s.id===active?'aria-current="page"':''}>${NAV_ICONS[s.id]?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${NAV_ICONS[s.id]}</svg>`:''}<span>${esc(lab||s.navTop||s.nav||s.title)}</span></button>`;
+  let h='<nav class="toc m5main" aria-label="Розділи">'+core.map(s=>btn(s)).join('');
+  if(ud.length&&(M.ud.on!==false||AUTH.admin))h+=`<button data-a="m5mod" data-k="ud" ${inUd?'aria-current="page"':''}><span class="m5mi">${esc(M.ud.ic||'🇺🇦')}</span><span>${esc(M.ud.name||'Україна')}${M.ud.on===false?' · вимкнено':''}</span></button>`;
+  h+='</nav>';
+  if(inUd)h+=`<nav class="toc m5sub" aria-label="${esc(M.ud.name||'Україна')}">${ud.map(s=>btn(s)).join('')}</nav>`;
+  return h;}
+function m5Btns(){if(AUTH.bot)return '';const un=AUTH.email?chatUnread():0;
+  return `<button type="button" class="m5ib" data-a="m5pl" title="Гравці" aria-label="Гравці"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.5a5 5 0 0 1 5 5"/></svg></button><button type="button" class="m5ib" data-a="m5chat" title="Чат" aria-label="Чат"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12Z"/></svg>${un?`<i class="nbadge">${un>99?'99+':un}</i>`:''}</button><button type="button" class="m5ib" data-a="m5theme" title="${CMTHEME==='light'?'Темна тема':'Світла тема'}" aria-label="Змінити тему">${CMTHEME==='light'?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'}</button>`;}
+function m5Logo(){return `<span class="m5logo" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="20" r="6" fill="currentColor"/></svg></span>`;}
+function mobNav(){const cur=state.sections.find(s=>s.id===active);if(m5ModOf(cur)==='ud')return mobNav0();const top=state.sections.filter(s=>!s.tab&&navVis(s));const feed=top.find(s=>s.kind==='feed');const ud=top.find(s=>m5ModOf(s)==='ud');const M=m5Mods();const un=AUTH.email?chatUnread():0;const cs=sectionByKind('chat');
+  const it=(attr,ic,lab,on,badge)=>`<button ${attr}${on?' aria-current="page"':''}>${ic}<span>${esc(lab)}</span>${badge?`<i class="nbadge">${badge}</i>`:''}</button>`;
+  const svg=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  return `<nav class="mnav" aria-label="Розділи">${feed?it(`data-a="tab" data-id="${esc(feed.id)}"`,svg('<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>'),'Головна',active===feed.id&&!PLAYM):''}${ud&&(M.ud.on!==false||AUTH.admin)?it('data-a="m5mod" data-k="ud"',`<span class="m5mi">${esc(M.ud.ic||'🇺🇦')}</span>`,M.ud.name||'Україна',false):''}${it('data-a="m5pl"',svg('<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.5a5 5 0 0 1 5 5"/>'),'Гравці',PLAYM)}${cs?it('data-a="m5chat"',svg('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12Z"/>'),'Чат',active===cs.id,un):''}</nav>`;}
+// ---------- стрічка ----------
+function m5Cat(k){return CM_CATS.find(c=>c[0]===k)||CM_CATS[5];}
+function m5Feed(){const can=m5CanPost();const L=FEED.filter(p=>(!p.hidden||AUTH.admin||lc(p.by)===lc(AUTH.email))&&(FEEDCAT==='all'||p.cat===FEEDCAT));
+  let h='<div class="m5wrap"><div class="m5col">';
+  if(can)h+=`<div class="m5card m5comp"><div class="m5row">${seatAv(m5Name(),'m5av')}<textarea id="m5-text" data-a="m5txt" rows="${FDF.text?4:2}" maxlength="3000" placeholder="Що нового у вашій державі?">${esc(FDF.text)}</textarea></div>${FDF.img?`<div class="m5imgp"><img src="${esc(FDF.img)}" alt=""><button type="button" class="small ghost" data-a="m5imgx">✕ Прибрати фото</button></div>`:''}<div class="m5tools"><div class="m5chips">${CM_CATS.map(([k,l,c])=>`<button type="button" class="m5chip${FDF.cat===k?' on':''}" style="--c:${c}" data-a="m5cat" data-k="${k}">${l}</button>`).join('')}</div><label class="m5chip m5ph">🖼 Фото<input type="file" accept="image/*" data-a="m5img" hidden></label><button type="button" class="m5btn" data-a="m5post" ${busy?'disabled':''}>Опублікувати</button></div></div>`;
+  else if(!AUTH.email)h+=`<div class="m5card m5join"><b>Ласкаво просимо до ${esc(CM_NAME)}!</b><p class="hint">Тут гравці DragPolit діляться новинами своїх держав. Увійдіть, щоб публікувати й коментувати.</p><button type="button" class="m5btn" data-a="login">Увійти через Google</button></div>`;
+  else if(!AUTH.bot)h+=`<div class="m5card m5join"><b>Створіть профіль, щоб публікувати</b><p class="hint">Це займає пів хвилини і не потребує схвалення адміністрації.</p><button type="button" class="m5btn" data-a="m5reg">🪪 Створити профіль</button></div>`;
+  h+=`<div class="m5filter"><button type="button" class="m5chip${FEEDCAT==='all'?' on':''}" data-a="m5f" data-k="all">Усе</button>${CM_CATS.map(([k,l,c])=>`<button type="button" class="m5chip${FEEDCAT===k?' on':''}" style="--c:${c}" data-a="m5f" data-k="${k}">${l}</button>`).join('')}</div>`;
+  h+=L.length?L.map(m5PostHtml).join(''):`<div class="m5card"><p class="hint">${FEEDCAT==='all'?'Дописів ще немає — станьте першим!':'У цій категорії ще немає дописів.'}</p></div>`;
+  h+='</div><aside class="m5side">'+m5Events()+'</aside></div>';
+  if(PLAYM&&!MODALH)MODALH=m5Players();
+  return h;}
+function m5PostHtml(p){const c=m5Cat(p.cat);const me=m5Key(AUTH.email);const re=p.re||{};const cnt={};Object.values(re).forEach(v=>{if(v)cnt[v]=(cnt[v]||0)+1;});const mine=re[me]||'';const rep=p.rep||{};const nrep=Object.keys(rep).length;const own=lc(p.by)===lc(AUTH.email);
+  const t=m5Tr(p);const open=FDOPEN.has(p.id);
+  return `<article class="m5card m5post${p.hidden?' m5hid':''}"><header class="m5ph">${seatAv(p.name||'?','m5av')}<div><b>${esc(p.name||'')} ${esc(m5Flag(p.by))}</b><div class="hint">${esc(m5Ago(m5At(p)))}</div></div><span class="m5tag" style="--c:${c[2]}">${esc(c[1])}</span></header>
+    ${p.hidden?`<p class="hint">🙈 Допис приховано після скарг${AUTH.admin?' — бачать лише адміністрація й автор':''}.</p>`:''}<div class="m5txt" data-notr>${fmtMsg(t.text)}</div>${t.tr?`<button type="button" class="chtrb" data-a="m5orig" data-k="${esc(p.id)}" data-notr>${t.orig?'🌐 показати переклад':'🌐 перекладено'+(t.src?' ('+esc(langNm(t.src))+')':'')+' · оригінал'}</button>`:''}
+    ${p.img?`<img class="m5pimg" src="${esc(p.img)}" alt="" loading="lazy">`:''}
+    <footer class="m5acts">${['👍','😂','😮','😢'].map(e=>`<button type="button" class="m5re${mine===e?' on':''}" data-a="m5re" data-k="${esc(p.id)}" data-e="${e}" ${AUTH.email&&m5CanPost()?'':'disabled'}>${e}${cnt[e]?' '+cnt[e]:''}</button>`).join('')}<button type="button" class="m5re" data-a="m5cm" data-k="${esc(p.id)}">💬 ${+p.nc||0}</button><span class="m5sp"></span>${own||AUTH.admin?`<button type="button" class="m5lnk" data-a="m5del" data-k="${esc(p.id)}">Видалити</button>`:''}${AUTH.admin&&p.hidden?`<button type="button" class="m5lnk" data-a="m5unhide" data-k="${esc(p.id)}">Повернути</button>`:''}${!own&&AUTH.email&&m5CanPost()&&!p.hidden?`<button type="button" class="m5lnk" data-a="m5rep" data-k="${esc(p.id)}" ${rep[me]?'disabled':''}>${rep[me]?'Скаргу надіслано':'Поскаржитися'}${nrep?' · '+nrep:''}</button>`:''}</footer>
+    ${open?m5Cmts(p):''}</article>`;}
+function m5Cmts(p){const L=FDC[p.id];let h='<div class="m5cmts">';if(!L)h+='<p class="hint">Завантажую коментарі…</p>';else h+=L.length?L.map(c=>`<div class="m5cmt">${seatAv(c.name||'?','m5avs')}<div><b>${esc(c.name||'')}</b> <span class="hint">${esc(m5Ago(vms(c.at)||Date.now()))}</span><div>${fmtMsg(c.text||'')}</div></div>${lc(c.by)===lc(AUTH.email)||AUTH.admin?`<button type="button" class="m5lnk" data-a="m5cdel" data-k="${esc(p.id)}" data-c="${esc(c.id)}">✕</button>`:''}</div>`).join(''):'<p class="hint">Коментарів ще немає.</p>';
+  if(m5CanPost())h+=`<div class="m5crow"><input type="text" id="m5c-${esc(p.id)}" data-a="m5ct" data-k="${esc(p.id)}" maxlength="1000" value="${esc(FDCT[p.id]||'')}" placeholder="Написати коментар…"><button type="button" class="m5btn sm" data-a="m5csend" data-k="${esc(p.id)}">Надіслати</button></div>`;
+  return h+'</div>';}
+function m5Ago(t){const d=(Date.now()-t)/1000;if(d<60)return 'щойно';if(d<3600)return Math.floor(d/60)+' хв тому';if(d<86400)return Math.floor(d/3600)+' год тому';if(d<172800)return 'вчора';return fmtDT(new Date(t).toISOString());}
+// автопереклад дописів мовою сайту
+function m5Tr(p){const tl=LANG||'uk';const k=p.id+'|'+tl;const r=FDTR[k];if(!r){if(p.text){FDTRQ.add(p.id);clearTimeout(FDTRT);FDTRT=setTimeout(m5TrRun,80);}return {text:p.text||''};}
+  if(r.same||!r.t)return {text:p.text||''};if(FDORIG.has(p.id))return {text:p.text||'',tr:true,orig:true};return {text:r.t,tr:true,src:r.src};}
+async function m5TrRun(){const tl=LANG||'uk';const ps=FEED.filter(p=>FDTRQ.has(p.id)&&!FDTR[p.id+'|'+tl]).slice(0,30);FDTRQ.clear();if(!ps.length)return;let got=0;
+  const q=ps.slice();const work=async()=>{while(q.length){const p=q.shift();const k=p.id+'|'+tl;try{const r=await chTrOne(String(p.text).slice(0,3000),tl);const same=!r.t||r.src===tl||(tl==='uk'&&r.src==='ru'&&false)||r.t.replace(/\s+/g,' ').trim()===String(p.text).replace(/\s+/g,' ').trim();FDTR[k]={t:same?'':r.t,src:r.src,same};got++;}catch(e){FDTR[k]={same:true};}}};
+  await Promise.all([work(),work(),work()]);if(got)renderSoon();}
+// найближчі події (свята, вибори, голосування з календаря)
+function m5Events(){let out=[];try{const now=new Date();for(let k=0;k<2;k++){const d0=new Date(now.getFullYear(),now.getMonth()+k,1);const ev=calEvents(d0.getFullYear(),d0.getMonth());Object.entries(ev).forEach(([day,arr])=>{const dt=new Date(d0.getFullYear(),d0.getMonth(),+day);if(dt<new Date(now.getFullYear(),now.getMonth(),now.getDate()))return;arr.forEach(e=>out.push({dt,e}));});}}catch(e){console.warn(e);}
+  out.sort((a,b)=>a.dt-b.dt);out=out.slice(0,6);const MN=['СІЧ','ЛЮТ','БЕР','КВІ','ТРА','ЧЕР','ЛИП','СЕР','ВЕР','ЖОВ','ЛИС','ГРУ'];
+  return `<div class="m5card"><h3>📅 Найближчі події</h3>${out.length?out.map(({dt,e})=>`<div class="m5ev"><div class="m5d">${dt.getDate()}<small>${MN[dt.getMonth()]}</small></div><div><b>${esc(e.ic||'')} ${esc(e.tx||'')}</b>${e.sub?`<div class="hint">${esc(e.sub)}</div>`:''}</div></div>`).join(''):'<p class="hint">Найближчим часом подій немає.</p>'}</div>`;}
+// ---------- гравці ----------
+function m5AllPlayers(){const out=[];const seen=new Set();const ud=m5UdOn()?players():[];
+  MEMBERS.forEach(m=>{const e=lc(m.id);seen.add(e);const p=ud.find(x=>lc(x.email)===e);const c=CM_COUNTRIES.find(x=>x[0]===m.country);out.push({name:m.name||(p&&p.name)||e.split('@')[0],flag:c?c[1]:'',country:c?c[2]:'',ud:!!p,udName:p&&p.name,ok:m.verified===true,email:e,profile:m.profile});});
+  ud.forEach(p=>{const e=lc(p.email);if(e&&seen.has(e))return;if(e)seen.add(e);out.push({name:p.name,flag:'🇺🇦',country:'Україна',ud:true,udName:p.name,ok:true,email:e});});
+  return out.sort((a,b)=>String(a.name).localeCompare(String(b.name),'uk'));}
+function m5Players(){const q=M5PLQ.trim().toLowerCase();const L=m5AllPlayers().filter(p=>!q||String(p.name).toLowerCase().includes(q)||String(p.country).toLowerCase().includes(q));const M=m5Mods();
+  return `<div class="bmodal m5pm" role="dialog" aria-modal="true" aria-label="Гравці"><button type="button" class="bmback" data-a="m5pl" data-k="0" tabindex="-1" aria-label="Закрити"></button><div class="bmbox"><button class="small bmx" data-a="m5pl" data-k="0">✕ Закрити</button><h3>👥 Гравці ком’юніті <small>${m5AllPlayers().length}</small></h3><input type="search" id="m5-plq" data-a="m5plq" value="${esc(M5PLQ)}" placeholder="🔍 Пошук гравця чи країни" autocomplete="off">
+    <div class="m5pl">${L.map(p=>`<div class="m5pli">${seatAv(p.udName||p.name,'m5av')}<div class="m5pln"><b>${esc(p.name)} ${esc(p.flag)}</b><div>${p.ud&&M.ud.on!==false?`<span class="m5bd">${esc(M.ud.ic||'🇺🇦')} ${esc(M.ud.name||'Україна')}</span>`:''}${p.ok?'<span class="m5bd ok">✓ профіль підтверджено</span>':''}${p.country&&!p.ud?`<span class="m5bd">${esc(p.country)}</span>`:''}</div></div>${p.ud&&p.udName?`<button type="button" class="m5lnk" data-a="dos" data-n="${esc(p.udName)}">Профіль</button>`:p.profile?`<a class="m5lnk" href="${esc(/^https?:/.test(p.profile)?p.profile:'https://dragpolit.com/profile/'+String(p.profile).replace(/\D/g,''))}" target="_blank" rel="noopener">DragPolit ↗</a>`:''}</div>`).join('')||'<p class="hint">Нікого не знайдено.</p>'}</div></div></div>`;}
+// ---------- реєстрація без адміністрації ----------
+function m5Reg(){if(!AUTH.email||AUTH.bot||M5SKIP||myMember()||plByEmail(AUTH.email)||!window.__m5memLoaded)return '';
+  return `<div class="bmodal" role="dialog" aria-modal="true" aria-label="Профіль ком’юніті"><button type="button" class="bmback" data-a="m5regx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m5reg"><button class="small bmx" data-a="m5regx">✕ Пізніше</button><h3>🪪 Профіль ${esc(CM_NAME)}</h3><p class="hint">Профіль створюється одразу, без схвалення. Бот сам перевірить ваш профіль у грі й поставить позначку «✓ підтверджено».</p>
+    <label class="fl">Нік у грі<input type="text" id="m5r-name" maxlength="40" value="${esc(M5REG.name)}" placeholder="Як вас звати в DragPolit"></label>
+    <label class="fl">Країна<select id="m5r-country">${CM_COUNTRIES.map(([k,f,n])=>`<option value="${k}"${M5REG.country===k?' selected':''}>${f} ${esc(n)}</option>`).join('')}</select></label>
+    <label class="fl">Посилання на профіль DragPolit (необов’язково)<input type="text" id="m5r-prof" maxlength="200" value="${esc(M5REG.profile)}" placeholder="https://dragpolit.com/profile/12345"></label>
+    <div class="landtools"><button type="button" class="m5btn" data-a="m5regsave" ${busy?'disabled':''}>Створити профіль</button></div></div></div>`;}
+// ---------- адмін-панель: модулі й групи чату ----------
+function m5Groups(){const G=state.chatGroups||[['cg_war','⚔️','Війна','обговорення війн і фронтів'],['cg_trade','💰','Торгівля','купівля й продаж ресурсів'],['cg_flood','😂','Флуд','про все й ні про що']];return G;}
+function m5ModsAdmin(){const M=m5Mods();const G=m5Groups();
+  return `<div class="block"><h3>🧩 Модулі</h3><p class="hint">Вимкнений модуль зникає з меню для всіх, крім адміністрації. Дані не видаляються — увімкніть, і все повернеться.</p>
+    <div class="m5mod"><span class="m5mi big">${esc(M.ud.ic)}</span><div style="flex:1"><b>${esc(M.ud.name)}</b><div class="hint">усі сторінки колишньої Української Держави</div><div class="erow"><input type="text" id="m5m-ud-name" maxlength="40" value="${esc(M.ud.name)}" placeholder="Назва модуля"><input type="text" id="m5m-ud-ic" maxlength="4" value="${esc(M.ud.ic)}" style="max-width:70px" aria-label="Значок"></div></div><button type="button" class="small ${M.ud.on!==false?'primary':'ghost'}" data-a="m5modtg" data-k="ud">${M.ud.on!==false?'✅ Увімкнено':'⛔ Вимкнено'}</button></div>
+    <div class="landtools"><button type="button" class="small" data-a="m5modsave">Зберегти назву</button></div></div>
+    <div class="block"><h3>💬 Групи чату ком’юніті</h3><p class="hint">«🌐 Загальний» є завжди. Тут — додаткові групи, доступні всім зареєстрованим.</p>${G.map((g,i)=>`<div class="m5grow"><input type="text" id="m5g-ic-${i}" value="${esc(g[1])}" maxlength="4" style="max-width:64px" aria-label="Значок"><input type="text" id="m5g-n-${i}" value="${esc(g[2])}" maxlength="30" placeholder="Назва"><input type="text" id="m5g-d-${i}" value="${esc(g[3]||'')}" maxlength="80" placeholder="Опис"><button type="button" class="small ghost" data-a="m5gdel" data-k="${i}">✕</button></div>`).join('')}<div class="landtools"><button type="button" class="small ghost" data-a="m5gadd">➕ Група</button><button type="button" class="small primary" data-a="m5gsave">Зберегти групи</button></div></div>`;}
+// ---------- дії ----------
+async function m5Click(a,b){const k=b.dataset.k;const run=async(fn,ok)=>{busy=true;render();try{await fn();if(ok){msg=ok;msgErr=false;}}catch(e){console.warn(e);msg='Не вдалося'+(e&&e.code==='permission-denied'?': немає права':'');msgErr=true;}busy=false;render();};
+  if(a==='m5theme'){CMTHEME=CMTHEME==='light'?'dark':'light';try{localStorage.setItem('cm-theme',CMTHEME);}catch(_){}render();return true;}
+  if(a==='m5pl'){PLAYM=k!=='0'&&!PLAYM;if(PLAYM){const f=sectionByKind('feed');if(f&&m5ModOf(state.sections.find(s=>s.id===active))){}}render();if(PLAYM)setTimeout(()=>{const i=document.getElementById('m5-plq');if(i&&innerWidth>760)i.focus();},30);return true;}
+  if(a==='m5chat'){const c=sectionByKind('chat');if(c){PLAYM=false;active=c.id;try{history.replaceState(null,'','#'+c.id);}catch(_){}render();window.scrollTo(0,0);}return true;}
+  if(a==='m5mod'){const top=state.sections.filter(s=>!s.tab&&navVis(s)&&m5ModOf(s)==='ud');const t=top.find(s=>s.id===LASTUD)||top[0];if(t){active=t.id;PLAYM=false;try{history.replaceState(null,'','#'+t.id);}catch(_){}render();window.scrollTo(0,0);}return true;}
+  if(a==='m5cat'){FDF.cat=k;render();return true;}
+  if(a==='m5f'){FEEDCAT=k;render();return true;}
+  if(a==='m5imgx'){FDF.img='';render();return true;}
+  if(a==='m5orig'){FDORIG.has(k)?FDORIG.delete(k):FDORIG.add(k);render();return true;}
+  if(a==='m5reg'){M5SKIP=false;render();return true;}
+  if(a==='m5regx'){M5SKIP=true;render();return true;}
+  if(a==='m5regsave'){const v=id=>((document.getElementById(id)||{}).value||'').trim();M5REG={name:v('m5r-name'),country:v('m5r-country')||'UA',profile:v('m5r-prof')};if(M5REG.name.length<2){msg='Вкажіть нік у грі';msgErr=true;render();return true;}
+    await run(()=>window.FB.cmMember({name:M5REG.name.slice(0,40),country:M5REG.country,profile:M5REG.profile.slice(0,200),since:Date.now()}),'Профіль створено — ласкаво просимо!');return true;}
+  if(a==='m5post'){if(!m5CanPost())return true;const t=(document.getElementById('m5-text')||{}).value||FDF.text;const text=String(t||'').trim();if(!text&&!FDF.img){msg='Напишіть щось';msgErr=true;render();return true;}
+    const mm=myMember();const mine=FEED.filter(p=>lc(p.by)===lc(AUTH.email)).map(m5At);const last=mine.length?Math.max(...mine):0;if(mm&&!plByEmail(AUTH.email)&&!AUTH.admin&&Date.now()-(+mm.since||0)<864e5&&Date.now()-last<6e5){msg='Нові профілі можуть публікувати раз на 10 хвилин — спробуйте трохи згодом';msgErr=true;render();return true;}
+    const d={text:text.slice(0,3000),cat:FDF.cat,name:m5Name().slice(0,40)};if(FDF.img)d.img=FDF.img;
+    await run(()=>window.FB.cmPost(d),'Опубліковано');if(!msgErr){FDF={text:'',cat:FDF.cat,img:''};}return true;}
+  if(a==='m5re'){const p=FEED.find(x=>x.id===k);if(!p)return true;const me=m5Key(AUTH.email);const cur=(p.re||{})[me]||'';const v=cur===b.dataset.e?'':b.dataset.e;p.re=Object.assign({},p.re,{[me]:v});render();try{await window.FB.cmReact(k,me,v);}catch(e){console.warn(e);msg='Не вдалося';msgErr=true;render();}return true;}
+  if(a==='m5rep'){const p=FEED.find(x=>x.id===k);if(!p)return true;const me=m5Key(AUTH.email);const n=Object.keys(p.rep||{}).filter(x=>x!==me).length+1;await run(()=>window.FB.cmReport(k,me,n>=3),n>=3?'Допис приховано до перевірки':'Скаргу надіслано');return true;}
+  if(a==='m5del'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно видалити?';return true;}await run(()=>window.FB.cmDel(k),'Видалено');return true;}
+  if(a==='m5unhide'){await run(()=>window.FB.cmUnhide(k),'Допис повернуто');return true;}
+  if(a==='m5cm'){if(FDOPEN.has(k))FDOPEN.delete(k);else{FDOPEN.add(k);if(!FDC[k])window.FB.cmCmts(k).then(l=>{FDC[k]=l;renderSoon();}).catch(e=>{console.warn(e);FDC[k]=[];renderSoon();});}render();return true;}
+  if(a==='m5csend'){const t=String(FDCT[k]||'').trim();const p=FEED.find(x=>x.id===k);if(!t||!p)return true;await run(async()=>{await window.FB.cmCmt(k,{text:t.slice(0,1000),name:m5Name().slice(0,40)},(+p.nc||0)+1);FDC[k]=await window.FB.cmCmts(k);},'');FDCT[k]='';return true;}
+  if(a==='m5cdel'){const p=FEED.find(x=>x.id===k);await run(async()=>{await window.FB.cmCdel(k,b.dataset.c,Math.max(0,(+(p&&p.nc)||1)-1));FDC[k]=await window.FB.cmCmts(k);},'');return true;}
+  if(AUTH.admin){
+    if(a==='m5modtg'){state.modules=state.modules||{};const M=m5Mods();state.modules.ud=Object.assign({},M.ud,{on:M.ud.on===false});await run(async()=>{await window.FB.save(state);saved=JSON.stringify(state);},state.modules.ud.on?'Модуль увімкнено':'Модуль вимкнено');return true;}
+    if(a==='m5modsave'){const v=id=>((document.getElementById(id)||{}).value||'').trim();const M=m5Mods();state.modules=state.modules||{};state.modules.ud=Object.assign({},M.ud,{name:v('m5m-ud-name')||'Україна',ic:v('m5m-ud-ic')||'🇺🇦'});await run(async()=>{await window.FB.save(state);saved=JSON.stringify(state);},'Збережено');return true;}
+    if(a==='m5gadd'||a==='m5gdel'||a==='m5gsave'){const G=m5Groups().map((g,i)=>[g[0],((document.getElementById('m5g-ic-'+i)||{}).value||g[1]).trim(),((document.getElementById('m5g-n-'+i)||{}).value||g[2]).trim(),((document.getElementById('m5g-d-'+i)||{}).value||g[3]||'').trim()]);
+      if(a==='m5gadd')G.push(['cg_'+Date.now().toString(36),'💬','Нова група','']);if(a==='m5gdel')G.splice(+k,1);state.chatGroups=G.filter(g=>g[2]);
+      if(a==='m5gsave')await run(async()=>{await window.FB.save(state);saved=JSON.stringify(state);},'Групи збережено');else render();return true;}
+  }
+  return false;}
+function m5Input(a,t){if(a==='m5txt'){FDF.text=t.value;return true;}if(a==='m5ct'){FDCT[t.dataset.k]=t.value;return true;}if(a==='m5plq'){M5PLQ=t.value;const st=t.selectionStart;render();const i=document.getElementById('m5-plq');if(i){i.focus();try{i.setSelectionRange(st,st);}catch(_){}}return true;}if(a==='m5img')return true;return false;}
+function m5Change(a,t){if(a==='m5img'){const f=t.files&&t.files[0];t.value='';imgToData(f,1000,d=>{if(!d){msg='Потрібне зображення';msgErr=true;}else FDF.img=d;render();});return true;}return false;}
+// ---------- після рендера: тема, пам’ять модуля ----------
+function m4Post(){const f=document.getElementById('m4chat');if(f)f.remove();}
+function m5Post(){const cur=state.sections.find(s=>s.id===active);const inUd=m5ModOf(cur)==='ud';if(inUd)LASTUD=active;const b=document.body;b.classList.toggle('cm',!inUd);b.classList.toggle('cml',!inUd&&CMTHEME==='light');b.classList.toggle('cmd',!inUd&&CMTHEME!=='light');
+  if(!m5UdOn()&&inUd&&!AUTH.admin&&!AUTH.bot){const f=sectionByKind('feed');if(f){active=f.id;renderSoon();}}}
+
+function navVis(s){if(s.navHide||s.kind==='confed'||s.kind==='chat')return false;if(m5ModOf(s)==='ud'&&!m5UdOn()&&!AUTH.admin)return false;return true;}
 
 })();
 </script>
@@ -8165,6 +8373,8 @@ async function revokeNews(id, r){ await updateDoc(doc(db, "news", id), { revoked
 
 // live updates: new bills, votes, decisions and edits appear without reloading the page
 function watch(){
+  onSnapshot(query(collection(db, "posts"), orderBy("at", "desc"), limit(150)), snap => window.APP.feed && window.APP.feed(listFrom(snap)), e => console.warn(e));
+  onSnapshot(collection(db, "members"), snap => window.APP.members && window.APP.members(listFrom(snap)), e => console.warn(e));
   onSnapshot(collection(db, "proposals"), snap => window.APP.props(listFrom(snap)), e => console.warn(e));
   syncBallots((window.APP_BALLOTIDS && window.APP_BALLOTIDS()) || []);
   onSnapshot(collection(db, "signatures"), snap => window.APP.sigs(sigsFrom(snap)), e => console.warn(e));
@@ -8210,7 +8420,17 @@ function watch(){
   part("ranks", j => { RANKS_JSON = j; });
   part("church", j => { CHURCH_JSON = j; });
 }
+async function cmMember(d){ await setDoc(doc(db, "members", myMail()), d, { merge: true }); }
+async function cmPost(d){ const id = "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); await setDoc(doc(db, "posts", id), { ...d, by: myMail(), at: serverTimestamp(), re: {}, rep: {}, hidden: false, nc: 0 }); }
+async function cmReact(id, key, v){ await updateDoc(doc(db, "posts", id), { ["re." + key]: v }); }
+async function cmReport(id, key, hide){ const u = { ["rep." + key]: true }; if (hide) u.hidden = true; await updateDoc(doc(db, "posts", id), u); }
+async function cmDel(id){ await deleteDoc(doc(db, "posts", id)); }
+async function cmUnhide(id){ await updateDoc(doc(db, "posts", id), { hidden: false, rep: {} }); }
+async function cmCmts(id){ const s = await getDocs(collection(db, "posts", id, "cmts")); return s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => ((a.at && a.at.seconds) || 0) - ((b.at && b.at.seconds) || 0)); }
+async function cmCmt(id, d, nc){ const cid = "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); await setDoc(doc(db, "posts", id, "cmts", cid), { ...d, by: myMail(), at: serverTimestamp() }); await updateDoc(doc(db, "posts", id), { nc }); }
+async function cmCdel(id, cid, nc){ await deleteDoc(doc(db, "posts", id, "cmts", cid)); try { await updateDoc(doc(db, "posts", id), { nc }); } catch (e) {} }
 window.FB = {
+  cmMember, cmPost, cmReact, cmReport, cmDel, cmUnhide, cmCmts, cmCmt, cmCdel,
   save, saveEcon, saveLands, savePlayers, syncAccess, depSet, depDel, loadVotes, loadProposals, vote, ovote, sign, propose, delProposal,
   postNews, delNews, giveAward, revokeAward, delAward,
   postComment, delComment, createPetition, signPetition, delPetition, petitionToBill, fileCase, decideCase, delCase, revokeNews, updCase, postNote, delNote,
