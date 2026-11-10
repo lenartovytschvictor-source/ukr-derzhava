@@ -127,6 +127,20 @@ async function checkProfiles() {
     const norm = s => String(s || "").toLowerCase().replace(/[^a-zа-яіїєґ0-9]+/gi, "");
     await d.ref.update({ check: { ok, gameName: gameName.slice(0, 80), match: gameName ? norm(gameName).includes(norm(a.name)) || norm(a.name).includes(norm(gameName)) : null, at: Date.now() } }); n++;
   }
+  // профілі учасників ком'юніті: бот ставить позначку ✔ (verified), якщо профіль DragPolit існує
+  const mq = await db.collection("members").get();
+  for (const d of mq.docs) {
+    const a = d.data(); if (a.check || !a.profile) continue;
+    const m = /(\d{2,})/.exec(String(a.profile)); if (!m) { await d.ref.update({ check: { ok: false, at: Date.now() }, verified: false }); continue; }
+    let ok = false, gameName = "";
+    try {
+      const r = await fetch("https://dragpolit.com/profile/" + m[1], { headers: { "user-agent": "Mozilla/5.0 UkrDerzhavaBot" }, redirect: "follow" });
+      if (r.ok) { const html = await r.text(); const t = /<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)/i.exec(html) || /<title>([^<]+)<\/title>/i.exec(html); gameName = t ? t[1].replace(/\s*[|–—-]\s*DragPolit.*$/i, "").trim() : ""; ok = r.ok && !/not found|404|не знайдено/i.test(html.slice(0, 3000)); }
+    } catch (e) { console.log("Перевірка учасника:", e.message); continue; }
+    const norm = s => String(s || "").toLowerCase().replace(/[^a-zа-яіїєґ0-9]+/gi, "");
+    const match = gameName ? norm(gameName).includes(norm(a.name)) || norm(a.name).includes(norm(gameName)) : null;
+    await d.ref.update({ check: { ok, gameName: gameName.slice(0, 80), match, at: Date.now() }, verified: !!ok }); n++;
+  }
   if (n) console.log(`Перевірено профілів: ${n}`);
 }
 
