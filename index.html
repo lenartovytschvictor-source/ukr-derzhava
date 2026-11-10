@@ -2132,6 +2132,8 @@ body.cm .m6o .m8tbl th{background:var(--bg2);color:var(--muted)}body.cm .m6o .m8
 .m6book{justify-content:center}
 .m6book .m6pg,.m8meas{min-height:0!important}
 .m6bm .bmbox.m6rd{width:min(980px,94vw);max-width:none!important;box-sizing:border-box}
+.m8trb{all:unset;cursor:pointer;align-self:flex-start;margin-top:8px;font:600 12.5px Inter,system-ui,sans-serif;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.18);color:inherit;border:1px solid rgba(255,255,255,.35)}
+.m8trb:hover{background:rgba(255,255,255,.28)}.m8trb.busy{cursor:default;opacity:.85}
 </style>
 
 </head><body>
@@ -8700,7 +8702,7 @@ function m6Lib(){const can=(m6OrdIn()||AUTH.admin)&&!AUTH.bot;const all=BOOKS;co
   h+=`<div class="m8gt" role="tablist"><button type="button" class="m5chip${!LIBG?' on':''}" data-a="m8g" data-k="">Усі <small>${all.length}</small></button>${GENRES.map(g=>`<span class="m8gw"><button type="button" class="m5chip${LIBG===g.id?' on':''}" data-a="m8g" data-k="${esc(g.id)}">${esc(g.name)} <small>${cnt(g.id)}</small></button>${m6CanOrd()&&LIBG===g.id?`<button type="button" class="m5lnk m8gx" data-a="m8gdel" data-k="${esc(g.id)}" title="Прибрати жанр">✕</button>`:''}</span>`).join('')}${none&&GENRES.length?`<button type="button" class="m5chip${LIBG==='_none'?' on':''}" data-a="m8g" data-k="_none">Без жанру <small>${none}</small></button>`:''}${can?(GNEW?`<span class="m8gn"><input type="text" id="m8-gn" maxlength="30" placeholder="Новий жанр"><button type="button" class="m5btn sm" data-a="m8gadd">Додати</button><button type="button" class="m5lnk" data-a="m8gnx">✕</button></span>`:'<button type="button" class="m5chip m8gplus" data-a="m8gnew">＋ Жанр</button>'):''}</div>`;
   const W=Math.min(1060,Math.max(300,(innerWidth||1100)-60))-40-(innerWidth>760?100:70);const rows=[];let row=[],w=0;B.forEach(b=>{const bw=m6BookW(+b.np||1)+3;if(w+bw>W&&row.length){rows.push(row);row=[];w=0;}row.push(b);w+=bw;});if(row.length)rows.push(row);
   const PER=3;const pages=Math.max(1,Math.ceil(rows.length/PER));if(SHP>=pages)SHP=pages-1;if(SHP<0)SHP=0;const vis=rows.slice(SHP*PER,SHP*PER+PER);while(vis.length<2)vis.push([]);
-  h+=`<div class="m8casew">${pages>1?`<button type="button" class="m6flip l" data-a="m8sp" data-k="-1" ${SHP<=0?'disabled':''} aria-label="Попередні полиці">‹</button>`:''}<div class="m6case">${vis.map(r=>`<div class="m6shelf">${r.map(b=>{const c=/^#[0-9a-f]{6}$/i.test(b.color||'')?b.color:'#3a3a3a';const hh=180+m6Hash(b.id)%56;return `<button type="button" class="m6bk" style="--bc:${c};--bi:${m6Ink(c)};width:${m6BookW(+b.np||1)}px;height:${hh}px" data-a="m6bopen" data-k="${esc(b.id)}" title="${esc(b.title)}${b.auth?' — '+esc(b.auth):''} · ${+b.np||1} с."><span>${esc(b.title)}</span><i>${+b.np||1}</i></button>`;}).join('')}</div>`).join('')}</div>${pages>1?`<button type="button" class="m6flip r" data-a="m8sp" data-k="1" ${SHP>=pages-1?'disabled':''} aria-label="Наступні полиці">›</button>`:''}</div>`;
+  h+=`<div class="m8casew">${pages>1?`<button type="button" class="m6flip l" data-a="m8sp" data-k="-1" ${SHP<=0?'disabled':''} aria-label="Попередні полиці">‹</button>`:''}<div class="m6case">${vis.map(r=>`<div class="m6shelf">${r.map(b=>{const c=/^#[0-9a-f]{6}$/i.test(b.color||'')?b.color:'#3a3a3a';const hh=180+m6Hash(b.id)%56;return `<button type="button" class="m6bk" style="--bc:${c};--bi:${m6Ink(c)};width:${m6BookW(+b.np||1)}px;height:${hh}px" data-a="m6bopen" data-k="${esc(b.id)}" title="${esc(b.title)}${b.auth?' — '+esc(b.auth):''} · ${+b.np||1} с."><span data-notr>${esc(b.title)}</span><i>${+b.np||1}</i></button>`;}).join('')}</div>`).join('')}</div>${pages>1?`<button type="button" class="m6flip r" data-a="m8sp" data-k="1" ${SHP>=pages-1?'disabled':''} aria-label="Наступні полиці">›</button>`:''}</div>`;
   if(pages>1)h+=`<p class="hint m8sph">Полиці ${SHP*PER+1}–${Math.min(rows.length,SHP*PER+PER)} з ${rows.length}</p>`;
   if(!B.length)h+=`<p class="hint m6empty">${LIBG?'У цьому жанрі книг ще немає.':'Полиця поки порожня.'}${can&&!LIBG?' Додайте першу книгу!':''}</p>`;
   h+='</div>';
@@ -8713,11 +8715,11 @@ function m6Write(){const np=m6Np(BKW.text);return `<div class="bmodal m6bm" role
   <label class="fl">Текст книги<textarea id="m6b-text" data-a="m6btx" rows="14" maxlength="150000" placeholder="Вставте або напишіть текст. Нова сторінка — окремий рядок із трьох дефісів: ---">${esc(BKW.text)}</textarea></label>
   <div class="m5tools" style="padding-left:0"><span class="hint" id="m6b-np">${np} ${np===1?'сторінка':np<5?'сторінки':'сторінок'}</span><span class="m5sp"></span><button type="button" class="m5btn" data-a="m6bsave" ${busy?'disabled':''}>${BKW.id?'Зберегти':'Поставити на полицю'}</button></div></div></div>`;}
 function m6Read(){const b=BOOKS.find(x=>x.id===BKR);if(!b)return '';const tx=BKTX[b.id];const own=AUTH.email&&lc(b.by)===lc(AUTH.email);const canDel=own||m6CanOrd();
-  let NP=+b.np||1;let body;if(tx==null)body='<p class="hint">Відкриваю книгу…</p>';else{const L=m8Layout();const two=L.two;const P=m8Paginate(b.id,tx,L);NP=P.length;const step=two?2:1;if(BKP>=P.length)BKP=Math.max(0,P.length-1);if(two&&BKP%2)BKP--;
+  let NP=+b.np||1;let body;if(tx==null)body='<p class="hint">Відкриваю книгу…</p>';else{const L=m8Layout();const two=L.two;const trk=m8TrKey(b.id);const tr=BKTRON&&BKTR[trk];if(BKTRON&&!tr&&!BKTRB)m8TrBook(b);const P=m8Paginate(tr?trk:b.id,tr?BKTR[trk]:tx,L);NP=P.length;const step=two?2:1;if(BKP>=P.length)BKP=Math.max(0,P.length-1);if(two&&BKP%2)BKP--;
     const pg=i=>i<P.length?`<div class="m6pg" style="width:${L.w}px;height:${L.h}px"><div class="m6pt" data-notr>${fmtMsg(P[i])}</div><span class="m6pn">${i+1}</span></div>`:`<div class="m6pg blank" style="width:${L.w}px;height:${L.h}px"></div>`;
     body=`<div class="m6book"><button type="button" class="m6flip l" data-a="m6bp" data-k="${-step}" ${BKP<=0?'disabled':''} aria-label="Попередня сторінка">‹</button><div class="m6spread${two?' two':''}">${pg(BKP)}${two?pg(BKP+1):''}</div><button type="button" class="m6flip r" data-a="m6bp" data-k="${step}" ${BKP+step>=P.length?'disabled':''} aria-label="Наступна сторінка">›</button></div><div class="m6nav"><button type="button" class="m5btn sm" data-a="m6bp" data-k="${-step}" ${BKP<=0?'disabled':''}>‹ Назад</button><span class="hint">${two&&BKP+1<P.length?`сторінки ${BKP+1}–${BKP+2}`:`сторінка ${BKP+1}`} з ${P.length}</span><button type="button" class="m5btn sm" data-a="m6bp" data-k="${step}" ${BKP+step>=P.length?'disabled':''}>Далі ›</button></div>`;}
   const gn=m8Gname(b.genre);
-  return `<div class="bmodal m6bm" role="dialog" aria-modal="true" aria-label="${esc(b.title)}"><button type="button" class="bmback" data-a="m6bx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m6rd" style="--bc:${esc(b.color||'#3a3a3a')};--bi:${m6Ink(b.color)}"><button class="small bmx" data-a="m6bx">✕ Закрити</button><div class="m6cover"><b>${esc(b.title)}</b>${b.auth?`<span class="m8au">${esc(b.auth)}</span>`:''}<small>${gn?esc(gn)+' · ':''}${NP} с. · додав ${esc(b.name||m6NameOf(b.by))}</small></div>${body}${own||canDel?`<div class="landtools m6bact">${own?`<button type="button" class="m5lnk" data-a="m6bedit" data-k="${esc(b.id)}">✏️ Редагувати</button>`:''}${canDel?`<button type="button" class="m5lnk" data-a="m6bdel" data-k="${esc(b.id)}">Зняти з полиці</button>`:''}</div>`:''}</div></div>`;}
+  return `<div class="bmodal m6bm" role="dialog" aria-modal="true" aria-label="${esc(b.title)}"><button type="button" class="bmback" data-a="m6bx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m6rd" style="--bc:${esc(b.color||'#3a3a3a')};--bi:${m6Ink(b.color)}"><button class="small bmx" data-a="m6bx">✕ Закрити</button><div class="m6cover"><b data-notr>${esc(BKTRON&&BKTRT[m8TrKey(b.id)]?BKTRT[m8TrKey(b.id)]:b.title)}</b>${b.auth?`<span class="m8au">${esc(b.auth)}</span>`:''}<small>${gn?esc(gn)+' · ':''}${NP} с. · додав ${esc(b.name||m6NameOf(b.by))}</small>${m8TrBtn(b)}</div>${body}${own||canDel?`<div class="landtools m6bact">${own?`<button type="button" class="m5lnk" data-a="m6bedit" data-k="${esc(b.id)}">✏️ Редагувати</button>`:''}${canDel?`<button type="button" class="m5lnk" data-a="m6bdel" data-k="${esc(b.id)}">Зняти з полиці</button>`:''}</div>`:''}</div></div>`;}
 // ---------- аватарки: з профілю ком’юніті + оновлення раз на добу ----------
 function m8AvQ(){return '?d='+Math.floor(Date.now()/864e5);}
 function avatarOf(p){if(!p)return '';if(p.img)return p.img;const id=profId(p.profile);if(!id)return '';const k=AV_OK[id];if(k==='none')return '';return AV_BASE+id+'.'+(k||'webp')+m8AvQ();}
@@ -8755,6 +8757,7 @@ async function m8Click(a,b){const k=b.dataset.k;const run=async(fn,ok)=>{busy=tr
     const H=(Array.isArray(ORD.hols)?ORD.hols:[]).concat([it]).slice(0,120);await run(()=>window.FB.ordSave({hols:H}),'Свято додано');if(!msgErr){ORD.hols=H;OCF={};render();}return true;}
   if(a==='m8hdel'){const all=m6Hols();const x=all[+k];const H=(Array.isArray(ORD.hols)?ORD.hols:[]).filter(y=>y!==x);await run(()=>window.FB.ordSave({hols:H}),'Прибрано');if(!msgErr){ORD.hols=H;render();}return true;}
   // жанри й полиці
+  if(a==='m8btr'){BKTRON=!BKTRON;BKP=0;render();return true;}
   if(a==='m8g'){LIBG=k||'';SHP=0;render();return true;}
   if(a==='m8sp'){SHP+=+k;render();return true;}
   if(a==='m8gnew'){GNEW=true;render();setTimeout(()=>{const e=document.getElementById('m8-gn');if(e)e.focus();},30);return true;}
@@ -8794,6 +8797,22 @@ function m8Paginate(id,text,L){const k=id+'|'+String(text).length+'|'+L.w+'x'+L.
     if(cur.trim())out.push(cur);});
   pg.remove();M8PC={k,P:out.length?out:['']};return M8PC.P;}
 (function(){let t=null;addEventListener('resize',()=>{if(!BKR)return;clearTimeout(t);t=setTimeout(()=>{M8PC.k='';render();},200);});})();
+
+// ---------- переклад книги мовою сайту ----------
+let BKTR={},BKTRT={},BKTRON=false,BKTRB=false,BKTRP=0;
+function m8TrKey(id){return id+'|'+(LANG||'uk');}
+function m8TrBtn(b){if(!LANG||LANG==='uk')return '';const k=m8TrKey(b.id);const ln=(()=>{try{return langNm(LANG);}catch(_){return LANG;}})();
+  if(BKTRB)return `<span class="m8trb busy">🌐 Перекладаю… ${BKTRP}%</span>`;
+  return `<button type="button" class="m8trb" data-a="m8btr">${BKTRON&&BKTR[k]?'📖 Показати оригінал':'🌐 Перекласти: '+esc(ln)}</button>`;}
+async function m8TrBook(b){const tx=BKTX[b.id];if(tx==null||BKTRB)return;const k=m8TrKey(b.id);const lsk='bktr:'+k+':'+tx.length;
+  try{const c=JSON.parse(localStorage.getItem(lsk)||'null');if(c&&c.t){BKTR[k]=c.t;BKTRT[k]=c.title||'';renderSoon();return;}}catch(_){}
+  BKTRB=true;BKTRP=0;renderSoon();
+  try{const lines=tx.replace(/\r/g,'').split('\n');const idx=[],src=[];lines.forEach((l,i)=>{if(l.trim()&&!/^-{3,}$/.test(l.trim())){idx.push(i);src.push(l);}});
+    const out=lines.slice();const N=30;for(let i=0;i<src.length;i+=N){const r=await mtChunks(src.slice(i,i+N),LANG);r.forEach((t,j)=>{out[idx[i+j]]=t;});BKTRP=Math.min(99,Math.round((i+N)/src.length*100));renderSoon();}
+    const tt=(await mtChunks([b.title],LANG))[0]||b.title;BKTR[k]=out.join('\n');BKTRT[k]=tt;
+    try{localStorage.setItem(lsk,JSON.stringify({t:BKTR[k],title:tt}));}catch(_){}}
+  catch(e){console.warn(e);BKTRON=false;msg='Не вдалося перекласти книгу — спробуйте пізніше';msgErr=true;}
+  BKTRB=false;BKP=0;renderSoon();}
 
 })();
 </script>
