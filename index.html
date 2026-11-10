@@ -2127,6 +2127,11 @@ body:not(.cm) .m6badge{color:#e7b8c6}
 .m8seg .m5chip.on{background:var(--gold);color:var(--bg);border-color:var(--gold)}
 body.cm .m6o .tblwrap{background:transparent!important;background-image:none!important;border:1px solid var(--line)!important;box-shadow:none}
 body.cm .m6o .m8tbl th{background:var(--bg2);color:var(--muted)}body.cm .m6o .m8tbl td{color:var(--cream)}
+.m6book .m6pg{overflow:hidden!important;flex:0 0 auto;box-sizing:border-box}
+.m6book .m6spread{flex:0 0 auto;display:flex!important;margin:0 auto}
+.m6book{justify-content:center}
+.m6book .m6pg,.m8meas{min-height:0!important}
+.m6bm .bmbox.m6rd{width:min(980px,94vw);max-width:none!important;box-sizing:border-box}
 </style>
 
 </head><body>
@@ -8708,11 +8713,11 @@ function m6Write(){const np=m6Np(BKW.text);return `<div class="bmodal m6bm" role
   <label class="fl">Текст книги<textarea id="m6b-text" data-a="m6btx" rows="14" maxlength="150000" placeholder="Вставте або напишіть текст. Нова сторінка — окремий рядок із трьох дефісів: ---">${esc(BKW.text)}</textarea></label>
   <div class="m5tools" style="padding-left:0"><span class="hint" id="m6b-np">${np} ${np===1?'сторінка':np<5?'сторінки':'сторінок'}</span><span class="m5sp"></span><button type="button" class="m5btn" data-a="m6bsave" ${busy?'disabled':''}>${BKW.id?'Зберегти':'Поставити на полицю'}</button></div></div></div>`;}
 function m6Read(){const b=BOOKS.find(x=>x.id===BKR);if(!b)return '';const tx=BKTX[b.id];const own=AUTH.email&&lc(b.by)===lc(AUTH.email);const canDel=own||m6CanOrd();
-  let body;if(tx==null)body='<p class="hint">Відкриваю книгу…</p>';else{const P=m6Pages(tx);const two=innerWidth>900;const step=two?2:1;if(BKP>=P.length)BKP=Math.max(0,P.length-1);if(two&&BKP%2)BKP--;
-    const pg=i=>i<P.length?`<div class="m6pg"><div class="m6pt" data-notr>${fmtMsg(P[i])}</div><span class="m6pn">${i+1}</span></div>`:'<div class="m6pg blank"></div>';
+  let NP=+b.np||1;let body;if(tx==null)body='<p class="hint">Відкриваю книгу…</p>';else{const L=m8Layout();const two=L.two;const P=m8Paginate(b.id,tx,L);NP=P.length;const step=two?2:1;if(BKP>=P.length)BKP=Math.max(0,P.length-1);if(two&&BKP%2)BKP--;
+    const pg=i=>i<P.length?`<div class="m6pg" style="width:${L.w}px;height:${L.h}px"><div class="m6pt" data-notr>${fmtMsg(P[i])}</div><span class="m6pn">${i+1}</span></div>`:`<div class="m6pg blank" style="width:${L.w}px;height:${L.h}px"></div>`;
     body=`<div class="m6book"><button type="button" class="m6flip l" data-a="m6bp" data-k="${-step}" ${BKP<=0?'disabled':''} aria-label="Попередня сторінка">‹</button><div class="m6spread${two?' two':''}">${pg(BKP)}${two?pg(BKP+1):''}</div><button type="button" class="m6flip r" data-a="m6bp" data-k="${step}" ${BKP+step>=P.length?'disabled':''} aria-label="Наступна сторінка">›</button></div><div class="m6nav"><button type="button" class="m5btn sm" data-a="m6bp" data-k="${-step}" ${BKP<=0?'disabled':''}>‹ Назад</button><span class="hint">${two&&BKP+1<P.length?`сторінки ${BKP+1}–${BKP+2}`:`сторінка ${BKP+1}`} з ${P.length}</span><button type="button" class="m5btn sm" data-a="m6bp" data-k="${step}" ${BKP+step>=P.length?'disabled':''}>Далі ›</button></div>`;}
   const gn=m8Gname(b.genre);
-  return `<div class="bmodal m6bm" role="dialog" aria-modal="true" aria-label="${esc(b.title)}"><button type="button" class="bmback" data-a="m6bx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m6rd" style="--bc:${esc(b.color||'#3a3a3a')};--bi:${m6Ink(b.color)}"><button class="small bmx" data-a="m6bx">✕ Закрити</button><div class="m6cover"><b>${esc(b.title)}</b>${b.auth?`<span class="m8au">${esc(b.auth)}</span>`:''}<small>${gn?esc(gn)+' · ':''}${+b.np||1} с. · додав ${esc(b.name||m6NameOf(b.by))}</small></div>${body}${own||canDel?`<div class="landtools m6bact">${own?`<button type="button" class="m5lnk" data-a="m6bedit" data-k="${esc(b.id)}">✏️ Редагувати</button>`:''}${canDel?`<button type="button" class="m5lnk" data-a="m6bdel" data-k="${esc(b.id)}">Зняти з полиці</button>`:''}</div>`:''}</div></div>`;}
+  return `<div class="bmodal m6bm" role="dialog" aria-modal="true" aria-label="${esc(b.title)}"><button type="button" class="bmback" data-a="m6bx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m6rd" style="--bc:${esc(b.color||'#3a3a3a')};--bi:${m6Ink(b.color)}"><button class="small bmx" data-a="m6bx">✕ Закрити</button><div class="m6cover"><b>${esc(b.title)}</b>${b.auth?`<span class="m8au">${esc(b.auth)}</span>`:''}<small>${gn?esc(gn)+' · ':''}${NP} с. · додав ${esc(b.name||m6NameOf(b.by))}</small></div>${body}${own||canDel?`<div class="landtools m6bact">${own?`<button type="button" class="m5lnk" data-a="m6bedit" data-k="${esc(b.id)}">✏️ Редагувати</button>`:''}${canDel?`<button type="button" class="m5lnk" data-a="m6bdel" data-k="${esc(b.id)}">Зняти з полиці</button>`:''}</div>`:''}</div></div>`;}
 // ---------- аватарки: з профілю ком’юніті + оновлення раз на добу ----------
 function m8AvQ(){return '?d='+Math.floor(Date.now()/864e5);}
 function avatarOf(p){if(!p)return '';if(p.img)return p.img;const id=profId(p.profile);if(!id)return '';const k=AV_OK[id];if(k==='none')return '';return AV_BASE+id+'.'+(k||'webp')+m8AvQ();}
@@ -8767,6 +8772,28 @@ function m8Input(a,t){if(a==='m8annt'){ANNF=t.value;return true;}if(a==='m6ba'&&
   if(a==='m8hr'){OCF=Object.assign({},OCF,{rep:t.value,start:((document.getElementById('m6h-d')||{}).value||''),name:((document.getElementById('m6h-n')||{}).value||''),text:((document.getElementById('m6h-t')||{}).value||'')});render();return true;}
   if(a==='m8sym')return true;return false;}
 function m8Change(a,t){if(a==='m8sym'){const f=t.files&&t.files[0];const k=t.dataset.k;t.value='';imgToData(f,k==='flag'?600:360,d=>{if(!d){msg='Потрібне зображення';msgErr=true;}else SYMF[k]=d;render();});return true;}if(a==='m8hr'||a==='m6bg')return true;return false;}
+
+// ---------- книга: сторінки за реальним розміром, без прокрутки ----------
+let M8PC={k:'',P:null};
+function m8Layout(){const vw=innerWidth||1200,vh=innerHeight||800;const box=Math.min(980,vw*0.94)-(vw>760?32:20);const fl=vw>760?88:60;const avail=Math.max(220,box-fl);
+  const two=avail>=760;const w=Math.floor(two?avail/2:avail);const h=Math.max(220,Math.min(600,vh-(vw>760?365:340)));return {two,w,h};}
+function m8Paginate(id,text,L){const k=id+'|'+String(text).length+'|'+L.w+'x'+L.h;if(M8PC.k===k&&M8PC.P)return M8PC.P;
+  const pg=document.createElement('div');pg.className='m6pg m8meas';pg.style.cssText=`position:fixed;left:-9999px;top:0;width:${L.w}px;height:${L.h}px;min-height:0;visibility:hidden`;
+  const pt=document.createElement('div');pt.className='m6pt';pg.appendChild(pt);(document.querySelector('.m6rd')||document.body).appendChild(pg);
+  const fits=t=>{pt.innerHTML=fmtMsg(t);return pt.offsetHeight<=pg.clientHeight-parseFloat(getComputedStyle(pg).paddingTop)-parseFloat(getComputedStyle(pg).paddingBottom)+1;};
+  const out=[];String(text||'').replace(/\r/g,'').split(/\n-{3,}\n/).forEach(part=>{let cur='';
+    part.split('\n').forEach(par=>{const cand=cur?cur+'\n'+par:par;if(fits(cand)){cur=cand;return;}
+      if(cur&&fits(par)){out.push(cur);cur=par;return;}
+      // абзац не вміщається — ділимо за словами
+      let words=par.split(/(\s+)/);if(cur&&!fits(cur+'\n'+words[0])){out.push(cur);cur='';}
+      while(words.length){const pre=cur?cur+'\n':'';let lo=1,hi=words.length,best=0;while(lo<=hi){const mid=(lo+hi)>>1;if(fits(pre+words.slice(0,mid).join('')))
+        {best=mid;lo=mid+1;}else hi=mid-1;}
+        if(!best){if(cur){out.push(cur);cur='';continue;}best=1;}
+        const piece=words.slice(0,best).join('');words=words.slice(best);while(words.length&&!words[0].trim())words.shift();
+        if(words.length){out.push(pre+piece);cur='';}else cur=pre+piece;}});
+    if(cur.trim())out.push(cur);});
+  pg.remove();M8PC={k,P:out.length?out:['']};return M8PC.P;}
+(function(){let t=null;addEventListener('resize',()=>{if(!BKR)return;clearTimeout(t);t=setTimeout(()=>{M8PC.k='';render();},200);});})();
 
 })();
 </script>
