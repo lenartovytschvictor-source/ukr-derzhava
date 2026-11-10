@@ -2071,6 +2071,62 @@ body.cml svg.hcedges .hclg rect{fill:#fff7f3}body.cml svg.hcedges .hclg text{fil
 .m6gm .m6row{display:flex;gap:8px;align-items:center;margin:6px 0}.m6gm .m6row input{flex:1;min-width:0}
 .m6gm .m6em{display:flex;gap:12px;align-items:center;margin:8px 0 12px}
 .m6lead{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:10px}.m6leadf{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.m6leadf select{min-width:220px}
+.m6lead summary{cursor:pointer;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.m6sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin:12px 0}
+.m6sr{display:grid;gap:4px}.m6st{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--gold)}.m6sr select{width:100%}
+details.m6lead{display:block}
+/* читалка: сторінка вміщається в екран, стрілки по боках */
+.m6rd{display:flex;flex-direction:column;max-height:92vh}
+.m6book{position:relative;display:flex;align-items:stretch;gap:0}
+.m6book .m6spread{flex:1;min-width:0}
+.m6pg{min-height:0!important;height:clamp(260px,calc(92vh - 260px),560px);overflow-y:auto}
+.m6flip{all:unset;box-sizing:border-box;flex:0 0 44px;display:grid;place-items:center;font-size:38px;line-height:1;color:var(--cream);cursor:pointer;border-radius:10px;user-select:none}
+.m6flip:hover:not([disabled]),.m6flip:focus-visible{background:color-mix(in srgb,var(--cream) 10%,transparent)}
+.m6flip[disabled]{opacity:.18;cursor:default}
+.m6spread{touch-action:pan-y}
+@media (max-width:760px){.m6flip{flex-basis:30px;font-size:30px}.m6pg{height:calc(100vh - 300px)}}
+.m6rd .bmx{align-self:flex-end}.m6rd>*{flex-shrink:0}
+/* ===== 10.11 (3): Орден ===== */
+.m6badge{display:inline-flex;vertical-align:-.15em;margin-left:4px;color:var(--lotus,#d9a3b5)}.m6badge .m5svg{width:1.05em;height:1.05em}
+body:not(.cm) .m6badge{color:#e7b8c6}
+.m6emb{width:64px;height:64px;object-fit:contain;flex:0 0 auto}
+.m6flg{height:26px;width:auto;margin-left:10px;vertical-align:middle;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.m6hero h2{display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+.m8ann textarea{width:100%;box-sizing:border-box}
+.m8a{border-top:1px solid var(--line);padding:12px 0 4px}.m8a:first-of-type{border-top:0}
+.m8ah{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.m8sym .m8symg{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin:6px 0 10px}.m8sym figure{margin:0;text-align:center}.m8sym figcaption{font-size:12px;color:var(--muted);margin-top:4px}
+.m8si{width:110px;height:110px;display:grid;place-items:center;border-radius:12px;background:var(--bg2);overflow:hidden}.m8si.wide{width:180px}.m8si img{max-width:100%;max-height:100%;object-fit:contain}
+.m8sl{font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:700}
+.m8motto{font:italic 17px Georgia,serif;text-align:center;margin:6px 0 0;color:var(--cream)}
+.m6mem.treas .m5avs{box-shadow:0 0 0 2px color-mix(in srgb,var(--gold) 50%,transparent)}
+.m8pos{border-top:1px solid var(--line);margin-top:10px;padding-top:6px}
+/* скарбниця */
+.m8bal h3 small{font-weight:500;color:var(--muted);font-size:13px;margin-left:6px}
+.m8chips{display:flex;gap:8px;flex-wrap:wrap}.m8chip{padding:8px 14px;border-radius:999px;background:var(--bg2);border:1px solid var(--line2);font-size:14px}.m8chip b{font-size:16px}.m8chip.neg b{color:#c0574a}
+.m8seg{display:flex;gap:6px;margin-bottom:6px}
+.m8ff{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.m8tbl{width:100%;border-collapse:collapse;font-size:13.5px}.m8tbl th,.m8tbl td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.m8tbl th{font-size:12px;color:var(--muted);font-weight:700}.m8tbl .num{text-align:right;white-space:nowrap}
+.m8in{color:#5fa36a}.m8out{color:#c0574a}
+.m8ev{border-top:1px solid var(--line);padding:10px 0}.m8ev:first-of-type{border-top:0;padding-top:0}.m8evh{display:flex;gap:8px;align-items:baseline}
+.m8gl{display:flex;justify-content:space-between;font-size:13px;margin-top:6px}.m8bar{height:6px;border-radius:4px;background:var(--bg2);overflow:hidden}.m8bar i{display:block;height:100%;background:var(--lotus,#d9a3b5)}
+/* свята */
+.m8hf{display:grid;grid-template-columns:170px 170px 120px;gap:10px}
+@media (max-width:760px){.m8hf{grid-template-columns:1fr 1fr}}
+/* бібліотека */
+.m8gt{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:0 0 14px}.m8gt small{opacity:.65;margin-left:2px}
+.m8gw{display:inline-flex;align-items:center}.m8gx{padding:2px 6px}
+.m8gn{display:inline-flex;gap:6px;align-items:center}.m8gn input{width:160px;border-radius:999px;border:1px solid var(--line2);background:var(--bg2);color:var(--cream);padding:6px 12px;font:inherit}
+.m8gplus{border-style:dashed!important}
+.m8casew{display:flex;align-items:stretch;gap:6px}.m8casew .m6case{flex:1;min-width:0}
+.m8casew .m6flip{color:var(--cream)}
+.m8sph{text-align:center;margin:-8px 0 0}
+.m8wr2{display:grid;grid-template-columns:1fr 180px;gap:10px}@media (max-width:760px){.m8wr2{grid-template-columns:1fr}}
+.m8au{font:italic 15px Georgia,serif;opacity:.9}
+.m6o input[type=number]{width:100%;box-sizing:border-box;border-radius:10px;border:1px solid var(--line2);background:var(--bg2);color:var(--cream);padding:9px 11px;font:inherit}
+.m8seg .m5chip.on{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+body.cm .m6o .tblwrap{background:transparent!important;background-image:none!important;border:1px solid var(--line)!important;box-shadow:none}
+body.cm .m6o .m8tbl th{background:var(--bg2);color:var(--muted)}body.cm .m6o .m8tbl td{color:var(--cream)}
 </style>
 
 </head><body>
@@ -2461,7 +2517,7 @@ function chatHtml(s,only){if(only==='confed'){if(!confAccess())return '';CHAT.th
   const ms=CHAT.msgs;const ban=chatBanned();const canW=chatCanWrite(th)&&!ban&&(th.startsWith('d:')||roomOk(th.slice(2)));
   const msgHtml=m=>{const mine=m.from===AUTH.email;const t=vms(m.at);const exp=vms(m.exp);const canDel=mine||(th.startsWith('r:')&&chatMod())||AUTH.admin;const p=plByEmail(m.from);
     const toMe=(m.mentions||[]).includes(AUTH.email)||(m.reply&&m.reply.from===AUTH.email&&!mine);
-    return `<div class="chm${mine?' me':''}${toMe?' tome':''}${CHAT.hl===m.id?' hl':''}" id="cm-${esc(m.id)}">${mine?'':seatAv(p?p.name:(m.name||'?'),'chav')}<div class="chb"><div class="chmh">${mine?'':`<b>${p?`<button class="linkbtn" data-a="dos" data-n="${esc(p.name)}">${esc(p.name)}</button>`:esc(m.name||'')}</b>${p&&p.tourist?' <span class="tag">'+(p.confed?'конфедерат':'турист')+'</span>':''}`}<span class="hint">${t?esc(fmtDT(new Date(t).toISOString())):'щойно'}</span>${canW?`<button class="chx" data-a="chreply" data-k="${esc(m.id)}" title="Відповісти">↩</button>`:''}${canDel?`<button class="chx" data-a="chdel" data-k="${esc(m.id)}" title="Видалити">🗑</button>`:''}${!mine&&chatMod()&&th.startsWith('r:')?`<button class="chx" data-a="chmute" data-k="${esc(m.from)}" title="Заборонити писати на 3 дні">🔇</button>`:''}</div>${m.reply?`<button type="button" class="chrq" data-a="chjump" data-k="${esc(m.reply.id||'')}"><b>↩ ${esc(m.reply.name||'')}</b><span>${esc(String(m.reply.text||'').slice(0,140))}</span></button>`:''}${m.img?`<button type="button" class="chimgb" data-a="zoom"><img class="chimg" src="${esc(m.img)}" alt="Зображення"></button>${exp?`<div class="hint xs">🕒 зображення зникне ${esc(fmtDT(new Date(exp).toISOString()))}</div>`:''}`:m.imgGone?'<div class="hint">🖼 зображення видалено: минуло 15 днів</div>':''}${m.file?chFileHtml(m):''}${chTrHtml(m,CHAT.th)}</div></div>`;};
+    return `<div class="chm${mine?' me':''}${toMe?' tome':''}${CHAT.hl===m.id?' hl':''}" id="cm-${esc(m.id)}">${mine?'':seatAv(p?p.name:(m.name||'?'),'chav')}<div class="chb"><div class="chmh">${mine?'':`<b>${p?`<button class="linkbtn" data-a="dos" data-n="${esc(p.name)}">${esc(p.name)}</button>`:esc(m.name||'')}${m6Lotus(m.by)}</b>${p&&p.tourist?' <span class="tag">'+(p.confed?'конфедерат':'турист')+'</span>':''}`}<span class="hint">${t?esc(fmtDT(new Date(t).toISOString())):'щойно'}</span>${canW?`<button class="chx" data-a="chreply" data-k="${esc(m.id)}" title="Відповісти">↩</button>`:''}${canDel?`<button class="chx" data-a="chdel" data-k="${esc(m.id)}" title="Видалити">🗑</button>`:''}${!mine&&chatMod()&&th.startsWith('r:')?`<button class="chx" data-a="chmute" data-k="${esc(m.from)}" title="Заборонити писати на 3 дні">🔇</button>`:''}</div>${m.reply?`<button type="button" class="chrq" data-a="chjump" data-k="${esc(m.reply.id||'')}"><b>↩ ${esc(m.reply.name||'')}</b><span>${esc(String(m.reply.text||'').slice(0,140))}</span></button>`:''}${m.img?`<button type="button" class="chimgb" data-a="zoom"><img class="chimg" src="${esc(m.img)}" alt="Зображення"></button>${exp?`<div class="hint xs">🕒 зображення зникне ${esc(fmtDT(new Date(exp).toISOString()))}</div>`:''}`:m.imgGone?'<div class="hint">🖼 зображення видалено: минуло 15 днів</div>':''}${m.file?chFileHtml(m):''}${chTrHtml(m,CHAT.th)}</div></div>`;};
   let main=`<div class="block chmain"><div class="chhead"><button class="small ghost chback" data-a="chback" aria-label="До списку розмов">‹</button><div class="chht"><b>${head}</b><div class="hint">${esc(sub)}</div>${th.startsWith('d:')?'':`<button type="button" class="small ghost chtrt" data-a="chtron" data-notr title="Автоматично перекладати повідомлення мовою сайту">🌐 ${CHTR_ON?'Автопереклад: увімк.':'Автопереклад: вимк.'}</button>`}</div></div><div class="chmsgs" id="chmsgs"${th.startsWith('d:')?' data-notr':''}>${ms==null?'<p class="hint">Завантаження…</p>':CHAT.err?`<p class="hint warn">Немає доступу до цієї розмови (${esc(CHAT.err)}).</p>`:(ms.length>=CHAT.limit?`<div class="chmore"><button class="small ghost" data-a="chmore">Показати раніші</button></div>`:'')+(ms.length?ms.map(msgHtml).join(''):'<p class="hint chempty">Тут ще ніхто нічого не написав. Почніть першим!</p>')}</div>`;
   if(canW){const d=CHAT.draft[th]||'';main+=`<div class="chcomp"><div class="chtools">${[['b','<b>Ж</b>','Жирний (**текст**)'],['i','<i>К</i>','Курсив (*текст*)'],['u','<u>П</u>','Підкреслений (__текст__)'],['s','<s>З</s>','Закреслений (~~текст~~)'],['q','❝','Цитата'],['code','&lt;/&gt;','Код'],['link','🔗','Посилання']].map(([k,l,t])=>`<button type="button" class="small ghost" data-a="chfmt" data-k="${k}" title="${t}">${l}</button>`).join('')}<button type="button" class="small ghost" data-a="chimgpick" title="Додати зображення (зберігається ${CHAT_IMG_DAYS} днів)">🖼</button><button type="button" class="small ghost" data-a="chfile" title="Надіслати файли до 15 МБ (видаляються через ${FILE_DAYS} днів)">📎</button></div>${CHAT.up?`<div class="chup" id="chup"><span>⬆ ${esc(CHAT.up.name)}</span><span class="chupb"><i style="width:${CHAT.up.pct}%"></i></span><b>${CHAT.up.pct}%</b></div>`:''}${CHAT.img?`<div class="chprev"><img src="${esc(CHAT.img)}" alt=""><button class="small ghost" data-a="chimgx">✕ прибрати</button><span class="hint">зображення зберігатиметься ${CHAT_IMG_DAYS} днів</span></div>`:''}${CHAT.reply&&CHAT.reply.th===th?`<div class="chreplybar"><span>↩ Відповідь <b>${esc(CHAT.reply.name)}</b>: ${esc(String(CHAT.reply.text||'').slice(0,90))}</span><button class="small ghost" data-a="chreplyx">✕</button></div>`:''}${(()=>{const L=mentionList();return L.length?`<div class="chmlist">${L.map(p=>`<button type="button" class="chmopt" data-a="chmention" data-k="${esc(p.name)}">${seatAv(p.name,'chav')}<span>${esc(p.name)}</span></button>`).join('')}</div>`:'';})()}<div class="chrow"><textarea id="chin" data-a="chin" maxlength="4000" rows="2" placeholder="Повідомлення… @ — позначити гравця, Enter — надіслати, Shift+Enter — новий рядок">${esc(d)}</textarea><button class="primary" data-a="chsend" ${busy?'disabled':''}>Надіслати</button></div></div>`;}
   else main+=`<div class="chcomp"><p class="hint">${ban?`🔇 Вам заборонено писати в чаті до ${esc(fmtDT(new Date(ban).toISOString()))}.`:'Тут ви можете лише читати.'}</p></div>`;
@@ -2819,8 +2875,8 @@ const AV_BASE='https://pub-5cade92008cd4292b3ce9093dd3b0158.r2.dev/avatars/users
 function profId(v){v=String(v||'').trim();if(/^\d+$/.test(v))return v;const m=/profile\/(\d+)/i.exec(v);return m?m[1]:'';}
 const AV_EXT=['webp','png','jpg','jpeg','gif'];const AV_OK={};
 function avatarOf(p){if(!p)return '';if(p.img)return p.img;const id=profId(p.profile);if(!id)return '';const k=AV_OK[id];if(k==='none')return '';return AV_BASE+id+'.'+(k||'webp');}
-window.avOk=function(i){const m=/\/(\d+)\.(\w+)$/.exec(i.src||'');if(m&&i.src.startsWith(AV_BASE))AV_OK[m[1]]=m[2];};
-window.avErr=function(i){const m=/\/(\d+)\.(\w+)$/.exec(i.src||'');if(m&&i.src.startsWith(AV_BASE)){const n=AV_EXT.indexOf(m[2])+1;if(n>0&&n<AV_EXT.length){i.src=AV_BASE+m[1]+'.'+AV_EXT[n];return;}AV_OK[m[1]]='none';}const s=document.createElement('span');s.className=i.className+' none';s.textContent=i.dataset.ini||'?';s.setAttribute('aria-hidden','true');i.replaceWith(s);};
+window.avOk=function(i){const m=/\/(\d+)\.(\w+)(?:\?[^\/]*)?$/.exec(i.src||'');if(m&&i.src.startsWith(AV_BASE))AV_OK[m[1]]=m[2];};
+window.avErr=function(i){const m=/\/(\d+)\.(\w+)(?:\?[^\/]*)?$/.exec(i.src||'');if(m&&i.src.startsWith(AV_BASE)){const n=AV_EXT.indexOf(m[2])+1;if(n>0&&n<AV_EXT.length){i.src=AV_BASE+m[1]+'.'+AV_EXT[n]+m8AvQ();return;}AV_OK[m[1]]='none';}const s=document.createElement('span');s.className=i.className+' none';s.textContent=i.dataset.ini||'?';s.setAttribute('aria-hidden','true');i.replaceWith(s);};
 function avImg(p,cls){const n=p?p.name:'';const src=avatarOf(p);const ini=esc(String(n).slice(0,1));return src?`<img class="${cls}" src="${esc(src)}" alt="" loading="lazy" data-ini="${ini}" onload="avOk(this)" onerror="avErr(this)">`:`<span class="${cls} none" aria-hidden="true">${ini}</span>`;}
 function profUrl(v){v=String(v||'').trim();if(!v)return '';if(/^\d+$/.test(v))return 'https://dragpolit.com/profile/'+v;const m=/dragpolit\.com\/(?:[a-z]{2}\/)?profile\/(\d+)/i.exec(v);return m?'https://dragpolit.com/profile/'+m[1]:'';}
 function plink(name,o){const n=String(name||'').trim();const p=plByName(n);if(!p)return esc(n);const u=profUrl(p.profile);const av=avImg(p,'av');
@@ -5946,6 +6002,7 @@ function docHtml(){
 app.addEventListener('input',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;
   if(confInput2(a,t))return;
+  if(m8Input(a,t))return;
   if(a==='htf'&&(t.dataset.k==='end'||t.dataset.k==='into')&&m6TreeInput(t))return;
   if(m6Input(a,t))return;
   if(m5Input(a,t))return;
@@ -6121,6 +6178,7 @@ app.addEventListener('input',e=>{
 app.addEventListener('change',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;
   if(confChange2(a,t))return;
+  if(m8Change(a,t))return;
   if(m6Change(a,t))return;
   if(m5Change(a,t))return;
   if(m3Change(a,t))return;
@@ -6175,6 +6233,7 @@ app.addEventListener('click',async e=>{
   if(await confAct2(a,b))return;
   if(await m3Click(a,b))return;
   if(await m4Click(a,b))return;
+  if(await m8Click(a,b))return;
   if(await m7Click(a,b))return;
   if(await m6Click(a,b))return;
   if(await m5Click(a,b))return;
@@ -8082,7 +8141,7 @@ function m5Feed(){const can=m5CanPost();const L=FEED.filter(p=>(!p.hidden||AUTH.
 function m5Compose(){return `<div class="bmodal m5cm" role="dialog" aria-modal="true" aria-label="Новий допис"><button type="button" class="bmback" data-a="m5newx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m5comp"><button class="small bmx" data-a="m5newx">✕ Закрити</button><h3>Новий допис</h3><div class="m5row">${seatAv(m5Name(),'m5av')}<textarea id="m5-text" data-a="m5txt" rows="6" maxlength="3000" placeholder="Чим хочете поділитися?">${esc(FDF.text)}</textarea></div>${FDF.img?`<div class="m5imgp"><img src="${esc(FDF.img)}" alt=""><button type="button" class="small ghost" data-a="m5imgx">✕ Прибрати фото</button></div>`:''}<div class="hint m5lbl">Категорія</div><div class="m5chips">${CM_CATS.map(([k,l,c])=>`<button type="button" class="m5chip${FDF.cat===k?' on':''}" style="--c:${c}" data-a="m5cat" data-k="${k}">${l}</button>`).join('')}</div><div class="m5tools"><label class="m5chip m5ph">🖼 Додати фото<input type="file" accept="image/*" data-a="m5img" hidden></label><span class="m5sp"></span><button type="button" class="m5btn" data-a="m5post" ${busy?'disabled':''}>Опублікувати</button></div></div></div>`;}
 function m5PostHtml(p){const c=m5Cat(p.cat);const me=m5Key(AUTH.email);const re=p.re||{};const cnt={};Object.values(re).forEach(v=>{if(v)cnt[v]=(cnt[v]||0)+1;});const mine=re[me]||'';const rep=p.rep||{};const nrep=Object.keys(rep).length;const own=lc(p.by)===lc(AUTH.email);
   const t=m5Tr(p);const open=FDOPEN.has(p.id);
-  return `<article class="m5card m5post${p.hidden?' m5hid':''}"><header class="m5ph">${seatAv(p.name||'?','m5av')}<div><b>${esc(p.name||'')} ${m5Em(m5Flag(p.by))}</b><div class="hint">${esc(m5Ago(m5At(p)))}</div></div><span class="m5tag" style="--c:${c[2]}">${esc(c[1])}</span></header>
+  return `<article class="m5card m5post${p.hidden?' m5hid':''}"><header class="m5ph">${seatAv(p.name||'?','m5av')}<div><b>${esc(p.name||'')} ${m5Em(m5Flag(p.by))}${m6Lotus(p.by)}</b><div class="hint">${esc(m5Ago(m5At(p)))}</div></div><span class="m5tag" style="--c:${c[2]}">${esc(c[1])}</span></header>
     ${p.hidden?`<p class="hint">🙈 Допис приховано після скарг${AUTH.admin?' — бачать лише адміністрація й автор':''}.</p>`:''}<div class="m5txt" data-notr>${fmtMsg(t.text)}</div>${t.tr?`<button type="button" class="chtrb" data-a="m5orig" data-k="${esc(p.id)}" data-notr>${t.orig?'🌐 показати переклад':'🌐 перекладено'+(t.src?' ('+esc(langNm(t.src))+')':'')+' · оригінал'}</button>`:''}
     ${p.img?`<img class="m5pimg" src="${esc(p.img)}" alt="" loading="lazy">`:''}
     <footer class="m5acts">${['👍','😂','😮','😢'].map(e=>`<button type="button" class="m5re${mine===e?' on':''}" data-a="m5re" data-k="${esc(p.id)}" data-e="${e}" ${AUTH.email&&m5CanPost()?'':'disabled'}>${e}${cnt[e]?' '+cnt[e]:''}</button>`).join('')}<button type="button" class="m5re" data-a="m5cm" data-k="${esc(p.id)}">💬 ${+p.nc||0}</button><span class="m5sp"></span>${own||AUTH.admin?`<button type="button" class="m5lnk" data-a="m5del" data-k="${esc(p.id)}">Видалити</button>`:''}${AUTH.admin&&p.hidden?`<button type="button" class="m5lnk" data-a="m5unhide" data-k="${esc(p.id)}">Повернути</button>`:''}${!own&&AUTH.email&&m5CanPost()&&!p.hidden?`<button type="button" class="m5lnk" data-a="m5rep" data-k="${esc(p.id)}" ${rep[me]?'disabled':''}>${rep[me]?'Скаргу надіслано':'Поскаржитися'}${nrep?' · '+nrep:''}</button>`:''}</footer>
@@ -8099,7 +8158,7 @@ async function m5TrRun(){const tl=LANG||'uk';const ps=FEED.filter(p=>FDTRQ.has(p
   await Promise.all([work(),work(),work()]);if(got)renderSoon();}
 // найближчі події (свята, вибори, голосування з календаря)
 function m5Events(){let out=[];try{const now=new Date();for(let k=0;k<2;k++){const d0=new Date(now.getFullYear(),now.getMonth()+k,1);const ev=calEvents(d0.getFullYear(),d0.getMonth());Object.entries(ev).forEach(([day,arr])=>{const dt=new Date(d0.getFullYear(),d0.getMonth(),+day);if(dt<new Date(now.getFullYear(),now.getMonth(),now.getDate()))return;arr.forEach(e=>out.push({dt,e}));});}}catch(e){console.warn(e);}
-  try{m6OrdHols().forEach(x=>out.push({dt:m6Next(x.md),e:{ic:'🪷',tx:x.name,sub:'свято Ордену Білого Лотоса'}}));}catch(e){}
+  try{m6OrdHols().forEach(x=>out.push({dt:m6Next(x),e:{ic:'🪷',tx:x.name,sub:'свято Ордену Білого Лотоса'}}));}catch(e){}
   out.sort((a,b)=>a.dt-b.dt);out=out.slice(0,6);const MN=['СІЧ','ЛЮТ','БЕР','КВІ','ТРА','ЧЕР','ЛИП','СЕР','ВЕР','ЖОВ','ЛИС','ГРУ'];
   return `<div class="m5card"><h3>📅 Найближчі події</h3>${out.length?out.map(({dt,e})=>`<div class="m5ev"><div class="m5d">${dt.getDate()}<small>${MN[dt.getMonth()]}</small></div><div><b>${m5Em(e.ic||'')} ${esc(e.tx||'')}</b>${e.sub?`<div class="hint">${esc(e.sub)}</div>`:''}</div></div>`).join(''):'<p class="hint">Найближчим часом подій немає.</p>'}</div>`;}
 // ---------- гравці ----------
@@ -8109,7 +8168,7 @@ function m5AllPlayers(){const out=[];const seen=new Set();const ud=players().fil
   return out.sort((a,b)=>String(a.name).localeCompare(String(b.name),'uk'));}
 function m5Players(){const q=M5PLQ.trim().toLowerCase();const L=m5AllPlayers().filter(p=>!q||String(p.name).toLowerCase().includes(q)||String(p.country).toLowerCase().includes(q));const M=m5Mods();
   return `<div class="bmodal m5pm" role="dialog" aria-modal="true" aria-label="Гравці"><button type="button" class="bmback" data-a="m5pl" data-k="0" tabindex="-1" aria-label="Закрити"></button><div class="bmbox"><button class="small bmx" data-a="m5pl" data-k="0">✕ Закрити</button><h3>👥 Гравці ком’юніті <small>${m5AllPlayers().length}</small></h3><input type="search" id="m5-plq" data-a="m5plq" value="${esc(M5PLQ)}" placeholder="🔍 Пошук гравця чи країни" autocomplete="off">
-    <div class="m5pl">${L.map(p=>`<div class="m5pli">${seatAv(p.udName||p.name,'m5av')}<div class="m5pln"><b>${esc(p.name)} ${m5Em(p.flag)}</b><div>${p.ud&&M.ud.on!==false?`<span class="m5bd">${m5Em(M.ud.ic||'🇺🇦')} ${esc(M.ud.name||'Україна')}</span>`:''}${p.ok?'<span class="m5bd ok">✓ профіль підтверджено</span>':''}${p.country&&!p.ud?`<span class="m5bd">${esc(p.country)}</span>`:''}</div></div>${p.ud&&p.udName?`<button type="button" class="m5lnk" data-a="dos" data-n="${esc(p.udName)}">Профіль</button>`:p.profile?`<a class="m5lnk" href="${esc(/^https?:/.test(p.profile)?p.profile:'https://dragpolit.com/profile/'+String(p.profile).replace(/\D/g,''))}" target="_blank" rel="noopener">DragPolit ↗</a>`:''}</div>`).join('')||'<p class="hint">Нікого не знайдено.</p>'}</div></div></div>`;}
+    <div class="m5pl">${L.map(p=>`<div class="m5pli">${seatAv(p.udName||p.name,'m5av')}<div class="m5pln"><b>${esc(p.name)} ${m5Em(p.flag)}${m6Lotus(p.email)}</b><div>${p.ud&&M.ud.on!==false?`<span class="m5bd">${m5Em(M.ud.ic||'🇺🇦')} ${esc(M.ud.name||'Україна')}</span>`:''}${p.ok?'<span class="m5bd ok">✓ профіль підтверджено</span>':''}${p.country&&!p.ud?`<span class="m5bd">${esc(p.country)}</span>`:''}</div></div>${p.ud&&p.udName?`<button type="button" class="m5lnk" data-a="dos" data-n="${esc(p.udName)}">Профіль</button>`:p.profile?`<a class="m5lnk" href="${esc(/^https?:/.test(p.profile)?p.profile:'https://dragpolit.com/profile/'+String(p.profile).replace(/\D/g,''))}" target="_blank" rel="noopener">DragPolit ↗</a>`:''}</div>`).join('')||'<p class="hint">Нікого не знайдено.</p>'}</div></div></div>`;}
 // ---------- реєстрація без адміністрації ----------
 function m5Reg(){if(!AUTH.email||AUTH.bot||M5SKIP||myMember()||plByEmail(AUTH.email)||!window.__m5memLoaded)return '';
   return `<div class="bmodal" role="dialog" aria-modal="true" aria-label="Профіль ком’юніті"><button type="button" class="bmback" data-a="m5regx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m5reg"><button class="small bmx" data-a="m5regx">✕ Пізніше</button><h3>🪪 Профіль ${esc(CM_NAME)}</h3><p class="hint">Профіль створюється одразу, без схвалення. Бот сам перевірить ваш профіль у грі й поставить позначку «✓ підтверджено».</p>
@@ -8333,7 +8392,7 @@ function m6Cal(){if(!OCAL){const n=new Date();OCAL={y:n.getFullYear(),m:n.getMon
   h+='</div></aside></div></div>';return h;}
 // ---------- бібліотека: полиця з книгами ----------
 function m6Np(text){const P=m6Pages(text);return Math.max(1,P.length);}
-function m6Pages(text){text=String(text||'').replace(/\r/g,'');const parts=text.split(/\n-{3,}\n/);const out=[];const MAX=1400;
+function m6Pages(text){text=String(text||'').replace(/\r/g,'');const parts=text.split(/\n-{3,}\n/);const out=[];const MAX=950;
   parts.forEach(pt=>{const paras=pt.split(/\n/);let cur='';paras.forEach(p=>{while(p.length>MAX){if(cur){out.push(cur);cur='';}let cut=p.lastIndexOf(' ',MAX);if(cut<MAX*0.6)cut=MAX;out.push(p.slice(0,cut));p=p.slice(cut).trimStart();}
       if((cur+'\n'+p).length>MAX&&cur){out.push(cur);cur=p;}else cur=cur?cur+'\n'+p:p;});if(cur.trim())out.push(cur);});
   return out.length?out:[''];}
@@ -8355,14 +8414,14 @@ function m6Write(){const np=m6Np(BKW.text);return `<div class="bmodal m6bm" role
 function m6Read(){const b=BOOKS.find(x=>x.id===BKR);if(!b)return '';const tx=BKTX[b.id];const own=AUTH.email&&lc(b.by)===lc(AUTH.email);const canDel=own||m6CanOrd();
   let body;if(tx==null)body='<p class="hint">Відкриваю книгу…</p>';else{const P=m6Pages(tx);const two=innerWidth>900;const step=two?2:1;if(BKP>=P.length)BKP=Math.max(0,P.length-1);if(two&&BKP%2)BKP--;
     const pg=i=>i<P.length?`<div class="m6pg"><div class="m6pt" data-notr>${fmtMsg(P[i])}</div><span class="m6pn">${i+1}</span></div>`:'<div class="m6pg blank"></div>';
-    body=`<div class="m6spread${two?' two':''}">${pg(BKP)}${two?pg(BKP+1):''}</div><div class="m6nav"><button type="button" class="m5btn sm" data-a="m6bp" data-k="${-step}" ${BKP<=0?'disabled':''}>‹ Назад</button><span class="hint">${two&&BKP+1<P.length?`сторінки ${BKP+1}–${BKP+2}`:`сторінка ${BKP+1}`} з ${P.length}</span><button type="button" class="m5btn sm" data-a="m6bp" data-k="${step}" ${BKP+step>=P.length?'disabled':''}>Далі ›</button></div>`;}
+    body=`<div class="m6book"><button type="button" class="m6flip l" data-a="m6bp" data-k="${-step}" ${BKP<=0?'disabled':''} aria-label="Попередня сторінка">‹</button><div class="m6spread${two?' two':''}">${pg(BKP)}${two?pg(BKP+1):''}</div><button type="button" class="m6flip r" data-a="m6bp" data-k="${step}" ${BKP+step>=P.length?'disabled':''} aria-label="Наступна сторінка">›</button></div><div class="m6nav"><button type="button" class="m5btn sm" data-a="m6bp" data-k="${-step}" ${BKP<=0?'disabled':''}>‹ Назад</button><span class="hint">${two&&BKP+1<P.length?`сторінки ${BKP+1}–${BKP+2}`:`сторінка ${BKP+1}`} з ${P.length}</span><button type="button" class="m5btn sm" data-a="m6bp" data-k="${step}" ${BKP+step>=P.length?'disabled':''}>Далі ›</button></div>`;}
   return `<div class="bmodal m6bm" role="dialog" aria-modal="true" aria-label="${esc(b.title)}"><button type="button" class="bmback" data-a="m6bx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m6rd" style="--bc:${esc(b.color||'#3a3a3a')};--bi:${m6Ink(b.color)}"><button class="small bmx" data-a="m6bx">✕ Закрити</button><div class="m6cover"><b>${esc(b.title)}</b><small>${esc(b.name||m6NameOf(b.by))} · ${+b.np||1} с.</small></div>${body}${own||canDel?`<div class="landtools m6bact">${own?`<button type="button" class="m5lnk" data-a="m6bedit" data-k="${esc(b.id)}">✏️ Редагувати</button>`:''}${canDel?`<button type="button" class="m5lnk" data-a="m6bdel" data-k="${esc(b.id)}">Зняти з полиці</button>`:''}</div>`:''}</div></div>`;}
 // ---------- адмін-панель: модулі ----------
 function m5ModsAdmin(){const M=m5Mods();const G=m5Groups();const card=(k,desc,extra)=>`<div class="m5mod"><span class="m5mi big">${m5Em(M[k].ic)}</span><div style="flex:1;min-width:0"><b>${esc(M[k].name)}</b><div class="hint">${desc}</div><div class="m5grow"><input type="text" id="m5m-${k}-name" maxlength="40" value="${esc(M[k].name)}" placeholder="Назва модуля"><input type="text" id="m5m-${k}-ic" maxlength="4" value="${esc(M[k].ic)}" style="max-width:70px" aria-label="Значок"></div>${extra||''}</div><button type="button" class="small ${M[k].on!==false?'primary':'ghost'}" data-a="m5modtg" data-k="${k}">${M[k].on!==false?'✅ Увімкнено':'⛔ Вимкнено'}</button></div>`;
   const pl=m5AllPlayers();
   return `<div class="block"><h3>🧩 Модулі</h3><p class="hint">Вимкнений модуль зникає з меню для всіх, крім адміністрації. Дані не видаляються — увімкніть, і все повернеться.</p>
     ${card('ud','Новини та укази, Уряд, Право, Суд, Церква, Військо',`<label class="chk m6chk"><input type="checkbox" data-a="m6govtg"${M.ud.gov!==false?' checked':''}> Закони голосує Уряд, лідер підписує (Палату, Землі, Карту, Економіку сховано)</label>`)}
-    ${card('order','Магістр і учні, календар свят, бібліотека, острови біля Іспанії',`<label class="fl">Магістр Ордену<select id="m6-master"><option value="">— не обрано —</option>${pl.map(p=>`<option value="${esc(p.email)}"${lc(p.email)===m6Master()?' selected':''}>${esc(p.name)}</option>`).join('')}</select></label>`)}
+    ${card('order','Магістр і учні, календар свят, бібліотека, острови біля Іспанії',`<label class="fl">Магістр Ордену<select id="m6-master"><option value="">— не обрано —</option>${pl.filter(p=>p.email).map(p=>`<option value="${esc(p.email)}"${m6Master()&&lc(p.email)===m6Master()?' selected':''}>${esc(p.name)}</option>`).join('')}</select></label>`)}
     <div class="landtools"><button type="button" class="small primary" data-a="m5modsave">Зберегти</button></div></div>
     <div class="block"><h3>💬 Групи чату ком’юніті</h3><p class="hint">«🌐 Загальний» є завжди. Тут — додаткові групи, доступні всім зареєстрованим.</p>${G.map((g,i)=>`<div class="m5grow"><input type="text" id="m5g-ic-${i}" value="${esc(g[1])}" maxlength="4" style="max-width:64px" aria-label="Значок"><input type="text" id="m5g-n-${i}" value="${esc(g[2])}" maxlength="30" placeholder="Назва"><input type="text" id="m5g-d-${i}" value="${esc(g[3]||'')}" maxlength="80" placeholder="Опис"><button type="button" class="small ghost" data-a="m5gdel" data-k="${i}">✕</button></div>`).join('')}<div class="landtools"><button type="button" class="small ghost" data-a="m5gadd">➕ Група</button><button type="button" class="small primary" data-a="m5gsave">Зберегти групи</button></div></div>`;}
 // ---------- дії ----------
@@ -8436,8 +8495,9 @@ function m6Words(){const root=document.getElementById('app')||document.body;cons
 function m4Kanc(){if(!m6Gov())return m4Kanc0();const can=isHetman()||AUTH.admin;
   let h='';if(can&&!AUTH.bot)h+=`<div class="m6gbar"><span class="hint">${esc(m6Leader())} може перейменувати посади уряду й поставити емблеми</span><button type="button" class="small primary" data-a="m6ged">✏️ Назви посад і емблеми</button></div>`;
   h+=m4Kanc0();if(AUTH.admin&&!AUTH.bot)h+=m6LeadAdmin();h+=m6GovLaws();if(G6ED&&can&&!MODALH)MODALH=`<div class="bmodal" role="dialog" aria-modal="true" aria-label="Назви посад"><button type="button" class="bmback" data-a="m6gedx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m6gm"><button class="small bmx" data-a="m6gedx">✕ Закрити</button>${m6GovPanel()}</div></div>`;return h;}
-function m6LeadAdmin(){const p=govPost(state,'hetman');if(!p)return '';const cur=String(p.name||'').trim();const pl=players().filter(x=>!x.tourist&&String(x.name||'').trim());
-  return `<div class="block m6lead"><div><b>🛡 Лідер України</b> <span class="hint">· зміна лише для адміністрації; звичайно лідера обирають на виборах (вкладка «Вибори»)</span></div><div class="m6leadf"><select id="m6-lead" aria-label="Новий лідер"><option value="">— вакантно —</option>${pl.map(x=>`<option value="${esc(x.name)}"${x.name===cur?' selected':''}>${esc(x.name)}</option>`).join('')}</select><button type="button" class="small primary" data-a="m6lead" ${busy?'disabled':''}>Призначити ${esc(m6Decl(m6Leader(),"i"))}</button></div></div>`;}
+function m6LeadAdmin(){const seats=m6Seats();if(!seats.length)return '';const pl=players().filter(x=>!x.tourist&&String(x.name||'').trim()).sort((a,b)=>String(a.name).localeCompare(String(b.name),'uk'));
+  const row=p=>{const cur=String(p.name||'').trim();const has=pl.some(x=>x.name===cur);return `<label class="m6sr"><span class="m6st">${esc(p.title)}</span><select id="m6s-${esc(p.id)}" aria-label="${esc(p.title)}"><option value=""${cur?'':' selected'}>— вакантно —</option>${!has&&cur&&cur!=='0'?`<option value="${esc(cur)}" selected>${esc(cur)} (немає в реєстрі)</option>`:''}${pl.map(x=>`<option value="${esc(x.name)}"${x.name===cur?' selected':''}>${esc(x.name)}</option>`).join('')}</select></label>`;};
+  return `<details class="block m6lead" data-o="m6lead"${OPEN.has('m6lead')?' open':''}><summary>🛡 <b>Склад уряду</b> <small class="hint">для адміністрації: виберіть людину на кожну посаду й натисніть «Зберегти» — зміна одразу, без бота</small></summary><div class="m6sg">${seats.map(row).join('')}</div><div class="landtools"><button type="button" class="small primary" data-a="m6seats" ${busy?'disabled':''}>Зберегти склад уряду</button></div></details>`;}
 function m6GovPanel(){const seats=m6Seats();return `<h3>✏️ Назви посад і емблеми</h3><p class="hint">Нова назва з’явиться за столом, у кабінетах, профілях і нових документах. Старі закони й укази залишаться з назвою, яка діяла, коли їх підписали.</p>
     <div class="m6em"><span class="m6emi"><img src="${esc(G6.em||emblemSrc())}" alt=""></span><div><b>Герб у центрі столу</b><div class="landtools"><label class="small m6up">🖼 Завантажити<input type="file" accept="image/*" data-a="m6gem" data-k="" hidden></label>${G6.em?'<button type="button" class="small ghost" data-a="m6gemx" data-k="">Прибрати</button>':''}</div></div></div>
     ${seats.map(p=>`<div class="m6row"><span class="m6emi sm">${G6.img[p.id]?`<img src="${esc(G6.img[p.id])}" alt="">`:'<span aria-hidden="true">·</span>'}</span><input type="text" id="m6t-${esc(p.id)}" data-a="m6gt" data-k="${esc(p.id)}" maxlength="60" value="${esc(G6.t[p.id]!=null?G6.t[p.id]:p.title)}" aria-label="Назва посади"><label class="small m6up" title="Емблема посади">🖼<input type="file" accept="image/*" data-a="m6gem" data-k="${esc(p.id)}" hidden></label>${G6.img[p.id]?`<button type="button" class="small ghost" data-a="m6gemx" data-k="${esc(p.id)}" aria-label="Прибрати емблему">✕</button>`:''}</div>`).join('')}
@@ -8514,12 +8574,199 @@ async function m7Click(a,b){const k=b.dataset.k;const run=async(fn,ok)=>{busy=tr
   if(a==='m6gsave'){const T=Object.assign({},(GOVT&&GOVT.t)||{});const H=m6Hist().slice();const now=Date.now();
     m6Seats().forEach(p=>{const t=v('m6t-'+p.id).slice(0,60);if(!t)return;const cur=String(T[p.id]||p.title||'').trim();if(t!==cur){H.push({id:p.id,t,at:now});}T[p.id]=t;});
     const d={t:T,img:G6.img,em:G6.em,hist:H.slice(-80)};await run(()=>window.FB.setGovt(d),'Назви посад збережено');if(!msgErr){GOVT=Object.assign({},GOVT,d);m6ApplyGovt();m6RulesFor.c={};G6ED=false;render();}return true;}
-  if(a==='m6lead'&&AUTH.admin){const nm=v('m6-lead');const p=govPost(state,'hetman');if(!p)return true;if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent=nm?'Точно: '+nm+'?':'Точно звільнити?';return true;}
-    p.name=nm;p.email='';try{syncArmyHetman(state,nm);}catch(_){}await run(async()=>{await window.FB.save(state);saved=JSON.stringify(state);},nm?nm+' — тепер '+m6Leader():'Посада лідера вакантна');return true;}
+  if(a==='m6seats'&&AUTH.admin){let n=0;m6Seats().forEach(p=>{const el=document.getElementById('m6s-'+p.id);if(!el)return;const nm=el.value.trim();if(nm===String(p.name||'').trim())return;p.name=nm;p.email='';delete p.ap;n++;if(p.id==='hetman'){try{syncArmyHetman(state,nm);}catch(_){}}});
+    if(!n){msg='Нічого не змінилося';msgErr=false;render();return true;}OPEN.add('m6lead');await run(async()=>{await window.FB.save(state);saved=JSON.stringify(state);},'Склад уряду збережено ('+n+')');return true;}
   if(a==='m6hadd2'){const it={day:+v('m6hd'),month:+v('m6hm'),name:v('m6hn').slice(0,80),text:v('m6ht').slice(0,200)};HOLF={day:it.day,month:it.month,name:it.name,text:it.text};if(!it.name){msg='Вкажіть назву свята';msgErr=true;render();return true;}
     const L=HOLS.concat([it]).slice(0,100);await run(()=>window.FB.setHols(L),'Свято додано до календаря');if(!msgErr){HOLS=L;HOLF={day:'',month:'',name:'',text:''};render();}return true;}
   if(a==='m6hdel2'){const L=HOLS.filter((_,i)=>i!==+k);await run(()=>window.FB.setHols(L),'Прибрано');if(!msgErr){HOLS=L;render();}return true;}
   return false;}
+
+// гортання книги: стрілки клавіатури і свайп
+(function(){document.addEventListener('keydown',ev=>{if(!BKR||BKW)return;const t=ev.target;if(t&&/INPUT|TEXTAREA|SELECT/.test(t.tagName))return;const b=document.querySelector('.m6flip.'+(ev.key==='ArrowRight'?'r':ev.key==='ArrowLeft'?'l':'x'));if(b&&!b.disabled){ev.preventDefault();b.click();}});
+  let X=null;document.addEventListener('pointerdown',ev=>{if(ev.target.closest&&ev.target.closest('.m6spread'))X=ev.clientX;},true);
+  document.addEventListener('pointerup',ev=>{if(X==null)return;const dx=ev.clientX-X;X=null;if(Math.abs(dx)<50)return;const b=document.querySelector('.m6flip.'+(dx<0?'r':'l'));if(b&&!b.disabled)b.click();},true);})();
+
+// ===================== 10.11.2026 (3): Орден — автори й жанри, полиці з гортанням, Скарбник і Скарбниця, оголошення, символіка, повторювані свята, значок учня, аватарки =====================
+let GENRES=[],ANN=[],FUND=[],OEVS=[],LIBG='',SHP=0,GNEW=false,ANNF='',FUNDF={kind:'in',what:'',amt:'',who:'',note:'',ev:''},EVF={title:'',date:'',text:'',goal:''},SYMED=false,SYMF={emblem:'',flag:'',motto:''},OPOS=false;
+try{
+  window.APP.genres=l=>{GENRES=(l||[]).slice().sort((a,b)=>String(a.name).localeCompare(String(b.name),'uk'));renderSoon();};
+  window.APP.ann=l=>{ANN=(l||[]).slice().sort((a,b)=>(+b.at0||0)-(+a.at0||0));renderSoon();};
+  window.APP.fund=l=>{FUND=(l||[]).slice().sort((a,b)=>(+b.at0||0)-(+a.at0||0));renderSoon();};
+  window.APP.oevs=l=>{OEVS=(l||[]).slice().sort((a,b)=>(+a.date||0)-(+b.date||0));renderSoon();};
+}catch(_){}
+function m5Ensure(s){if(!s.sections.some(x=>x.kind==='feed'))s.sections.unshift({id:'feed',kind:'feed',title:'Головна',nav:'Головна'});
+  const f=s.sections.find(x=>x.kind==='feed');delete f.tab;f.navTop='Головна';s.sections=[f,...s.sections.filter(x=>x!==f)];
+  [['order','order','Орден Білого Лотоса','Про Орден'],['ordcal','ordercal','Календар свят Ордену','Календар свят'],['ordlib','orderlib','Бібліотека Ордену','Бібліотека'],['ordfund','orderfund','Скарбниця Ордену','Скарбниця']].forEach(([id,kind,title,nav])=>{let x=s.sections.find(q=>q.kind===kind);if(!x){x={id,kind,title,nav};s.sections.push(x);}delete x.tab;delete x.hideView;x.navTop=nav;});
+  s.modules=s.modules||{};s.modules.ud=s.modules.ud||{on:true,name:'Україна',ic:'🇺🇦'};s.modules.order=s.modules.order||{on:true,name:'Орден Білого Лотоса',ic:'🪷'};}
+function m4Sec(s,si){
+  if(s.kind==='order')return m6Order();if(s.kind==='orderlib')return m6Lib();if(s.kind==='ordercal')return m6Cal();if(s.kind==='orderfund')return m8Fund();
+  if(editing)return null;
+  if(s.kind==='feed')return m5Feed();
+  if(s.kind==='power'&&!CAB)return m4Kanc();
+  if(!s.kind&&s.lands&&s.id===((state.sections.find(x=>x.id==='ud')||{}).id))return m4Lands();
+  if(s.kind==='ranks')return m4RanksTop()+ranksHtml(s,si);
+  return null;}
+// ---------- хто є хто в Ордені ----------
+function m6Treas(){return lc(ORD.treas||'');}
+function m6IsTreas(){return !!(AUTH.email&&m6Treas()&&lc(AUTH.email)===m6Treas());}
+function m6OrdIn(){const m=m6MyOrd();return m6IsMaster()||m6IsTreas()||!!(m&&m.st==='ok');}
+function m6CanFund(){return m6IsMaster()||m6IsTreas()||AUTH.admin;}
+function m6InOrder(e){e=lc(e||'');if(!e)return false;if(e===m6Master()||e===m6Treas())return true;const m=ORDM.find(x=>lc(x.id)===e);return !!(m&&m.st==='ok');}
+function m6Lotus(e){return m6On('order')&&m6InOrder(e)?`<span class="m6badge" title="${esc(lc(e)===m6Master()?'Магістр':lc(e)===m6Treas()?'Скарбник':'Учень')} Ордену Білого Лотоса">${M6_LOTUS}</span>`:'';}
+function m6Sym(){return Object.assign({emblem:'',flag:'',motto:''},ORD.sym||{});}
+function m6OrdHead(){const M=m5Mods().order;const n=ORDM.filter(x=>x.st==='ok').length;const S=m6Sym();
+  return `<div class="m6hero">${S.emblem?`<img class="m6emb" src="${esc(S.emblem)}" alt="Герб Ордену">`:`<span class="m6lotus">${M6_LOTUS}</span>`}<div><h2>${esc(M.name)}${S.flag?`<img class="m6flg" src="${esc(S.flag)}" alt="Прапор Ордену">`:''}</h2><p class="hint">${m6Master()?'Магістр: <b>'+esc(ORD.masterName||m6NameOf(m6Master()))+'</b> · ':''}${n} ${n===1?'учень':n>1&&n<5?'учні':'учнів'}${S.motto?` · <i>«${esc(S.motto)}»</i>`:' · Балеарські острови'}</p></div></div>`;}
+// ---------- головна Ордену ----------
+function m6Order(){let h='<div class="m6o">'+m6OrdHead();const can=m6CanOrd();const S=m6Sym();
+  h+='<div class="m6grid"><div>';
+  // оголошення Магістра
+  h+=`<div class="m5card m8ann"><h3>📣 Оголошення Магістра</h3>`;
+  if(can&&!AUTH.bot)h+=`<textarea id="m8-ann" data-a="m8annt" rows="3" maxlength="3000" placeholder="Що важливого для учнів?">${esc(ANNF)}</textarea><div class="landtools"><button type="button" class="m5btn sm" data-a="m8annadd" ${busy?'disabled':''}>Оголосити</button></div>`;
+  h+=ANN.length?ANN.slice(0,12).map(a=>`<div class="m8a"><div class="m8ah">${seatAv(a.name||m6NameOf(a.by),'m5avs')}<b>${esc(a.name||m6NameOf(a.by))}</b><span class="hint">${a.at0?fmtDT(new Date(+a.at0).toISOString()):''}</span><span class="m5sp"></span>${can?`<button type="button" class="m5lnk" data-a="m8anndel" data-k="${esc(a.id)}" aria-label="Прибрати">✕</button>`:''}</div><div class="m6txt">${fmtMsg(a.text||'')}</div></div>`).join(''):'<p class="hint">Оголошень поки немає.</p>';
+  h+='</div>';
+  // про Орден
+  if(ORDED&&can){h+=`<div class="m5card"><h3>✏️ Про Орден</h3><label class="fl">Опис Ордену<textarea id="m6-about" rows="6" maxlength="3000" placeholder="Хто ми, у що віримо, наші правила">${esc(ORDF.about)}</textarea></label><label class="fl">Назви островів (Мальорка, Менорка, Ївіса, Форментера — через кому)<input type="text" id="m6-isl" maxlength="300" value="${esc(ORDF.isl)}"></label><div class="landtools"><button type="button" class="m5btn sm" data-a="m6osave" ${busy?'disabled':''}>Зберегти</button><button type="button" class="m5lnk" data-a="m6oedx">Скасувати</button></div></div>`;}
+  else h+=`<div class="m5card m6about"><h3>🪷 Про Орден</h3>${ORD.about?`<div class="m6txt">${fmtMsg(ORD.about)}</div>`:`<p class="hint">Орден Білого Лотоса — спільнота учнів і їхнього Магістра на Балеарських островах.${can?' Додайте опис Ордену.':''}</p>`}${can?'<div class="landtools"><button type="button" class="m5lnk" data-a="m6oed">✏️ Змінити опис і острови</button></div>':''}</div>`;
+  // символіка
+  if(SYMED&&can){h+=`<div class="m5card m8sym"><h3>✏️ Символіка</h3><div class="m8symg"><div><div class="m8sl">Герб</div><div class="m8si">${SYMF.emblem?`<img src="${esc(SYMF.emblem)}" alt="">`:'—'}</div><label class="small m6up">🖼 Завантажити<input type="file" accept="image/*" data-a="m8sym" data-k="emblem" hidden></label>${SYMF.emblem?'<button type="button" class="m5lnk" data-a="m8symx" data-k="emblem">Прибрати</button>':''}</div><div><div class="m8sl">Прапор</div><div class="m8si wide">${SYMF.flag?`<img src="${esc(SYMF.flag)}" alt="">`:'—'}</div><label class="small m6up">🖼 Завантажити<input type="file" accept="image/*" data-a="m8sym" data-k="flag" hidden></label>${SYMF.flag?'<button type="button" class="m5lnk" data-a="m8symx" data-k="flag">Прибрати</button>':''}</div></div><label class="fl">Девіз<input type="text" id="m8-motto" maxlength="120" value="${esc(SYMF.motto)}" placeholder="Девіз Ордену"></label><div class="landtools"><button type="button" class="m5btn sm" data-a="m8symsave" ${busy?'disabled':''}>Зберегти</button><button type="button" class="m5lnk" data-a="m8symedx">Скасувати</button></div></div>`;}
+  else if(S.emblem||S.flag||S.motto||can)h+=`<div class="m5card m8sym"><h3>🏳 Символіка Ордену</h3>${S.emblem||S.flag?`<div class="m8symg">${S.emblem?`<figure><div class="m8si"><img src="${esc(S.emblem)}" alt="Герб"></div><figcaption>Герб</figcaption></figure>`:''}${S.flag?`<figure><div class="m8si wide"><img src="${esc(S.flag)}" alt="Прапор"></div><figcaption>Прапор</figcaption></figure>`:''}</div>`:'<p class="hint">Магістр ще не встановив герб і прапор.</p>'}${S.motto?`<p class="m8motto">«${esc(S.motto)}»</p>`:''}${can?'<div class="landtools"><button type="button" class="m5lnk" data-a="m8symed">✏️ Змінити символіку</button></div>':''}</div>`;
+  h+='</div><aside>';
+  const me=m6MyOrd();
+  if(!AUTH.email)h+=`<div class="m5card"><b>Хочете стати учнем?</b><p class="hint">Увійдіть, щоб подати заявку Магістрові.</p><button type="button" class="m5btn sm" data-a="login">Увійти</button></div>`;
+  else if(m6IsMaster())h+=`<div class="m5card m6me"><b>${M6_LOTUS} Ви — Магістр Ордену</b><p class="hint">Приймаєте учнів, призначаєте Скарбника, ведете оголошення, свята й символіку.</p></div>`;
+  else if(m6IsTreas())h+=`<div class="m5card m6me"><b>${M6_LOTUS} Ви — Скарбник Ордену</b><p class="hint">Ведете Скарбницю: внески, витрати й бюджети івентів.</p></div>`;
+  else if(me&&me.st==='ok')h+=`<div class="m5card m6me"><b>${M6_LOTUS} Ви — учень Ордену</b><p class="hint">Можете писати книги для бібліотеки й спілкуватися в чаті Ордену.</p><button type="button" class="m5lnk" data-a="m6leave">Покинути Орден</button></div>`;
+  else if(me)h+=`<div class="m5card"><b>⏳ Заявку подано</b><p class="hint">Магістр розгляне її найближчим часом.</p><button type="button" class="m5lnk" data-a="m6leave">Відкликати заявку</button></div>`;
+  else if(!AUTH.bot&&(myMember()||plByEmail(AUTH.email)))h+=`<div class="m5card"><b>Стати учнем Ордену</b><p class="hint">Напишіть кілька слів Магістрові — чому хочете приєднатися.</p><textarea id="m6-app" data-a="m6app" rows="3" maxlength="500" placeholder="Кілька слів про себе">${esc(ORDAPP)}</textarea><div class="landtools"><button type="button" class="m5btn sm" data-a="m6apply" ${busy?'disabled':''}>Подати заявку</button></div></div>`;
+  else if(!AUTH.bot)h+=`<div class="m5card"><b>Стати учнем Ордену</b><p class="hint">Спершу створіть профіль ком’юніті.</p><button type="button" class="m5btn sm" data-a="m5reg">🪪 Створити профіль</button></div>`;
+  h+=`<div class="m5card m6mapc"><h3>🗺 Острови Ордену</h3>${m6Map()}</div>`;
+  const pend=ORDM.filter(x=>x.st!=='ok');
+  if(can&&pend.length)h+=`<div class="m5card"><h3>📨 Заявки <small>${pend.length}</small></h3>${pend.map(x=>`<div class="m6mem">${seatAv(x.name||m6NameOf(x.id),'m5avs')}<div><b>${esc(x.name||m6NameOf(x.id))}</b>${x.msg?`<div class="hint">${esc(x.msg)}</div>`:''}</div><span class="m5sp"></span><button type="button" class="m5btn sm" data-a="m6acc" data-k="${esc(x.id)}">Прийняти</button><button type="button" class="m5lnk" data-a="m6rej" data-k="${esc(x.id)}">Відхилити</button></div>`).join('')}</div>`;
+  const st=ORDM.filter(x=>x.st==='ok'&&lc(x.id)!==m6Treas()&&lc(x.id)!==m6Master());const mn=ORD.masterName||(m6Master()?m6NameOf(m6Master()):'');const tn=ORD.treasName||(m6Treas()?m6NameOf(m6Treas()):'');
+  h+=`<div class="m5card"><h3><span class="m6li">${M6_LOTUS}</span> Ієрархія</h3>
+    <div class="m6mem master">${mn?seatAv(mn,'m5av'):'<span class="m5av none">?</span>'}<div><small class="hint">Магістр Ордену</small><div><b>${mn?esc(mn):'ще не обрано'}</b></div></div></div>
+    <div class="m6mem treas">${tn?seatAv(tn,'m5avs'):'<span class="m5avs none">?</span>'}<div><small class="hint">Скарбник</small><div><b>${tn?esc(tn):'вакантно'}</b></div></div></div>
+    <div class="m6sub">Учні <small>${st.length}</small></div>${st.length?st.map(x=>`<div class="m6mem">${seatAv(x.name||m6NameOf(x.id),'m5avs')}<b>${esc(x.name||m6NameOf(x.id))}</b><span class="m5sp"></span>${can?`<button type="button" class="m5lnk" data-a="m6rej" data-k="${esc(x.id)}">Виключити</button>`:''}</div>`).join(''):'<p class="hint">Учнів поки немає.</p>'}
+    ${can&&!AUTH.bot?m8PosForm():''}</div>`;
+  h+='</aside></div></div>';return h;}
+function m8PosForm(){if(!OPOS)return `<div class="landtools"><button type="button" class="m5lnk" data-a="m8pos">👑 Призначити Магістра чи Скарбника</button></div>`;
+  const pl=m5AllPlayers().filter(p=>p.email);const opts=sel=>`<option value="">— вакантно —</option>`+pl.map(p=>`<option value="${esc(p.email)}"${sel&&lc(p.email)===sel?' selected':''}>${esc(p.name)}${m6InOrder(p.email)?' 🪷':''}</option>`).join('');
+  return `<div class="m8pos"><label class="fl">Магістр Ордену<select id="m8-master">${opts(m6Master())}</select></label><label class="fl">Скарбник<select id="m8-treas">${opts(m6Treas())}</select></label>${m6IsMaster()&&!AUTH.admin?'<p class="hint">Якщо передасте посаду Магістра іншому, ви станете звичайним учнем.</p>':''}<div class="landtools"><button type="button" class="m5btn sm" data-a="m8possave" ${busy?'disabled':''}>Зберегти</button><button type="button" class="m5lnk" data-a="m8posx">Скасувати</button></div></div>`;}
+// ---------- Скарбниця ----------
+function m8Key(w){return String(w||'').trim().toLowerCase();}
+function m8Bal(list){const B={};(list||FUND).forEach(f=>{const k=m8Key(f.what);if(!k)return;B[k]=B[k]||{name:String(f.what).trim(),n:0};B[k].n+=(f.kind==='out'?-1:1)*(+f.amt||0);});return Object.values(B).sort((a,b)=>b.n-a.n);}
+function m8Num(n){return (Math.round(n*100)/100).toLocaleString('uk-UA');}
+function m8Goal(t){return String(t||'').split(/[,;\n]/).map(x=>x.trim()).filter(Boolean).map(x=>{const m=/^(.*?)[\s:–-]*(\d[\d\s.,]*)$/.exec(x);return m?{what:m[1].trim()||x,amt:+m[2].replace(/[\s,]/g,'')}:{what:x,amt:0};});}
+function m8Fund(){const can=m6CanFund()&&!AUTH.bot;const bal=m8Bal();let h='<div class="m6o">'+m6OrdHead();
+  h+=`<div class="m5card m8bal"><h3>💰 Скарбниця Ордену <small>${m6Treas()?'Скарбник: '+esc(ORD.treasName||m6NameOf(m6Treas())):'Скарбника не призначено'}</small></h3>${bal.length?`<div class="m8chips">${bal.map(b=>`<span class="m8chip${b.n<0?' neg':''}"><b>${m8Num(b.n)}</b> ${esc(b.name)}</span>`).join('')}</div>`:'<p class="hint">Скарбниця порожня. Внески й витрати записують Магістр і Скарбник.</p>'}</div>`;
+  h+='<div class="m6grid"><div>';
+  if(can){const known=m8Bal().map(b=>b.name);h+=`<div class="m5card"><h3>✍️ Записати</h3><div class="m8seg"><button type="button" class="m5chip${FUNDF.kind==='in'?' on':''}" data-a="m8fk" data-k="in">＋ Внесок</button><button type="button" class="m5chip${FUNDF.kind==='out'?' on':''}" data-a="m8fk" data-k="out">− Витрата</button></div>
+    <div class="m8ff"><label class="fl">Що<input type="text" id="m8f-what" list="m8f-known" maxlength="40" value="${esc(FUNDF.what)}" placeholder="Срібло, золото, залізо…"><datalist id="m8f-known">${known.map(k=>`<option value="${esc(k)}">`).join('')}</datalist></label><label class="fl">Скільки<input type="number" id="m8f-amt" min="0" step="any" value="${esc(FUNDF.amt)}"></label><label class="fl">${FUNDF.kind==='in'?'Від кого':'На що'}<input type="text" id="m8f-who" maxlength="60" value="${esc(FUNDF.who)}" placeholder="${FUNDF.kind==='in'?'Ім’я гравця':'Призи, подарунки…'}"></label><label class="fl">Івент<select id="m8f-ev"><option value="">— без івенту —</option>${OEVS.map(e=>`<option value="${esc(e.id)}"${FUNDF.ev===e.id?' selected':''}>${esc(e.title)}</option>`).join('')}</select></label></div><label class="fl">Примітка<input type="text" id="m8f-note" maxlength="200" value="${esc(FUNDF.note)}"></label><div class="landtools"><button type="button" class="m5btn sm" data-a="m8fadd" ${busy?'disabled':''}>Записати</button></div></div>`;}
+  h+=`<div class="m5card"><h3>📒 Журнал</h3>${FUND.length?`<div class="tblwrap"><table class="m8tbl"><thead><tr><th>Дата</th><th></th><th>Хто / на що</th><th>Що</th><th class="num">Скільки</th><th>Івент</th>${can?'<th></th>':''}</tr></thead><tbody>${FUND.slice(0,200).map(f=>{const ev=OEVS.find(e=>e.id===f.ev);return `<tr><td class="hint">${f.at0?new Date(+f.at0).toLocaleDateString('uk-UA'):''}</td><td>${f.kind==='out'?'<span class="m8out">витрата</span>':'<span class="m8in">внесок</span>'}</td><td>${esc(f.who||'')}${f.note?`<div class="hint">${esc(f.note)}</div>`:''}</td><td>${esc(f.what||'')}</td><td class="num ${f.kind==='out'?'m8out':'m8in'}">${f.kind==='out'?'−':'+'}${m8Num(+f.amt||0)}</td><td>${ev?esc(ev.title):''}</td>${can?`<td><button type="button" class="m5lnk" data-a="m8fdel" data-k="${esc(f.id)}" aria-label="Прибрати">✕</button></td>`:''}</tr>`;}).join('')}</tbody></table></div>`:'<p class="hint">Записів ще немає.</p>'}</div>`;
+  h+='</div><aside>';
+  h+=`<div class="m5card"><h3>🎉 Івенти</h3>${OEVS.length?OEVS.map(e=>{const G=m8Goal(e.goal);const got=m8Bal(FUND.filter(f=>f.ev===e.id));const d=+e.date?new Date(+e.date):null;
+      return `<div class="m8ev"><div class="m8evh"><b>${esc(e.title)}</b>${d?`<span class="hint">${d.getDate()} ${M6MG[d.getMonth()]}</span>`:''}<span class="m5sp"></span>${can?`<button type="button" class="m5lnk" data-a="m8evdel" data-k="${esc(e.id)}" aria-label="Прибрати">✕</button>`:''}</div>${e.text?`<div class="hint">${esc(e.text)}</div>`:''}${G.length?G.map(g=>{const c=(got.find(x=>m8Key(x.name)===m8Key(g.what))||{n:0}).n;const p=g.amt?Math.max(0,Math.min(100,Math.round(c/g.amt*100))):0;return `<div class="m8gl"><span>${esc(g.what)}</span><span class="hint">${m8Num(c)} / ${m8Num(g.amt)}</span></div><div class="m8bar"><i style="width:${p}%"></i></div>`;}).join(''):''}</div>`;}).join(''):'<p class="hint">Івентів ще немає.</p>'}</div>`;
+  if(can)h+=`<div class="m5card"><h3>➕ Новий івент</h3><label class="fl">Назва<input type="text" id="m8e-t" maxlength="80" value="${esc(EVF.title)}" placeholder="Турнір на Мальорці"></label><label class="fl">Дата<input type="date" id="m8e-d" value="${esc(EVF.date)}"></label><label class="fl">Опис<textarea id="m8e-x" rows="2" maxlength="500">${esc(EVF.text)}</textarea></label><label class="fl">Бюджет (через кому)<input type="text" id="m8e-g" maxlength="200" value="${esc(EVF.goal)}" placeholder="Срібло 2000, Залізо 500"></label><div class="landtools"><button type="button" class="m5btn sm" data-a="m8evadd" ${busy?'disabled':''}>Додати івент</button></div></div>`;
+  h+='</aside></div></div>';return h;}
+// ---------- повторювані свята ----------
+function m6Hols(){return (Array.isArray(ORD.hols)?ORD.hols:[]).filter(x=>x&&(x.md||x.start)&&x.name);}
+function m8Start(x){if(x.start){const [y,m,d]=String(x.start).split('-').map(Number);return new Date(y,m-1,d);}const [m,d]=String(x.md).split('-').map(Number);return new Date(2000,m-1,d);}
+function m8OnDay(x,dt){const s=m8Start(x);const r=x.rep||'year';if(dt<s&&r!=='year')return false;
+  if(r==='year')return dt.getMonth()===s.getMonth()&&dt.getDate()===s.getDate();
+  if(r==='month')return dt.getDate()===s.getDate();
+  const n=r==='week'?7:Math.max(1,+x.n||1);const diff=Math.round((Date.UTC(dt.getFullYear(),dt.getMonth(),dt.getDate())-Date.UTC(s.getFullYear(),s.getMonth(),s.getDate()))/864e5);return diff>=0&&diff%n===0;}
+function m6Next(x){if(typeof x==='string')x={md:x};const t=new Date();t.setHours(0,0,0,0);for(let i=0;i<800;i++){const d=new Date(t.getFullYear(),t.getMonth(),t.getDate()+i);if(m8OnDay(x,d))return d;}return new Date(t.getFullYear()+5,0,1);}
+function m8RepTxt(x){const r=x.rep||'year';return r==='year'?'щороку':r==='month'?'щомісяця':r==='week'?'щотижня':'кожні '+(+x.n||1)+' дн.';}
+function m6Cal(){if(!OCAL){const n=new Date();OCAL={y:n.getFullYear(),m:n.getMonth()};}const H=m6Hols();const can=m6CanOrd();const {y,m}=OCAL;
+  const first=(new Date(y,m,1).getDay()+6)%7;const dim=new Date(y,m+1,0).getDate();const now=new Date();
+  let g='';for(let i=0;i<first;i++)g+='<div class="m6d e"></div>';for(let d=1;d<=dim;d++){const dt=new Date(y,m,d);const hs=H.filter(x=>m8OnDay(x,dt));const td=now.getFullYear()===y&&now.getMonth()===m&&now.getDate()===d;g+=`<div class="m6d${hs.length?' h':''}${td?' t':''}"><span>${d}</span>${hs.map(x=>`<i title="${esc(x.name)}">${esc(x.name)}</i>`).join('')}</div>`;}
+  const up=H.map((x,i)=>({x,i,dt:m6Next(x)})).sort((a,b)=>a.dt-b.dt);
+  let h='<div class="m6o">'+m6OrdHead()+'<div class="m6grid"><div>';
+  h+=`<div class="m5card"><div class="m6ch"><button type="button" class="m5lnk" data-a="m6cm" data-k="-1" aria-label="Попередній місяць">‹</button><h3>${M6MN[m]} ${y}</h3><button type="button" class="m5lnk" data-a="m6cm" data-k="1" aria-label="Наступний місяць">›</button></div><div class="m6cal">${['Пн','Вт','Ср','Чт','Пт','Сб','Нд'].map(d=>`<div class="m6wd">${d}</div>`).join('')}${g}</div></div>`;
+  if(can&&!AUTH.bot)h+=`<div class="m5card"><h3>➕ Нове свято</h3><div class="m8hf"><label class="fl">Дата (перша)<input type="date" id="m6h-d" value="${esc(OCF.start||'')}"></label><label class="fl">Повторювати<select id="m8h-r" data-a="m8hr"><option value="year"${(OCF.rep||'year')==='year'?' selected':''}>щороку</option><option value="month"${OCF.rep==='month'?' selected':''}>щомісяця</option><option value="week"${OCF.rep==='week'?' selected':''}>щотижня</option><option value="days"${OCF.rep==='days'?' selected':''}>кожні N днів</option></select></label>${OCF.rep==='days'?`<label class="fl">N днів<input type="number" id="m8h-n" min="1" max="365" value="${esc(OCF.n||10)}"></label>`:''}</div><label class="fl">Назва<input type="text" id="m6h-n" maxlength="80" value="${esc(OCF.name||'')}" placeholder="День Білого Лотоса"></label><label class="fl">Опис (необов’язково)<textarea id="m6h-t" rows="2" maxlength="500" placeholder="Як святкуємо">${esc(OCF.text||'')}</textarea></label><div class="landtools"><button type="button" class="m5btn sm" data-a="m8hadd" ${busy?'disabled':''}>Додати свято</button></div></div>`;
+  h+='</div><aside><div class="m5card"><h3><span class="m6li">'+M6_LOTUS+'</span> Свята Ордену</h3>';
+  h+=up.length?up.map(({x,i,dt})=>{const days=Math.round((dt-new Date(new Date().toDateString()))/864e5);return `<div class="m5ev"><div class="m5d">${dt.getDate()}<small>${M6MG[dt.getMonth()].slice(0,3).toUpperCase()}</small></div><div style="flex:1"><b>${esc(x.name)}</b><div class="hint">${days===0?'сьогодні':days===1?'завтра':'через '+days+' '+(days%10===1&&days%100!==11?'день':[2,3,4].includes(days%10)&&![12,13,14].includes(days%100)?'дні':'днів')} · ${m8RepTxt(x)}</div>${x.text?`<div class="m6ht">${esc(x.text)}</div>`:''}</div>${can?`<button type="button" class="m5lnk" data-a="m8hdel" data-k="${i}" aria-label="Прибрати">✕</button>`:''}</div>`;}).join(''):`<p class="hint">Свят ще немає.${can?' Додайте перше ліворуч.':''}</p>`;
+  h+='</div></aside></div></div>';return h;}
+// ---------- бібліотека: жанри й полиці ----------
+function m8Gname(id){const g=GENRES.find(x=>x.id===id);return g?g.name:'';}
+function m6Lib(){const can=(m6OrdIn()||AUTH.admin)&&!AUTH.bot;const all=BOOKS;const B=LIBG?all.filter(b=>LIBG==='_none'?!m8Gname(b.genre):b.genre===LIBG):all;let h='<div class="m6o">'+m6OrdHead();
+  h+=`<div class="m6lh"><div><h3>📚 Бібліотека Ордену</h3><p class="hint">${all.length} ${all.length===1?'книга':all.length>1&&all.length<5?'книги':'книг'} · товщина корінця — кількість сторінок · натисніть на книгу, щоб читати</p></div>${can?'<button type="button" class="m5btn" data-a="m6bnew">＋ Додати книгу</button>':''}</div>`;
+  const cnt=id=>all.filter(b=>b.genre===id).length;const none=all.filter(b=>!m8Gname(b.genre)).length;
+  h+=`<div class="m8gt" role="tablist"><button type="button" class="m5chip${!LIBG?' on':''}" data-a="m8g" data-k="">Усі <small>${all.length}</small></button>${GENRES.map(g=>`<span class="m8gw"><button type="button" class="m5chip${LIBG===g.id?' on':''}" data-a="m8g" data-k="${esc(g.id)}">${esc(g.name)} <small>${cnt(g.id)}</small></button>${m6CanOrd()&&LIBG===g.id?`<button type="button" class="m5lnk m8gx" data-a="m8gdel" data-k="${esc(g.id)}" title="Прибрати жанр">✕</button>`:''}</span>`).join('')}${none&&GENRES.length?`<button type="button" class="m5chip${LIBG==='_none'?' on':''}" data-a="m8g" data-k="_none">Без жанру <small>${none}</small></button>`:''}${can?(GNEW?`<span class="m8gn"><input type="text" id="m8-gn" maxlength="30" placeholder="Новий жанр"><button type="button" class="m5btn sm" data-a="m8gadd">Додати</button><button type="button" class="m5lnk" data-a="m8gnx">✕</button></span>`:'<button type="button" class="m5chip m8gplus" data-a="m8gnew">＋ Жанр</button>'):''}</div>`;
+  const W=Math.min(1060,Math.max(300,(innerWidth||1100)-60))-40-(innerWidth>760?100:70);const rows=[];let row=[],w=0;B.forEach(b=>{const bw=m6BookW(+b.np||1)+3;if(w+bw>W&&row.length){rows.push(row);row=[];w=0;}row.push(b);w+=bw;});if(row.length)rows.push(row);
+  const PER=3;const pages=Math.max(1,Math.ceil(rows.length/PER));if(SHP>=pages)SHP=pages-1;if(SHP<0)SHP=0;const vis=rows.slice(SHP*PER,SHP*PER+PER);while(vis.length<2)vis.push([]);
+  h+=`<div class="m8casew">${pages>1?`<button type="button" class="m6flip l" data-a="m8sp" data-k="-1" ${SHP<=0?'disabled':''} aria-label="Попередні полиці">‹</button>`:''}<div class="m6case">${vis.map(r=>`<div class="m6shelf">${r.map(b=>{const c=/^#[0-9a-f]{6}$/i.test(b.color||'')?b.color:'#3a3a3a';const hh=180+m6Hash(b.id)%56;return `<button type="button" class="m6bk" style="--bc:${c};--bi:${m6Ink(c)};width:${m6BookW(+b.np||1)}px;height:${hh}px" data-a="m6bopen" data-k="${esc(b.id)}" title="${esc(b.title)}${b.auth?' — '+esc(b.auth):''} · ${+b.np||1} с."><span>${esc(b.title)}</span><i>${+b.np||1}</i></button>`;}).join('')}</div>`).join('')}</div>${pages>1?`<button type="button" class="m6flip r" data-a="m8sp" data-k="1" ${SHP>=pages-1?'disabled':''} aria-label="Наступні полиці">›</button>`:''}</div>`;
+  if(pages>1)h+=`<p class="hint m8sph">Полиці ${SHP*PER+1}–${Math.min(rows.length,SHP*PER+PER)} з ${rows.length}</p>`;
+  if(!B.length)h+=`<p class="hint m6empty">${LIBG?'У цьому жанрі книг ще немає.':'Полиця поки порожня.'}${can&&!LIBG?' Додайте першу книгу!':''}</p>`;
+  h+='</div>';
+  if(BKW&&!MODALH)MODALH=m6Write();else if(BKR&&!MODALH)MODALH=m6Read();
+  return h;}
+function m6Write(){const np=m6Np(BKW.text);return `<div class="bmodal m6bm" role="dialog" aria-modal="true" aria-label="Книга"><button type="button" class="bmback" data-a="m6bx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m6wr"><button class="small bmx" data-a="m6bx">✕ Закрити</button><h3>${BKW.id?'✏️ Редагувати книгу':'📖 Нова книга'}</h3>
+  <div class="m6wtop"><div class="m6prev" style="--bc:${esc(BKW.color)};--bi:${m6Ink(BKW.color)};width:${m6BookW(np)}px"><span>${esc(BKW.title||'Назва')}</span></div><div style="flex:1;min-width:0"><label class="fl">Назва<input type="text" id="m6b-title" data-a="m6bt" maxlength="80" value="${esc(BKW.title)}" placeholder="Назва книги"></label>
+  <div class="m8wr2"><label class="fl">Автор(и)<input type="text" id="m6b-auth" data-a="m6ba" maxlength="200" value="${esc(BKW.auth||'')}" placeholder="Ім’я з гри, через кому"></label><label class="fl">Жанр<select id="m6b-gen" data-a="m6bg"><option value="">— без жанру —</option>${GENRES.map(g=>`<option value="${esc(g.id)}"${BKW.genre===g.id?' selected':''}>${esc(g.name)}</option>`).join('')}</select></label></div>
+  <div class="hint m5lbl">Колір корінця</div><div class="m6sw">${OR_COLORS.map(c=>`<button type="button" class="m6c${BKW.color===c?' on':''}" style="background:${c}" data-a="m6bc" data-k="${c}" aria-label="Колір ${c}"></button>`).join('')}<label class="m6c m6cc" title="Свій колір"><input type="color" data-a="m6bcc" value="${esc(BKW.color)}" aria-label="Свій колір"></label></div></div></div>
+  <label class="fl">Текст книги<textarea id="m6b-text" data-a="m6btx" rows="14" maxlength="150000" placeholder="Вставте або напишіть текст. Нова сторінка — окремий рядок із трьох дефісів: ---">${esc(BKW.text)}</textarea></label>
+  <div class="m5tools" style="padding-left:0"><span class="hint" id="m6b-np">${np} ${np===1?'сторінка':np<5?'сторінки':'сторінок'}</span><span class="m5sp"></span><button type="button" class="m5btn" data-a="m6bsave" ${busy?'disabled':''}>${BKW.id?'Зберегти':'Поставити на полицю'}</button></div></div></div>`;}
+function m6Read(){const b=BOOKS.find(x=>x.id===BKR);if(!b)return '';const tx=BKTX[b.id];const own=AUTH.email&&lc(b.by)===lc(AUTH.email);const canDel=own||m6CanOrd();
+  let body;if(tx==null)body='<p class="hint">Відкриваю книгу…</p>';else{const P=m6Pages(tx);const two=innerWidth>900;const step=two?2:1;if(BKP>=P.length)BKP=Math.max(0,P.length-1);if(two&&BKP%2)BKP--;
+    const pg=i=>i<P.length?`<div class="m6pg"><div class="m6pt" data-notr>${fmtMsg(P[i])}</div><span class="m6pn">${i+1}</span></div>`:'<div class="m6pg blank"></div>';
+    body=`<div class="m6book"><button type="button" class="m6flip l" data-a="m6bp" data-k="${-step}" ${BKP<=0?'disabled':''} aria-label="Попередня сторінка">‹</button><div class="m6spread${two?' two':''}">${pg(BKP)}${two?pg(BKP+1):''}</div><button type="button" class="m6flip r" data-a="m6bp" data-k="${step}" ${BKP+step>=P.length?'disabled':''} aria-label="Наступна сторінка">›</button></div><div class="m6nav"><button type="button" class="m5btn sm" data-a="m6bp" data-k="${-step}" ${BKP<=0?'disabled':''}>‹ Назад</button><span class="hint">${two&&BKP+1<P.length?`сторінки ${BKP+1}–${BKP+2}`:`сторінка ${BKP+1}`} з ${P.length}</span><button type="button" class="m5btn sm" data-a="m6bp" data-k="${step}" ${BKP+step>=P.length?'disabled':''}>Далі ›</button></div>`;}
+  const gn=m8Gname(b.genre);
+  return `<div class="bmodal m6bm" role="dialog" aria-modal="true" aria-label="${esc(b.title)}"><button type="button" class="bmback" data-a="m6bx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m6rd" style="--bc:${esc(b.color||'#3a3a3a')};--bi:${m6Ink(b.color)}"><button class="small bmx" data-a="m6bx">✕ Закрити</button><div class="m6cover"><b>${esc(b.title)}</b>${b.auth?`<span class="m8au">${esc(b.auth)}</span>`:''}<small>${gn?esc(gn)+' · ':''}${+b.np||1} с. · додав ${esc(b.name||m6NameOf(b.by))}</small></div>${body}${own||canDel?`<div class="landtools m6bact">${own?`<button type="button" class="m5lnk" data-a="m6bedit" data-k="${esc(b.id)}">✏️ Редагувати</button>`:''}${canDel?`<button type="button" class="m5lnk" data-a="m6bdel" data-k="${esc(b.id)}">Зняти з полиці</button>`:''}</div>`:''}</div></div>`;}
+// ---------- аватарки: з профілю ком’юніті + оновлення раз на добу ----------
+function m8AvQ(){return '?d='+Math.floor(Date.now()/864e5);}
+function avatarOf(p){if(!p)return '';if(p.img)return p.img;const id=profId(p.profile);if(!id)return '';const k=AV_OK[id];if(k==='none')return '';return AV_BASE+id+'.'+(k||'webp')+m8AvQ();}
+function seatAv(name,cls){const n=String(name||'').trim();if(!n||n==='0')return `<span class="${cls} none vacant" aria-hidden="true">?</span>`;const p=plByName(n);
+  if(p&&(p.img||profId(p.profile)))return avImg(p,cls);const m=(MEMBERS||[]).find(x=>String(x.name||'').trim()===n);if(m&&profId(m.profile))return avImg({name:n,profile:m.profile},cls);
+  if(p)return avImg(p,cls);return `<span class="${cls} none" aria-hidden="true">${esc(n.slice(0,1))}</span>`;}
+// ---------- дії ----------
+async function m8Click(a,b){const k=b.dataset.k;const run=async(fn,ok)=>{busy=true;render();try{await fn();if(ok){msg=ok;msgErr=false;}}catch(e){console.warn(e);msg='Не вдалося'+(e&&e.code==='permission-denied'?': немає права':'');msgErr=true;}busy=false;render();};
+  const v=id=>((document.getElementById(id)||{}).value||'').trim();
+  // оголошення
+  if(a==='m8annadd'){const t=(document.getElementById('m8-ann')||{}).value||'';if(!t.trim())return true;await run(()=>window.FB.ordAnn({text:t.trim().slice(0,3000),name:m5Name().slice(0,40)}),'Оголошено');if(!msgErr)ANNF='';render();return true;}
+  if(a==='m8anndel'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return true;}await run(()=>window.FB.ordAnnDel(k),'Прибрано');return true;}
+  // символіка
+  if(a==='m8symed'){SYMF=Object.assign({},m6Sym());SYMED=true;render();return true;}
+  if(a==='m8symedx'){SYMED=false;render();return true;}
+  if(a==='m8symx'){SYMF[k]='';render();return true;}
+  if(a==='m8symsave'){const d={emblem:SYMF.emblem||'',flag:SYMF.flag||'',motto:v('m8-motto').slice(0,120)};await run(()=>window.FB.ordSave({sym:d}),'Символіку збережено');if(!msgErr){ORD.sym=d;SYMED=false;render();}return true;}
+  // посади
+  if(a==='m8pos'){OPOS=true;render();return true;}
+  if(a==='m8posx'){OPOS=false;render();return true;}
+  if(a==='m8possave'){const ms=v('m8-master'),ts=v('m8-treas');const d={master:ms,masterName:ms?m6NameOf(ms):'',treas:ts,treasName:ts?m6NameOf(ts):''};if(!ms&&!AUTH.admin){msg='Магістр має бути обраний';msgErr=true;render();return true;}
+    await run(()=>window.FB.ordSave(d),'Посади Ордену збережено');if(!msgErr){Object.assign(ORD,d);OPOS=false;render();}return true;}
+  // скарбниця
+  if(a==='m8fk'){FUNDF.kind=k;['what','amt','who','note','ev'].forEach(f=>{const e=document.getElementById('m8f-'+f);if(e)FUNDF[f]=e.value;});render();return true;}
+  if(a==='m8fadd'){const d={kind:FUNDF.kind==='out'?'out':'in',what:v('m8f-what').slice(0,40),amt:+v('m8f-amt'),who:v('m8f-who').slice(0,60),ev:v('m8f-ev'),note:v('m8f-note').slice(0,200)};
+    if(!d.what||!(d.amt>0)){FUNDF=Object.assign(FUNDF,d,{amt:v('m8f-amt')});msg='Вкажіть, що саме й скільки';msgErr=true;render();return true;}
+    await run(()=>window.FB.ordFund(d),d.kind==='in'?'Внесок записано':'Витрату записано');if(!msgErr){FUNDF={kind:d.kind,what:d.what,amt:'',who:'',note:'',ev:d.ev};render();}return true;}
+  if(a==='m8fdel'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return true;}await run(()=>window.FB.ordFundDel(k),'Прибрано');return true;}
+  if(a==='m8evadd'){const d={title:v('m8e-t').slice(0,80),date:v('m8e-d')?Date.parse(v('m8e-d')+'T12:00:00'):0,text:v('m8e-x').slice(0,500),goal:v('m8e-g').slice(0,200)};if(!d.title){EVF={title:'',date:v('m8e-d'),text:d.text,goal:d.goal};msg='Вкажіть назву івенту';msgErr=true;render();return true;}
+    await run(()=>window.FB.ordEv(d),'Івент додано');if(!msgErr){EVF={title:'',date:'',text:'',goal:''};render();}return true;}
+  if(a==='m8evdel'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно?';return true;}await run(()=>window.FB.ordEvDel(k),'Прибрано');return true;}
+  // свята
+  if(a==='m8hadd'){const st=v('m6h-d');const rep=v('m8h-r')||'year';const n=+v('m8h-n')||10;const name=v('m6h-n');const text=v('m6h-t');OCF={start:st,rep,n,name,text};if(!st||!name){msg='Вкажіть дату й назву свята';msgErr=true;render();return true;}
+    const it={md:st.slice(5),start:st,rep,name:name.slice(0,80),text:text.slice(0,500)};if(rep==='days')it.n=Math.max(1,Math.min(365,n));
+    const H=(Array.isArray(ORD.hols)?ORD.hols:[]).concat([it]).slice(0,120);await run(()=>window.FB.ordSave({hols:H}),'Свято додано');if(!msgErr){ORD.hols=H;OCF={};render();}return true;}
+  if(a==='m8hdel'){const all=m6Hols();const x=all[+k];const H=(Array.isArray(ORD.hols)?ORD.hols:[]).filter(y=>y!==x);await run(()=>window.FB.ordSave({hols:H}),'Прибрано');if(!msgErr){ORD.hols=H;render();}return true;}
+  // жанри й полиці
+  if(a==='m8g'){LIBG=k||'';SHP=0;render();return true;}
+  if(a==='m8sp'){SHP+=+k;render();return true;}
+  if(a==='m8gnew'){GNEW=true;render();setTimeout(()=>{const e=document.getElementById('m8-gn');if(e)e.focus();},30);return true;}
+  if(a==='m8gnx'){GNEW=false;render();return true;}
+  if(a==='m8gadd'){const n=v('m8-gn').slice(0,30);if(!n)return true;if(GENRES.some(g=>m8Key(g.name)===m8Key(n))){msg='Такий жанр уже є';msgErr=true;render();return true;}await run(()=>window.FB.ordGenre(n),'Жанр додано');if(!msgErr){GNEW=false;render();}return true;}
+  if(a==='m8gdel'){if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Прибрати жанр?';return true;}await run(()=>window.FB.ordGenreDel(k),'Жанр прибрано (книги лишились у «Без жанру»)');LIBG='';return true;}
+  if(a==='m6bnew'){BKW={id:'',title:'',auth:'',genre:LIBG&&LIBG!=='_none'?LIBG:'',color:OR_COLORS[m6Hash(Date.now())%OR_COLORS.length],text:''};render();setTimeout(()=>{const t=document.getElementById('m6b-title');if(t)t.focus();},30);return true;}
+  if(a==='m6bedit'){const bk=BOOKS.find(x=>x.id===k);if(!bk)return true;BKW={id:bk.id,title:bk.title||'',auth:bk.auth||'',genre:bk.genre||'',color:bk.color||'#3a3a3a',text:BKTX[k]||''};BKR=null;render();return true;}
+  if(a==='m6bc'&&BKW){BKW.title=v('m6b-title');BKW.auth=v('m6b-auth');BKW.genre=v('m6b-gen');BKW.text=(document.getElementById('m6b-text')||{}).value||BKW.text;BKW.color=k;render();return true;}
+  if(a==='m6bsave'&&BKW){BKW.title=v('m6b-title');BKW.auth=v('m6b-auth');BKW.genre=v('m6b-gen');BKW.text=(document.getElementById('m6b-text')||{}).value||BKW.text;if(!BKW.title||!BKW.text.trim()){msg='Потрібні назва й текст';msgErr=true;render();return true;}
+    const id=BKW.id||('b'+Date.now().toString(36)+Math.random().toString(36).slice(2,5));const np=Math.min(500,m6Np(BKW.text));const meta={title:BKW.title.slice(0,80),color:/^#[0-9a-f]{6}$/i.test(BKW.color)?BKW.color:'#3a3a3a',np,name:m5Name().slice(0,40),auth:BKW.auth.slice(0,200),genre:BKW.genre||''};
+    await run(()=>window.FB.bookSave(id,meta,BKW.text.slice(0,150000),!!BKW.id),BKW.id?'Збережено':'Книга на полиці');if(!msgErr){BKTX[id]=BKW.text;BKW=null;render();}return true;}
+  return false;}
+function m8Input(a,t){if(a==='m8annt'){ANNF=t.value;return true;}if(a==='m6ba'&&BKW){BKW.auth=t.value;return true;}if(a==='m6bg'&&BKW){BKW.genre=t.value;return true;}
+  if(a==='m8hr'){OCF=Object.assign({},OCF,{rep:t.value,start:((document.getElementById('m6h-d')||{}).value||''),name:((document.getElementById('m6h-n')||{}).value||''),text:((document.getElementById('m6h-t')||{}).value||'')});render();return true;}
+  if(a==='m8sym')return true;return false;}
+function m8Change(a,t){if(a==='m8sym'){const f=t.files&&t.files[0];const k=t.dataset.k;t.value='';imgToData(f,k==='flag'?600:360,d=>{if(!d){msg='Потрібне зображення';msgErr=true;}else SYMF[k]=d;render();});return true;}if(a==='m8hr'||a==='m6bg')return true;return false;}
 
 })();
 </script>
@@ -8875,6 +9122,10 @@ async function revokeNews(id, r){ await updateDoc(doc(db, "news", id), { revoked
 
 // live updates: new bills, votes, decisions and edits appear without reloading the page
 function watch(){
+  onSnapshot(collection(db, "ordann"), s => window.APP.ann && window.APP.ann(listFrom(s)), e => console.warn(e));
+  onSnapshot(collection(db, "ordfund"), s => window.APP.fund && window.APP.fund(listFrom(s)), e => console.warn(e));
+  onSnapshot(collection(db, "ordev"), s => window.APP.oevs && window.APP.oevs(listFrom(s)), e => console.warn(e));
+  onSnapshot(collection(db, "bgenres"), s => window.APP.genres && window.APP.genres(listFrom(s)), e => console.warn(e));
   onSnapshot(doc(db, "site", "hols"), s => window.APP.hols && window.APP.hols(s.exists() ? s.data() : null), e => console.warn(e));
   onSnapshot(doc(db, "site", "govt"), s => window.APP.govt && window.APP.govt(s.exists() ? s.data() : null), e => console.warn(e));
   onSnapshot(doc(db, "site", "order"), s => window.APP.order && window.APP.order(s.exists() ? s.data() : {}), e => { console.warn(e); window.APP.order && window.APP.order({}); });
@@ -8945,7 +9196,16 @@ async function ordDel(email){ await deleteDoc(doc(db, "ordm", email)); }
 async function bookSave(id, meta, text, upd){ if (upd) await updateDoc(doc(db, "books", id), { ...meta, up: Date.now() }); else await setDoc(doc(db, "books", id), { ...meta, by: myMail(), at: serverTimestamp(), at0: Date.now() }); await setDoc(doc(db, "booktx", id), { text, by: myMail() }); }
 async function bookText(id){ const s = await getDoc(doc(db, "booktx", id)); return s.exists() ? (s.data().text || "") : ""; }
 async function bookDel(id){ await deleteDoc(doc(db, "booktx", id)); await deleteDoc(doc(db, "books", id)); }
+async function ordAnn(d){ await setDoc(doc(db, "ordann", "a" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5)), { text: d.text, name: d.name || "", by: myMail(), at: serverTimestamp(), at0: Date.now() }); }
+async function ordAnnDel(id){ await deleteDoc(doc(db, "ordann", id)); }
+async function ordFund(d){ await setDoc(doc(db, "ordfund", "f" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5)), { kind: d.kind, what: d.what, amt: d.amt, who: d.who || "", ev: d.ev || "", note: d.note || "", by: myMail(), at: serverTimestamp(), at0: Date.now() }); }
+async function ordFundDel(id){ await deleteDoc(doc(db, "ordfund", id)); }
+async function ordEv(d){ await setDoc(doc(db, "ordev", "e" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5)), { title: d.title, date: d.date || 0, text: d.text || "", goal: d.goal || "", by: myMail(), at: serverTimestamp(), at0: Date.now() }); }
+async function ordEvDel(id){ await deleteDoc(doc(db, "ordev", id)); }
+async function ordGenre(name){ await setDoc(doc(db, "bgenres", "g" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5)), { name, by: myMail(), at: serverTimestamp() }); }
+async function ordGenreDel(id){ await deleteDoc(doc(db, "bgenres", id)); }
 window.FB = {
+  ordAnn, ordAnnDel, ordFund, ordFundDel, ordEv, ordEvDel, ordGenre, ordGenreDel,
   setGovt, setHols, ordSave, ordApply, ordSet, ordDel, bookSave, bookText, bookDel,
   cmMember, cmPost, cmReact, cmReport, cmDel, cmUnhide, cmCmts, cmCmt, cmCdel,
   save, saveEcon, saveLands, savePlayers, syncAccess, depSet, depDel, loadVotes, loadProposals, vote, ovote, sign, propose, delProposal,
