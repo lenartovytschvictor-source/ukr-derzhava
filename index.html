@@ -8267,9 +8267,9 @@ function m6Struct(s){const S=s.sections;const by=k=>S.find(x=>x.kind===k);S.forE
   if(gov&&P&&gov!==P){gov.tab=P.id;gov.sw=false;gov.hideView=true;delete gov.navTop;}
   if(units&&ranks){units.tab=ranks.id;delete units.navTop;}
   if(doc&&laws){doc.tab=laws.id;doc.sw=false;doc.hideView=true;delete doc.navTop;}
-  S.filter(x=>!x.kind&&x.lands).forEach(hide);['map','economy','labor','fund','parties','awards','calendar','culture','community'].forEach(k=>hide(by(k)));
+  S.filter(x=>!x.kind&&x.lands).forEach(hide);['economy','labor','fund','parties','awards','calendar','culture','community'].forEach(k=>hide(by(k)));
   const conf=by('confed');if(conf){conf.navHide=true;}
-  const feed=by('feed');const tops=[feed,hist,home,power,laws,court,church,ranks].filter(Boolean);const ord=S.filter(x=>/^order/.test(x.kind||''));
+  const feed=by('feed');const mapS=by('map');top(mapS,'Карта');const tops=[feed,hist,home,power,laws,court,church,ranks,mapS].filter(Boolean);const ord=S.filter(x=>/^order/.test(x.kind||''));
   const order=[...tops,...ord,...S.filter(x=>!x.tab&&!tops.includes(x)&&!ord.includes(x))];const out=[];
   const KO=['parliament','elections','players','gov'];const ko=c=>{const i=KO.indexOf(c.kind);return i<0?50:i;};
   order.forEach(t=>{if(out.includes(t))return;out.push(t);S.filter(c=>c.tab===t.id&&!out.includes(c)).sort((x,y)=>ko(x)-ko(y)).forEach(c=>out.push(c));});S.forEach(c=>{if(!out.includes(c))out.push(c);});s.sections=out;
