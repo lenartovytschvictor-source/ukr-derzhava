@@ -2163,6 +2163,9 @@ body.cm .m6o .m8tbl th{background:var(--bg2);color:var(--muted)}body.cm .m6o .m8
 .m9epnew{border-style:dashed!important}
 .m9chcal{margin-top:16px}
 .m9h{margin:0 0 8px}
+.m9la{display:grid;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.m9lar{display:flex;gap:6px;flex-wrap:wrap}.m9lar select{flex:1 1 160px;min-width:0}
+.m9bdel{margin-top:8px;align-items:center}
 </style>
 
 </head><body>
@@ -3799,7 +3802,7 @@ function mapSideHtml(res){const G=window.MAPGEO;const r0=MAPSEL&&G.__by[MAPSEL];
   let land='';
   if(e){const mine=R.filter(r=>res[r.id]&&res[r.id].l.id===e.l.id).sort((a,b)=>(b.city-a.city)||mapName(a).localeCompare(mapName(b),'uk'));const nc=mine.filter(r=>r.city).length,nu=mine.length-nc;
     land=`<button type="button" class="mlandb" data-a="landm" data-k="${esc(nm)}">${cur(e.l).img?`<img src="${esc(cur(e.l).img)}" alt="">`:''}<span><b>${esc(nm)}</b><small>${esc(e.lost?'Втрачена Земля':landStName(landSt(e.l,e.sec)))} · відкрити сторінку Землі</small></span></button>
-      <div class="mgrid2"><div class="dsec"><div class="hint">${esc(h&&h.post?String(h.post.title).replace(/^\d+\s*-?\s*[йя]?\s*/,''):'Очільник')}</div><div>${h&&h.name?plink(h.name):'<span class="vacn">Вакантно</span>'}</div></div>${ep?`<div class="dsec"><div class="hint">Єпархія</div><div>⛪ ${esc(ep.name)}${ep.bishop?`<small class="hint"> · ${esc(ep.bishop)}</small>`:''}</div></div>`:''}</div>
+      <div class="mgrid2"><div class="dsec"><div class="hint">${esc(h&&h.post?String(h.post.title).replace(/^\d+\s*-?\s*[йя]?\s*/,''):'Очільник')}</div><div>${h&&h.name?plink(h.name):'<span class="vacn">Вакантно</span>'}</div>${e&&!e.lost?m9LandAppHtml(e.l):''}</div>${ep?`<div class="dsec"><div class="hint">Єпархія</div><div>⛪ ${esc(ep.name)}${ep.bishop?`<small class="hint"> · ${esc(ep.bishop)}</small>`:''}</div></div>`:''}</div>
       <div class="dsec"><div class="hint">Територія Землі: ${nu} ${nu===1?'уділ':nu<5&&nu>0?'уділи':'уділів'}${nc?` · ${nc} ${nc===1?'місто':nc<5?'міста':'міст'}`:''}</div><div class="mchips">${mine.map(r=>`<button type="button" class="mchip${r.city?' city':''}${r.id===r0.id?' on':''}" data-a="mapfocus" data-u="${esc(r.id)}">${r.city?'🏙 ':''}${esc(mapName(r))}</button>`).join('')}</div></div>`;}
   else if(our)land=`<p class="hint">${esc(MAP_KINDS[mapKind(r0,e)][1])}${(e&&e.sec&&e.sec.id==='ck')||ARB_CAPS.includes(r0.id)?'':' Української Держави'}.</p>`;
   else if(ctry)land=`<p class="hint">${esc(ctry[0])}${ctry[2]?' · '+esc(ctry[2]):''}${G.union.includes(r0.cid)?' · союзна держава':''}${mapVassal(r0.cid)?' · васал Української Держави':''}</p>`;
@@ -4620,7 +4623,7 @@ function repStatsHtml(reps,all){const closed=all.filter(b=>!isOpen(b)&&(b.live||
   const rows=reps.map(r=>{let v=0,miss=0,f=0,ag=0;closed.forEach(b=>{const vs=tally(b).vs||[];const m=vs.find(x=>x.land===r.land);if(m){v++;if(m.choice==='for')f++;if(m.choice==='against')ag++;}else if(vs.length)miss++;});
     const prop=all.filter(b=>String(b.author||'').includes('('+r.land+')')||b.land===r.land).length;const tot=v+miss;return {r,v,miss,f,ag,prop,pct:tot?Math.round(v/tot*100):null};}).sort((a,b)=>(b.pct??-1)-(a.pct??-1)||b.v-a.v);
   return `<details class="block rstats"><summary><h3>Статистика представників <small>явка, голоси «за» і «проти», подані законопроєкти</small></h3></summary><div class="tblwrap"><table class="bud"><thead><tr><th>Земля</th><th>Представник</th><th>Явка</th><th>Голосів</th><th>За</th><th>Проти</th><th>Пропустив</th><th>Подав</th></tr></thead><tbody>${rows.map(o=>`<tr><th>${esc(o.r.land)}</th><td>${o.r.name?plink(o.r.name):'<span class="vacn">вакантно</span>'}</td>${o.r.name?`<td><b>${o.pct==null?'—':o.pct+'%'}</b></td><td>${o.v}</td><td>${o.f}</td><td>${o.ag}</td><td>${o.miss}</td><td>${o.prop}</td>`:'<td colspan="6" class="hint">немає представника</td>'}</tr>`).join('')}</tbody></table></div><p class="hint">Рахуються завершені голосування. «Пропустив» — голосування, в якому інші голосували, а ця Земля ні.</p></details>`;}
-function billCard(b,lead,me,compact){const T=tally(b),vs=T.vs;const f=T.f,a=T.a,z=T.z;const es=lawState(b)==='void'?'void':effStatus(b);const t=f+a+z;const st=BST[es]||BST.review;
+function billCard0(b,lead,me,compact){const T=tally(b),vs=T.vs;const f=T.f,a=T.a,z=T.z;const es=lawState(b)==='void'?'void':effStatus(b);const t=f+a+z;const st=BST[es]||BST.review;
   const open=isOpen(b);
   const br=b.closesAt&&!open&&(expired(b)||b.autoClosed||b.live)?baseRes(b):'';const ended=br?`<div class="bm">Голосування завершилося ${b.early?'достроково — більшість призначених Представників, ':''}${fmtDT(b.closesAt)}${br==='passed'?' · більшість «За»':' · «За» не більше, ніж «Проти»'}</div>`:'';
   const voteUi=open?`<div class="vote"><span class="live">Голосування триває${b.hours===12?' · 12 год (надзвичайний стан)':''}</span>${b.closesAt?`<span class="hint">до ${fmtDT(b.closesAt)} · залишилось ${timeLeft(b.closesAt)}</span>`:''}${me.length?me.map(land=>{const mine=vs.find(v=>v.land===land);return `<div class="vrow">${me.length>1?`<span class="vland">${esc(seatName(land))}</span>`:''}${Object.keys(CH).map(k=>`<button class="small ${CH[k][1]}${mine&&mine.choice===k?' on':''}" data-a="vote" data-b="${esc(b.id)}" data-c="${k}" data-l="${esc(land)}" ${busy?'disabled':''}>${CH[k][0]}</button>`).join('')}${mine?'<span class="hint">голос враховано, можна змінити</span>':''}</div>`}).join(''):(AUTH.email?'<span class="hint">Голосують лише Представники Земель</span>':'<span class="hint">Представники Земель: увійдіть через Google, щоб проголосувати</span>')}</div>`:'';
@@ -7477,10 +7480,10 @@ function welcomeHtml(){if(M9EP)return m9EpModal();if(M9AP&&AUTH.email)return m9A
   if(accAdding()!=null||DPIMP)return '';if(!AUTH.ready||AUTH.bot||AUTH.email||welcomeSeen()||/[?&]bot=1/.test(location.search)||!state.sections.length||editing)return '';
   WELC_AT=0;return `<div class="bmodal" role="dialog" aria-modal="true" aria-label="Вітаємо"><button type="button" class="bmback" data-a="welx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox welc"><button class="small bmx" data-a="welx">✕</button><div class="wellang">${langBtns()}</div><img class="welgerb" src="${esc(emblemSrc())}" alt=""><h3>Вітаємо в ${esc(m9Udn())}!</h3><p>Це доповнення до гри DragPolit: уряд і закони, Суд, Церква, військо, карта й чат.</p><div class="welbtns"><button class="primary" data-a="login">🔑 Увійти через Google</button></div><p class="hint">Після входу ви створите профіль ком’юніті й зможете подати заявку на громадянство або туристичну реєстрацію.</p><div><button class="small ghost" data-a="welx">Просто подивитися сайт</button></div></div></div>`;}
 // ---------- події ----------
-function m9Input(a,t){if(M9EP&&a==='m9epf'){M9EP.f[t.dataset.k]=t.value;return true;}if(M9EP&&a==='m9epl'){const L=M9EP.f.lands;const n=t.dataset.k;const i=L.indexOf(n);if(t.checked&&i<0)L.push(n);if(!t.checked&&i>=0)L.splice(i,1);return true;}if(a==='m9f'&&t.tagName!=='BUTTON'){M9F[t.dataset.k]=t.value;return true;}
+function m9Input(a,t){if(a==='m9laf'){M9LA[t.dataset.k]=t.value;return true;}if(M9EP&&a==='m9epf'){M9EP.f[t.dataset.k]=t.value;return true;}if(M9EP&&a==='m9epl'){const L=M9EP.f.lands;const n=t.dataset.k;const i=L.indexOf(n);if(t.checked&&i<0)L.push(n);if(!t.checked&&i>=0)L.splice(i,1);return true;}if(a==='m9f'&&t.tagName!=='BUTTON'){M9F[t.dataset.k]=t.value;return true;}
   if(a==='m9guest'){const g=m9Guests().find(x=>x.email===t.value);M9F={adst:M9F.adst};M9ADD=g?{email:g.email,name:g.name,profile:profId(g.profile)||g.profile}:{};render();return true;}
   return false;}
-async function m9Click(a,b){const k=b.dataset.k;if(m9EpClick(a,b))return true;if(a==='m9epsave'||a==='m9epdel')return m9EpAct(a,b);
+async function m9Click(a,b){const k=b.dataset.k;if(m9EpClick(a,b))return true;if(a==='m9bdel'){await m9BillDel(b);return true;}if(a==='m9la'||a==='m9lax'){await m9LandAct(a,b);return true;}if(a==='m9epsave'||a==='m9epdel')return m9EpAct(a,b);
   const run=async(fn,ok)=>{busy=true;render();let r=true;try{await fn();msg=ok;msgErr=false;}catch(e){console.warn(e);r=false;msg='Не вдалося'+(e&&e.code==='permission-denied'?': немає права':(e&&e.message?': '+e.message:''));msgErr=true;}busy=false;render();return r;};
   if(a==='m9f'&&b.dataset.v){M9F[k]=b.dataset.v;render();return true;}
   if(a==='m9plf'){PLF9=k||'all';render();return true;}
@@ -7554,6 +7557,36 @@ async function m9EpAct(a,b){if(!M9EP||!m9CanEp()||busy)return true;const c=churc
     E.forEach((e,i)=>{if(i!==M9EP.i)e.lands=(e.lands||[]).filter(n=>!F.lands.includes(n));});
     const ep=M9EP.i>=0?E[M9EP.i]:{};Object.assign(ep,{name,bishop:F.bishop||'',desc:String(F.desc||'').trim(),col:F.col||'',lands:F.lands.slice()});if(M9EP.i<0)E.push(ep);}
   busy=true;render();try{await window.FB.saveChurch(c);saved=JSON.stringify(state);msg=a==='m9epdel'?'Єпархію розформовано':'Єпархію збережено';msgErr=false;M9EP=null;}catch(e){console.warn(e);c.eparchies=JSON.parse(before);msg='Не вдалося'+(e&&e.code==='permission-denied'?': немає права':'');msgErr=true;}busy=false;render();return true;}
+// ===================== Адмін: прибрати будь-який законопроєкт =====================
+function billCard(b,lead,me,compact){let h=billCard0(b,lead,me,compact);if(!AUTH.admin||AUTH.bot||editing||!b||!b.id)return h;
+  const tool=`<div class="landtools m9bdel"><button type="button" class="small danger" data-a="m9bdel" data-id="${esc(b.id)}" ${busy?'disabled':''}>🗑 Прибрати назавжди</button><span class="hint">лише адміністрація</span></div>`;
+  return compact?h.replace(/<\/details>$/,tool+'</details>'):h.replace(/<\/article>$/,tool+'</article>');}
+async function m9BillDel(b0){const id=b0.dataset.id;if(!AUTH.admin||busy)return;const b=allBills().find(x=>x.id===id);if(!b)return;
+  if(b0.dataset.confirm!=='1'){b0.dataset.confirm='1';b0.textContent='Точно прибрати «'+String(b.title||'').slice(0,40)+'»? Повернути не можна';return;}
+  busy=true;render();try{
+    if(b.live){await window.FB.delProposal(id);}
+    const ps=parlSec();if(ps&&Array.isArray(ps.bills)&&ps.bills.some(x=>x.id===id)){ps.bills=ps.bills.filter(x=>x.id!==id);await window.FB.save(state);saved=JSON.stringify(state);}
+    try{PROPS=(PROPS||[]).filter(x=>x.id!==id);}catch(_){}
+    msg='Законопроєкт прибрано';msgErr=false;}catch(e){console.warn(e);msg='Не вдалося прибрати'+(e&&e.code==='permission-denied'?': немає права':'');msgErr=true;}busy=false;render();}
+// ===================== Карта: призначення керівників Земель =====================
+// призначають лідер України, Писар (прем’єр) і адміністрація
+let M9LA={};
+function m9CanLandApp(){return !AUTH.bot&&!editing&&(AUTH.admin||isHetman()||isPysar());}
+function m9LandApp(l,name){const posts=l.posts||(l.posts=[]);const h=landHead(l);
+  const base=t=>String(t||'').replace(/^\d+\s*-?\s*[йя]?\s*/,'').trim()||'Крайовий Осавул';
+  const num=t=>{const m=/^(\d+)/.exec(String(t||'').trim());return m?+m[1]:0;};
+  if(h.post&&!h.name&&name){h.post.holder=name;h.post.since=today();l.head=posts.indexOf(h.post);return;}
+  let title='Крайовий Осавул';if(h.post){const n=num(h.post.title);title=n?(n+1)+'-й '+base(h.post.title):h.post.title;if(!n)h.post.past=true;h.post.till=today();}
+  posts.push({title,holder:name||'',since:name?today():''});l.head=posts.length-1;}
+function m9LandAppHtml(l){if(!m9CanLandApp()||!l)return '';const h=landHead(l);const v=M9LA[l.id]!=null?M9LA[l.id]:'';
+  return `<div class="m9la"><div class="hint">👤 ${h.name?'Змінити':'Призначити'} керівника Землі</div><div class="m9lar"><select data-a="m9laf" data-k="${esc(l.id)}" class="plsel">${plOptions(v,'— оберіть громадянина —')}</select><button type="button" class="small primary" data-a="m9la" data-k="${esc(l.id)}" ${busy?'disabled':''}>Призначити</button>${h.name?`<button type="button" class="small ghost" data-a="m9lax" data-k="${esc(l.id)}" ${busy?'disabled':''}>Звільнити</button>`:''}</div></div>`;}
+async function m9LandAct(a,b){if(!m9CanLandApp()||busy)return;const x=mapLandIdx().find(q=>q.l.id===b.dataset.k);if(!x)return;const l=x.l;
+  const nm=a==='m9la'?String(M9LA[l.id]||'').trim():'';if(a==='m9la'&&!nm){msg='Оберіть громадянина';msgErr=true;render();return;}
+  if(a==='m9lax'&&b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно звільнити?';return;}
+  const secs=state.sections.filter(isLandsSec);const before=JSON.stringify(secs.map(s=>s.lands));const ln=cur(l).name;
+  m9LandApp(l,nm);busy=true;render();
+  try{await window.FB.saveLands(secs);saved=JSON.stringify(state);delete M9LA[l.id];msg=nm?nm+' — керівник: '+ln:'Посаду керівника «'+ln+'» звільнено';msgErr=false;}
+  catch(e){console.warn(e);const B=JSON.parse(before);secs.forEach((s,i)=>{s.lands=B[i];});msg='Не вдалося'+(e&&e.code==='permission-denied'?': немає права':'');msgErr=true;}busy=false;render();}
 
 })();
 </script>
