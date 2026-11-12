@@ -2134,6 +2134,29 @@ body.cm .m6o .m8tbl th{background:var(--bg2);color:var(--muted)}body.cm .m6o .m8
 .m6bm .bmbox.m6rd{width:min(980px,94vw);max-width:none!important;box-sizing:border-box}
 .m8trb{all:unset;cursor:pointer;align-self:flex-start;margin-top:8px;font:600 12.5px Inter,system-ui,sans-serif;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.18);color:inherit;border:1px solid rgba(255,255,255,.35)}
 .m8trb:hover{background:rgba(255,255,255,.28)}.m8trb.busy{cursor:default;opacity:.85}
+/* ---- етап 2: громадянство ---- */
+.m9st{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--line);white-space:nowrap}
+.m9st-cit{border-color:color-mix(in srgb,var(--gold) 60%,transparent);color:var(--gold-hi)}
+.m9st-tour{opacity:.9}
+.m9st-guest{color:var(--muted)}
+.m9st-exiled{border-color:#c0504080;color:#e08070}
+.m9me{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.m9me>.amfail{flex-basis:100%}
+.m9mel{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 280px}
+.m9mel b{display:block}
+.m9meb{display:flex;gap:8px;flex-wrap:wrap}
+.m9box{width:min(560px,100%)!important}
+.m9box h3{margin:0;padding-right:70px}
+.m9opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.m9opts.two{grid-template-columns:repeat(2,1fr)}
+.m9opt{display:grid;justify-items:center;text-align:center;gap:2px;padding:10px 8px;border:1px solid var(--line);border-radius:12px;background:#00000018;cursor:pointer;color:inherit;font:inherit}
+.m9opt span{font-size:22px}.m9opt small{color:var(--muted);font-size:11.5px}
+.m9opt.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;background:color-mix(in srgb,var(--gold) 12%,transparent)}
+.m9tools .afilter{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.m9addb{margin-left:auto}
+.m9card .m9cb{min-width:0}
+.m9card .plmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+@media (max-width:560px){.m9opts{grid-template-columns:1fr}.m9opts.two{grid-template-columns:1fr 1fr}.m9addb{margin-left:0}}
 </style>
 
 </head><body>
@@ -2515,7 +2538,7 @@ function chatHtml(s,only){if(!AUTH.email)return `<div class="block"><h3>Чат</
   const roomBtn=([k,ic,l,d])=>{const ok=roomOk(k);return ok?`<button type="button" class="chth${th==='r:'+k?' on':''}" data-a="chth" data-k="r:${k}"><span class="ic">${ic}</span><span><b>${l}</b><small>${d}</small></span></button>`:'';};
   const dmBtn=d=>{const o=dmOther(d.id);const t=vms(d.last&&d.last.at)||vms(d.at);const un=d.last&&d.last.from!==AUTH.email&&t>(CHSEEN['d:'+d.id]||0)&&th!=='d:'+d.id;const p=plByEmail(o);return `<button type="button" class="chth dm${th==='d:'+d.id?' on':''}" data-a="chth" data-k="d:${esc(d.id)}">${seatAv(p?p.name:'?','chav')}<span><b>${esc(nameByEmail(o))}</b><small>${esc(String((d.last&&d.last.text)||'').slice(0,40))}</small></span>${un?'<i class="dot"></i>':''}</button>`;};
   const others=players().filter(p=>p.email&&lc(p.email)!==AUTH.email&&!p.exiled).sort((a,b)=>a.name.localeCompare(b.name,'uk'));
-  let side=`<aside class="block chside"><div class="chsh">Кімнати</div>${chatRooms().map(roomBtn).join('')}${myHomeLands().length?'':'<p class="hint chhint">Оберіть свою Землю в кабінеті (👤 угорі), щоб бачити її кімнату.</p>'}<div class="chsh">Особисті повідомлення</div><label class="fl sm"><select id="chnew" data-a="chnew"><option value="">✉️ Написати гравцеві…</option>${others.map(p=>`<option value="${esc(lc(p.email))}">${esc(p.name)}${p.tourist?(p.confed?' (конфедерат)':' (турист)'):''}</option>`).join('')}</select></label>${dms.map(dmBtn).join('')||'<p class="hint">Розмов ще немає.</p>'}`;
+  let side=`<aside class="block chside"><div class="chsh">Кімнати</div>${chatRooms().map(roomBtn).join('')}${myHomeLands().length?'':'<p class="hint chhint">Оберіть свою Землю в кабінеті (👤 угорі), щоб бачити її кімнату.</p>'}<div class="chsh">Особисті повідомлення</div><label class="fl sm"><select id="chnew" data-a="chnew"><option value="">✉️ Написати гравцеві…</option>${others.map(p=>`<option value="${esc(lc(p.email))}">${esc(p.name)}${p.tourist?' (турист)':''}</option>`).join('')}</select></label>${dms.map(dmBtn).join('')||'<p class="hint">Розмов ще немає.</p>'}`;
   if(chatMod()){const bl=Object.entries(CHATBANS).filter(([e,u])=>+u>Date.now());side+=`<div class="chsh">Модерація</div>${bl.length?bl.map(([e,u])=>`<div class="chban"><span>🔇 ${esc(nameByEmail(e))}<small>до ${esc(fmtDT(new Date(+u).toISOString()))}</small></span><button class="small ghost" data-a="chunban" data-k="${esc(e)}">Зняти</button></div>`).join(''):'<p class="hint">Заборон писати немає.</p>'}`;}
   {const seen=CHSEEN['pings']||0;const pl=PINGS.slice(0,12);if(pl.length)side+=`<div class="chsh">🔔 Згадки ${PINGS.some(pingNew)?'<i class="nbadge">'+PINGS.filter(pingNew).length+'</i>':''}</div>${pl.map(x=>`<button type="button" class="chth ping${pingNew(x)?' new':''}" data-a="chping" data-k="${esc(x.id)}"><span class="ic">${x.kind==='reply'?'↩':'@'}</span><span><b>${esc(x.name||'')}</b><small>${esc(String(x.text||'').slice(0,50))}</small></span></button>`).join('')}${PINGS.some(pingNew)?'<button class="small ghost" data-a="chpingseen">Позначити прочитаним</button>':''}`;}
   side+='</aside>';
@@ -2524,7 +2547,7 @@ function chatHtml(s,only){if(!AUTH.email)return `<div class="block"><h3>Чат</
   const ms=CHAT.msgs;const ban=chatBanned();const canW=chatCanWrite(th)&&!ban&&(th.startsWith('d:')||roomOk(th.slice(2)));
   const msgHtml=m=>{const mine=m.from===AUTH.email;const t=vms(m.at);const exp=vms(m.exp);const canDel=mine||(th.startsWith('r:')&&chatMod())||AUTH.admin;const p=plByEmail(m.from);
     const toMe=(m.mentions||[]).includes(AUTH.email)||(m.reply&&m.reply.from===AUTH.email&&!mine);
-    return `<div class="chm${mine?' me':''}${toMe?' tome':''}${CHAT.hl===m.id?' hl':''}" id="cm-${esc(m.id)}">${mine?'':seatAv(p?p.name:('?'),'chav')}<div class="chb"><div class="chmh">${mine?'':`<b>${p?`<button class="linkbtn" data-a="dos" data-n="${esc(p.name)}">${esc(p.name)}</button>`:esc(m.name||'')}${m6Lotus(m.by)}</b>${p&&p.tourist?' <span class="tag">'+(p.confed?'конфедерат':'турист')+'</span>':''}`}<span class="hint">${t?esc(fmtDT(new Date(t).toISOString())):'щойно'}</span>${canW?`<button class="chx" data-a="chreply" data-k="${esc(m.id)}" title="Відповісти">↩</button>`:''}${canDel?`<button class="chx" data-a="chdel" data-k="${esc(m.id)}" title="Видалити">🗑</button>`:''}${!mine&&chatMod()&&th.startsWith('r:')?`<button class="chx" data-a="chmute" data-k="${esc(m.from)}" title="Заборонити писати на 3 дні">🔇</button>`:''}</div>${m.reply?`<button type="button" class="chrq" data-a="chjump" data-k="${esc(m.reply.id||'')}"><b>↩ ${esc(m.reply.name||'')}</b><span>${esc(String(m.reply.text||'').slice(0,140))}</span></button>`:''}${m.img?`<button type="button" class="chimgb" data-a="zoom"><img class="chimg" src="${esc(m.img)}" alt="Зображення"></button>${exp?`<div class="hint xs">🕒 зображення зникне ${esc(fmtDT(new Date(exp).toISOString()))}</div>`:''}`:m.imgGone?'<div class="hint">🖼 зображення видалено: минуло 15 днів</div>':''}${m.file?chFileHtml(m):''}${chTrHtml(m,CHAT.th)}</div></div>`;};
+    return `<div class="chm${mine?' me':''}${toMe?' tome':''}${CHAT.hl===m.id?' hl':''}" id="cm-${esc(m.id)}">${mine?'':seatAv(p?p.name:('?'),'chav')}<div class="chb"><div class="chmh">${mine?'':`<b>${p?`<button class="linkbtn" data-a="dos" data-n="${esc(p.name)}">${esc(p.name)}</button>`:esc(m.name||'')}${m6Lotus(m.by)}</b>${p&&p.tourist?' <span class="tag">'+'турист'+'</span>':''}`}<span class="hint">${t?esc(fmtDT(new Date(t).toISOString())):'щойно'}</span>${canW?`<button class="chx" data-a="chreply" data-k="${esc(m.id)}" title="Відповісти">↩</button>`:''}${canDel?`<button class="chx" data-a="chdel" data-k="${esc(m.id)}" title="Видалити">🗑</button>`:''}${!mine&&chatMod()&&th.startsWith('r:')?`<button class="chx" data-a="chmute" data-k="${esc(m.from)}" title="Заборонити писати на 3 дні">🔇</button>`:''}</div>${m.reply?`<button type="button" class="chrq" data-a="chjump" data-k="${esc(m.reply.id||'')}"><b>↩ ${esc(m.reply.name||'')}</b><span>${esc(String(m.reply.text||'').slice(0,140))}</span></button>`:''}${m.img?`<button type="button" class="chimgb" data-a="zoom"><img class="chimg" src="${esc(m.img)}" alt="Зображення"></button>${exp?`<div class="hint xs">🕒 зображення зникне ${esc(fmtDT(new Date(exp).toISOString()))}</div>`:''}`:m.imgGone?'<div class="hint">🖼 зображення видалено: минуло 15 днів</div>':''}${m.file?chFileHtml(m):''}${chTrHtml(m,CHAT.th)}</div></div>`;};
   let main=`<div class="block chmain"><div class="chhead"><button class="small ghost chback" data-a="chback" aria-label="До списку розмов">‹</button><div class="chht"><b>${head}</b><div class="hint">${esc(sub)}</div>${th.startsWith('d:')?'':`<button type="button" class="small ghost chtrt" data-a="chtron" data-notr title="Автоматично перекладати повідомлення мовою сайту">🌐 ${CHTR_ON?'Автопереклад: увімк.':'Автопереклад: вимк.'}</button>`}</div></div><div class="chmsgs" id="chmsgs"${th.startsWith('d:')?' data-notr':''}>${ms==null?'<p class="hint">Завантаження…</p>':CHAT.err?`<p class="hint warn">Немає доступу до цієї розмови (${esc(CHAT.err)}).</p>`:(ms.length>=CHAT.limit?`<div class="chmore"><button class="small ghost" data-a="chmore">Показати раніші</button></div>`:'')+(ms.length?ms.map(msgHtml).join(''):'<p class="hint chempty">Тут ще ніхто нічого не написав. Почніть першим!</p>')}</div>`;
   if(canW){const d=CHAT.draft[th]||'';main+=`<div class="chcomp"><div class="chtools">${[['b','<b>Ж</b>','Жирний (**текст**)'],['i','<i>К</i>','Курсив (*текст*)'],['u','<u>П</u>','Підкреслений (__текст__)'],['s','<s>З</s>','Закреслений (~~текст~~)'],['q','❝','Цитата'],['code','&lt;/&gt;','Код'],['link','🔗','Посилання']].map(([k,l,t])=>`<button type="button" class="small ghost" data-a="chfmt" data-k="${k}" title="${t}">${l}</button>`).join('')}<button type="button" class="small ghost" data-a="chimgpick" title="Додати зображення (зберігається ${CHAT_IMG_DAYS} днів)">🖼</button><button type="button" class="small ghost" data-a="chfile" title="Надіслати файли до 15 МБ (видаляються через ${FILE_DAYS} днів)">📎</button></div>${CHAT.up?`<div class="chup" id="chup"><span>⬆ ${esc(CHAT.up.name)}</span><span class="chupb"><i style="width:${CHAT.up.pct}%"></i></span><b>${CHAT.up.pct}%</b></div>`:''}${CHAT.img?`<div class="chprev"><img src="${esc(CHAT.img)}" alt=""><button class="small ghost" data-a="chimgx">✕ прибрати</button><span class="hint">зображення зберігатиметься ${CHAT_IMG_DAYS} днів</span></div>`:''}${CHAT.reply&&CHAT.reply.th===th?`<div class="chreplybar"><span>↩ Відповідь <b>${esc(CHAT.reply.name)}</b>: ${esc(String(CHAT.reply.text||'').slice(0,90))}</span><button class="small ghost" data-a="chreplyx">✕</button></div>`:''}${(()=>{const L=mentionList();return L.length?`<div class="chmlist">${L.map(p=>`<button type="button" class="chmopt" data-a="chmention" data-k="${esc(p.name)}">${seatAv(p.name,'chav')}<span>${esc(p.name)}</span></button>`).join('')}</div>`:'';})()}<div class="chrow"><textarea id="chin" data-a="chin" maxlength="4000" rows="2" placeholder="Повідомлення… @ — позначити гравця, Enter — надіслати, Shift+Enter — новий рядок">${esc(d)}</textarea><button class="primary" data-a="chsend" ${busy?'disabled':''}>Надіслати</button></div></div>`;}
   else main+=`<div class="chcomp"><p class="hint">${ban?`🔇 Вам заборонено писати в чаті до ${esc(fmtDT(new Date(ban).toISOString()))}.`:'Тут ви можете лише читати.'}</p></div>`;
@@ -2887,7 +2910,7 @@ function homeTop(){const m=me();const ma=meAny();const cs=sectionByKind('court')
   let h=`<div class="qacts">`;
   h+=`<button class="qa" data-a="homem" data-k="pet"><span class="qi">✍️</span><b>Петиції</b><small>${pets?pets+' збирають підписи · ':''}${petMin()} підписів — і до Палати</small></button>`;
   h+=`<button class="qa" data-a="homem" data-k="claim"><span class="qi">⚖️</span><b>Звернутися до Суду</b><small>позов чи скарга</small></button>`;
-  h+=ma?`<button class="qa" data-a="dos" data-n="${esc(ma.name)}"><span class="qi">👤</span><b>Мій профіль</b><small>${ma.tourist?(ma.confed?'🤝 конфедерат':'🧳 турист'):'звання, служба, відзнаки'}</small></button>`:`<button class="qa" data-a="tab" data-id="players"><span class="qi">🪪</span><b>Реєстрація</b><small>громадянство або туристи</small></button>`;
+  h+=ma?`<button class="qa" data-a="dos" data-n="${esc(ma.name)}"><span class="qi">👤</span><b>Мій профіль</b><small>${ma.tourist?'🧳 турист':'звання, служба, відзнаки'}</small></button>`:`<button class="qa" data-a="tab" data-id="players"><span class="qi">🪪</span><b>Реєстрація</b><small>громадянство або туристи</small></button>`;
   h+=`<button class="qa" data-a="tab" data-id="${esc('laws')}"><span class="qi">📚</span><b>Законодавство</b><small>Конституція й кодекси</small></button></div>`;
   if(HOMEM){const body=HOMEM==='pet'?petitionsHtml():ma&&!editing?claimForm():`<div class="block"><h3>Звернутися до Суду</h3><p class="hint">${AUTH.email?'Подавати позови й скарги можуть зареєстровані громадяни й туристи.':'Увійдіть через Google, щоб подати позов.'}</p>${cs?`<button class="small" data-a="tab" data-id="${esc(cs.id)}">⚖️ Перейти до Суду</button>`:''}</div>`;
     MODALH=`<div class="bmodal" role="dialog" aria-modal="true"><button type="button" class="bmback" data-a="homem" data-k="" tabindex="-1" aria-label="Закрити"></button><div class="bmbox wide"><button class="small bmx" data-a="homem" data-k="" aria-label="Закрити">✕ Закрити</button>${body}</div></div>`;}
@@ -3357,7 +3380,7 @@ function migrateArmy(s){const rs=s.sections.find(x=>x.kind==='ranks');if(!rs||rs
 function dossierArmy(name){const rs=ranksSec();if(!rs||!rs.v3)return '';const sv=serviceOf(name);const p=rs.pts&&rs.pts[name];if(!sv&&!p)return '';
   const hist=((p&&p.hist)||[]).slice().reverse().slice(0,10);
   return `<div class="dsec"><h4>Військова служба</h4><ul><li>${sv?esc(postTitle(sv))+(sv.uid?' · '+esc(unitName(sv.uid)):''):'не в строю'}</li><li>⏳ Вислуга: <b>${svcDays(name)}</b> дн. · ⭐ Заслуги: <b>${merit(name)}</b></li><li>${ptsBar(name)}</li><li class="hint">${esc(lackText(name))}</li></ul>${hist.length?`<div class="hint">Заслуги:</div><ul>${hist.map(x=>`<li>${x.n>0?'+':''}${esc(x.n)} — ${esc(x.reason||'')} <span class="hint">· ${esc(fmtDT(x.at))}${x.by?' · '+esc(x.by):''}</span></li>`).join('')}</ul>`:''}</div>`;}
-function playersHtml(s,si){const list=s.list||(s.list=[]);let h='<div class="players">';
+function playersHtml0(s,si){const list=s.list||(s.list=[]);let h='<div class="players">';
   if(editing){const q=PLQ.trim().toLowerCase();h+=`<div class="block"><h3>Гравці <small>${list.length} · пошта — це вхід через Google: лише ця людина зможе діяти від імені гравця</small></h3><div class="pltools"><input type="text" inputmode="search" autocomplete="off" id="plq" data-a="plq" value="${esc(PLQ)}" placeholder="🔎 Знайти гравця за іменем, поштою чи профілем"><button class="small" data-a="pladd" data-s="${si}">＋ Гравець</button></div><div class="plhead"><span></span><span>Ім’я в грі</span><span>Профіль у грі</span><span>Google-пошта</span><span>Статус</span><span></span></div>`+list.map((p,pi)=>q&&!(String(p.name||'')+' '+String(p.email||'')+' '+String(p.profile||'')).toLowerCase().includes(q)&&!p._new?'':`<div class="erow plrow"><button type="button" class="avbtn" data-a="plimg" data-s="${si}" data-p="${pi}" title="${p.img?'Своя аватарка (натисніть, щоб змінити)':'Аватарка з гри; натисніть, щоб завантажити свою'}">${avatarOf(p)?avImg(p,'avs'):'🙂'}</button><input type="text" id="pln-${pi}" data-a="pln" data-s="${si}" data-p="${pi}" data-old="${esc(p.name)}" value="${esc(p.name)}" placeholder="Ім’я в грі"${!AUTH.admin&&p.name&&!p._new?' readonly title="Перейменувати гравця може лише адміністрація"':''}><input type="text" id="plp-${pi}" data-a="plp" data-s="${si}" data-p="${pi}" value="${esc(p.profile)}" placeholder="Профіль у грі: 257 або посилання"><input type="text" inputmode="email" id="ple-${pi}" data-a="ple" data-s="${si}" data-p="${pi}" value="${esc(p.email)}" placeholder="Google-пошта"><select class="plst" data-a="plst" data-s="${si}" data-p="${pi}" title="Статус гравця"><option value="cit"${!p.tourist?' selected':''}>🪪 Громадянин</option><option value="tour"${p.tourist&&!p.confed?' selected':''}>🧳 Турист</option>${''}</select><button class="small danger plx" data-a="pldel" data-s="${si}" data-p="${pi}" title="Прибрати з реєстру">✕</button></div>`).join('')+`<div class="landtools"><button class="small" data-a="pladd" data-s="${si}">+ Гравець</button></div><p class="hint">${AUTH.admin?'':'Права голосу й посад за новими поштами вмикаються протягом 15 хвилин. '}Перейменування гравця змінює його ім’я всюди на сайті. Аватарка береться з гри сама, якщо вказано номер профілю. Свою можна завантажити, натиснувши на кружечок.</p></div>`;}
   else{if(DOSSIER)return profileHtml(DOSSIER);const me=plByEmail(AUTH.email);
     if(AUTH.email&&!AUTH.bot)h+=me&&!me.tourist?`<div class="block mine mecard">${avImg(me,'avbig')}<div class="mct"><div class="hint">Ви увійшли як</div><b>${esc(me.name)}</b><div class="hint">🪪 Громадянин Української Держави${me.since?' з '+esc(me.since):''}</div></div><div class="mcb"><button class="small" data-a="dos" data-n="${esc(me.name)}">👤 Мій профіль</button><button class="small ghost" data-a="cabm" data-k="1">Мій кабінет</button></div></div>`:applyBlock();
@@ -3366,7 +3389,7 @@ function playersHtml(s,si){const list=s.list||(s.list=[]);let h='<div class="pla
     const sorted=list.slice().sort((a,b)=>a.name.localeCompare(b.name,'uk'));
     const card=p=>{const u=profUrl(p.profile);const roles=[];landLeaders().forEach(r=>{if(r.name===p.name)roles.push('Крайовий Осавул: '+r.land);});const g=govSec();((g&&g.posts)||[]).forEach(q=>{if(q.name===p.name)roles.push(q.title);});if(((parlSec()||{}).chair||'')===p.name)roles.push('Голова Палати');
       const cm=p.confed?null:null;const cd=p.confed?(undefined||((cm&&cm.pub)||[]).find(x=>x.name===p.name||(x.profile&&String(x.profile)===String(p.profile||'')))):null;if(cm)roles.push((cd?(cd.role==='leader'?'Лідер делегації':'Міністр')+(cd.post?' · '+cd.post:''):'Делегат')+' · '+cm.name);
-      return `<div class="plcard">${avImg(p,'avbig')}<div><div class="pn"><button class="linkbtn" data-a="dos" data-n="${esc(p.name)}">${esc(p.name)}</button></div>${rankBadges(p.name)?`<div class="rkbs">${rankBadges(p.name)}</div>`:''}${roles.length?`<div class="hint">${roles.map(esc).join(' · ')}</div>`:''}<div class="plmeta">${u?`<a href="${esc(u)}" target="_blank" rel="noopener">Профіль у грі ↗</a>`:'<span class="hint">профіль не вказано</span>'}${p.email?'<span class="tag ok">✓ акаунт прив’язано</span>':''}${p.confed?'<span class="tag">🤝 конфедерат</span>':''}${p.exiled?'<span class="tag warn">⛔ позбавлений громадянства</span>':''}<button class="small" data-a="dos" data-n="${esc(p.name)}">👤 Профіль</button></div></div></div>`};const qq=PLS.trim().toLowerCase();const mt=p=>!qq||String(p.name||'').toLowerCase().includes(qq)||String(p.profile||'').includes(qq);
+      return `<div class="plcard">${avImg(p,'avbig')}<div><div class="pn"><button class="linkbtn" data-a="dos" data-n="${esc(p.name)}">${esc(p.name)}</button></div>${rankBadges(p.name)?`<div class="rkbs">${rankBadges(p.name)}</div>`:''}${roles.length?`<div class="hint">${roles.map(esc).join(' · ')}</div>`:''}<div class="plmeta">${u?`<a href="${esc(u)}" target="_blank" rel="noopener">Профіль у грі ↗</a>`:'<span class="hint">профіль не вказано</span>'}${p.email?'<span class="tag ok">✓ акаунт прив’язано</span>':''}${p.exiled?'<span class="tag warn">⛔ позбавлений громадянства</span>':''}<button class="small" data-a="dos" data-n="${esc(p.name)}">👤 Профіль</button></div></div></div>`};const qq=PLS.trim().toLowerCase();const mt=p=>!qq||String(p.name||'').toLowerCase().includes(qq)||String(p.profile||'').includes(qq);
     const cit=sorted.filter(p=>!p.tourist),tur=sorted.filter(p=>p.tourist&&!p.confed),cfAll=sorted.filter(p=>p.confed);
     h+=`<div class="pltools plview"><input type="text" inputmode="search" autocomplete="off" id="pls" data-a="pls" value="${esc(PLS)}" placeholder="🔎 Пошук гравця за іменем або номером профілю"><div class="afilter">${[['all','Усі',sorted.length],['cit','🪪 Громадяни',cit.length],['tour','🧳 Туристи',tur.length]].map(([k,l,n])=>`<button class="small${PLF===k?' primary':''}" data-a="plf" data-k="${k}">${l} · ${n}</button>`).join('')}</div></div>`;
     const sh=k=>PLF==='all'||PLF===k;let shown=0;
@@ -5084,6 +5107,7 @@ const today=()=>{const d=new Date();return String(d.getDate()).padStart(2,'0')+'
 
 app.addEventListener('input',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;
+  if(m9Input(a,t))return;
   if(m8Input(a,t))return;
   if(a==='htf'&&(t.dataset.k==='end'||t.dataset.k==='into')&&m6TreeInput(t))return;
   if(m6Input(a,t))return;
@@ -5254,6 +5278,7 @@ app.addEventListener('input',e=>{
 });
 app.addEventListener('change',e=>{
   const t=e.target,a=t.dataset.a;if(!a)return;
+  if(m9Input(a,t))return;
   if(m8Change(a,t))return;
   if(m6Change(a,t))return;
   if(m5Change(a,t))return;
@@ -5303,6 +5328,7 @@ app.addEventListener('click',async e=>{
   
   if(await m3Click(a,b))return;
   if(await m4Click(a,b))return;
+  if(await m9Click(a,b))return;
   if(await m8Click(a,b))return;
   if(await m7Click(a,b))return;
   if(await m6Click(a,b))return;
@@ -6551,7 +6577,7 @@ function accAddModal(){const prev=accAdding();if(prev==null||AUTH.email||!AUTH.r
 let SRCHM=false,SRQ='';
 function srchTop(){return `<button type="button" class="srchbtn" data-a="srch" data-k="1" title="Пошук по сайту" aria-label="Пошук по сайту"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>`;}
 function srchResults(q){q=q.trim().toLowerCase();if(q.length<2)return '';const G=[];const has=x=>String(x||'').toLowerCase().includes(q);
-  const pl=players().filter(p=>has(p.name)).slice(0,8);if(pl.length)G.push(['👤 Гравці',pl.map(p=>`<button class="srr" data-a="dos" data-n="${esc(p.name)}">${avImg(p,'chav')}<span><b>${esc(p.name)}</b><small>${p.confed?'конфедерат':p.tourist?'турист':'громадянин'}</small></span></button>`)]);
+  const pl=players().filter(p=>has(p.name)).slice(0,8);if(pl.length)G.push(['👤 Гравці',pl.map(p=>`<button class="srr" data-a="dos" data-n="${esc(p.name)}">${avImg(p,'chav')}<span><b>${esc(p.name)}</b><small>${p.tourist?'турист':'громадянин'}</small></span></button>`)]);
   const bl=allBills().filter(b=>has(b.title)||has(b.no)).slice(0,8);if(bl.length)G.push(['📜 Закони й законопроєкти',bl.map(b=>`<button class="srr" data-a="billm" data-k="${esc(b.id)}"><span class="srri">📜</span><span><b>${esc((bno(b)?bno(b)+' ':'')+(b.title||''))}</b><small>${esc(({passed:'чинний / ухвалений',rejected:'відхилений',voting:'на голосуванні',sign:'чекає підпису'})[phase(b)]||phase(b)||'')}</small></span></button>`)]);
   const cs=sectionByKind('court');const cl=(typeof CASES!=='undefined'?CASES:[]).filter(c=>has(c.title)||has('№'+c.no)).slice(0,6);if(cl.length&&cs)G.push(['⚖️ Справи Суду',cl.map(c=>`<button class="srr" data-a="tab" data-id="${esc(cs.id)}"><span class="srri">⚖️</span><span><b>Справа №${esc(c.no||'')} «${esc(c.title||'')}»</b><small>${esc(({open:'на розгляді',hearing:'слухання',decided:'рішення ухвалено',closed:'закрито',rejected:'відхилено'})['open']||c.status||'')}</small></span></button>`)]);
   const cu=sectionByKind('culture');const sl=CULTURE.filter(x=>x.status==='ok'&&(has(x.title)||has(x.author))).slice(0,6);if(sl.length&&cu)G.push(['🎵 Культура',sl.map(x=>`<button class="srr" data-a="tab" data-id="${esc(cu.id)}" data-v="culv:${x.type==='song'?'songs':'works'}"><span class="srri">${x.type==='song'?'🎵':'🖋'}</span><span><b>${esc(x.title)}</b><small>${esc(x.author||'')}</small></span></button>`)]);
@@ -7359,6 +7385,129 @@ async function m8TrBook(b){const tx=BKTX[b.id];if(tx==null||BKTRB)return;const k
     try{localStorage.setItem(lsk,JSON.stringify({t:BKTR[k],title:tt}));}catch(_){}}
   catch(e){console.warn(e);BKTRON=false;msg='Не вдалося перекласти книгу — спробуйте пізніше';msgErr=true;}
   BKTRB=false;BKP=0;renderSoon();}
+
+// ===================== Етап 2: громадянство й статуси =====================
+// Статус в Україні: 👤 гість (лише профіль ком'юніті) · 🧳 турист · 🪪 громадянин.
+// Заявки приймають лідер України, Секретар Внутрішніх Справ (МВС) і адміністрація. Орден — окремо, незалежно від статусу.
+let M9AP='',M9PS='',M9ADD=null,M9F={},PLF9='all';
+function m9Post(perm){const g=govSec();return g?(g.posts||[]).find(p=>p.perm===perm||p.id===perm):null;}
+function m9Leader(){return govPost(state,'hetman');}
+function m9Reviewers(){const a=[];const L=m9Leader();if(L)a.push(L.title||'Лідер');const I=m9Post('interior');if(I)a.push(I.title||'Секретар Внутрішніх Справ');a.push('адміністрація');return a;}
+function m9RevText(){const r=m9Reviewers();return r.length>1?r.slice(0,-1).join(', ')+' або '+r[r.length-1]:r[0];}
+function canPlayers(){return isHetman()||isInterior();}
+function m9CanReview(){return !AUTH.bot&&(AUTH.admin||canPlayers());}
+function m9Status(e){e=lc(e);if(!e)return 'none';const p=plByEmail(e);if(p){if(p.exiled)return 'exiled';return p.tourist?'tour':'cit';}return 'guest';}
+function m9PStatus(p){if(!p)return 'guest';if(p.exiled)return 'exiled';return p.tourist?'tour':'cit';}
+const M9ST={cit:['🪪','Громадянин'],tour:['🧳','Турист'],guest:['👤','Гість'],exiled:['⛔','Позбавлений громадянства']};
+function m9Badge(k){const x=M9ST[k]||M9ST.guest;return `<span class="m9st m9st-${k}">${x[0]} ${x[1]}</span>`;}
+function m9Udn(){const M=m5Mods();return (M.ud&&M.ud.name)||'Україна';}
+function m9Guests(){const e=new Set(players().map(p=>lc(p.email)).filter(Boolean));return MEMBERS.filter(m=>!e.has(lc(m.id))).map(m=>{const c=CM_COUNTRIES.find(x=>x[0]===m.country);return {email:lc(m.id),name:m.name||lc(m.id).split('@')[0],profile:m.profile||'',flag:c?c[1]:'',country:c?c[2]:'',ok:m.verified===true};}).sort((a,b)=>String(a.name).localeCompare(String(b.name),'uk'));}
+// ---------- картка «мій статус» ----------
+function applyBlock(){const a=myApp();const st=m9Status(AUTH.email);const mm=myMember();
+  if(a&&a.status==='open')return `<div class="block mine m9me"><div class="m9mel">${m9Badge(st)}<div><b>Заявку ${a.kind==='tourist'?'на туристичну реєстрацію':'на громадянство'} подано</b><div class="hint">«${esc(a.name)}» · ${esc(fmtDT(msIso(a.at)))}. Її розгляне ${esc(m9RevText())}.</div></div></div><div class="m9meb"><button class="small ghost" data-a="apwd">Відкликати заявку</button></div></div>`;
+  const rej=a&&a.status==='rejected'?`<div class="amfail">Попередню заявку відхилено${a.decision&&a.decision.reason?': '+esc(a.decision.reason):''}. Можна подати нову.</div>`:'';
+  const what=st==='tour'?'Ви зареєстровані в '+m9Udn()+' як турист: можете писати в чаті й звертатися до Суду.':st==='exiled'?'Вас позбавлено громадянства. Можна подати заявку на поновлення.':'Ви поки гість: бачите все, але не голосуєте й не обіймаєте посад.';
+  return `<div class="block mine m9me">${rej}<div class="m9mel">${m9Badge(st)}<div><b>${esc(mm&&mm.name||(plByEmail(AUTH.email)||{}).name||'Ваш статус')}</b><div class="hint">${esc(what)}</div></div></div><div class="m9meb"><button class="small primary" data-a="m9ap" data-k="citizen">🪪 Стати громадянином</button>${st==='guest'?'<button class="small" data-a="m9ap" data-k="tourist">🧳 Туристична реєстрація</button>':''}</div></div>`;}
+// ---------- вікно заявки ----------
+function m9ApModal(){const tk=M9AP==='tourist';const tp=plByEmail(AUTH.email);const mm=myMember();const lands=landList(state).map(x=>x.name);
+  const nm=M9F.apname!=null?M9F.apname:(tp&&tp.name)||(mm&&mm.name)||'';const pf=M9F.approf!=null?M9F.approf:(tp&&tp.profile)||(mm&&profId(mm.profile))||'';
+  return `<div class="bmodal" role="dialog" aria-modal="true" aria-label="Заявка"><button type="button" class="bmback" data-a="m9apx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m9box"><button class="small bmx" data-a="m9apx">✕</button>
+    <h3>${tk?'🧳 Туристична реєстрація':'🪪 Заявка на громадянство'}</h3>
+    <p class="hint">${tk?'Турист не голосує й не обіймає посад, але може писати в чаті й звертатися до Суду.':'Громадянин голосує, підписує петиції, може обіймати посади й балотуватися.'} Заявку розгляне ${esc(m9RevText())}.</p>
+    <label class="fl">Ім’я в грі<input type="text" data-a="m9f" data-k="apname" maxlength="80" value="${esc(nm)}"${tp?' readonly':''}></label>
+    <label class="fl">Профіль у грі: номер або посилання<input type="text" data-a="m9f" data-k="approf" maxlength="200" value="${esc(pf)}" placeholder="257 або https://dragpolit.com/profile/257"></label>
+    ${tk?'':`<label class="fl">Земля, де ви живете<select data-a="m9f" data-k="apland"><option value="">— ще не визначився —</option>${lands.map(n=>`<option${n===M9F.apland?' selected':''}>${esc(n)}</option>`).join('')}</select></label>`}
+    <label class="fl">${tk?'Коротко про себе':'Чому хочете стати громадянином'}<textarea data-a="m9f" data-k="apabout" maxlength="3000" rows="4">${esc(M9F.apabout||'')}</textarea></label>
+    <div class="landtools"><button type="button" class="primary" data-a="m9apsend" ${busy?'disabled':''}>${tk?'Зареєструватися':'Подати заявку'}</button><button type="button" class="small ghost" data-a="m9apx">Скасувати</button></div></div></div>`;}
+// ---------- вікно статусу гравця (лідер / МВС / адмін) ----------
+function m9PsModal(){const p=plByName(M9PS);if(!p)return '';const st=M9F.psst||m9PStatus(p);
+  return `<div class="bmodal" role="dialog" aria-modal="true" aria-label="Статус гравця"><button type="button" class="bmback" data-a="m9psx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m9box"><button class="small bmx" data-a="m9psx">✕</button>
+    <div class="m9mel">${avImg(p,'avbig')}<div><h3 style="margin:0">${esc(p.name)}</h3><div class="hint">Зараз: ${m9Badge(m9PStatus(p))}${p.since?' · з '+esc(p.since):''}</div></div></div>
+    <div class="m9opts">${[['cit','🪪','Громадянин','голосує, обіймає посади'],['tour','🧳','Турист','чат і Суд, без голосу'],['exiled','⛔','Позбавити громадянства','лишається в реєстрі без прав']].map(([k,i,t,d])=>`<button type="button" class="m9opt${st===k?' on':''}" data-a="m9f" data-k="psst" data-v="${k}"><span>${i}</span><b>${t}</b><small>${d}</small></button>`).join('')}</div>
+    <label class="fl">Профіль у грі<input type="text" data-a="m9f" data-k="psprof" maxlength="200" value="${esc(M9F.psprof!=null?M9F.psprof:p.profile||'')}"></label>
+    ${AUTH.admin?`<label class="fl">Google-пошта (вхід на сайт)<input type="text" inputmode="email" data-a="m9f" data-k="psmail" maxlength="120" value="${esc(M9F.psmail!=null?M9F.psmail:p.email||'')}"></label>`:''}
+    <div class="landtools"><button type="button" class="primary" data-a="m9pssave" ${busy?'disabled':''}>Зберегти</button><button type="button" class="small danger" data-a="m9psrm" ${busy?'disabled':''}>Прибрати з реєстру (стане гостем)</button></div>
+    <p class="hint">Зміни прав на голосування й посади набирають сили протягом 15 хвилин.</p></div></div>`;}
+// ---------- вікно «додати гравця» ----------
+function m9AddModal(){const A=M9ADD||{};const G=m9Guests();const v=k=>M9F[k]!=null?M9F[k]:(A[k]||'');const st=M9F.adst||'cit';
+  return `<div class="bmodal" role="dialog" aria-modal="true" aria-label="Додати гравця"><button type="button" class="bmback" data-a="m9addx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox m9box"><button class="small bmx" data-a="m9addx">✕</button>
+    <h3>＋ Додати гравця до реєстру</h3>
+    ${G.length?`<label class="fl">Обрати з профілів ком’юніті (необов’язково)<select data-a="m9guest"><option value="">— вписати вручну —</option>${G.map(g=>`<option value="${esc(g.email)}"${A.email===g.email?' selected':''}>${esc(g.name)} ${g.flag}</option>`).join('')}</select></label>`:''}
+    <label class="fl">Ім’я в грі<input type="text" data-a="m9f" data-k="name" maxlength="80" value="${esc(v('name'))}"></label>
+    <label class="fl">Профіль у грі<input type="text" data-a="m9f" data-k="profile" maxlength="200" value="${esc(v('profile'))}" placeholder="257 або посилання"></label>
+    <label class="fl">Google-пошта (необов’язково — без неї гравець не зможе діяти на сайті)<input type="text" inputmode="email" data-a="m9f" data-k="email" maxlength="120" value="${esc(v('email'))}"></label>
+    <div class="m9opts two">${[['cit','🪪','Громадянин'],['tour','🧳','Турист']].map(([k,i,t])=>`<button type="button" class="m9opt${st===k?' on':''}" data-a="m9f" data-k="adst" data-v="${k}"><span>${i}</span><b>${t}</b></button>`).join('')}</div>
+    <div class="landtools"><button type="button" class="primary" data-a="m9addsave" ${busy?'disabled':''}>Додати</button><button type="button" class="small ghost" data-a="m9addx">Скасувати</button></div></div></div>`;}
+// ---------- сторінка «Громадяни» ----------
+function playersHtml(s,si){if(editing)return playersHtml0(s,si);if(DOSSIER)return profileHtml(DOSSIER);
+  const list=s.list||(s.list=[]);let h='<div class="players">';const me0=plByEmail(AUTH.email);const R=m9CanReview();
+  if(AUTH.email&&!AUTH.bot)h+=me0&&!me0.tourist&&!me0.exiled?`<div class="block mine mecard">${avImg(me0,'avbig')}<div class="mct"><div class="hint">Ви увійшли як</div><b>${esc(me0.name)}</b><div class="hint">${m9Badge('cit')}${me0.since?' з '+esc(me0.since):''}</div></div><div class="mcb"><button class="small" data-a="dos" data-n="${esc(me0.name)}">👤 Мій профіль</button><button class="small ghost" data-a="cabm" data-k="1">Мій кабінет</button></div></div>`:applyBlock();
+  else if(!AUTH.email&&AUTH.ready)h+=`<div class="block mine mecta"><div><b>Хочете долучитися?</b><div class="hint">Увійдіть через Google, створіть профіль ком’юніті — і подайте заявку на громадянство чи туристичну реєстрацію.</div></div><button class="primary" data-a="login">🔑 Увійти через Google</button></div>`;
+  if(R)h+=appsReview();
+  const sorted=list.filter(p=>String(p.name||'').trim()).sort((a,b)=>a.name.localeCompare(b.name,'uk'));
+  const G=m9Guests();const g=govSec();
+  const roles=p=>{const r=[];(landLeaders()||[]).forEach(x=>{if(x.name===p.name)r.push((x.title||'Крайовий Осавул')+': '+x.land);});((g&&g.posts)||[]).forEach(q=>{if(q.name===p.name)r.push(q.title);});return r;};
+  const card=p=>{const u=profUrl(p.profile);const rr=roles(p);const st=m9PStatus(p);
+    return `<div class="plcard m9card">${avImg(p,'avbig')}<div class="m9cb"><div class="pn"><button class="linkbtn" data-a="dos" data-n="${esc(p.name)}">${esc(p.name)}</button>${m6Lotus(p.email)}</div>${rankBadges(p.name)?`<div class="rkbs">${rankBadges(p.name)}</div>`:''}${rr.length?`<div class="hint">${rr.map(esc).join(' · ')}</div>`:''}<div class="plmeta">${st!=='cit'?m9Badge(st):''}${u?`<a href="${esc(u)}" target="_blank" rel="noopener">Профіль у грі ↗</a>`:'<span class="hint">профіль не вказано</span>'}${R?`<button class="small ghost" data-a="m9ps" data-n="${esc(p.name)}" title="Змінити статус">⚙️ Статус</button>`:''}</div></div></div>`;};
+  const gcard=x=>{const u=profUrl(x.profile);return `<div class="plcard m9card">${seatAv(x.name,'avbig')}<div class="m9cb"><div class="pn"><b>${esc(x.name)}</b> ${m5Em(x.flag)}${m6Lotus(x.email)}</div><div class="plmeta">${x.country?`<span class="hint">${esc(x.country)}</span>`:''}${x.ok?'<span class="tag ok">✓ профіль підтверджено</span>':''}${u?`<a href="${esc(u)}" target="_blank" rel="noopener">DragPolit ↗</a>`:''}${R?`<button class="small ghost" data-a="m9add" data-k="${esc(x.email)}">＋ Додати до реєстру</button>`:''}</div></div></div>`;};
+  const qq=PLS.trim().toLowerCase();const mt=p=>!qq||String(p.name||'').toLowerCase().includes(qq)||String(p.profile||'').includes(qq);
+  const cit=sorted.filter(p=>!p.tourist&&!p.exiled),tur=sorted.filter(p=>p.tourist&&!p.exiled),ex=sorted.filter(p=>p.exiled);
+  const tabs=[['all','Усі',sorted.length+G.length],['cit','🪪 Громадяни',cit.length],['tour','🧳 Туристи',tur.length],['guest','👤 Гості',G.length]];if(ex.length)tabs.push(['exiled','⛔ Позбавлені',ex.length]);
+  if(!tabs.some(t=>t[0]===PLF9))PLF9='all';
+  h+=`<div class="pltools plview m9tools"><input type="text" inputmode="search" autocomplete="off" id="pls" data-a="pls" value="${esc(PLS)}" placeholder="🔎 Пошук гравця за іменем або номером профілю"><div class="afilter">${tabs.map(([k,l,n])=>`<button class="small${PLF9===k?' primary':''}" data-a="m9plf" data-k="${k}">${l} · ${n}</button>`).join('')}${R?'<button class="small m9addb" data-a="m9add" data-k="">＋ Додати гравця</button>':''}</div></div>`;
+  const sh=k=>PLF9==='all'||PLF9===k;let shown=0;
+  const blk=(k,title,L0,hint,empty,fn)=>{if(!sh(k))return;const L=L0.filter(mt);shown+=L.length;if(!L.length&&(qq||PLF9==='all'&&!L0.length))return;h+=`<div class="block"><h3>${title} <small>${L.length}${qq?' з '+L0.length:''}${hint?' · '+hint:''}</small></h3>${L.length?`<div class="plgrid">${L.map(fn).join('')}</div>`:`<p class="empty">${empty}</p>`}</div>`;};
+  blk('cit','🪪 Громадяни',cit,'','Громадян ще немає.',card);
+  blk('tour','🧳 Туристи',tur,'зареєстровані, але не громадяни','Туристів немає.',card);
+  blk('guest','👤 Гості',G,'мають профіль ком’юніті, але не зареєстровані в '+m9Udn(),'Гостей немає.',gcard);
+  blk('exiled','⛔ Позбавлені громадянства',ex,'','Нікого.',card);
+  if(qq&&!shown)h+=`<div class="block"><p class="empty">За запитом «${esc(PLS)}» нікого не знайдено.</p></div>`;
+  return h+'</div>';}
+// ---------- вітальне вікно: лише для тих, хто не увійшов; заявка — у власному вікні ----------
+function welcomeHtml(){if(M9AP&&AUTH.email)return m9ApModal();if(M9PS&&m9CanReview())return m9PsModal();if(M9ADD&&m9CanReview())return m9AddModal();
+  if(accAdding()!=null||DPIMP)return '';if(!AUTH.ready||AUTH.bot||AUTH.email||welcomeSeen()||/[?&]bot=1/.test(location.search)||!state.sections.length||editing)return '';
+  WELC_AT=0;return `<div class="bmodal" role="dialog" aria-modal="true" aria-label="Вітаємо"><button type="button" class="bmback" data-a="welx" tabindex="-1" aria-label="Закрити"></button><div class="bmbox welc"><button class="small bmx" data-a="welx">✕</button><div class="wellang">${langBtns()}</div><img class="welgerb" src="${esc(emblemSrc())}" alt=""><h3>Вітаємо в ${esc(m9Udn())}!</h3><p>Це доповнення до гри DragPolit: уряд і закони, Суд, Церква, військо, карта й чат.</p><div class="welbtns"><button class="primary" data-a="login">🔑 Увійти через Google</button></div><p class="hint">Після входу ви створите профіль ком’юніті й зможете подати заявку на громадянство або туристичну реєстрацію.</p><div><button class="small ghost" data-a="welx">Просто подивитися сайт</button></div></div></div>`;}
+// ---------- події ----------
+function m9Input(a,t){if(a==='m9f'&&t.tagName!=='BUTTON'){M9F[t.dataset.k]=t.value;return true;}
+  if(a==='m9guest'){const g=m9Guests().find(x=>x.email===t.value);M9F={adst:M9F.adst};M9ADD=g?{email:g.email,name:g.name,profile:profId(g.profile)||g.profile}:{};render();return true;}
+  return false;}
+async function m9Click(a,b){const k=b.dataset.k;
+  const run=async(fn,ok)=>{busy=true;render();let r=true;try{await fn();msg=ok;msgErr=false;}catch(e){console.warn(e);r=false;msg='Не вдалося'+(e&&e.code==='permission-denied'?': немає права':(e&&e.message?': '+e.message:''));msgErr=true;}busy=false;render();return r;};
+  if(a==='m9f'&&b.dataset.v){M9F[k]=b.dataset.v;render();return true;}
+  if(a==='m9plf'){PLF9=k||'all';render();return true;}
+  if(a==='welgo'){welcomeOff();if(!AUTH.email)return true;M9F={};M9AP=k==='tourist'?'tourist':'citizen';render();return true;}
+  if(a==='m9ap'){if(!AUTH.email)return true;M9F={};M9AP=k==='tourist'?'tourist':'citizen';render();return true;}
+  if(a==='m9apx'){M9AP='';M9F={};render();return true;}
+  if(a==='m9apsend'){if(!AUTH.email||busy)return true;const tp=plByEmail(AUTH.email);const mm=myMember();
+    const nm=String(M9F.apname!=null?M9F.apname:(tp&&tp.name)||(mm&&mm.name)||'').trim();const pf=profId(M9F.approf!=null?M9F.approf:(tp&&tp.profile)||(mm&&mm.profile)||'');
+    if(!nm){msg='Впишіть своє ім’я в грі';msgErr=true;render();return true;}if(!pf){msg='Вкажіть профіль у грі: номер або посилання на dragpolit.com/profile/…';msgErr=true;render();return true;}
+    const kind=M9AP==='tourist'&&!tp?'tourist':'citizen';
+    const ok=await run(async()=>{if(myApp())await window.FB.delApp(AUTH.email);await window.FB.applyCitizen({name:nm,profile:pf,land:kind==='tourist'?'':(M9F.apland||''),about:String(M9F.apabout||'').trim(),kind});},'Заявку подано. Її розгляне '+m9RevText()+'.');
+    if(ok){M9AP='';M9F={};render();}return true;}
+  if(a==='m9ps'){if(!m9CanReview())return true;M9PS=b.dataset.n||'';M9F={};render();return true;}
+  if(a==='m9psx'){M9PS='';M9F={};render();return true;}
+  if(a==='m9pssave'||a==='m9psrm'){if(!m9CanReview()||busy)return true;const ps=plSec();const p=plByName(M9PS);if(!ps||!p)return true;
+    if(a==='m9psrm'&&b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Точно прибрати «'+p.name+'» з реєстру?';return true;}
+    const before=JSON.stringify(ps.list);
+    if(a==='m9psrm'){ps.list.splice(ps.list.indexOf(p),1);}
+    else{const st=M9F.psst||m9PStatus(p);if(st==='cit'){if(p.tourist||p.exiled)p.since=today();delete p.tourist;delete p.exiled;delete p.confed;}else if(st==='tour'){p.tourist=true;delete p.exiled;delete p.confed;}else if(st==='exiled'){p.exiled=true;}
+      if(M9F.psprof!=null)p.profile=profId(M9F.psprof)||String(M9F.psprof).trim();
+      if(AUTH.admin&&M9F.psmail!=null){const e=lc(String(M9F.psmail).trim());if(e&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){msg='Пошта виглядає неправильно';msgErr=true;render();return true;}const dup=e&&players().find(x=>x!==p&&lc(x.email)===e);if(dup){msg='Ця пошта вже прив’язана до «'+dup.name+'»';msgErr=true;render();return true;}p.email=e;}}
+    const nm=p.name;const ok=await run(()=>window.FB.savePlayers(ps),a==='m9psrm'?nm+' — прибрано з реєстру':'Статус збережено');
+    if(ok){saved=JSON.stringify(state);M9PS='';M9F={};}else{ps.list=JSON.parse(before);}render();return true;}
+  if(a==='m9add'){if(!m9CanReview())return true;const g=k?m9Guests().find(x=>x.email===k):null;M9F={};M9ADD=g?{email:g.email,name:g.name,profile:profId(g.profile)||g.profile}:{};render();return true;}
+  if(a==='m9addx'){M9ADD=null;M9F={};render();return true;}
+  if(a==='m9addsave'){if(!m9CanReview()||busy)return true;const ps=plSec();if(!ps)return true;const A=M9ADD||{};const v=x=>String(M9F[x]!=null?M9F[x]:(A[x]||'')).trim();
+    const name=v('name'),email=lc(v('email')),profile=profId(v('profile'))||v('profile');
+    if(!name){msg='Впишіть ім’я в грі';msgErr=true;render();return true;}
+    if(plByName(name)){msg='Гравець «'+name+'» уже є в реєстрі';msgErr=true;render();return true;}
+    if(email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){msg='Пошта виглядає неправильно';msgErr=true;render();return true;}
+    if(email&&plByEmail(email)){msg='Ця пошта вже прив’язана до «'+plByEmail(email).name+'»';msgErr=true;render();return true;}
+    const p={name,profile,email,since:today()};if((M9F.adst||'cit')==='tour')p.tourist=true;
+    ps.list=ps.list||[];ps.list.push(p);
+    const ok=await run(async()=>{await window.FB.savePlayers(ps);const ap=email&&APPS.find(x=>lc(x.id)===email&&x.status==='open');if(ap){const mp=myPost();try{await window.FB.decideApp(ap.id,'accepted',{by:mp?mp.name:'Адміністрація',role:mp?mp.title:'',at:new Date().toISOString(),reason:''});}catch(_){}}},name+' — додано до реєстру');
+    if(ok){saved=JSON.stringify(state);M9ADD=null;M9F={};}else{ps.list.splice(ps.list.indexOf(p),1);}render();return true;}
+  return false;}
 
 })();
 </script>
