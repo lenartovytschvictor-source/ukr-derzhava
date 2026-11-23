@@ -1,6 +1,6 @@
 // Демо-режим (?demo=1): усе зберігається лише в цьому браузері, база не потрібна.
 // Потрібен, щоб подивитися сайт без входу і щоб перевіряти його під час розробки.
-const KEY = "ud2-demo-v1";
+const KEY = "ud2-demo-v2";
 const OWNER = "lenartovytsch.victor@gmail.com";
 export const isDemo = true;
 
@@ -35,7 +35,9 @@ function seed() {
   const links = {
     [OWNER]: { pid: "p1" }, "hetman@demo.ua": { pid: "p2" }, "interior@demo.ua": { pid: "p3" }, "marko@demo.ua": { pid: "p4" },
   };
-  const pos = (id, title, order, appointBy, holder = "") => [id, { title, order, appointBy, holder }];
+  const pos = (id, title, order, appointBy, holder = "", extra = {}) => [id, { title, order, appointBy, holder, ...extra }];
+  const LANDS = [["volyn", "Волинська", "p6"], ["halych", "Галицька", "p3"], ["zakarpattia", "Закарпатська"], ["podillia", "Подільсько-Буковинська"], ["kyivska", "Київська", "p1"],
+    ["naddnipro", "Наддніпрянська", "p5"], ["sicheslav", "Січеславська"], ["sloboda", "Слобідська", "p4"], ["prychornomor", "Причорноморська", "p7"], ["kyiv", "Київ"]];
   const positions = Object.fromEntries([
     pos("hetman", "Гетьман", 0, "election", "p2"),
     pos("pysar", "Генеральний писар", 1, "hetman", "p6"),
@@ -45,7 +47,19 @@ function seed() {
     pos("defense", "Секретар оборони (головнокомандувач)", 5, "hetman", "p7"),
     pos("press", "Прес-секретар", 6, "hetman"),
     pos("prosecutor", "Прокурор", 7, "hetman"),
+    pos("chair", "Голова Палати Земель", 100, "election", "p6", { chamber: "chair" }),
+    ...LANDS.map(([id, n, h], i) => pos("seat_" + id, "Представник: " + n, 101 + i, "election", h || "", { chamber: "zemska", land: id })),
+    pos("sot_demo", "Війт міста Запоріжжя", 200, "admin", "", { chamber: "sotenna", land: "naddnipro" }),
   ]);
+  const H = 3600e3, T0 = Date.now();
+  const bills = {
+    b1: { title: "Про державні свята", text: "Стаття 1. Державними святами є День Незалежності, День Державного прапора і День Гетьманату.\nСтаття 2. У дні свят у загальному чаті проводяться урочистості.", kind: "law", author: "p6", seat: "seat_volyn", status: "voting", at: T0 - 30 * H, voteStart: T0 - 2 * H, voteEnd: T0 + 22 * H },
+    b2: { title: "Про охорону кордонів", text: "Стаття 1. Секретар оборони щотижня звітує Палаті про стан кордонів.", kind: "law", author: "p4", seat: "seat_sloboda", status: "discussion", at: T0 - 5 * H },
+    b3: { title: "Про відкриття школи для новачків", text: "Просимо створити наставництво для нових громадян.", kind: "petition", author: "p4", status: "signatures", at: T0 - 50 * H },
+  };
+  const elections = {
+    e1: { pos: "seat_zakarpattia", title: "Представник: Закарпатська", scope: "zakarpattia", stage: "nomination", nomEnd: T0 + 40 * H, voteHours: 48, by: "p1", at: T0 - 8 * H },
+  };
   const oldPlayers = { kind: "players", list: [
     { name: "Віктор", email: OWNER, profile: "255", since: "12.09.2026" },
     { name: "Старий Гравець", email: "old1@demo.ua", profile: "1200", since: "20.09.2026" },
@@ -55,6 +69,10 @@ function seed() {
   return {
     ud_players: players, ud_links: links, ud_positions: positions,
     ud_config: { admins: { emails: [] } },
+    ud_bills: bills, "ud_bills/b1/votes": { p6: { v: "for", seat: "seat_volyn", at: T0 - H }, p3: { v: "against", seat: "seat_halych", at: T0 - H }, p7: { v: "for", seat: "seat_prychornomor", at: T0 - H } },
+    "ud_bills/b3/signs": { p4: { at: T0 - 40 * H }, p7: { at: T0 - 20 * H } },
+    "ud_bills/b2/cmts": { c1: { by: "p3", text: "Підтримую, але звіт раз на два тижні.", at: T0 - 3 * H } },
+    ud_elections: elections,
     ud_apps: { "new@demo.ua": { name: "Новенький", profile: "3001", kind: "cit", note: "Хочу долучитися", status: "new", at: Date.now() - 3600e3 } },
     site: { players: { json: JSON.stringify(oldPlayers) } },
   };

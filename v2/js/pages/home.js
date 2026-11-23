@@ -5,7 +5,7 @@ import { t } from "../i18n.js";
 import { esc, avatar } from "../ui.js";
 import { txt } from "./common.js";
 
-const POWER = ["hetman", "pysar", "defense", "interior", "foreign", "finance"];
+const POWER = ["hetman", "chair", "pysar", "defense", "interior", "foreign", "finance"];
 
 export function render() {
   const u = S.user, m = me();

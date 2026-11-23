@@ -4,6 +4,9 @@ import { EDIT } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, confirmBox, toast } from "../ui.js";
 import { tabs, soon, txt, empty } from "./common.js";
+import * as chamber from "./chamber.js";
+import * as elections from "./elections.js";
+import * as diplo from "./diplo.js";
 
 const TABS = [["vlada", "👑", "st.tab.power"], ["palata", "🏛", "st.tab.chamber"], ["vybory", "🗳", "st.tab.elections"], ["karta", "🗺", "st.tab.map"], ["dyplomatiya", "🤝", "st.tab.diplo"]];
 
@@ -18,9 +21,9 @@ export function render(parts) {
   let h = `<h1 class="ptitle">🏛 ${esc(t("nav.state"))}</h1>${tabs("derzhava", TABS, cur)}`;
   if (cur === "vlada") h += power();
   else if (cur === "karta") h += mapTab();
-  else if (cur === "palata") h += soon(2, t("soon.chamber"));
-  else if (cur === "vybory") h += soon(2, t("soon.elections"));
-  else h += soon(2, t("soon.diplo"));
+  else if (cur === "palata") h += chamber.render(parts);
+  else if (cur === "vybory") h += elections.render(parts);
+  else h += diplo.render(parts);
   return h;
 }
 
@@ -50,8 +53,9 @@ function power() {
     return h;
   }
   const het = pos("hetman");
+  const gov = S.positions.filter(p => p.id !== "hetman" && !p.chamber);
   if (het) h += `<section class="card hetman">${posCard(het, true)}</section>`;
-  h += `<section class="card"><h2>${esc(t("pw.gov"))}</h2><div class="pgrid">${S.positions.filter(p => p.id !== "hetman").map(p => posCard(p)).join("")}</div>
+  h += `<section class="card"><h2>${esc(t("pw.gov"))}</h2><div class="pgrid">${gov.map(p => posCard(p)).join("")}</div>
     ${EDIT && isAdmin() ? `<form class="row addpos" data-padd><input type="text" name="title" maxlength="80" placeholder="${esc(t("pw.newTitle"))}" required><button class="sm">+ ${esc(t("pw.add"))}</button></form>` : ""}</section>`;
   return h;
 }
@@ -69,7 +73,11 @@ function mapTab() {
   return h;
 }
 
-export function mount(root) {
+export function mount(root, parts) {
+  const cur = parts[0] || "vlada";
+  if (cur === "palata") return chamber.mount(root, parts);
+  if (cur === "vybory") return elections.mount(root, parts);
+  if (cur === "dyplomatiya") return diplo.mount(root, parts);
   root.querySelectorAll("[data-hold]").forEach(s => s.onchange = async () => {
     const p = pos(s.dataset.hold); const pl = player(s.value);
     if (await run(() => B.update("ud_positions", p.id, { holder: s.value || "", since: B.now() }), t("saved")))

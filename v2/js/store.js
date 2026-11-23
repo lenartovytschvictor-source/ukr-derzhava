@@ -8,6 +8,7 @@ export const S = {
   ready: false, user: null,
   players: [], positions: [], links: [], apps: [],
   admins: [], lands: null, texts: {}, history: null, site: {},
+  bills: [], elections: [], states: [], treaties: [], chamber: {},
   myLink: null, myApp: null, err: "",
 };
 let renderCb = () => {};
@@ -28,6 +29,11 @@ export async function initStore() {
   B.watchDoc("ud_config", "lands", d => { S.lands = d && Array.isArray(d.list) ? d.list : null; changed(); });
   B.watchDoc("ud_config", "site", d => { S.site = d || {}; changed(); });
   B.watchDoc("ud_history", "main", d => { S.history = d; changed(); });
+  B.watch("ud_bills", r => { S.bills = r; changed(); }, e => fail(e));
+  B.watch("ud_elections", r => { S.elections = r; changed(); }, e => fail(e));
+  B.watch("ud_states", r => { S.states = r; changed(); }, e => fail(e));
+  B.watch("ud_treaties", r => { S.treaties = r; changed(); }, e => fail(e));
+  B.watchDoc("ud_config", "chamber", d => { S.chamber = d || {}; changed(); });
   B.onAuth(u => { S.user = u; S.ready = true; userWatches(); changed(); });
 }
 function fail(e) { console.warn(e); S.err = String(e && e.message || e); changed(); }
@@ -60,7 +66,14 @@ export const canAppoint = p => isAdmin() || (isHetman() && p && p.appointBy === 
 export const canLands = () => isAdmin() || holds("pysar");
 export const canTexts = () => isAdmin();
 export const canHistory = () => isAdmin();
-export const canEditAnything = () => isAdmin() || canPlayers() || isHetman() || canLands();
+export const canDiplo = () => isAdmin() || isHetman() || holds("foreign");
+export const isChair = () => holds("chair");
+export const canChamber = () => isAdmin() || isChair();          // керує порядком роботи Палати й виборами
+export const canEditAnything = () => isAdmin() || canPlayers() || isHetman() || canLands() || canDiplo() || isChair();
+// Палата Земель: місця — це посади з полем chamber (chair / zemska / sotenna)
+export const seats = () => S.positions.filter(p => p.chamber);
+export const mySeat = () => { const m = me(); return m ? seats().find(p => p.holder === m.id) || null : null; };
+export const CH = () => ({ hours: 24, quorum: 50, petition: 5, nomHours: 48, voteHours: 48, ...S.chamber });
 export const positionsOf = pid => S.positions.filter(p => p.holder && p.holder === pid);
 export const emailOf = pid => { const l = S.links.find(x => x.pid === pid); return l ? l.id : ""; };
 
@@ -72,6 +85,9 @@ export async function loadDefaults() {
 export const lands = () => S.lands || LANDS_DEFAULT;
 export const landsFromPlan = () => LANDS_DEFAULT;
 export const land = id => lands().find(l => l.id === id) || null;
+
+// час: Firestore Timestamp / Date / число / рядок → мілісекунди
+export const ms = v => !v ? 0 : v.toMillis ? v.toMillis() : v.seconds ? v.seconds * 1000 : typeof v === "number" ? v : Date.parse(v) || 0;
 
 // ---------- журнал дій ----------
 export async function log(act, text) {

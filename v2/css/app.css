@@ -192,3 +192,61 @@ main { width: 100%; max-width: 1080px; margin: 0 auto; padding: 18px 16px 40px; 
   .row2, .kinds { grid-template-columns: 1fr; }
   #toast { bottom: 86px; }
 }
+
+/* ---------- етап 2: Палата Земель ---------- */
+.seats { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-bottom: 8px; }
+.seat { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--surface2); min-width: 0; }
+.seat small { display: block; color: var(--muted); font-size: .8rem; } .seat b { display: block; overflow-wrap: anywhere; }
+.seat > span { min-width: 0; flex: 1; }
+.chairrow .seat { background: color-mix(in srgb, var(--gold) 18%, var(--surface)); border: 1px solid color-mix(in srgb, var(--gold) 45%, var(--line)); }
+.bills { display: grid; gap: 6px; }
+.bill { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; background: var(--surface2); color: var(--ink); border: 1px solid transparent; }
+.bill:hover { text-decoration: none; border-color: var(--line); }
+.bst { font-size: 1.2rem; line-height: 1.3; } .bt { flex: 1; min-width: 0; } .bt b { display: block; overflow-wrap: anywhere; } .bt small { color: var(--muted); font-size: .84rem; }
+.tags { margin: 0 0 6px; }
+.billcard h1, .billcard h2 { margin-top: 4px; }
+.billtext { line-height: 1.6; overflow-wrap: anywhere; } .billtext p { margin: 0 0 .7em; }
+.meter { height: 10px; border-radius: 99px; background: var(--surface2); border: 1px solid var(--line); overflow: hidden; margin: 6px 0 10px; }
+.meter span { display: block; height: 100%; background: var(--gold); }
+.vbar { position: relative; display: flex; justify-content: space-between; padding: 8px 12px; border-radius: 10px; background: var(--surface2); margin: 6px 0; overflow: hidden; }
+.vbar > span, .vbar > b { position: relative; z-index: 1; }
+.vbar i { position: absolute; left: 0; top: 0; bottom: 0; opacity: .28; }
+.vbar.yes i { background: var(--green); } .vbar.no i { background: var(--red); } .vbar.abs i { background: var(--muted); }
+.vbtns { margin: 10px 0 4px; } .vbtns button { flex: 1; justify-content: center; min-width: 110px; }
+.vlist { margin: 6px 0 0; padding-left: 20px; font-size: .9rem; }
+.cmt { display: flex; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); } .cmt > div { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.cmt small { color: var(--muted); font-size: .8rem; margin-left: 6px; } .cmt p { margin: 2px 0 0; white-space: pre-wrap; }
+.cmtform { display: flex; gap: 8px; align-items: flex-end; margin-top: 10px; } .cmtform textarea { flex: 1; resize: vertical; }
+.setgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; align-items: end; }
+.setgrid label { display: grid; gap: 4px; font-size: .88rem; color: var(--muted); }
+.newbill summary, details.card summary { cursor: pointer; } .newbill[open] summary { margin-bottom: 10px; }
+
+/* ---------- етап 2: вибори ---------- */
+.cands { display: grid; gap: 8px; }
+.cand { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 12px; background: var(--surface2); border: 2px solid transparent; }
+.cand.chosen { border-color: var(--blue2); } .cand.win { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 12%, var(--surface)); }
+.cand .grow { min-width: 0; overflow-wrap: anywhere; }
+.prog { font-size: .92rem; color: var(--ink); margin-top: 4px; } .prog p { margin: 0 0 .5em; }
+.nomform { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); } .nomform textarea { width: 100%; }
+
+/* ---------- етап 2: дипломатія ---------- */
+.sgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+.scard { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 12px; background: var(--surface2); border-left: 6px solid var(--line); }
+.scard img, .noflag { width: 56px; height: 38px; object-fit: cover; border-radius: 4px; border: 1px solid var(--line); flex: none; }
+.noflag { display: grid; place-items: center; font-size: 1.3rem; background: var(--surface); }
+.scard small { display: block; } .scard .grow { min-width: 0; }
+.rel-ally, .rel-peace { border-left-color: var(--green); } .rel-nonaggression { border-left-color: var(--blue2); } .rel-neutral { border-left-color: var(--muted); }
+.rel-tension { border-left-color: var(--warn); } .rel-war { border-left-color: var(--red); }
+.relb { font-size: .88rem; margin: 2px 0; }
+.treaty { border-top: 1px solid var(--line); padding: 8px 0; } .treaty:first-of-type { border-top: 0; }
+.treaty summary { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; cursor: pointer; list-style: none; padding: 4px 0; }
+.treaty summary::-webkit-details-marker { display: none; }
+.treaty summary .grow { min-width: 200px; } .treaty summary small { display: block; }
+.exp { font-size: .82rem; padding: 3px 10px; border-radius: 99px; background: color-mix(in srgb, var(--green) 14%, var(--surface)); white-space: nowrap; }
+.exp.soon { background: color-mix(in srgb, var(--warn) 18%, var(--surface)); color: var(--warn); }
+.exp.ended { background: color-mix(in srgb, var(--red) 14%, var(--surface)); color: var(--red); }
+.ttext { line-height: 1.6; padding: 8px 0; overflow-wrap: anywhere; } .ttext p { margin: 0 0 .7em; }
+.flagprev { width: 84px; height: 56px; display: grid; place-items: center; font-size: 1.8rem; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--surface2); }
+.flagprev img { width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 720px) { .cmtform { flex-direction: column; align-items: stretch; } .exp { white-space: normal; } }
+.av { flex: none; }
