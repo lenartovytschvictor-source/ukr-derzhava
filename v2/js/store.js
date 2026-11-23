@@ -8,7 +8,7 @@ export const S = {
   ready: false, user: null,
   players: [], positions: [], links: [], apps: [],
   admins: [], lands: null, texts: {}, history: null, site: {},
-  bills: [], elections: [], states: [], treaties: [], chamber: {},
+  bills: [], elections: [], states: [], treaties: [], chamber: {}, places: [],
   myLink: null, myApp: null, err: "",
 };
 let renderCb = () => {};
@@ -34,6 +34,7 @@ export async function initStore() {
   B.watch("ud_states", r => { S.states = r; changed(); }, e => fail(e));
   B.watch("ud_treaties", r => { S.treaties = r; changed(); }, e => fail(e));
   B.watchDoc("ud_config", "chamber", d => { S.chamber = d || {}; changed(); });
+  B.watch("ud_places", r => { S.places = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name, "uk")); changed(); }, e => fail(e));
   B.onAuth(u => { S.user = u; S.ready = true; userWatches(); changed(); });
 }
 function fail(e) { console.warn(e); S.err = String(e && e.message || e); changed(); }
@@ -62,14 +63,18 @@ export const isAdmin = () => isOwner() || !!(S.user && S.admins.includes(S.user.
 export const isHetman = () => holds("hetman");
 export const isCitizen = () => { const m = me(); return !!(m && m.status === "cit"); };
 export const canPlayers = () => isAdmin() || isHetman() || holds("interior");
-export const canAppoint = p => isAdmin() || (isHetman() && p && p.appointBy === "hetman");
+export const canAppoint = p => isAdmin() || (isHetman() && p && p.appointBy === "hetman")
+  || (!!p && p.appointBy === "osavul" && !!p.land && holds("osavul_" + p.land));   // Осавул призначає джур і війтів своєї землі
+// Крайовий Осавул землі — посада osavul_<land>; уділи й міста землі ведуть адмін, Писар і Осавул цієї землі
+export const isOsavul = landId => holds("osavul_" + landId);
+export const canPlaces = landId => isAdmin() || holds("pysar") || isOsavul(landId);
 export const canLands = () => isAdmin() || holds("pysar");
 export const canTexts = () => isAdmin();
 export const canHistory = () => isAdmin();
 export const canDiplo = () => isAdmin() || isHetman() || holds("foreign");
 export const isChair = () => holds("chair");
 export const canChamber = () => isAdmin() || isChair();          // керує порядком роботи Палати й виборами
-export const canEditAnything = () => isAdmin() || canPlayers() || isHetman() || canLands() || canDiplo() || isChair();
+export const canEditAnything = () => isAdmin() || canPlayers() || isHetman() || canLands() || canDiplo() || isChair() || lands().some(l => isOsavul(l.id));
 // Палата Земель: місця — це посади з полем chamber (chair / zemska / sotenna)
 export const seats = () => S.positions.filter(p => p.chamber);
 export const mySeat = () => { const m = me(); return m ? seats().find(p => p.holder === m.id) || null : null; };

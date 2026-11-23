@@ -7,6 +7,7 @@ import { tabs, soon, txt, empty } from "./common.js";
 import * as chamber from "./chamber.js";
 import * as elections from "./elections.js";
 import * as diplo from "./diplo.js";
+import * as map from "./map.js";
 
 const TABS = [["vlada", "👑", "st.tab.power"], ["palata", "🏛", "st.tab.chamber"], ["vybory", "🗳", "st.tab.elections"], ["karta", "🗺", "st.tab.map"], ["dyplomatiya", "🤝", "st.tab.diplo"]];
 
@@ -20,7 +21,7 @@ export function render(parts) {
   const cur = TABS.some(x => x[0] === parts[0]) ? parts[0] : "vlada";
   let h = `<h1 class="ptitle">🏛 ${esc(t("nav.state"))}</h1>${tabs("derzhava", TABS, cur)}`;
   if (cur === "vlada") h += power();
-  else if (cur === "karta") h += mapTab();
+  else if (cur === "karta") h += map.render(parts);
   else if (cur === "palata") h += chamber.render(parts);
   else if (cur === "vybory") h += elections.render(parts);
   else h += diplo.render(parts);
@@ -53,23 +54,10 @@ function power() {
     return h;
   }
   const het = pos("hetman");
-  const gov = S.positions.filter(p => p.id !== "hetman" && !p.chamber);
+  const gov = S.positions.filter(p => p.id !== "hetman" && !p.chamber && !p.land);
   if (het) h += `<section class="card hetman">${posCard(het, true)}</section>`;
   h += `<section class="card"><h2>${esc(t("pw.gov"))}</h2><div class="pgrid">${gov.map(p => posCard(p)).join("")}</div>
     ${EDIT && isAdmin() ? `<form class="row addpos" data-padd><input type="text" name="title" maxlength="80" placeholder="${esc(t("pw.newTitle"))}" required><button class="sm">+ ${esc(t("pw.add"))}</button></form>` : ""}</section>`;
-  return h;
-}
-
-// ---------- Карта (на етапі 1 — список земель; сама карта буде на етапі 3) ----------
-function mapTab() {
-  const L = lands();
-  let h = `<div class="card soon slim"><p>${esc(t("map.soon"))}</p></div>`;
-  if (!S.lands && canLands()) h += `<div class="card warn small">${esc(t("map.notSaved"))} <button type="button" class="sm" data-lseed>${esc(t("map.save"))}</button></div>`;
-  h += `<div class="lgrid">${L.map(l => {
-    const n = S.players.filter(p => p.land === l.id && p.status === "cit").length;
-    return `<div class="lcard" style="--lc:${esc(l.color || "#ccc")}"><h3>${esc(l.name)}</h3><p class="hint">${esc(t("map.residents", { n }))}</p>
-      <p class="regs">${(l.regions || []).map(r => esc(r.name)).join(" · ") || "—"}</p></div>`;
-  }).join("")}</div>`;
   return h;
 }
 
@@ -78,6 +66,7 @@ export function mount(root, parts) {
   if (cur === "palata") return chamber.mount(root, parts);
   if (cur === "vybory") return elections.mount(root, parts);
   if (cur === "dyplomatiya") return diplo.mount(root, parts);
+  if (cur === "karta") return map.mount(root, parts);
   root.querySelectorAll("[data-hold]").forEach(s => s.onchange = async () => {
     const p = pos(s.dataset.hold); const pl = player(s.value);
     if (await run(() => B.update("ud_positions", p.id, { holder: s.value || "", since: B.now() }), t("saved")))
@@ -105,6 +94,4 @@ export function mount(root, parts) {
     if (await run(() => B.batch(DEFAULT_POSITIONS.map(([id, title, by], i) => ({ op: "set", c: "ud_positions", id, v: { title, order: i, appointBy: by, holder: "" } }))), t("saved")))
       log("position", t("pw.seed"));
   };
-  const ls = root.querySelector("[data-lseed]");
-  if (ls) ls.onclick = async () => { if (await run(() => B.set("ud_config", "lands", { list: landsFromPlan() }), t("saved"))) log("lands", t("map.save")); };
 }

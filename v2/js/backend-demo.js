@@ -1,6 +1,6 @@
 // Демо-режим (?demo=1): усе зберігається лише в цьому браузері, база не потрібна.
 // Потрібен, щоб подивитися сайт без входу і щоб перевіряти його під час розробки.
-const KEY = "ud2-demo-v2";
+const KEY = "ud2-demo-v3";
 const OWNER = "lenartovytsch.victor@gmail.com";
 export const isDemo = true;
 
@@ -49,7 +49,9 @@ function seed() {
     pos("prosecutor", "Прокурор", 7, "hetman"),
     pos("chair", "Голова Палати Земель", 100, "election", "p6", { chamber: "chair" }),
     ...LANDS.map(([id, n, h], i) => pos("seat_" + id, "Представник: " + n, 101 + i, "election", h || "", { chamber: "zemska", land: id })),
-    pos("sot_demo", "Війт міста Запоріжжя", 200, "admin", "", { chamber: "sotenna", land: "naddnipro" }),
+    ...LANDS.map(([id, n], i) => pos("osavul_" + id, "Крайовий Осавул: " + n, 50 + i, "election", id === "sloboda" ? "p4" : id === "halych" ? "p3" : "", { land: id })),
+    pos("pl_x1", "Війт міста Харків", 301, "osavul", "p4", { chamber: "sotenna", land: "sloboda", place: "x1" }),
+    pos("pl_x2", "Джура уділу Сумський", 302, "osavul", "", { chamber: "sotenna", land: "sloboda", place: "x2" }),
   ]);
   const H = 3600e3, T0 = Date.now();
   const bills = {
@@ -73,6 +75,7 @@ function seed() {
     "ud_bills/b3/signs": { p4: { at: T0 - 40 * H }, p7: { at: T0 - 20 * H } },
     "ud_bills/b2/cmts": { c1: { by: "p3", text: "Підтримую, але звіт раз на два тижні.", at: T0 - 3 * H } },
     ud_elections: elections,
+    ud_places: { x1: { land: "sloboda", kind: "city", name: "Харків", note: "", order: 1 }, x2: { land: "sloboda", kind: "udil", name: "Сумський", note: "", order: 2 } },
     ud_apps: { "new@demo.ua": { name: "Новенький", profile: "3001", kind: "cit", note: "Хочу долучитися", status: "new", at: Date.now() - 3600e3 } },
     site: { players: { json: JSON.stringify(oldPlayers) } },
   };
