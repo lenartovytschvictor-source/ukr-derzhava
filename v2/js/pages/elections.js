@@ -1,6 +1,6 @@
 // 🗳 Вибори на будь-яку посаду: висування → голосування → підсумки.
 // Хто голосує, фіксується в момент старту голосування (переїзд після старту не дає другого голосу).
-import { S, B, me, player, pos, land, isAdmin, isCitizen, canChamber, CH, ms, log, changed } from "../store.js";
+import { bansOf, S, B, me, player, pos, land, isAdmin, isCitizen, canChamber, CH, ms, log, changed } from "../store.js";
 import { EDIT, go } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, confirmBox, toast, fmtDate } from "../ui.js";
@@ -19,7 +19,9 @@ function follow(id) {
 const left = end => { const d = ms(end) - Date.now(); if (d <= 0) return t("ch.ended"); const h = Math.floor(d / 3600e3), m = Math.floor(d % 3600e3 / 60e3); return t("ch.left", { h, m }); };
 const scopeName = e => e.scope ? ((land(e.scope) || {}).name || e.scope) : t("el.allCitizens");
 // хто може висуватися й голосувати: громадяни; на виборах у землі — лише прописані в ній
-const eligible = (p, e) => p && p.status === "cit" && (!e.scope || p.land === e.scope);
+const canVote = (p, e) => p && p.status === "cit" && (!e.scope || p.land === e.scope);
+// судова заборона обіймати посади (вирок суду, не помилуваний) — не можна висуватися
+const eligible = (p, e) => p && p.status === "cit" && (!e.scope || p.land === e.scope) && !bansOf(p.id).length;
 const STAGE = { nomination: "📝", voting: "🗳", done: "🏁", tie: "⚖️", cancelled: "✕" };
 
 export function render(parts) {
@@ -72,7 +74,7 @@ function page(id) {
   }).join("")}</div>` : empty(t("el.noCands"))}`;
   if (nomOpen && m && !iAmCand) {
     h += eligible(m, e) ? `<form class="form nomform" data-nom><label>${esc(t("el.program"))}<textarea name="program" rows="3" maxlength="2000" placeholder="${esc(t("el.programPh"))}"></textarea></label><button class="primary">${esc(t("el.nominate"))}</button></form>`
-      : `<p class="hint">${esc(t(e.scope ? "el.notEligibleLand" : "el.notEligible"))}</p>`;
+      : `<p class="hint">${esc(t(bansOf(m.id).length ? "el.banned" : e.scope ? "el.notEligibleLand" : "el.notEligible"))}</p>`;
   }
   if (voteOpen && m && !(e.voters || []).includes(m.id)) h += `<p class="hint">${esc(t("el.notVoter"))}</p>`;
   if (voteOpen && CUR.myVote) h += `<p class="hint">✓ ${esc(t("el.voted"))}</p>`;
@@ -109,7 +111,7 @@ export function mount(root, parts) {
   const st = root.querySelector("[data-start]");
   if (st) st.onclick = async () => {
     // фіксуємо список виборців на момент старту
-    const voters = S.players.filter(p => eligible(p, e)).map(p => p.id);
+    const voters = S.players.filter(p => canVote(p, e)).map(p => p.id);
     const vh = e.voteHours || CH().voteHours;
     if (await run(() => B.update("ud_elections", e.id, { stage: "voting", voters, voteEnd: new Date(Date.now() + vh * 3600e3) }), t("el.voteStarted"))) log("election", `${e.title}: ${t("el.stage.voting")}`);
   };

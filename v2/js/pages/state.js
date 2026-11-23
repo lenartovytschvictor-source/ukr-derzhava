@@ -54,7 +54,7 @@ function power() {
     return h;
   }
   const het = pos("hetman");
-  const gov = S.positions.filter(p => p.id !== "hetman" && !p.chamber && !p.land);
+  const gov = S.positions.filter(p => p.id !== "hetman" && !p.chamber && !p.land && !p.court);
   if (het) h += `<section class="card hetman">${posCard(het, true)}</section>`;
   h += `<section class="card"><h2>${esc(t("pw.gov"))}</h2><div class="pgrid">${gov.map(p => posCard(p)).join("")}</div>
     ${EDIT && isAdmin() ? `<form class="row addpos" data-padd><input type="text" name="title" maxlength="80" placeholder="${esc(t("pw.newTitle"))}" required><button class="sm">+ ${esc(t("pw.add"))}</button></form>` : ""}</section>`;

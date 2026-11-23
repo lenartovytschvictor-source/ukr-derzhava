@@ -1,6 +1,6 @@
 // Демо-режим (?demo=1): усе зберігається лише в цьому браузері, база не потрібна.
 // Потрібен, щоб подивитися сайт без входу і щоб перевіряти його під час розробки.
-const KEY = "ud2-demo-v3";
+const KEY = "ud2-demo-v4";
 const OWNER = "lenartovytsch.victor@gmail.com";
 export const isDemo = true;
 
@@ -14,6 +14,7 @@ export const USERS = [
   { key: "owner", label: "Віктор — адмін", user: { uid: "u1", email: OWNER, name: "Віктор" } },
   { key: "hetman", label: "Олександр — Гетьман", user: { uid: "u2", email: "hetman@demo.ua", name: "Олександр" } },
   { key: "interior", label: "Остап — Секретар внутрішніх справ", user: { uid: "u3", email: "interior@demo.ua", name: "Остап" } },
+  { key: "judge", label: "Kivi — суддя", user: { uid: "u6", email: "kivi@demo.ua", name: "Kivi" } },
   { key: "cit", label: "Марко — громадянин", user: { uid: "u4", email: "marko@demo.ua", name: "Марко" } },
   { key: "new", label: "Новенький — ще не зареєстрований", user: { uid: "u5", email: "new@demo.ua", name: "Новенький" } },
 ];
@@ -33,7 +34,7 @@ function seed() {
     P("p10", "Ярема", "990", "exiled", "podillia", "14.09.2026"),
   ]);
   const links = {
-    [OWNER]: { pid: "p1" }, "hetman@demo.ua": { pid: "p2" }, "interior@demo.ua": { pid: "p3" }, "marko@demo.ua": { pid: "p4" },
+    [OWNER]: { pid: "p1" }, "hetman@demo.ua": { pid: "p2" }, "interior@demo.ua": { pid: "p3" }, "marko@demo.ua": { pid: "p4" }, "kivi@demo.ua": { pid: "p5" },
   };
   const pos = (id, title, order, appointBy, holder = "", extra = {}) => [id, { title, order, appointBy, holder, ...extra }];
   const LANDS = [["volyn", "Волинська", "p6"], ["halych", "Галицька", "p3"], ["zakarpattia", "Закарпатська"], ["podillia", "Подільсько-Буковинська"], ["kyivska", "Київська", "p1"],
@@ -50,6 +51,9 @@ function seed() {
     pos("chair", "Голова Палати Земель", 100, "election", "p6", { chamber: "chair" }),
     ...LANDS.map(([id, n, h], i) => pos("seat_" + id, "Представник: " + n, 101 + i, "election", h || "", { chamber: "zemska", land: id })),
     ...LANDS.map(([id, n], i) => pos("osavul_" + id, "Крайовий Осавул: " + n, 50 + i, "election", id === "sloboda" ? "p4" : id === "halych" ? "p3" : "", { land: id })),
+    pos("judge_1", "Суддя 1", 30, "election", "p5", { court: true, since: Date.now() - 10 * 864e5 }),
+    pos("judge_2", "Суддя 2", 31, "election", "p7", { court: true, since: Date.now() - 70 * 864e5 }),
+    pos("judge_3", "Суддя 3", 32, "election", "", { court: true }),
     pos("pl_x1", "Війт міста Харків", 301, "osavul", "p4", { chamber: "sotenna", land: "sloboda", place: "x1" }),
     pos("pl_x2", "Джура уділу Сумський", 302, "osavul", "", { chamber: "sotenna", land: "sloboda", place: "x2" }),
   ]);
@@ -75,6 +79,21 @@ function seed() {
     "ud_bills/b3/signs": { p4: { at: T0 - 40 * H }, p7: { at: T0 - 20 * H } },
     "ud_bills/b2/cmts": { c1: { by: "p3", text: "Підтримую, але звіт раз на два тижні.", at: T0 - 3 * H } },
     ud_elections: elections,
+    ud_codes: { admin: { name: "Адміністративний кодекс", desc: "", order: 0 }, criminal: { name: "Кримінальний кодекс", desc: "Злочини проти держави та громадян.", order: 1 }, military: { name: "Військовий кодекс", desc: "", order: 2 } },
+    ud_laws: {
+      l1: { kind: "law", no: 1, title: "Про Палату Земель", text: "Стаття 1. Палата Земель складається із Земської і Сотенної лав.", code: "admin", status: "active", date: "2026-11-20", by: "p2", at: T0 - 80 * H },
+      l2: { kind: "law", no: 2, title: "Про державну зраду", text: "Стаття 1. Державна зрада карається позбавленням права обіймати посади до 3 місяців.", code: "criminal", status: "active", date: "2026-11-21", by: "p2", at: T0 - 60 * H },
+      l3: { kind: "law", no: 3, title: "Про тимчасовий порядок", text: "Втратив чинність.", code: "admin", status: "repealed", date: "2026-11-10", by: "p2", at: T0 - 300 * H },
+      d1: { kind: "decree", no: 1, title: "Про призначення уряду", text: "Призначити членів уряду згідно з додатком.", code: "", status: "active", date: "2026-11-22", by: "p2", at: T0 - 30 * H },
+    },
+    ud_law: { constitution: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.\nСтаття 2. Державна мова — українська.\n\n# Розділ II. Гетьман\nСтаття 3. Гетьман є главою держави.\nСтаття 4. Нові вибори Гетьмана ініціює Палата Земель.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
+    "ud_law/constitution/hist": { v1: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
+    ud_counters: { cases: { n: 2 } },
+    ud_cases: {
+      k1: { no: 1, title: "Невиплата внеску до казни", text: "Відповідач тричі не сплатив внесок.", plaintiff: "p4", defendant: "p7", forState: false, closed: false, status: "filed", judge: "", parties: ["p4", "p7"], at: T0 - 20 * H },
+      k2: { no: 2, title: "Державна зрада", text: "Відповідач передав плани оборони іншій державі.", plaintiff: "p3", defendant: "p10", forState: true, closed: true, status: "verdict", judge: "p5", parties: ["p3", "p10", "p5"], at: T0 - 100 * H,
+        verdict: "Вину доведено.", sentence: "позбавлення звання", laws: ["l2"], banUntil: "2027-02-20", decidedAt: T0 - 50 * H },
+    },
     ud_places: { x1: { land: "sloboda", kind: "city", name: "Харків", note: "", order: 1 }, x2: { land: "sloboda", kind: "udil", name: "Сумський", note: "", order: 2 } },
     ud_apps: { "new@demo.ua": { name: "Новенький", profile: "3001", kind: "cit", note: "Хочу долучитися", status: "new", at: Date.now() - 3600e3 } },
     site: { players: { json: JSON.stringify(oldPlayers) } },
@@ -91,9 +110,11 @@ function emit(c, id) {
   for (const s of subs) {
     if (s.c !== c) continue;
     if (s.id) { if (s.id === id) s.cb(col(c)[id] ? { id, ...clone(col(c)[id]) } : null); }
-    else s.cb(rows(c));
+    else s.cb(s.f ? rows(c).filter(s.f) : rows(c));
   }
 }
+// вибірка за умовою (як where у Firestore): op — "==" або "array-contains"
+const cond = (field, op, value) => r => op === "array-contains" ? (r[field] || []).includes(value) : r[field] === value;
 // перевірка прав у демо не потрібна: її робить інтерфейс, а справжні правила — Firebase
 
 const ss = { get: k => { try { return sessionStorage.getItem(k); } catch (_) { return null; } }, set: (k, v) => { try { sessionStorage.setItem(k, v); } catch (_) {} } };
@@ -144,6 +165,7 @@ export async function batch(ops) {
   for (const o of ops) emit(o.c, o.id);
 }
 export function watch(c, cb) { const s = { c, cb }; subs.push(s); setTimeout(() => cb(rows(c)), 0); return () => subs.splice(subs.indexOf(s), 1); }
+export function watchWhere(c, field, op, value, cb) { const s = { c, cb, f: cond(field, op, value) }; subs.push(s); setTimeout(() => cb(rows(c).filter(s.f)), 0); return () => subs.splice(subs.indexOf(s), 1); }
 export function watchDoc(c, id, cb) { const s = { c, id, cb }; subs.push(s); setTimeout(() => cb(col(c)[id] ? { id, ...clone(col(c)[id]) } : null), 0); return () => subs.splice(subs.indexOf(s), 1); }
 
 export function onAuth(cb) { authSubs.push(cb); setTimeout(() => cb(USER), 0); }

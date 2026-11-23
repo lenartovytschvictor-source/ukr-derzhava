@@ -9,12 +9,13 @@ export const S = {
   players: [], positions: [], links: [], apps: [],
   admins: [], lands: null, texts: {}, history: null, site: {},
   bills: [], elections: [], states: [], treaties: [], chamber: {}, places: [],
+  codes: [], laws: [], constitution: null, casesPub: [], casesPriv: [], caseCounter: null,
   myLink: null, myApp: null, err: "",
 };
 let renderCb = () => {};
 let raf = 0;
 export function onChange(cb) { renderCb = cb; }
-export function changed() { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; renderCb(); }); }
+export function changed() { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; syncCaseWatch(); renderCb(); }); }
 
 const unsub = [];
 function stopUserWatches() { while (unsub.length) { try { unsub.pop()(); } catch (_) {} } }
@@ -35,6 +36,11 @@ export async function initStore() {
   B.watch("ud_treaties", r => { S.treaties = r; changed(); }, e => fail(e));
   B.watchDoc("ud_config", "chamber", d => { S.chamber = d || {}; changed(); });
   B.watch("ud_places", r => { S.places = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name, "uk")); changed(); }, e => fail(e));
+  B.watch("ud_codes", r => { S.codes = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)); changed(); }, e => fail(e));
+  B.watch("ud_laws", r => { S.laws = r; changed(); }, e => fail(e));
+  B.watchDoc("ud_law", "constitution", d => { S.constitution = d; changed(); });
+  B.watchDoc("ud_counters", "cases", d => { S.caseCounter = d; changed(); });
+  B.watchWhere("ud_cases", "closed", "==", false, r => { S.casesPub = r; changed(); }, e => fail(e));
   B.onAuth(u => { S.user = u; S.ready = true; userWatches(); changed(); });
 }
 function fail(e) { console.warn(e); S.err = String(e && e.message || e); changed(); }
@@ -52,6 +58,18 @@ function userWatches() {
   unsub.push(B.watch("ud_links", r => { S.links = r; changed(); }, () => { S.links = []; }));
   unsub.push(B.watch("ud_apps", r => { S.apps = r; changed(); }, () => { S.apps = []; }));
 }
+
+// Суд: відкриті справи бачать усі; закриті — лише учасники й судові посадовці (так само в правилах бази)
+let caseKey = "", caseUn = null;
+function syncCaseWatch() {
+  const m = me();
+  const key = !S.user ? "" : courtStaff() ? "all" : m ? "p:" + m.id : "";
+  if (key === caseKey) return;
+  caseKey = key; if (caseUn) { try { caseUn(); } catch (_) {} caseUn = null; } S.casesPriv = [];
+  if (key === "all") caseUn = B.watch("ud_cases", r => { S.casesPriv = r; changed(); }, () => {});
+  else if (key) caseUn = B.watchWhere("ud_cases", "parties", "array-contains", m.id, r => { S.casesPriv = r; changed(); }, () => {});
+}
+export const cases = () => { const M = new Map(); [...S.casesPub, ...S.casesPriv].forEach(c => M.set(c.id, c)); return [...M.values()]; };
 
 // ---------- хто є хто ----------
 export const player = id => S.players.find(p => p.id === id) || null;
@@ -73,6 +91,14 @@ export const canTexts = () => isAdmin();
 export const canHistory = () => isAdmin();
 export const canDiplo = () => isAdmin() || isHetman() || holds("foreign");
 export const isChair = () => holds("chair");
+// Закон
+export const JUDGES = ["judge_1", "judge_2", "judge_3"];
+export const isJudge = () => JUDGES.some(holds);
+export const courtStaff = () => isAdmin() || isJudge() || holds("prosecutor") || isHetman() || holds("interior");
+export const canCodes = () => isAdmin() || holds("pysar");          // кодекси, реєстр законів, Конституція
+export const canDecree = () => isAdmin() || isHetman();
+// чинні судові заборони обіймати посади (не помилувані, строк ще не минув)
+export const bansOf = pid => cases().filter(c => c.status === "verdict" && !c.pardon && c.defendant === pid && c.banUntil && Date.parse(c.banUntil + "T23:59:59") > Date.now());
 export const canChamber = () => isAdmin() || isChair();          // керує порядком роботи Палати й виборами
 export const canEditAnything = () => isAdmin() || canPlayers() || isHetman() || canLands() || canDiplo() || isChair() || lands().some(l => isOsavul(l.id));
 // Палата Земель: місця — це посади з полем chamber (chair / zemska / sotenna)

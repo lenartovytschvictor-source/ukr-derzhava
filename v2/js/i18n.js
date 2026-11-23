@@ -2,6 +2,7 @@
 // Тексти, які пишуть люди (закони, новини, імена), не перекладаються — лише кнопки й підписи.
 import { S2 } from "./i18n-s2.js";
 import { S3 } from "./i18n-s3.js";
+import { S4 } from "./i18n-s4.js";
 export const LANGS = [["uk", "Українська"], ["en", "English"], ["ru", "Русский"], ["es", "Español"], ["pl", "Polski"]];
 
 const uk = {
@@ -289,6 +290,7 @@ const pl = {
 const D = { uk, en, ru, es, pl };
 for (const l in S2) Object.assign(D[l], S2[l]);
 for (const l in S3) Object.assign(D[l], S3[l]);
+for (const l in S4) Object.assign(D[l], S4[l]);
 let L = (() => {
   try { const s = localStorage.getItem("ud2-lang"); if (D[s]) return s; } catch (_) {}
   return "uk";   // основна мова сайту — українська; іншу кожен обирає сам

@@ -59,6 +59,9 @@ export async function batch(ops) {
 export function watch(c, cb, onErr) {
   return F.onSnapshot(F.collection(db, c), s => cb(s.docs.map(plain)), e => onErr && onErr(e));
 }
+export function watchWhere(c, field, op, value, cb, onErr) {
+  return F.onSnapshot(F.query(F.collection(db, c), F.where(field, op, value)), s => cb(s.docs.map(plain)), e => onErr && onErr(e));
+}
 export function watchDoc(c, id, cb, onErr) {
   return F.onSnapshot(ref(c, id), s => cb(plain(s)), e => onErr && onErr(e));
 }

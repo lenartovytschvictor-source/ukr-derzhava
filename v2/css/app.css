@@ -274,3 +274,25 @@ a.lcard { color: var(--ink); display: block; } a.lcard:hover { text-decoration: 
 .chip { display: inline-flex; gap: 6px; align-items: center; padding: 4px 10px 4px 4px; border-radius: 99px; background: var(--surface2); color: var(--ink); border: 1px solid var(--line); font-size: .9rem; }
 .chip:hover { text-decoration: none; border-color: var(--blue2); }
 @media (max-width: 720px) { .umap .lbl { font-size: 19px; } .umap .lbl .cnt { display: none; } .mapcard { padding: 6px; } }
+
+/* ---------- етап 4: закон і суд ---------- */
+.constwrap { display: grid; grid-template-columns: 260px 1fr; gap: 16px; align-items: start; }
+.ctoc { position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow: auto; display: grid; gap: 2px; font-size: .9rem; }
+.ctoc b { margin-bottom: 6px; } .ctoc a { padding: 3px 6px; border-radius: 6px; color: var(--ink); } .ctoc a:hover { background: var(--surface2); text-decoration: none; }
+.ctoc a.l1 { font-weight: 700; margin-top: 6px; } .ctoc a.l2 { padding-left: 16px; color: var(--muted); }
+.ctext { line-height: 1.7; overflow-wrap: anywhere; } .ctext h2 { margin: 1.2em 0 .4em; scroll-margin-top: 80px; } .ctext h2:first-child { margin-top: 0; }
+.ctext h3 { font-size: 1.02rem; margin: 1em 0 .3em; scroll-margin-top: 80px; } .ctext p { margin: 0 0 .7em; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; } .filters input[type=search] { flex: 1; min-width: 200px; }
+.billcard .note { padding: 8px 12px; border-radius: 10px; background: color-mix(in srgb, var(--gold) 14%, var(--surface)); font-size: .92rem; }
+.parties { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin: 10px 0; }
+.party { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--surface2); }
+.party small { display: block; color: var(--muted); font-size: .8rem; } .party b { display: block; overflow-wrap: anywhere; }
+.verdict { border-left: 6px solid var(--blue); }
+.ban { padding: 8px 12px; border-radius: 10px; background: color-mix(in srgb, var(--red) 12%, var(--surface)); color: var(--red); font-weight: 600; }
+.form .chk, .lawpick .chk { display: flex; gap: 8px; align-items: flex-start; color: var(--ink); font-size: .92rem; white-space: normal; }
+.form .chk input, .lawpick .chk input { width: 18px; height: 18px; margin-top: 2px; flex: none; }
+.lawpick { border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; max-height: 260px; overflow: auto; display: grid; gap: 6px; }
+.lawpick legend { font-size: .9rem; color: var(--muted); padding: 0 4px; }
+.addcode input { flex: 1; min-width: 180px; }
+a.codecard { border-left-color: var(--blue); }
+@media (max-width: 720px) { .constwrap { grid-template-columns: 1fr; } .ctoc { position: static; max-height: 260px; } }

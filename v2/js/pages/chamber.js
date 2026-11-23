@@ -1,4 +1,5 @@
 // 🏛 Палата Земель: Голова, Земська й Сотенна лави, законопроєкти, петиції, голосування.
+import { pickCode, nextNo, lawNo } from "./law.js";
 import { S, B, me, player, pos, lands, seats, mySeat, isAdmin, isHetman, isCitizen, isChair, canChamber, CH, ms, log, changed } from "../store.js";
 import { EDIT, go } from "../app.js";
 import { t } from "../i18n.js";
@@ -111,6 +112,7 @@ function billPage(id) {
     <p class="tags"><span class="tag">${ST[b.status] || ""} ${esc(t("ch.st." + b.status))}</span><span class="tag">${esc(t(b.kind === "call" ? "ch.kind.call" : b.kind === "petition" ? "ch.kind.petition" : "ch.kind.law"))}</span>${b.at ? `<span class="tag">📅 ${esc(fmtDate(b.at))}</span>` : ""}</p>
     <h1>${esc(b.title)}</h1>
     <p class="hint">${esc(t("ch.author"))}: ${a ? `<a href="#/narod/gravets/${esc(a.id)}">${esc(a.name)}</a>` : "—"}${tg ? ` · ${esc(t("ch.target"))}: <b>${esc(tg.title)}</b>` : ""}</p>
+    ${(() => { const l = S.laws.find(x => x.bill === b.id); return l ? `<p><a class="tag" href="#/zakon/zakony/${esc(l.id)}">📜 ${esc(lawNo(l))}</a></p>` : ""; })()}
     <div class="billtext">${paras(b.text)}</div></section>`;
   // збір підписів
   if (b.status === "signatures") {
@@ -213,7 +215,17 @@ export function mount(root, parts) {
       if (p) await run(() => B.set("ud_elections", B.newId("ud_elections"), { pos: p.id, title: p.title, scope: p.land || "", stage: "nomination", nomEnd: new Date(Date.now() + CH().nomHours * 3600e3), bill: b.id, by: S.user.email, at: B.now() }), t("el.created"));
     }
   });
-  const sl = root.querySelector("[data-sign-law]"); if (sl) sl.onclick = () => upd({ status: "signed", signedAt: B.now(), signedBy: m ? m.id : "" }, t("ch.lawSigned"), `📜 ${b.title}`);
+  // підписаний закон одразу потрапляє в реєстр «Закони й укази» з номером і кодексом
+  const sl = root.querySelector("[data-sign-law]");
+  if (sl) sl.onclick = async () => {
+    const r = await pickCode(t("ch.signLaw")); if (!r) return;
+    const lid = B.newId("ud_laws"), d = new Date().toISOString().slice(0, 10);
+    const law = { kind: "law", no: nextNo("law"), title: b.title, text: b.text || "", code: r.code, status: "active", date: d, by: m ? m.id : "", bill: b.id, at: B.now() };
+    if (await run(() => B.batch([
+      { op: "update", c: "ud_bills", id: b.id, v: { status: "signed", signedAt: B.now(), signedBy: m ? m.id : "" } },
+      { op: "set", c: "ud_laws", id: lid, v: law },
+    ]), t("ch.lawSigned"))) log("bill", `📜 ${lawNo(law)} ${b.title}`);
+  };
   const vt = root.querySelector("[data-veto]"); if (vt) vt.onclick = async () => { if (await confirmBox(t("ch.vetoQ"), t("ch.veto"))) upd({ status: "vetoed", signedAt: B.now(), signedBy: m ? m.id : "" }, t("saved"), `⛔ ${b.title}`); };
   const wd = root.querySelector("[data-withdraw]"); if (wd) wd.onclick = async () => { if (await confirmBox(t("ch.withdrawQ"), t("ch.withdraw"))) upd({ status: "withdrawn" }, t("saved"), `↩️ ${b.title}`); };
   const bd = root.querySelector("[data-bdel]"); if (bd) bd.onclick = async () => { if (await confirmBox(t("ch.delQ"), t("delete")) && await run(() => B.del("ud_bills", b.id), t("deleted"))) { log("bill", `${t("deleted")}: ${b.title}`); go("derzhava/palata"); } };
