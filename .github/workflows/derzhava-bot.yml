@@ -1,4 +1,5 @@
 name: Державний бот
+# Новий сайт: бот працює з базою напряму (серверним ключем), браузер не потрібен.
 # GitHub запускає розклад нерегулярно, тому бот працює «змінами»:
 # один запуск живе ~5,5 години, робить роботу кожні 15 хвилин
 # і наприкінці сам запускає наступну зміну.
@@ -40,7 +41,6 @@ jobs:
         working-directory: bot
         run: |
           npm install --no-audit --no-fund
-          npx playwright install --with-deps chromium
       - name: Зміна бота (кожні 15 хвилин протягом ~5,5 години)
         id: shift
         if: steps.check.outputs.skip != 'true'
@@ -54,7 +54,7 @@ jobs:
           TELEGRAM_REMIND_THREAD_ID: ${{ secrets.TELEGRAM_REMIND_THREAD_ID }}
         run: |
           end=$(( $(date +%s) + 5*3600 + 30*60 ))
-          # Telegram-бот команд (/start, /казна, /закони, /мій_внесок) слухає у фоні всю зміну
+          # Telegram-бот команд (/start КОД, /закони, /вибори, /новини, /свята) слухає у фоні всю зміну
           TGBOT_MINUTES=325 node tgbot.mjs > tgbot.log 2>&1 &
           while true; do
             start=$(date +%s)
