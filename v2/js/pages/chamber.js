@@ -5,18 +5,21 @@ import { EDIT, go } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, confirmBox, toast, fmtDate } from "../ui.js";
 import { txt, empty, paras, holderSel, bindHolders, symHtml } from "./common.js";
+import { fxSelect, bindFx, fxRead, fxDesc, fxCard, applyFx, bindFxCard } from "./fxui.js";
 
 // законопроєкт: signatures (петиція збирає підписи) → discussion → voting → passed / rejected → signed / vetoed
-const ST = { signatures: "✍️", discussion: "💬", voting: "🗳", passed: "✅", rejected: "❌", signed: "📜", vetoed: "⛔", withdrawn: "↩️" };
+// вето можна подолати: vetoed → override (голосування, потрібно 2/3) → overridden (закон набирає чинності без підпису)
+const ST = { signatures: "✍️", discussion: "💬", voting: "🗳", passed: "✅", rejected: "❌", signed: "📜", vetoed: "⛔", withdrawn: "↩️", override: "🔁", overridden: "💪" };
 
 // ---------- живі дані відкритого законопроєкту ----------
-const CUR = { id: "", votes: [], signs: [], cmts: [], un: [] };
+const CUR = { id: "", votes: [], ovotes: [], signs: [], cmts: [], un: [] };
 function follow(id) {
   if (CUR.id === id) return;
   CUR.un.forEach(f => { try { f(); } catch (_) {} });
-  Object.assign(CUR, { id, votes: [], signs: [], cmts: [], un: [] });
+  Object.assign(CUR, { id, votes: [], ovotes: [], signs: [], cmts: [], un: [] });
   if (!id) return;
   CUR.un.push(B.watch(`ud_bills/${id}/votes`, r => { CUR.votes = r; changed(); }));
+  CUR.un.push(B.watch(`ud_bills/${id}/ovotes`, r => { CUR.ovotes = r; changed(); }));
   CUR.un.push(B.watch(`ud_bills/${id}/signs`, r => { CUR.signs = r; changed(); }));
   CUR.un.push(B.watch(`ud_bills/${id}/cmts`, r => { CUR.cmts = r.sort((a, b) => ms(a.at) - ms(b.at)); changed(); }));
 }
@@ -24,15 +27,19 @@ function follow(id) {
 // члени Палати — унікальні люди: хто обіймає два місця (напр. Голова й представник землі), має один голос
 const occupied = () => [...new Set(seats().filter(p => p.holder && player(p.holder)).map(p => p.holder))];
 const quorumNeed = () => Math.floor(occupied().length * CH().quorum / 100) + 1;
-function tally(votes) {
+function tally(votes, ov) {
   const valid = votes.filter(v => occupied().includes(v.id));   // голоси тих, хто досі в Палаті
   const c = { for: 0, against: 0, abstain: 0 };
   valid.forEach(v => { if (c[v.v] != null) c[v.v]++; });
   const cast = c.for + c.against + c.abstain;
-  return { ...c, cast, quorum: cast >= quorumNeed(), pass: cast >= quorumNeed() && c.for > c.against };
+  const q = cast >= quorumNeed();
+  // подолання вето: «За» щонайменше 2/3 (налаштування Палати) від тих, хто голосував
+  const pass = ov ? q && c.for * 100 >= cast * (CH().override || 67) : q && c.for > c.against;
+  return { ...c, cast, quorum: q, pass };
 }
 const left = end => { const d = ms(end) - Date.now(); if (d <= 0) return t("ch.ended"); const h = Math.floor(d / 3600e3), m = Math.floor(d % 3600e3 / 60e3); return t("ch.left", { h, m }); };
 const votingOpen = b => b.status === "voting" && ms(b.voteEnd) > Date.now();
+const ovOpen = b => b.status === "override" && ms(b.ovEnd) > Date.now();
 
 export function render(parts) {
   if (parts[1]) { follow(parts[1]); return billPage(parts[1]); }
@@ -63,11 +70,11 @@ function overview() {
   h += newBillBlock();
   const by = st => S.bills.filter(b => st.includes(b.status)).sort((a, b) => ms(b.at) - ms(a.at));
   const sec = (title, list, open = true) => list.length ? `<section class="card"><h2>${esc(title)} <span class="badge">${list.length}</span></h2><div class="bills">${list.map(billRow).join("")}</div></section>` : "";
-  h += sec(t("ch.sec.voting"), by(["voting"]));
+  h += sec(t("ch.sec.voting"), by(["voting", "override"]));
   h += sec(t("ch.sec.passed"), by(["passed"]));
   h += sec(t("ch.sec.discussion"), by(["discussion"]));
   h += sec(t("ch.sec.petitions"), by(["signatures"]));
-  const arch = by(["signed", "rejected", "vetoed", "withdrawn"]);
+  const arch = by(["signed", "overridden", "rejected", "vetoed", "withdrawn"]);
   if (arch.length) h += `<details class="card"><summary><b>${esc(t("ch.sec.archive"))}</b> <span class="badge">${arch.length}</span></summary><div class="bills">${arch.map(billRow).join("")}</div></details>`;
   if (!S.bills.length) h += `<div class="card">${empty(t("ch.noBills"))}</div>`;
   return h;
@@ -75,7 +82,7 @@ function overview() {
 function billRow(b) {
   const a = player(b.author);
   return `<a class="bill" href="#/derzhava/palata/${esc(b.id)}"><span class="bst" aria-hidden="true">${ST[b.status] || "•"}</span><span class="bt"><b>${esc(b.title)}</b>
-    <small class="hint">${esc(t("ch.st." + b.status))}${b.kind === "call" ? " · " + esc(t("ch.kind.call")) : b.kind === "petition" ? " · " + esc(t("ch.kind.petition")) : ""}${a ? " · " + esc(a.name) : ""}${b.status === "voting" ? " · " + esc(left(b.voteEnd)) : ""}</small></span></a>`;
+    <small class="hint">${esc(t("ch.st." + b.status))}${b.kind === "call" ? " · " + esc(t("ch.kind.call")) : b.kind === "petition" ? " · " + esc(t("ch.kind.petition")) : ""}${a ? " · " + esc(a.name) : ""}${b.status === "voting" ? " · " + esc(left(b.voteEnd)) : b.status === "override" ? " · " + esc(left(b.ovEnd)) : ""}${b.fx && b.fx.type ? " · ⚙️" : ""}</small></span></a>`;
 }
 function settings() {
   const c = CH();
@@ -85,6 +92,7 @@ function settings() {
     <label>${esc(t("ch.set.petition"))}<input type="number" name="petition" min="1" max="100" value="${c.petition}"></label>
     <label>${esc(t("ch.set.nom"))}<input type="number" name="nomHours" min="1" max="336" value="${c.nomHours}"></label>
     <label>${esc(t("ch.set.vote"))}<input type="number" name="voteHours" min="1" max="336" value="${c.voteHours}"></label>
+    <label>${esc(t("ch.set.override"))}<input type="number" name="override" min="51" max="100" value="${c.override || 67}"></label>
     <div><button class="sm">${esc(t("save"))}</button></div></form></section>`;
 }
 function newBillBlock() {
@@ -100,6 +108,7 @@ function newBillBlock() {
       <label data-target hidden>${esc(t("ch.target"))}<select name="target">${targets.map(p => `<option value="${esc(p.id)}">${esc(p.title)}</option>`).join("")}</select></label>` : ""}
       <label>${esc(t("ch.title"))}<input name="title" required maxlength="150"></label>
       <label>${esc(t("ch.text"))}<textarea name="text" rows="8" maxlength="20000" required></textarea></label>
+      <div data-fxwrap class="fxwrap">${fxSelect()}</div>
       <button class="primary">${esc(t("ch.submit"))}</button></form></details>`;
 }
 
@@ -114,7 +123,7 @@ function billPage(id) {
     <h1>${esc(b.title)}</h1>
     <p class="hint">${esc(t("ch.author"))}: ${a ? `<a href="#/narod/gravets/${esc(a.id)}">${esc(a.name)}</a>` : "—"}${tg ? ` · ${esc(t("ch.target"))}: <b>${esc(tg.title)}</b>` : ""}</p>
     ${(() => { const l = S.laws.find(x => x.bill === b.id); return l ? `<p><a class="tag" href="#/zakon/zakony/${esc(l.id)}">📜 ${esc(lawNo(l))}</a></p>` : ""; })()}
-    <div class="billtext">${paras(b.text)}</div></section>`;
+    <div class="billtext">${paras(b.text)}</div></section>${fxCard(b)}`;
   // збір підписів
   if (b.status === "signatures") {
     const need = CH().petition, have = CUR.signs.length, signed = m && CUR.signs.some(s => s.id === m.id);
@@ -124,12 +133,16 @@ function billPage(id) {
       ${canChamber() ? `<button type="button" class="sm" data-to="discussion" ${have >= need || isAdmin() ? "" : "disabled"}>${esc(t("ch.toDiscussion"))}</button>` : ""}</div></section>`;
   }
   // голосування
-  if (["voting", "passed", "rejected", "signed", "vetoed"].includes(b.status)) h += votingBlock(b);
+  if (["voting", "passed", "rejected", "signed", "vetoed", "override", "overridden"].includes(b.status)) h += votingBlock(b);
+  if (b.status === "override" || b.ovResult) h += votingBlock(b, true);
   // дії керівництва Палати
   const acts = [];
   if (canChamber() && b.status === "discussion") acts.push(`<button type="button" class="primary" data-open>${esc(t("ch.openVote", { h: CH().hours }))}</button>`);
   if (canChamber() && b.status === "voting" && !votingOpen(b)) acts.push(`<button type="button" class="primary" data-close>${esc(t("ch.finalize"))}</button>`);
   if (isAdmin() && b.status === "voting" && votingOpen(b)) acts.push(`<button type="button" class="ghost sm" data-close>${esc(t("ch.finalizeNow"))}</button>`);
+  if (canChamber() && b.status === "vetoed" && !b.ovDone && b.kind !== "call") acts.push(`<button type="button" class="primary" data-ovopen>🔁 ${esc(t("ch.ovOpen", { h: CH().hours }))}</button>`);
+  if (canChamber() && b.status === "override" && !ovOpen(b)) acts.push(`<button type="button" class="primary" data-ovclose>${esc(t("ch.finalize"))}</button>`);
+  if (isAdmin() && b.status === "override" && ovOpen(b)) acts.push(`<button type="button" class="ghost sm" data-ovclose>${esc(t("ch.finalizeNow"))}</button>`);
   if ((isHetman() || isAdmin()) && b.status === "passed" && b.kind !== "call") acts.push(`<button type="button" class="primary" data-sign-law>📜 ${esc(t("ch.signLaw"))}</button><button type="button" class="ghost danger" data-veto>⛔ ${esc(t("ch.veto"))}</button>`);
   if (m && b.author === m.id && ["signatures", "discussion"].includes(b.status)) acts.push(`<button type="button" class="ghost sm danger" data-withdraw>${esc(t("ch.withdraw"))}</button>`);
   if (isAdmin()) acts.push(`<button type="button" class="ghost sm danger" data-bdel>${esc(t("delete"))}</button>`);
@@ -139,17 +152,22 @@ function billPage(id) {
     ${isCitizen() ? `<form class="cmtform" data-cmt><textarea name="text" rows="2" maxlength="1000" required placeholder="${esc(t("ch.cmtPh"))}"></textarea><button class="sm">${esc(t("ch.send"))}</button></form>` : ""}</section>`;
   return h;
 }
-function votingBlock(b) {
-  const T = tally(CUR.votes); const m = me(); const seat = mySeat();
-  const mine = m && CUR.votes.find(v => v.id === m.id);
-  const open = votingOpen(b);
+function votingBlock(b, ov) {
+  const VV = ov ? CUR.ovotes : CUR.votes;
+  const live0 = ov ? b.status === "override" : b.status === "voting", saved = ov ? b.ovResult : b.result;
+  // після підсумку показуємо збережений результат (голоси могли змінитися, а люди — піти з Палати)
+  const T = !live0 && saved ? { ...saved, quorum: (saved.cast || 0) >= (saved.need || 0) } : tally(VV, ov); const m = me(); const seat = mySeat();
+  const mine = m && VV.find(v => v.id === m.id);
+  const open = ov ? ovOpen(b) : votingOpen(b);
   const bar = (k, cls) => `<div class="vbar ${cls}"><span>${esc(t("ch.v." + k))}</span><b>${T[k]}</b><i style="width:${T.cast ? T[k] / T.cast * 100 : 0}%"></i></div>`;
-  let h = `<section class="card"><div class="row between"><h2>🗳 ${esc(t("ch.voting"))}</h2><span class="hint">${b.status === "voting" ? esc(left(b.voteEnd)) : esc(t("ch.st." + b.status))}</span></div>
+  const live = ov ? b.status === "override" : b.status === "voting";
+  let h = `<section class="card${ov ? " ovcard" : ""}"><div class="row between"><h2>${ov ? "🔁 " + esc(t("ch.ovVoting")) : "🗳 " + esc(t("ch.voting"))}</h2><span class="hint">${live ? esc(left(ov ? b.ovEnd : b.voteEnd)) : ov ? esc(t(b.status === "overridden" ? "ch.ovPassed" : "ch.ovFailed")) : esc(t("ch.st." + b.status))}</span></div>
+    ${ov ? `<p class="hint">${esc(t("ch.ovRule", { p: CH().override || 67 }))}</p>` : ""}
     ${bar("for", "yes")}${bar("against", "no")}${bar("abstain", "abs")}
-    <p class="hint">${esc(t("ch.cast", { n: T.cast, q: quorumNeed() }))} ${T.quorum ? "✓" : "✗"}${b.status === "voting" && !open ? " · " + esc(t(T.pass ? "ch.willPass" : "ch.willFail")) : ""}</p>`;
-  if (open && seat) h += `<div class="row vbtns">${["for", "against", "abstain"].map(k => `<button type="button" class="${mine && mine.v === k ? "primary" : ""}" data-vote="${k}">${esc(t("ch.v." + k))}</button>`).join("")}</div>${mine ? `<p class="hint">${esc(t("ch.youVoted"))}</p>` : ""}`;
+    <p class="hint">${esc(t("ch.cast", { n: T.cast, q: quorumNeed() }))} ${T.quorum ? "✓" : "✗"}${live && !open ? " · " + esc(t(T.pass ? "ch.willPass" : "ch.willFail")) : ""}</p>`;
+  if (open && seat) h += `<div class="row vbtns">${["for", "against", "abstain"].map(k => `<button type="button" class="${mine && mine.v === k ? "primary" : ""}" data-vote="${k}" data-ov="${ov ? 1 : 0}">${esc(t("ch.v." + k))}</button>`).join("")}</div>${mine ? `<p class="hint">${esc(t("ch.youVoted"))}</p>` : ""}`;
   else if (open && S.user) h += `<p class="hint">${esc(t("ch.onlyMembers"))}</p>`;
-  if (CUR.votes.length) h += `<details><summary class="hint">${esc(t("ch.whoVoted"))}</summary><ul class="vlist">${CUR.votes.map(v => `<li>${esc((player(v.id) || {}).name || "?")} — ${esc(t("ch.v." + v.v))}</li>`).join("")}</ul></details>`;
+  if (VV.length) h += `<details><summary class="hint">${esc(t("ch.whoVoted"))}</summary><ul class="vlist">${VV.map(v => `<li>${esc((player(v.id) || {}).name || "?")} — ${esc(t("ch.v." + v.v))}</li>`).join("")}</ul></details>`;
   return h + "</section>";
 }
 
@@ -176,19 +194,22 @@ export function mount(root, parts) {
   };
   const cs = root.querySelector("[data-cset]");
   if (cs) cs.onsubmit = async e => {
-    e.preventDefault(); const n = k => Math.max(1, Math.min(k === "quorum" || k === "petition" ? 100 : 336, parseInt(cs[k].value, 10) || 1));
-    if (await run(() => B.set("ud_config", "chamber", { hours: n("hours"), quorum: n("quorum"), petition: n("petition"), nomHours: n("nomHours"), voteHours: n("voteHours") }), t("saved"))) log("chamber", t("ch.settings"));
+    e.preventDefault(); const n = k => Math.max(1, Math.min(k === "quorum" || k === "petition" || k === "override" ? 100 : 336, parseInt(cs[k].value, 10) || 1));
+    if (await run(() => B.set("ud_config", "chamber", { hours: n("hours"), quorum: n("quorum"), petition: n("petition"), nomHours: n("nomHours"), voteHours: n("voteHours"), override: Math.max(51, n("override")) }), t("saved"))) log("chamber", t("ch.settings"));
   };
   const bn = root.querySelector("[data-bnew]");
   if (bn) {
     const kind = bn.querySelector("[name=kind]"), tl = bn.querySelector("[data-target]");
-    if (kind) kind.onchange = () => { tl.hidden = kind.value !== "call"; if (kind.value === "call" && !bn.title.value) bn.title.value = t("ch.callTitle"); };
+    const fw = bn.querySelector("[data-fxwrap]");
+    bindFx(bn);
+    if (kind) kind.onchange = () => { tl.hidden = kind.value !== "call"; fw.hidden = kind.value === "call"; if (kind.value === "call" && !bn.title.value) bn.title.value = t("ch.callTitle"); };
     bn.onsubmit = async e => {
       e.preventDefault();
       const full = !!mySeat() || isHetman() || isAdmin(); const k = full ? (kind ? kind.value : "law") : "petition";
       const v = { title: bn.title.value.trim().slice(0, 150), text: bn.text.value.trim().slice(0, 20000), kind: k, author: me().id,
         status: full ? "discussion" : "signatures", at: B.now() };
       if (k === "call") { v.target = bn.target.value; if (!v.target) return toast(t("ch.noTarget"), "err"); }
+      else { let fx; try { fx = fxRead(bn); } catch (er) { return toast(String(er.message || er), "err"); } if (fx) { v.fx = fx; v.fxText = fxDesc(fx).slice(0, 300); } }
       if (mySeat()) v.seat = mySeat().id;
       const id = B.newId("ud_bills");
       if (await run(() => B.set("ud_bills", id, v), t("ch.submitted"))) { log("bill", `+ ${v.title}`); go("derzhava/palata/" + id); }
@@ -204,7 +225,8 @@ export function mount(root, parts) {
   root.querySelectorAll("[data-to]").forEach(x => x.onclick = () => upd({ status: x.dataset.to }, t("saved"), `${b.title}: ${t("ch.st." + x.dataset.to)}`));
   const op = root.querySelector("[data-open]");
   if (op) op.onclick = () => upd({ status: "voting", voteStart: B.now(), voteEnd: new Date(Date.now() + CH().hours * 3600e3) }, t("ch.voteOpened"), `${b.title}: ${t("ch.st.voting")}`);
-  root.querySelectorAll("[data-vote]").forEach(x => x.onclick = () => run(() => B.set(`ud_bills/${b.id}/votes`, m.id, { v: x.dataset.vote, seat: mySeat().id, at: B.now() }), t("ch.voted")));
+  bindFxCard(root, b);
+  root.querySelectorAll("[data-vote]").forEach(x => x.onclick = () => run(() => B.set(`ud_bills/${b.id}/${x.dataset.ov === "1" ? "ovotes" : "votes"}`, m.id, { v: x.dataset.vote, seat: mySeat().id, at: B.now() }), t("ch.voted")));
   root.querySelectorAll("[data-close]").forEach(x => x.onclick = async () => {
     if (votingOpen(b) && !(await confirmBox(t("ch.finalizeEarly"), t("ch.finalize")))) return;
     const T = tally(CUR.votes);
@@ -226,8 +248,30 @@ export function mount(root, parts) {
     if (await run(() => B.batch([
       { op: "update", c: "ud_bills", id: b.id, v: { status: "signed", signedAt: B.now(), signedBy: m ? m.id : "" } },
       { op: "set", c: "ud_laws", id: lid, v: law },
-    ]), t("ch.lawSigned"))) log("bill", `📜 ${lawNo(law)} ${b.title}`);
+    ]), t("ch.lawSigned"))) {
+      log("bill", `📜 ${lawNo(law)} ${b.title}`);
+      if (isAdmin() && b.fx && b.fx.type) setTimeout(() => { const nb = S.bills.find(x => x.id === b.id); if (nb && !nb.fxDone) applyFx(nb, true); }, 300);
+    }
   };
+  // подолання вето
+  const oo = root.querySelector("[data-ovopen]");
+  if (oo) oo.onclick = () => upd({ status: "override", ovStart: B.now(), ovEnd: new Date(Date.now() + CH().hours * 3600e3) }, t("ch.voteOpened"), `🔁 ${b.title}`);
+  root.querySelectorAll("[data-ovclose]").forEach(x => x.onclick = async () => {
+    if (ovOpen(b) && !(await confirmBox(t("ch.finalizeEarly"), t("ch.finalize")))) return;
+    const T = tally(CUR.ovotes, true);
+    const res = { for: T.for, against: T.against, abstain: T.abstain, cast: T.cast, need: quorumNeed(), seats: occupied().length };
+    if (!T.pass) { await upd({ status: "vetoed", ovResult: res, ovDone: true }, t("ch.ovFailed"), `⛔ ${b.title}: ${t("ch.ovFailed")}`); return; }
+    const r = await pickCode(t("ch.ovPassed")); if (!r) return;
+    const lid = B.newId("ud_laws");
+    const law = { kind: "law", no: nextNo("law"), title: b.title, text: b.text || "", code: r.code, status: "active", date: new Date().toISOString().slice(0, 10), by: "", bill: b.id, note: "override", at: B.now() };
+    if (await run(() => B.batch([
+      { op: "update", c: "ud_bills", id: b.id, v: { status: "overridden", ovResult: res, ovDone: true } },
+      { op: "set", c: "ud_laws", id: lid, v: law },
+    ]), t("ch.ovPassed"))) {
+      log("bill", `💪 ${lawNo(law)} ${b.title}`);
+      if (isAdmin() && b.fx && b.fx.type) setTimeout(() => { const nb = S.bills.find(x => x.id === b.id); if (nb && !nb.fxDone) applyFx(nb, true); }, 300);
+    }
+  });
   const vt = root.querySelector("[data-veto]"); if (vt) vt.onclick = async () => { if (await confirmBox(t("ch.vetoQ"), t("ch.veto"))) upd({ status: "vetoed", signedAt: B.now(), signedBy: m ? m.id : "" }, t("saved"), `⛔ ${b.title}`); };
   const wd = root.querySelector("[data-withdraw]"); if (wd) wd.onclick = async () => { if (await confirmBox(t("ch.withdrawQ"), t("ch.withdraw"))) upd({ status: "withdrawn" }, t("saved"), `↩️ ${b.title}`); };
   const bd = root.querySelector("[data-bdel]"); if (bd) bd.onclick = async () => { if (await confirmBox(t("ch.delQ"), t("delete")) && await run(() => B.del("ud_bills", b.id), t("deleted"))) { log("bill", `${t("deleted")}: ${b.title}`); go("derzhava/palata"); } };

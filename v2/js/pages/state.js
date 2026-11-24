@@ -1,5 +1,5 @@
 // 🏛 Держава: Влада · Палата Земель · Вибори · Карта · Дипломатія
-import { ranks, meetsRank, S, B, pos, player, lands, landsFromPlan, positionsOf, canAppoint, isAdmin, canLands, log } from "../store.js";
+import { ranks, meetsRank, S, B, me, pos, player, lands, landsFromPlan, positionsOf, canAppoint, isAdmin, canLands, log, emergency, canEmergency } from "../store.js";
 import { EDIT } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, confirmBox, toast } from "../ui.js";
@@ -9,8 +9,9 @@ import * as elections from "./elections.js";
 import * as diplo from "./diplo.js";
 import * as map from "./map.js";
 import * as economy from "./economy.js";
+import * as calendar from "./calendar.js";
 
-const TABS = [["vlada", "👑", "st.tab.power"], ["palata", "🏛", "st.tab.chamber"], ["vybory", "🗳", "st.tab.elections"], ["ekonomika", "💰", "st.tab.economy"], ["karta", "🗺", "st.tab.map"], ["dyplomatiya", "🤝", "st.tab.diplo"]];
+const TABS = [["vlada", "👑", "st.tab.power"], ["palata", "🏛", "st.tab.chamber"], ["vybory", "🗳", "st.tab.elections"], ["ekonomika", "💰", "st.tab.economy"], ["kalendar", "🗓", "cal.tab"], ["karta", "🗺", "st.tab.map"], ["dyplomatiya", "🤝", "st.tab.diplo"]];
 
 export const DEFAULT_POSITIONS = [
   ["hetman", "Гетьман", "election"], ["pysar", "Генеральний писар", "hetman"], ["finance", "Секретар фінансів", "hetman"],
@@ -24,6 +25,7 @@ export function render(parts) {
   if (cur === "vlada") h += power();
   else if (cur === "karta") h += map.render(parts);
   else if (cur === "ekonomika") h += economy.render(parts);
+  else if (cur === "kalendar") h += calendar.render(parts);
   else if (cur === "palata") h += chamber.render(parts);
   else if (cur === "vybory") h += elections.render(parts);
   else h += diplo.render(parts);
@@ -63,11 +65,24 @@ function power() {
   const het = pos("hetman");
   const gov = S.positions.filter(p => p.id !== "hetman" && !p.chamber && !p.land && !p.court && !p.church);
   if (het) h += `<section class="card hetman">${posCard(het, true)}</section>`;
+  h += emergencyCard();
   h += `<section class="card"><h2>${esc(t("pw.gov"))}</h2><div class="pgrid">${gov.map(p => posCard(p)).join("")}</div>
     ${EDIT && isAdmin() ? `<form class="row addpos" data-padd><input type="text" name="title" maxlength="80" placeholder="${esc(t("pw.newTitle"))}" required><button class="sm">+ ${esc(t("pw.add"))}</button></form>` : ""}</section>`;
   return h;
 }
 
+// 🚨 надзвичайний стан: запроваджує Гетьман (або закон), на 1–30 днів; банер видно на всіх сторінках
+function emergencyCard() {
+  const em = emergency();
+  if (!canEmergency() && !em) return "";
+  if (em) { const by = player(em.by);
+    return `<section class="card emcard"><h2>🚨 ${esc(t("em.bar"))}</h2><p>${esc(em.reason || "")}</p><p class="hint">${esc(t("em.until", { x: new Date(em.until).toLocaleString(document.documentElement.lang || "uk") }))}${by ? " · " + esc(by.name) : ""}</p>
+      ${canEmergency() ? `<button type="button" class="ghost danger sm" data-emend>${esc(t("em.end"))}</button>` : ""}</section>`; }
+  return `<details class="card"><summary><b>🚨 ${esc(t("em.declare"))}</b></summary><form class="form" data-emon>
+    <label>${esc(t("em.reason"))}<input name="reason" required maxlength="300"></label>
+    <label>${esc(t("em.days"))}<input type="number" name="days" min="1" max="30" value="7" required></label>
+    <p class="hint">${esc(t("em.hint"))}</p><div class="row end"><button class="primary danger">${esc(t("em.declareBtn"))}</button></div></form></details>`;
+}
 export function mount(root, parts) {
   const cur = parts[0] || "vlada";
   if (cur === "palata") return chamber.mount(root, parts);
@@ -75,6 +90,7 @@ export function mount(root, parts) {
   if (cur === "dyplomatiya") return diplo.mount(root, parts);
   if (cur === "karta") return map.mount(root, parts);
   if (cur === "ekonomika") return economy.mount(root, parts);
+  if (cur === "kalendar") return calendar.mount(root, parts);
   root.querySelectorAll("[data-hold]").forEach(s => s.onchange = async () => {
     const p = pos(s.dataset.hold); const pl = player(s.value);
     if (await run(() => B.update("ud_positions", p.id, { holder: s.value || "", since: B.now() }), t("saved")))
@@ -98,6 +114,15 @@ export function mount(root, parts) {
     const order = Math.max(0, ...S.positions.map(p => p.order || 0)) + 1;
     if (await run(() => B.set("ud_positions", B.newId("ud_positions"), { title, order, appointBy: "hetman", holder: "" }), t("saved"))) log("position", `+ ${title}`);
   };
+  const eo = root.querySelector("[data-emon]");
+  if (eo) eo.onsubmit = async e => {
+    e.preventDefault(); const days = Math.max(1, Math.min(30, parseInt(eo.days.value, 10) || 7)), m = me();
+    if (!(await confirmBox(t("em.q", { n: days }), t("em.declareBtn")))) return;
+    const v = { on: true, reason: eo.reason.value.trim().slice(0, 300), from: Date.now(), until: Date.now() + days * 864e5, by: m ? m.id : "" };
+    if (await run(() => B.set("ud_config", "site", { emergency: v }, true), t("saved"))) log("emergency", `🚨 ${v.reason}`);
+  };
+  const ee = root.querySelector("[data-emend]");
+  if (ee) ee.onclick = async () => { if (await confirmBox(t("em.endQ"), t("em.end")) && await run(() => B.set("ud_config", "site", { emergency: { ...S.site.emergency, on: false, ended: Date.now() } }, true), t("saved"))) log("emergency", "✅"); };
   const seed = root.querySelector("[data-pseed]");
   if (seed) seed.onclick = async () => {
     if (await run(() => B.batch(DEFAULT_POSITIONS.map(([id, title, by], i) => ({ op: "set", c: "ud_positions", id, v: { title, order: i, appointBy: by, holder: "" } }))), t("saved")))

@@ -13,6 +13,7 @@ export const S = {
   army: [], units: [], ranksCfg: null, stars: [], awards: [], grants: [], church: null, clergy: [], parishes: [], holidays: [],
   chat: {}, chatCfg: {}, mutes: [], dms: [], reads: {},
   news: [], plan: null, botCfg: {}, tgLink: null, symbols: [], dues: [],
+  eparchies: [], chdocs: [], protocols: [], lawyers: [],
   myLink: null, myApp: null, err: "",
 };
 let renderCb = () => {};
@@ -54,6 +55,10 @@ export async function initStore() {
   B.watch("ud_clergy", r => { S.clergy = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)); changed(); }, e => fail(e));
   B.watch("ud_parishes", r => { S.parishes = r.sort((a, b) => a.name.localeCompare(b.name, "uk")); changed(); }, e => fail(e));
   B.watch("ud_holidays", r => { S.holidays = r; changed(); }, e => fail(e));
+  B.watch("ud_eparchies", r => { S.eparchies = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)); changed(); }, () => {});
+  B.watch("ud_chdocs", r => { S.chdocs = r; changed(); }, () => {});
+  B.watch("ud_protocols", r => { S.protocols = r.sort((a, b) => (b.no || 0) - (a.no || 0)); changed(); }, () => {});
+  B.watch("ud_lawyers", r => { S.lawyers = r; changed(); }, () => {});
   // етап 7: новини, план розвитку, бот
   B.watch("ud_news", r => { S.news = r; changed(); }, e => fail(e));
   B.watchDoc("ud_plan", "main", d => { S.plan = d; changed(); });
@@ -202,6 +207,14 @@ export const isJudge = () => JUDGES.some(holds);
 export const courtStaff = () => isAdmin() || isJudge() || holds("prosecutor") || isHetman() || holds("interior");
 export const canCodes = () => isAdmin() || holds("pysar");          // кодекси, реєстр законів, Конституція
 export const canDecree = () => isAdmin() || isHetman();
+// надзвичайний стан (ud_config/site.emergency): діє, якщо on і ще не минув строк
+export const emergency = () => { const e = S.site && S.site.emergency; return e && e.on && ms(e.until) > Date.now() ? e : null; };
+export const canEmergency = () => isAdmin() || isHetman();
+// адвокат: ліцензія в ud_lawyers/<pid> зі статусом active
+export const isLawyer = pid => S.lawyers.some(l => l.id === pid && l.status === "active");
+export const canLicense = () => isAdmin() || isJudge();
+// протоколи й штрафи: прокурор, внутрішні справи, судді, Гетьман
+export const canProtocols = () => isAdmin() || isJudge() || holds("prosecutor") || holds("interior") || isHetman();
 // чинні судові заборони обіймати посади (не помилувані, строк ще не минув)
 export const bansOf = pid => cases().filter(c => c.status === "verdict" && !c.pardon && c.defendant === pid && c.banUntil && Date.parse(c.banUntil + "T23:59:59") > Date.now());
 export const canChamber = () => isAdmin() || isChair();          // керує порядком роботи Палати й виборами

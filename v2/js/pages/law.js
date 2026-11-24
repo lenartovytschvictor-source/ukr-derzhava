@@ -4,6 +4,8 @@ import { EDIT, go } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, modal, closeModal, confirmBox, toast, fmtDate } from "../ui.js";
 import { tabs, txt, empty, paras, holderSel, bindHolders } from "./common.js";
+import { docDialog } from "../docimg.js";
+import { courtExtra, caseLawyers, mountCourtExtra } from "./court2.js";
 
 const TABS = [["konstytutsiya", "📜", "lw.tab.const"], ["kodeksy", "📚", "lw.tab.codes"], ["zakony", "📑", "lw.tab.laws"], ["sud", "⚖️", "lw.tab.court"]];
 export const DEFAULT_CODES = [["admin", "Адміністративний кодекс"], ["criminal", "Кримінальний кодекс"], ["military", "Військовий кодекс"]];
@@ -141,6 +143,15 @@ function lawsTab() {
   </div>${lawRows(list)}<p class="empty" data-lnone hidden>${esc(t("lw.nothing"))}</p></section>`;
   return h;
 }
+// примітка: «law:<id>» — скасовано законом, «redo:<id>» — нова редакція, «override» — вето подолано
+function docBtn(l) { return `<button type="button" class="ghost sm" data-ldoc>🖼 ${esc(t("dc.asImage"))}</button>`; }
+function noteHtml(l) {
+  const n = String(l.note || ""); if (!n) return "";
+  const m = n.match(/^(law|redo):(.+)$/), ref = m && lawById(m[2]);
+  if (m) return `<p class="note">${esc(t(m[1] === "law" ? "lw.repealedBy" : "lw.redoBy"))} ${ref ? `<a href="#/zakon/zakony/${esc(ref.id)}">${esc(lawNo(ref))} «${esc(ref.title)}»</a>` : "—"}</p>`;
+  if (n === "override") return `<p class="note">💪 ${esc(t("lw.overrideNote"))}</p>`;
+  return `<p class="note">${esc(n)}</p>`;
+}
 function lawPage(id) {
   const l = lawById(id);
   if (!l) return `<p><a href="#/zakon/zakony">← ${esc(t("lw.toLaws"))}</a></p><div class="card">${empty(S.laws.length ? t("lw.lawNotFound") : t("loading"))}</div>`;
@@ -151,8 +162,8 @@ function lawPage(id) {
     <h1>${esc(l.title)}</h1>
     <p class="hint">${l.kind === "decree" ? esc(t("lw.byHetman", { x: by ? by.name : "—" })) : esc(t("lw.byChamber")) + (by ? " · " + esc(t("lw.signedBy", { x: by.name })) : "")}
       ${bill ? ` · <a href="#/derzhava/palata/${esc(bill.id)}">${esc(t("lw.openBill"))}</a>` : ""}${cs ? ` · <a href="#/zakon/sud/${esc(cs.id)}">${esc(t("lw.openCase", { n: cs.no || "?" }))}</a>` : ""}</p>
-    ${l.note ? `<p class="note">${esc(l.note)}</p>` : ""}
-    <div class="billtext">${paras(l.text)}</div></section>`;
+    ${noteHtml(l)}
+    <div class="billtext">${paras(l.text)}</div><div class="row end">${docBtn(l)}</div></section>`;
   if (ed) h += `<section class="card"><h2>✏️ ${esc(t("edit"))}</h2><form class="form" data-ledit>
     <div class="row2"><label>${esc(t("lw.status"))}<select name="status">${Object.keys(LST).map(k => `<option value="${k}"${(l.status || "active") === k ? " selected" : ""}>${LST[k]} ${esc(t("lw.st." + k))}</option>`).join("")}</select></label>
     <label>${esc(t("lw.code"))}<select name="code"><option value="">— ${esc(t("lw.noCode"))} —</option>${S.codes.map(x => `<option value="${esc(x.id)}"${l.code === x.id ? " selected" : ""}>${esc(x.name)}</option>`).join("")}</select></label></div>
@@ -209,7 +220,7 @@ function courtTab() {
     <small>${esc(nm(c.forState ? "state" : c.plaintiff))} ⟶ ${esc(nm(c.defendant))} · ${esc(t("lw.cst." + c.status))}${c.judge ? " · 👨‍⚖️ " + esc(nm(c.judge)) : ""}${c.pardon ? " · 🕊 " + esc(t("lw.pardoned")) : ""}</small></span></a>`;
   h += `<section class="card"><h2>${esc(t("lw.activeCases"))} <span class="badge">${act.length}</span></h2>${act.length ? `<div class="bills">${act.map(row).join("")}</div>` : empty(t("lw.noCases"))}</section>`;
   if (done.length) h += `<details class="card"><summary><b>${esc(t("lw.doneCases"))}</b> <span class="badge">${done.length}</span></summary><div class="bills">${done.map(row).join("")}</div></details>`;
-  return h;
+  return h + courtExtra();
 }
 
 const CUR = { id: "", msgs: [], un: null };
@@ -231,13 +242,14 @@ function casePage(id) {
       const pl = pid && pid !== "state" ? player(pid) : null;
       return `<div class="party">${pid === "state" ? `<span class="av md ini" aria-hidden="true">🏛</span>` : avatar(pl || { name: "?" }, "av md")}<span><small>${esc(t(k))}</small><b>${pid === "state" ? esc(t("lw.state")) + (c.plaintiff ? ` <small class="hint">(${esc(t("lw.prosecutorX", { x: nm(c.plaintiff) }))})</small>` : "") : pl ? `<a href="#/narod/gravets/${esc(pl.id)}">${esc(pl.name)}</a>` : `<i class="vac">${esc(t(k === "lw.judge" ? "lw.noJudge" : "vacant"))}</i>`}</b></span></div>`;
     }).join("")}</div>
-    <h2>${esc(t("lw.claim"))}</h2><div class="billtext">${paras(c.text)}</div></section>`;
+    <h2>${esc(t("lw.claim"))}</h2><div class="billtext">${paras(c.text)}</div></section>${caseLawyers(c)}`;
   // вирок
   if (c.status === "verdict" || c.status === "rejected") {
     const cited = (c.laws || []).map(lawById).filter(Boolean), pd = c.pardon && lawById(c.pardon);
     h += `<section class="card verdict"><h2>${c.status === "verdict" ? "⚖️ " + esc(t("lw.verdict")) : "❌ " + esc(t("lw.rejectedT"))}</h2>${c.decidedAt ? `<p class="hint">${esc(fmtDate(c.decidedAt))} · ${esc(t("lw.judge"))}: ${esc(nm(c.judge))}</p>` : ""}
       <div class="billtext">${paras(c.verdict)}</div>
       ${c.sentence ? `<p><b>${esc(t("lw.sentence"))}:</b> ${esc(c.sentence)}</p>` : ""}
+      ${c.fine ? `<p><b>💰 ${esc(t("ct.fine"))}:</b> ${esc(c.fine)}${c.fineDue ? " · " + esc(t("ct.until", { x: fmtDay(c.fineDue) })) : ""} — ${c.finePaid ? "✅ " + esc(t("ct.ps.paid")) : c.pardon ? "🕊" : "🟠 " + esc(t("ct.ps.open"))}</p>` : ""}
       ${c.banUntil ? `<p class="ban">⛔ ${esc(t("lw.banText", { x: nm(c.defendant), d: fmtDay(c.banUntil) }))}${c.pardon ? " — " + esc(t("lw.pardonLifts")) : ""}</p>` : ""}
       ${cited.length ? `<p><b>${esc(t("lw.cited"))}:</b></p><ul class="vlist">${cited.map(l => `<li><a href="#/zakon/zakony/${esc(l.id)}">${esc(lawNo(l))} «${esc(l.title)}»</a>${code(l.code) ? ` — ${esc(code(l.code).name)}` : ""}</li>`).join("")}</ul>` : ""}
       ${pd ? `<p>🕊 <a href="#/zakon/zakony/${esc(pd.id)}">${esc(t("lw.pardonBy", { x: lawNo(pd) }))}</a></p>` : ""}</section>`;
@@ -259,6 +271,7 @@ function casePage(id) {
       <label>${esc(t("lw.verdictText"))}<textarea name="verdict" rows="6" maxlength="10000" required></textarea></label>
       <label>${esc(t("lw.sentence"))}<input name="sentence" maxlength="300" placeholder="${esc(t("lw.sentencePh"))}"></label>
       <fieldset class="lawpick"><legend>${esc(t("lw.cited"))}</legend>${laws.length ? laws.map(l => `<label class="chk"><input type="checkbox" name="law" value="${esc(l.id)}"> ${esc(lawNo(l))} «${esc(l.title)}»${code(l.code) ? ` <small class="hint">${esc(code(l.code).name)}</small>` : ""}</label>`).join("") : `<p class="hint">${esc(t("lw.noLaws"))}</p>`}</fieldset>
+      <div class="row2"><label>${esc(t("ct.fine"))}<input name="fine" maxlength="80" placeholder="${esc(t("ct.finePh"))}"></label><label>${esc(t("ct.due"))}<input type="date" name="fineDue" min="${todayIso()}"></label></div>
       <label>${esc(t("lw.banUntil"))}<input type="date" name="ban" min="${todayIso()}"></label><p class="hint">${esc(t("lw.banHint"))}</p>
       <div class="row end"><button class="primary">${esc(t("lw.announce"))}</button></div></form></details>`;
   }
@@ -333,6 +346,10 @@ function mountLaws(root, parts) {
     const none = root.querySelector("[data-lnone]"); if (none) none.hidden = n > 0;
   };
   const l = parts[1] && lawById(parts[1]);
+  const ldoc = root.querySelector("[data-ldoc]");
+  if (ldoc && l) ldoc.onclick = () => { const by = player(l.by), het = pos("hetman");
+    docDialog({ issuer: { role: l.kind === "decree" || by ? (het ? het.title : t("dc.t.decree")) : t("lw.byChamber"), name: by ? by.name : "", kind: "lawdoc" },
+      type: l.kind === "decree" ? "decree" : "law", no: String(l.no || ""), title: l.title, text: l.text, date: String(l.date || "").split("-").reverse().join("."), auto: true }); };
   const le = root.querySelector("[data-ledit]");
   if (le && l) le.onsubmit = async e => {
     e.preventDefault();
@@ -356,7 +373,9 @@ function mountCourt(root, parts) {
       closed: !!fc.closed.checked, status: "filed", judge: "", parties: [m.id, def], at: B.now() };
     if (await run(() => B.batch([{ op: "set", c: "ud_counters", id: "cases", v: { n: no } }, { op: "set", c: "ud_cases", id, v }]), t("lw.filed"))) { log("court", `${t("lw.caseNo", { n: no })}: ${v.title}`); go("zakon/sud/" + id); }
   };
-  const c = parts[1] && cases().find(x => x.id === parts[1]); if (!c) return;
+  const c = parts[1] && cases().find(x => x.id === parts[1]);
+  mountCourtExtra(root, c);
+  if (!c) return;
   const m = me();
   const upd = (v, msg, txt) => run(() => B.update("ud_cases", c.id, v), msg || t("saved")).then(ok => { if (ok && txt) log("court", `${t("lw.caseNo", { n: c.no })}: ${txt}`); return ok; });
   const tk = root.querySelector("[data-take]"); if (tk) tk.onclick = () => upd({ status: "accepted", judge: m.id, parties: [...(c.parties || []), m.id] }, t("saved"), t("lw.cst.accepted"));
@@ -373,7 +392,7 @@ function mountCourt(root, parts) {
     e.preventDefault();
     if (!(await confirmBox(t("lw.verdictQ"), t("lw.announce")))) return;
     const laws = [...vf.querySelectorAll("[name=law]:checked")].map(x => x.value);
-    upd({ status: "verdict", verdict: vf.verdict.value.slice(0, 10000), sentence: vf.sentence.value.trim().slice(0, 300), laws, banUntil: vf.ban.value || "", decidedAt: B.now() }, t("lw.verdictDone"), t("lw.cst.verdict"));
+    upd({ status: "verdict", verdict: vf.verdict.value.slice(0, 10000), sentence: vf.sentence.value.trim().slice(0, 300), laws, banUntil: vf.ban.value || "", fine: vf.fine.value.trim().slice(0, 80), fineDue: vf.fineDue.value || "", decidedAt: B.now() }, t("lw.verdictDone"), t("lw.cst.verdict"));
   };
   const pd = root.querySelector("[data-pardon]");
   if (pd) pd.onclick = async () => {

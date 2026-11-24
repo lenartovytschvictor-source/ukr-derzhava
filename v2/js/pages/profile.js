@@ -2,6 +2,7 @@
 import { S, B, me, lands, land, positionsOf, isAdmin, cases, log } from "../store.js";
 import { dueBadge } from "./economy.js";
 import { passportBlob } from "../passport.js";
+import { issuers, docDialog } from "../docimg.js";
 import { t, LANGS, lang, setLang } from "../i18n.js";
 import { render as rerender } from "../app.js";
 import { esc, avatar, profUrl, run, profNum, toast, modal } from "../ui.js";
@@ -26,7 +27,7 @@ export function render() {
   h += `<section class="card"><h2>⚙️ ${esc(t("pf.settings"))}</h2>
     <label class="fl">${esc(t("lang"))} <select data-mylang>${LANGS.map(([k, l]) => `<option value="${k}"${k === lang() ? " selected" : ""}>${l}</option>`).join("")}</select></label>
     <p class="hint">${esc(t("pf.signedAs"))} <b>${esc(u.email)}</b></p>
-    <div class="row">${m ? `<button type="button" class="sm" data-passport>🪪 ${esc(t("pp.my"))}</button>` : ""}${isAdmin() ? `<a class="btn sm" href="#/admin">🛠 ${esc(t("nav.admin"))}</a>` : ""}<button type="button" class="ghost sm" data-act="logout">${esc(t("logout"))}</button></div></section>`;
+    <div class="row">${m ? `<button type="button" class="sm" data-passport>🪪 ${esc(t("pp.my"))}</button>` : ""}${m && issuers().length ? `<button type="button" class="sm" data-docimg>🖼 ${esc(t("dc.title"))}</button>` : ""}${isAdmin() ? `<a class="btn sm" href="#/admin">🛠 ${esc(t("nav.admin"))}</a>` : ""}<button type="button" class="ghost sm" data-act="logout">${esc(t("logout"))}</button></div></section>`;
   return h;
 }
 
@@ -81,6 +82,7 @@ export function mount(root) {
       if (out.length && mc.isConnected) { mc.innerHTML = `<div class="evs">${out.join("")}</div>`; const ne = root.querySelector("[data-noaff]"); if (ne) ne.remove(); }
     })();
   }
+  const di = root.querySelector("[data-docimg]"); if (di) di.onclick = () => docDialog();
   const pb = root.querySelector("[data-passport]");
   if (pb && m) pb.onclick = async () => {
     const w = modal(t("pp.my"), `<div class="ppbox"><p class="hint">${esc(t("loading"))}</p></div>`, { wide: true });

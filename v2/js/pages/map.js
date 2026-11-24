@@ -60,7 +60,7 @@ function overview() {
   h += `<section class="card mapcard">${svgMap("")}</section>`;
   h += `<div class="lgrid">${L.map(l => {
     const o = pos("osavul_" + l.id), op = o && player(o.holder);
-    return `<a class="lcard" href="#/derzhava/karta/${esc(l.id)}" style="--lc:${esc(l.color || "#ccc")}"><h3>${symHtml("land_" + l.id, "sm")}${esc(l.name)}</h3>
+    return `<a class="lcard${l.status === "lost" || l.status === "occupied" ? " dim" : ""}" href="#/derzhava/karta/${esc(l.id)}" style="--lc:${esc(l.color || "#ccc")}"><h3>${symHtml("land_" + l.id, "sm")}${esc(l.name)}</h3>${l.status && l.status !== "normal" ? `<p><span class="tag ls-${esc(l.status)}">${esc(t("ls." + l.status))}${l.statusAt ? " · " + esc(l.statusAt.split("-").reverse().join(".")) : ""}</span></p>` : ""}
       <p class="hint">${esc(t("map.osavul"))}: ${op ? `<b>${esc(op.name)}</b>` : `<i>${esc(t("vacant"))}</i>`}</p>
       <p class="hint">👥 ${residents(l.id).length} · ${esc(t("map.udilsN", { n: placesOf(l.id, "udil").length }))} · ${esc(t("map.citiesN", { n: placesOf(l.id, "city").length }))}</p></a>`;
   }).join("")}</div>`;
@@ -106,7 +106,7 @@ function landPage(id) {
     ${edL ? `<form class="setgrid" data-ledit><label>${esc(t("map.name"))}<input name="name" required maxlength="60" value="${esc(l.name)}"></label>
       <label>${esc(t("map.short"))}<input name="short" maxlength="30" value="${esc(l.short || "")}"></label>
       <label>${esc(t("map.color"))}<input type="color" name="color" value="${esc(l.color || "#cccccc")}"></label><button class="primary sm">${esc(t("save"))}</button></form>`
-      : `<div class="lhrow">${symHtml("land_" + id, "lg")}<h1>${esc(l.name)}</h1></div>`}
+      : `<div class="lhrow">${symHtml("land_" + id, "lg")}<h1>${esc(l.name)}</h1></div>`}${l.status && l.status !== "normal" ? `<p><span class="tag ls-${esc(l.status)}">${esc(t("ls." + l.status))}${l.statusAt ? " · " + esc(l.statusAt.split("-").reverse().join(".")) : ""}</span>${l.statusNote ? ` <span class="hint">${esc(l.statusNote)}</span>` : ""}</p>` : ""}
     ${EDIT && canPlaces(id) ? symEditor("land_" + id, id) : ""}
     <p class="hint">👥 ${esc(t("map.residents", { n: res.length }))}</p>
     ${m && m.status === "cit" ? (m.land === id ? `<p class="tag">🏠 ${esc(t("map.youLive"))}</p>` : `<button type="button" class="sm" data-live>🏠 ${esc(t("map.liveHere"))}</button>`) : ""}</section>`;

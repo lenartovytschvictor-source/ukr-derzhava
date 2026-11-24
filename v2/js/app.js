@@ -1,7 +1,7 @@
 // Головний файл: запуск, шапка, меню, маршрути й режим редагування.
 import { asset } from "./ui.js";
 import { applySeason, seasonNow } from "./season.js";
-import { S, DEMO, B, initStore, onChange, loadDefaults, me, isAdmin, canEditAnything, unreadTotal } from "./store.js";
+import { S, DEMO, B, initStore, onChange, loadDefaults, me, isAdmin, canEditAnything, unreadTotal, emergency } from "./store.js";
 import { t, LANGS, lang, setLang } from "./i18n.js";
 import { esc, avatar, run, toast } from "./ui.js";
 import * as home from "./pages/home.js";
@@ -74,7 +74,9 @@ export function render(force) {
   let body;
   try { body = P.render(R.parts); } catch (e) { console.error(e); body = `<div class="card err">${esc(t("err.render"))} ${esc(e.message)}</div>`; }
   const y = window.scrollY;
-  app.innerHTML = `${demoBar()}${header()}${nav()}<main id="main" tabindex="-1">${S.err && isAdmin() ? `<div class="card warn small">⚠️ ${esc(S.err)}</div>` : ""}${body}</main>
+  const em = emergency();
+  const emBar = em ? `<div class="emerbar" role="alert">🚨 <b>${esc(t("em.bar"))}</b>${em.reason ? " — " + esc(em.reason) : ""} <span>${esc(t("em.until", { x: new Date(em.until).toLocaleString(lang(), { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }) }))}</span></div>` : "";
+  app.innerHTML = `${demoBar()}${header()}${nav()}${emBar}<main id="main" tabindex="-1">${S.err && isAdmin() ? `<div class="card warn small">⚠️ ${esc(S.err)}</div>` : ""}${body}</main>
     <footer class="foot">${esc(t("site.name"))} · DragPolit</footer>`;
   if (P.mount) try { P.mount(document.getElementById("main"), R.parts); } catch (e) { console.error(e); }
   try { applySeason(); } catch (e) { console.error(e); }

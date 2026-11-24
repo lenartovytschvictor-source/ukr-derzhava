@@ -1,6 +1,6 @@
 // Демо-режим (?demo=1): усе зберігається лише в цьому браузері, база не потрібна.
 // Потрібен, щоб подивитися сайт без входу і щоб перевіряти його під час розробки.
-const KEY = "ud2-demo-v8";
+const KEY = "ud2-demo-v9";
 const OWNER = "lenartovytsch.victor@gmail.com";
 export const isDemo = true;
 
@@ -63,6 +63,10 @@ function seed() {
   const bills = {
     b1: { title: "Про державні свята", text: "Стаття 1. Державними святами є День Незалежності, День Державного прапора і День Гетьманату.\nСтаття 2. У дні свят у загальному чаті проводяться урочистості.", kind: "law", author: "p6", seat: "seat_volyn", status: "voting", at: T0 - 30 * H, voteStart: T0 - 2 * H, voteEnd: T0 + 22 * H },
     b2: { title: "Про охорону кордонів", text: "Стаття 1. Секретар оборони щотижня звітує Палаті про стан кордонів.", kind: "law", author: "p4", seat: "seat_sloboda", status: "discussion", at: T0 - 5 * H },
+    b4: { title: "Про День Соборності", text: "Встановити День Соборності державним святом.", kind: "law", author: "p6", seat: "seat_volyn", status: "passed", at: T0 - 30 * H, closedAt: T0 - 2 * H,
+      result: { for: 5, against: 1, abstain: 0, cast: 6, need: 4, seats: 8 }, fx: { type: "holidayAdd", name: "День Соборності", date: "01-22", desc: "Акт Злуки 1919 року" }, fxText: "Встановити державне свято: День Соборності (22.01)" },
+    b5: { title: "Про перейменування Слобідської землі", text: "Перейменувати Слобідську землю на Слобожанську.", kind: "law", author: "p4", seat: "seat_sloboda", status: "vetoed", at: T0 - 60 * H, closedAt: T0 - 20 * H, signedAt: T0 - 10 * H, signedBy: "p2",
+      result: { for: 4, against: 2, abstain: 1, cast: 7, need: 4, seats: 8 }, fx: { type: "landRename", land: "sloboda", name: "Слобожанська земля", short: "Слобожанська" }, fxText: "Перейменувати землю: Слобідська земля → Слобожанська земля" },
     b3: { title: "Про відкриття школи для новачків", text: "Просимо створити наставництво для нових громадян.", kind: "petition", author: "p4", status: "signatures", at: T0 - 50 * H },
   };
   const elections = {
@@ -91,7 +95,12 @@ function seed() {
     },
     ud_law: { constitution: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.\nСтаття 2. Державна мова — українська.\n\n# Розділ II. Гетьман\nСтаття 3. Гетьман є главою держави.\nСтаття 4. Нові вибори Гетьмана ініціює Палата Земель.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
     "ud_law/constitution/hist": { v1: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
-    ud_counters: { cases: { n: 2 } },
+    ud_counters: { cases: { n: 2 }, protocols: { n: 1 } },
+    ud_eparchies: { e1: { name: "Київська єпархія", img: "", bishop: "p9", lands: ["kyiv", "kyivska"], order: 0 } },
+    ud_chdocs: { m1: { kind: "msg", no: 0, title: "Послання до Дня Святого Миколая", text: "Дорогі браття й сестри! Вітаю вас із наближенням свята.\n\nБережіть одне одного.", by: "p9", at: T0 - 6 * H },
+      d1: { kind: "dec", no: 1, title: "Про церковний календар", text: "Затвердити церковний календар на 2026–2027 роки.", by: "p9", at: T0 - 30 * H } },
+    ud_protocols: { pr1: { no: 1, pid: "p10", what: "Образа в загальному чаті", law: "", text: "", fine: "20 000 срібла", due: "2026-11-20", status: "open", by: "p3", at: T0 - 100 * H } },
+    ud_lawyers: { p6: { status: "active", since: "2026-11-01", by: "p5", at: T0 - 300 * H }, p7: { status: "apply", note: "Вивчав право", at: T0 - 5 * H } },
     ud_dues: {
       du1: { pid: "p4", what: "100 000 срібла", due: day(1), note: "тиждень 48, на фабрики", status: "open", by: "p2", at: T0 - 5 * H },
       du2: { pid: "p3", what: "50 нафти", due: day(-2), note: "", status: "open", by: "p2", at: T0 - 50 * H },
