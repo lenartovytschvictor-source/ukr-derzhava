@@ -5,6 +5,9 @@
 //  4) раз на добу робить резервну копію в приватне сховище Firebase.
 // Працює напряму з базою серверним ключем — без браузера.
 import { admin, db, FV, TS, TG, SITE, H, ms, short, kyiv, link, all, one, sleep, tgSend } from "./lib.mjs";
+import { readFileSync } from "node:fs";
+// спільний із сайтом модуль автоматичних дій законів (лежить у папці сайту v2)
+import { fxOps, fxPending } from "../v2/js/effects.js";
 
 const NOW = Date.now();
 const LOG = [];
@@ -36,6 +39,26 @@ async function timers(D) {
       }
     }
   }
+  // подолання вето: потрібно «За» щонайменше override% (типово 67%) від тих, хто голосував, і кворум
+  for (const b of D.bills.filter(b => b.status === "override" && ms(b.ovEnd) && ms(b.ovEnd) <= NOW)) {
+    const votes = (await db.collection(`ud_bills/${b.id}/ovotes`).get()).docs.map(d => ({ id: d.id, ...d.data() })).filter(v => members.includes(v.id));
+    const c = { for: 0, against: 0, abstain: 0 }; votes.forEach(v => { if (c[v.v] != null) c[v.v]++; });
+    const cast = c.for + c.against + c.abstain, pass = cast >= need && c.for * 100 >= cast * (CH.override || 67);
+    const res = { ...c, cast, need, seats: members.length };
+    if (!pass) {
+      await db.doc(`ud_bills/${b.id}`).update({ status: "vetoed", ovResult: res, ovDone: true });
+      Object.assign(b, { status: "vetoed", ovResult: res, ovDone: true });
+      say(`Палата: вето на «${b.title}» не подолано`); continue;
+    }
+    const no = Math.max(0, ...D.laws.filter(l => l.kind === "law").map(l => l.no || 0)) + 1;
+    const ref = db.collection("ud_laws").doc();
+    const law = { kind: "law", no, title: b.title, text: b.text || "", code: "", status: "active", date: new Date(NOW).toISOString().slice(0, 10), by: "", bill: b.id, note: "override", at: FV.serverTimestamp() };
+    const batch = db.batch();
+    batch.update(db.doc(`ud_bills/${b.id}`), { status: "overridden", ovResult: res, ovDone: true });
+    batch.set(ref, law); await batch.commit();
+    Object.assign(b, { status: "overridden", ovResult: res, ovDone: true }); D.laws.push({ id: ref.id, ...law, at: TS.now() });
+    say(`Палата подолала вето: «${b.title}» → закон № ${no}`);
+  }
   for (const e of D.elections) {
     // висування скінчилось → голосування (список виборців фіксується зараз)
     if (e.stage === "nomination" && ms(e.nomEnd) && ms(e.nomEnd) <= NOW) {
@@ -66,6 +89,42 @@ async function timers(D) {
   }
 }
 
+// ---------- 1б. Автоматичні дії законів і кінець надзвичайного стану ----------
+async function effects(D) {
+  const pend = D.bills.filter(b => fxPending(b) && !b.fxErr);   // з помилкою — не повторюємо, адмін виправить і натисне «Виконати зараз»
+  const site = (await one("ud_config", "site")) || {};
+  if (site.emergency && site.emergency.on && ms(site.emergency.until) && ms(site.emergency.until) <= NOW) {
+    await db.doc("ud_config/site").set({ emergency: { ...site.emergency, on: false, ended: NOW } }, { merge: true });
+    say("Надзвичайний стан закінчився за строком");
+  }
+  if (!pend.length) return;
+  let landsList = ((await one("ud_config", "lands")) || {}).list;
+  if (!Array.isArray(landsList)) { try { landsList = JSON.parse(readFileSync(new URL("../v2/data/lands-default.json", import.meta.url))); } catch (_) { landsList = []; } }
+  const places = await all("ud_places"), constitution = await one("ud_law", "constitution");
+  for (const b of pend) {
+    const law = D.laws.find(l => l.bill === b.id) || null;
+    try {
+      const ops = fxOps(b, { positions: D.positions, lands: landsList, places, laws: D.laws, holidays: D.holidays, constitution, law }, FV.serverTimestamp());
+      const batch = db.batch();
+      for (const o of ops) {
+        const r = db.doc(`${o.c}/${o.id}`);
+        if (o.op === "set") batch.set(r, o.v, o.merge ? { merge: true } : {});
+        else if (o.op === "update") batch.update(r, o.v);
+        else if (o.op === "del") batch.delete(r);
+      }
+      batch.update(db.doc(`ud_bills/${b.id}`), { fxDone: true, fxAt: FV.serverTimestamp(), fxErr: "" });
+      await batch.commit();
+      b.fxDone = true; b.fxAt = TS.now();
+      // наступні дії в цьому ж запуску бачать нові землі й Конституцію
+      for (const o of ops) if (o.c === "ud_config" && o.id === "lands") landsList = o.v.list;
+      say(`Закон «${b.title}»: виконано — ${b.fxText || b.fx.type}`);
+    } catch (err) {
+      await db.doc(`ud_bills/${b.id}`).update({ fxErr: String(err.message || err).slice(0, 200) });
+      say(`Закон «${b.title}»: не вдалося виконати — ${err.message}`);
+    }
+  }
+}
+
 // ---------- 2. Стрічка подій у Telegram ----------
 const name = (D, pid) => (D.players.find(p => p.id === pid) || {}).name || "—";
 function feed(D) {
@@ -83,7 +142,10 @@ function feed(D) {
       const r = b.result, ok = b.status !== "rejected";
       add("br:" + b.id, b.closedAt || NOW, `${ok ? "✅ Палата Земель ухвалила" : "❌ Палата Земель відхилила"} «${H(b.title)}»\nЗа ${r.for || 0} · проти ${r.against || 0} · утрималось ${r.abstain || 0}\n\n${link("derzhava/palata/" + b.id, "Деталі")}`);
     }
-    if (b.status === "vetoed") add("bx:" + b.id, b.signedAt || NOW, `⛔ Гетьман ветував закон «${H(b.title)}»`);
+    if (b.status === "vetoed" || b.ovResult) add("bx:" + b.id, b.signedAt || NOW, `⛔ Гетьман ветував закон «${H(b.title)}»`);
+    if (b.status === "override" && b.ovEnd) add("bo:" + b.id, b.ovStart || NOW, `🔁 <b>Палата голосує за подолання вето</b>\n«${H(b.title)}»\nДо ${H(kyiv(b.ovEnd))}\n\n${link("derzhava/palata/" + b.id, "Проголосувати")}`, { remind: true });
+    if (b.status === "overridden") add("bo2:" + b.id, NOW, `💪 <b>Палата Земель подолала вето</b>\n«${H(b.title)}» набрав чинності без підпису Гетьмана`);
+    if (b.fxDone && b.fxText) add("fx:" + b.id, b.fxAt || NOW, `⚙️ За законом «${H(b.title)}»: ${H(b.fxText)}`);
   }
   for (const e of D.elections) {
     add("en:" + e.id, e.at, `🗳 <b>Оголошено вибори: ${H(e.title)}</b>\nВисування кандидатів до ${H(kyiv(e.nomEnd))}${e.scope ? "\nГолосують прописані в землі" : ""}\n\n${link("derzhava/vybory/" + e.id, "Висунутись")}`);
@@ -91,6 +153,12 @@ function feed(D) {
     if (e.stage === "done" && e.winner) add("er:" + e.id, e.closedAt || NOW, `🏆 <b>${H(e.title)}</b>: обрано ${H(name(D, e.winner))}\nПроголосувало ${e.turnout || 0} з ${(e.voters || []).length}`);
     if (e.stage === "tie") add("er:" + e.id, e.closedAt || NOW, `⚖️ Вибори «${H(e.title)}» завершились нічиєю — потрібні повторні вибори.`);
   }
+  if (D.site && D.site.emergency && D.site.emergency.from) {
+    const em = D.site.emergency;
+    add("em:" + em.from, em.from, `🚨 <b>Запроваджено надзвичайний стан</b>${em.reason ? "\n" + H(em.reason) : ""}\nДо ${H(kyiv(em.until))}`);
+    if (!em.on || ms(em.until) <= NOW) add("em2:" + em.from, Math.min(NOW, ms(em.ended) || ms(em.until) || NOW), "✅ Надзвичайний стан завершено");
+  }
+  for (const x of D.chdocs || []) add("chd:" + x.id, x.at, `${x.kind === "msg" ? "✉️ <b>Послання Патріарха</b>" : `📜 <b>Постанова Церкви № ${x.no || "?"}</b>`}\n«${H(x.title)}»\n\n${H(short(x.text, 500))}\n\n${link("narod/tserkva", "Церква")}`);
   for (const c of D.cases) if (!c.closed && c.status === "verdict") add("cv:" + c.id, c.decidedAt, `⚖️ <b>Суд: вирок у справі № ${c.no}</b>\n«${H(c.title)}»\n${H(name(D, c.plaintiff))} ⟶ ${H(name(D, c.defendant))}\n\n${link("zakon/sud/" + c.id, "Вирок")}`);
   const awards = Object.fromEntries(D.awards.map(a => [a.id, a]));
   for (const g of D.grants) if (!g.revoked && awards[g.award]) add("aw:" + g.id, g.at, `🏅 ${H(name(D, g.pid))} нагороджено «${H(awards[g.award].name)}»${g.reason ? `\n${H(short(g.reason, 200))}` : ""}`);
@@ -211,7 +279,8 @@ async function scrub() {
 const D = {};
 for (const c of ["players", "positions", "bills", "elections", "news", "laws", "codes", "awards", "grants", "stars", "states", "treaties", "holidays"]) D[c] = await all("ud_" + c);
 D.cases = await all("ud_cases"); D.dms = await all("ud_dms"); D.dues = await all("ud_dues");
-for (const [label, fn] of [["Таймери", () => timers(D)], ["Прибирання", scrub], ["Telegram", () => telegram(D)], ["Особисті", () => personal(D)], ["Копія", backup]]) {
+D.chdocs = await all("ud_chdocs");
+for (const [label, fn] of [["Таймери", () => timers(D)], ["Дії законів", () => effects(D)], ["Стан", async () => { D.site = (await one("ud_config", "site")) || {}; }], ["Прибирання", scrub], ["Telegram", () => telegram(D)], ["Особисті", () => personal(D)], ["Копія", backup]]) {
   try { await fn(); } catch (err) { say(`${label}: помилка — ${err.message}`); }
 }
 await db.doc("ud_bot/state").set({ at: NOW, log: LOG.slice(-30) });
