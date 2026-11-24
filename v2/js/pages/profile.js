@@ -1,5 +1,5 @@
 // 👤 Профіль: мій профіль, прописка, заявка на громадянство, налаштування, вихід.
-import { S, B, me, lands, land, positionsOf, isAdmin, log } from "../store.js";
+import { S, B, me, lands, land, positionsOf, isAdmin, cases, log } from "../store.js";
 import { t, LANGS, lang, setLang } from "../i18n.js";
 import { render as rerender } from "../app.js";
 import { esc, avatar, profUrl, run, profNum, toast } from "../ui.js";
@@ -19,13 +19,33 @@ export function render() {
     <section class="card"><h2>🗺 ${esc(t("pf.residence"))}</h2><p class="hint">${esc(t("pf.residenceHint"))}</p>
       <select data-myland aria-label="${esc(t("pf.residence"))}"><option value="">— ${esc(t("pf.noLand"))} —</option>${lands().map(l => `<option value="${esc(l.id)}"${m.land === l.id ? " selected" : ""}>${esc(l.name)}</option>`).join("")}</select>
       ${L ? `<p class="hint">${esc(t("pf.livesIn", { x: L.name }))}</p>` : ""}</section>`;
+    h += affairs(m) + tgBlock(m);
   } else h += applyBlock();
   h += `<section class="card"><h2>⚙️ ${esc(t("pf.settings"))}</h2>
     <label class="fl">${esc(t("lang"))} <select data-mylang>${LANGS.map(([k, l]) => `<option value="${k}"${k === lang() ? " selected" : ""}>${l}</option>`).join("")}</select></label>
     <p class="hint">${esc(t("pf.signedAs"))} <b>${esc(u.email)}</b></p>
-    <div class="row">${isAdmin() ? `<a class="btn sm" href="#/admin">🛠 ${esc(t("nav.admin"))}</a>` : ""}<button type="button" class="ghost sm" data-act="logout">${esc(t("logout"))}</button></div></section>
-    <section class="card muted small">${esc(t("pf.later"))}</section>`;
+    <div class="row">${isAdmin() ? `<a class="btn sm" href="#/admin">🛠 ${esc(t("nav.admin"))}</a>` : ""}<button type="button" class="ghost sm" data-act="logout">${esc(t("logout"))}</button></div></section>`;
   return h;
+}
+
+// Мої справи: суди, мої законопроєкти, вибори, де я кандидат (кандидатури підвантажуються окремо)
+function affairs(m) {
+  const my = cases().filter(c => (c.parties || []).includes(m.id) && ["filed", "accepted", "hearing", "verdict"].includes(c.status)).sort((a, b) => (b.no || 0) - (a.no || 0)).slice(0, 8);
+  const bills = S.bills.filter(b => b.author === m.id && ["signatures", "discussion", "voting", "passed"].includes(b.status));
+  const act = S.elections.filter(e => ["nomination", "voting"].includes(e.stage));
+  const role = c => c.judge === m.id ? t("lw.judge") : c.defendant === m.id ? t("lw.defendant") : t("lw.plaintiff");
+  const rows = [
+    ...my.map(c => `<a class="ev" href="#/zakon/sud/${esc(c.id)}"><span class="evi">⚖️</span><span class="grow"><b>${esc(t("lw.caseNo", { n: c.no }))}: ${esc(c.title)}</b><small class="hint">${esc(role(c))} · ${esc(t("lw.cst." + c.status))}</small></span></a>`),
+    ...bills.map(b => `<a class="ev" href="#/derzhava/palata/${esc(b.id)}"><span class="evi">📜</span><span class="grow"><b>${esc(b.title)}</b><small class="hint">${esc(t("ch.st." + b.status))}</small></span></a>`),
+  ];
+  return `<section class="card"><h2>🗂 ${esc(t("pf.affairs"))}</h2>${rows.length ? `<div class="evs">${rows.join("")}</div>` : ""}<div data-mycands="${esc(act.map(e => e.id).join(","))}"></div>${rows.length ? "" : `<p class="empty" data-noaff>${esc(t("pf.noAffairs"))}</p>`}</section>`;
+}
+// Сповіщення в Telegram: код для бота (/start КОД)
+function tgBlock(m) {
+  const bot = (S.botCfg.username || "").replace(/^@/, "");
+  if (S.tgLink) return `<section class="card"><h2>🔔 ${esc(t("pf.tg"))}</h2><p>✅ ${esc(t("pf.tgOn"))}</p><button type="button" class="ghost sm" data-tgoff>${esc(t("pf.tgOff"))}</button></section>`;
+  return `<section class="card"><h2>🔔 ${esc(t("pf.tg"))}</h2><p class="hint">${esc(t("pf.tgHint"))}</p>
+    ${bot ? `<button type="button" class="sm primary" data-tgcode>${esc(t("pf.tgConnect"))}</button><div data-tgout></div>` : `<p class="hint">${esc(t("pf.tgNoBot"))}</p>`}</section>`;
 }
 
 function applyBlock() {
@@ -46,6 +66,26 @@ function applyBlock() {
 }
 
 export function mount(root) {
+  const m = me();
+  const mc = root.querySelector("[data-mycands]");
+  if (mc && m && mc.dataset.mycands) {
+    (async () => {
+      const out = [];
+      for (const id of mc.dataset.mycands.split(",")) {
+        try { if (await B.get(`ud_elections/${id}/cands`, m.id)) { const e = S.elections.find(x => x.id === id); if (e) out.push(`<a class="ev" href="#/derzhava/vybory/${esc(e.id)}"><span class="evi">🙋</span><span class="grow"><b>${esc(e.title)}</b><small class="hint">${esc(t("pf.candidate"))} · ${esc(t("el.stage." + e.stage))}</small></span></a>`); } } catch (_) {}
+      }
+      if (out.length && mc.isConnected) { mc.innerHTML = `<div class="evs">${out.join("")}</div>`; const ne = root.querySelector("[data-noaff]"); if (ne) ne.remove(); }
+    })();
+  }
+  const tc = root.querySelector("[data-tgcode]");
+  if (tc) tc.onclick = async () => {
+    const code = Array.from(crypto.getRandomValues(new Uint8Array(6)), b => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[b % 32]).join("");
+    if (!(await run(() => B.set("ud_tgcodes", m.id, { code, at: B.now() })))) return;
+    const bot = (S.botCfg.username || "").replace(/^@/, "");
+    root.querySelector("[data-tgout]").innerHTML = `<p>${esc(t("pf.tgStep"))}</p><p><a class="btn primary" href="https://t.me/${encodeURIComponent(bot)}?start=${code}" target="_blank" rel="noopener">✈️ @${esc(bot)}</a></p><p class="hint">${esc(t("pf.tgManual", { c: code }))}</p>`;
+  };
+  const toff = root.querySelector("[data-tgoff]");
+  if (toff) toff.onclick = () => run(() => B.del("ud_tglinks", m.id), t("saved"));
   const sl = root.querySelector("[data-myland]");
   if (sl) sl.onchange = async () => {
     const m = me(); const L = land(sl.value);

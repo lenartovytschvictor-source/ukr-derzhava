@@ -1,12 +1,12 @@
 // 🛠 Адмінпанель: гравці, адміни, перенесення зі старого сайту, журнал, резервна копія.
-import { S, B, OWNERS, isAdmin, isOwner, player, land, positionsOf, emailOf, ms, log } from "../store.js";
+import { S, B, OWNERS, isAdmin, isOwner, me, player, land, positionsOf, emailOf, ms, log } from "../store.js";
 import { render as rerender } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, toast, confirmBox, fmtDate, normEmail, okEmail, profNum, today } from "../ui.js";
 import { tabs, empty, statusLabel, statusIcon } from "./common.js";
 import { playerForm } from "./people.js";
 
-const TABS = [["gravtsi", "👥", "ad.tab.players"], ["admins", "🛡", "ad.tab.admins"], ["moderatsiya", "🔇", "ad.tab.mod"], ["perenesennya", "📦", "ad.tab.migrate"], ["zhurnal", "📒", "ad.tab.log"], ["kopiya", "💾", "ad.tab.backup"]];
+const TABS = [["gravtsi", "👥", "ad.tab.players"], ["admins", "🛡", "ad.tab.admins"], ["moderatsiya", "🔇", "ad.tab.mod"], ["bot", "🤖", "ad.tab.bot"], ["perenesennya", "📦", "ad.tab.migrate"], ["zhurnal", "📒", "ad.tab.log"], ["kopiya", "💾", "ad.tab.backup"]];
 
 export function render(parts) {
   if (!S.user) return `<section class="card center"><p>${esc(t("pf.needLogin"))}</p><button type="button" class="primary" data-act="login">${esc(t("login"))}</button></section>`;
@@ -16,6 +16,7 @@ export function render(parts) {
   if (cur === "gravtsi") h += playersTab();
   else if (cur === "admins") h += adminsTab();
   else if (cur === "moderatsiya") h += modTab();
+  else if (cur === "bot") h += botTab();
   else if (cur === "perenesennya") h += migrateTab();
   else if (cur === "zhurnal") h += `<section class="card"><h2>${esc(t("ad.tab.log"))}</h2><div data-log>${esc(t("loading"))}</div></section>`;
   else h += backupTab();
@@ -52,6 +53,16 @@ function modTab() {
     <form class="row" data-modadd><select name="pid" required><option value="">—</option>${S.players.filter(p => !mods.includes(p.id)).sort((a, b) => a.name.localeCompare(b.name, "uk")).map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("")}</select><button class="sm">+ ${esc(t("ad.addMod"))}</button></form></section>
   <section class="card"><h2>${esc(t("ad.mutes"))} <span class="badge">${act.length}</span></h2>${act.length ? `<ul class="list">${act.map(m => `<li><b>${esc((player(m.id) || {}).name || m.id)}</b> — ${esc(m.reason || "")} <small class="hint">${esc(t("ad.until", { x: fmtDate(m.until) }))} · ${esc((player(m.by) || {}).name || "")}</small> <button type="button" class="ghost sm" data-unmute="${esc(m.id)}">🔊 ${esc(t("cht.unmute"))}</button></li>`).join("")}</ul>` : empty(t("ad.noMutes"))}
     <p class="hint">${esc(t("ad.dmNote"))}</p></section>`;
+}
+
+// ---------- Telegram-бот ----------
+let BOTST = undefined;
+function botTab() {
+  if (BOTST === undefined) { BOTST = null; B.get("ud_bot", "state").then(d => { BOTST = d || false; rerender(); }).catch(() => { BOTST = false; rerender(); }); }
+  const st = BOTST;
+  return `<section class="card"><h2>🤖 ${esc(t("ad.bot"))}</h2><p class="hint">${esc(t("ad.botHint"))}</p>
+    <form class="row" data-botname><label class="fl">${esc(t("ad.botName"))} <input name="u" maxlength="40" placeholder="@UkrDerzhavaBot" value="${esc(S.botCfg.username || "")}"></label><button class="sm primary">${esc(t("save"))}</button></form></section>
+  <section class="card"><h2>${esc(t("ad.botState"))}</h2>${st === null ? `<p>${esc(t("loading"))}</p>` : st ? `<p>${esc(t("ad.botLast", { x: fmtDate(st.at) }))}</p>${(st.log || []).length ? `<ul class="slog">${st.log.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` : ""}` : empty(t("ad.botNever"))}</section>`;
 }
 
 // ---------- Перенесення зі старого сайту ----------
@@ -118,7 +129,7 @@ async function migrateHistory() {
   if (s && s.json) { try { h = (JSON.parse(s.json).sections || []).find(x => x.kind === "history") || null; } catch (_) {} }
   if (!h || !(h.tree || []).length) h = await (await fetch("data/history-default.json")).json();
   const tree = await Promise.all((h.tree || []).map(async n => ({ ...n, img: await resolveImg(n.img || "") })));
-  const doc = { tree, events: h.events || [], at: B.now(), by: S.user.email };
+  const doc = { tree, events: h.events || [], at: B.now(), by: (me() && me().id) || "admin" };
   if (Array.isArray(h.arrows)) doc.arrows = h.arrows;
   if (JSON.stringify(doc).length > 900000) throw new Error(t("hs.tooBig"));
   await B.set("ud_history", "main", doc);
@@ -136,6 +147,8 @@ function backupTab() {
 export function mount(root, parts) {
   const pa = root.querySelector("[data-padd]"); if (pa) pa.onclick = () => playerForm(null);
   root.querySelectorAll("[data-pedit]").forEach(b => b.onclick = () => playerForm(player(b.dataset.pedit)));
+  const bn = root.querySelector("[data-botname]");
+  if (bn) bn.onsubmit = async e => { e.preventDefault(); const u = bn.u.value.trim().replace(/^@/, "").replace(/[^\w]/g, "").slice(0, 40); if (await run(() => B.set("ud_config", "bot", { username: u }, true), t("saved"))) log("bot", "@" + u); };
   // модератори чатів
   const mf = root.querySelector("[data-modadd]");
   if (mf) mf.onsubmit = async e => { e.preventDefault(); const id = mf.pid.value; if (!id) return; if (await run(() => B.set("ud_config", "chat", { mods: [...(S.chatCfg.mods || []), id] }, true), t("saved"))) log("chat", `+ mod ${player(id).name}`); };

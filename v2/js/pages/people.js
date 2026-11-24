@@ -317,7 +317,7 @@ function mountHistory(root) {
     ensureArrows();
     const size = JSON.stringify(C).length;
     if (size > 900000) return toast(t("hs.tooBig"), "err");
-    if (await run(() => B.set("ud_history", "main", { tree: C.tree || [], arrows: C.arrows, events: C.events || [], at: B.now(), by: S.user.email }), t("saved"))) { log("history", t("hs.save")); HC = null; rerender(); }
+    if (await run(() => B.set("ud_history", "main", { tree: C.tree || [], arrows: C.arrows, events: C.events || [], at: B.now(), by: (me() && me().id) || "admin" }), t("saved"))) { log("history", t("hs.save")); HC = null; rerender(); }
   });
   const hr = root.querySelector("[data-hreset]"); if (hr) hr.onclick = () => { HC = null; rerender(); };
 }

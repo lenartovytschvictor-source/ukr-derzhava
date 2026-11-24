@@ -372,3 +372,30 @@ a.codecard { border-left-color: var(--blue); }
   .chatbox { height: calc(100vh - 300px); min-height: 320px; margin-left: -4px; margin-right: -4px; }
   .nbadge { top: 0; right: 50%; margin-right: -22px; }
 }
+
+/* ---------- етап 7: головна, новини ---------- */
+.nlist { display: grid; gap: 10px; } .nlist.home { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); } .nlist.home .ncard.big { grid-column: 1 / -1; }
+.ncard { display: flex; gap: 12px; padding: 10px; border-radius: 14px; background: var(--surface2); color: var(--ink); border: 1px solid transparent; overflow: hidden; }
+.ncard:hover { text-decoration: none; border-color: var(--line); }
+.ncard img { width: 110px; height: 80px; object-fit: cover; border-radius: 10px; flex: none; }
+.ncard.big img { width: 220px; height: 140px; }
+.ncard.pinned { border-color: color-mix(in srgb, var(--gold) 60%, var(--line)); }
+.nb { display: grid; gap: 4px; align-content: start; min-width: 0; } .nb b { font-size: 1.02rem; overflow-wrap: anywhere; } .ncard.big .nb b { font-size: 1.2rem; }
+.narticle h1 { margin: 6px 0; } .nimg { width: 100%; max-height: 420px; object-fit: cover; border-radius: 12px; }
+.nmeta { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: .9rem; }
+.nprev img { height: 60px; border-radius: 8px; }
+.twocol { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; align-items: start; } .twocol > .card { margin: 0; }
+.evs { display: grid; gap: 6px; }
+.ev { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--surface2); color: var(--ink); }
+.ev:hover { text-decoration: none; background: color-mix(in srgb, var(--blue2) 8%, var(--surface2)); }
+.ev .grow { min-width: 0; } .ev .grow b { display: block; overflow-wrap: anywhere; } .ev .grow small { display: block; }
+.evi { font-size: 1.3rem; width: 28px; text-align: center; flex: none; }
+.timer { font-size: .82rem; white-space: nowrap; padding: 3px 8px; border-radius: 99px; background: color-mix(in srgb, var(--gold) 20%, var(--surface)); }
+.goals { display: grid; gap: 12px; } .goal .meter { margin: 4px 0 2px; }
+.planed { margin-top: 12px; } .planed summary { cursor: pointer; color: var(--muted); }
+.goalrow { display: grid; grid-template-columns: 2fr 80px 2fr; gap: 6px; padding: 4px; background: none; }
+@media (max-width: 860px) {
+  .twocol { grid-template-columns: 1fr; } .ncard.big { flex-direction: column; } .ncard.big img { width: 100%; height: 170px; }
+  .goalrow { grid-template-columns: 1fr 70px; } .goalrow input:last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 600px) { .ev { flex-wrap: wrap; } .ev .grow { flex: 1 1 calc(100% - 40px); } .ev .timer { margin-left: 38px; } }

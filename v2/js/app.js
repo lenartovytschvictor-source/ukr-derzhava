@@ -6,11 +6,12 @@ import * as home from "./pages/home.js";
 import * as state from "./pages/state.js";
 import * as law from "./pages/law.js";
 import * as people from "./pages/people.js";
+import * as news from "./pages/news.js";
 import * as chat from "./pages/chat.js";
 import * as profile from "./pages/profile.js";
 import * as admin from "./pages/admin.js";
 
-const PAGES = { "": home, derzhava: state, zakon: law, narod: people, chat, profil: profile, admin };
+const PAGES = { "": home, derzhava: state, zakon: law, narod: people, chat, profil: profile, admin, novyny: news };
 const NAV = [
   ["", "🏠", "nav.home"], ["derzhava", "🏛", "nav.state"], ["zakon", "⚖️", "nav.law"], ["narod", "👥", "nav.people"], ["chat", "💬", "nav.chat"],
 ];

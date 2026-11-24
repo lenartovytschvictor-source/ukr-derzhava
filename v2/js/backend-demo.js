@@ -1,6 +1,6 @@
 // Демо-режим (?demo=1): усе зберігається лише в цьому браузері, база не потрібна.
 // Потрібен, щоб подивитися сайт без входу і щоб перевіряти його під час розробки.
-const KEY = "ud2-demo-v6";
+const KEY = "ud2-demo-v7";
 const OWNER = "lenartovytsch.victor@gmail.com";
 export const isDemo = true;
 
@@ -76,7 +76,7 @@ function seed() {
   ] };
   return {
     ud_players: players, ud_links: links, ud_positions: positions,
-    ud_config: { admins: { emails: [] }, chat: { mods: ["p3"] } },
+    ud_config: { admins: { emails: [] }, chat: { mods: ["p3"] }, bot: { username: "UkrDerzhavaBot" } },
     ud_bills: bills, "ud_bills/b1/votes": { p6: { v: "for", seat: "seat_volyn", at: T0 - H }, p3: { v: "against", seat: "seat_halych", at: T0 - H }, p7: { v: "for", seat: "seat_prychornomor", at: T0 - H } },
     "ud_bills/b3/signs": { p4: { at: T0 - 40 * H }, p7: { at: T0 - 20 * H } },
     "ud_bills/b2/cmts": { c1: { by: "p3", text: "Підтримую, але звіт раз на два тижні.", at: T0 - 3 * H } },
@@ -91,6 +91,16 @@ function seed() {
     ud_law: { constitution: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.\nСтаття 2. Державна мова — українська.\n\n# Розділ II. Гетьман\nСтаття 3. Гетьман є главою держави.\nСтаття 4. Нові вибори Гетьмана ініціює Палата Земель.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
     "ud_law/constitution/hist": { v1: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
     ud_counters: { cases: { n: 2 } },
+    ud_news: {
+      nw1: { title: "Промисловість повернулася до України", text: "Після довгого часу анархії в Україні стабілізувалася влада. Сьогодні промисловість повернулася до держави.\n\nУряд оновлюється, а Палата Земель відновлює роботу з оновленим складом земель.", img: "", pinned: true, by: "p2", at: T0 - 26 * H },
+      nw2: { title: "Підписано угоди з Польщею та Reich of Alandia", text: "Встановлено дипломатичні відносини й ненапад на шість місяців.", img: "", pinned: false, by: "p2", at: T0 - 5 * H },
+      nw3: { title: "Суд виніс рішення щодо руху генерала Борща", text: "Руху заборонено обіймати державні посади.", img: "", pinned: false, by: "p6", at: T0 - 50 * H },
+    },
+    ud_plan: { main: { title: "План економічного розвитку", goals: [
+      { t: "Докачати фабрики вугілля, нафти й руди до 41 рівня", p: 60, note: "далі — срібло та військові заводи" },
+      { t: "Повернути внески Крайовим Осавулам", p: 100, note: "" },
+      { t: "Срібло та військові заводи", p: 0, note: "після 41 рівня" },
+    ] } },
     "ud_chat/general/msgs": {
       m1: { by: "p2", text: "Слава Україні! Вітаю всіх у новому чаті.", at: T0 - 3 * H },
       m2: { by: "p8", text: "Hello everyone, greetings from Europe!", at: T0 - 2 * H },

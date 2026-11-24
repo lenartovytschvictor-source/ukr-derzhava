@@ -12,6 +12,7 @@ export const S = {
   codes: [], laws: [], constitution: null, casesPub: [], casesPriv: [], caseCounter: null,
   army: [], units: [], ranksCfg: null, stars: [], awards: [], grants: [], church: null, clergy: [], parishes: [], holidays: [],
   chat: {}, chatCfg: {}, mutes: [], dms: [], reads: {},
+  news: [], plan: null, botCfg: {}, tgLink: null,
   myLink: null, myApp: null, err: "",
 };
 let renderCb = () => {};
@@ -52,6 +53,10 @@ export async function initStore() {
   B.watch("ud_clergy", r => { S.clergy = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)); changed(); }, e => fail(e));
   B.watch("ud_parishes", r => { S.parishes = r.sort((a, b) => a.name.localeCompare(b.name, "uk")); changed(); }, e => fail(e));
   B.watch("ud_holidays", r => { S.holidays = r; changed(); }, e => fail(e));
+  // етап 7: новини, план розвитку, бот
+  B.watch("ud_news", r => { S.news = r; changed(); }, e => fail(e));
+  B.watchDoc("ud_plan", "main", d => { S.plan = d; changed(); });
+  B.watchDoc("ud_config", "bot", d => { S.botCfg = d || {}; changed(); });
   // етап 6: чат
   B.watchDoc("ud_config", "chat", d => { S.chatCfg = d || {}; changed(); });
   B.watch("ud_mutes", r => { S.mutes = r; changed(); }, () => {});
@@ -101,7 +106,7 @@ export function channels() {
   return out;
 }
 export const chatHooks = new Set();   // сторінка чату оновлює стрічку напряму, без перемальовування всієї сторінки
-let chatSubs = new Map(), dmKey = "", dmUn = null, readKey = "", readUn = null;
+let chatSubs = new Map(), dmKey = "", dmUn = null, readKey = "", readUn = null, tgUn = null;
 function syncChat() {
   const want = new Map(channels().map(c => [c.key, c.path]));
   for (const [k, un] of chatSubs) if (!want.has(k)) { try { un(); } catch (_) {} chatSubs.delete(k); delete S.chat[k]; }
@@ -113,7 +118,8 @@ function syncChat() {
   }
   if (pid !== readKey) {
     if (readUn) { try { readUn(); } catch (_) {} } readUn = null; S.reads = {}; readKey = pid;
-    if (pid) readUn = B.watchDoc("ud_reads", pid, d => { S.reads = d || {}; changed(); });
+    if (tgUn) { try { tgUn(); } catch (_) {} } tgUn = null; S.tgLink = null;
+    if (pid) { readUn = B.watchDoc("ud_reads", pid, d => { S.reads = d || {}; changed(); }); tgUn = B.watchDoc("ud_tglinks", pid, d => { S.tgLink = d; changed(); }); }
   }
 }
 // непрочитані: повідомлення інших людей, новіші за мою позначку

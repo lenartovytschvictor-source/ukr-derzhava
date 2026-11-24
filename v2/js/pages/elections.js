@@ -97,7 +97,7 @@ export function mount(root, parts) {
     if (S.elections.some(x => x.pos === p.id && ["nomination", "voting"].includes(x.stage))) return toast(t("el.already"), "err");
     const nh = Math.max(1, Math.min(336, +f.nh.value || 48));
     const id = B.newId("ud_elections");
-    if (await run(() => B.set("ud_elections", id, { pos: p.id, title: p.title, scope: p.land || "", stage: "nomination", nomEnd: new Date(Date.now() + nh * 3600e3), voteHours: Math.max(1, Math.min(336, +f.vh.value || 48)), by: S.user.email, at: B.now() }), t("el.created"))) {
+    if (await run(() => B.set("ud_elections", id, { pos: p.id, title: p.title, scope: p.land || "", stage: "nomination", nomEnd: new Date(Date.now() + nh * 3600e3), voteHours: Math.max(1, Math.min(336, +f.vh.value || 48)), by: (me() && me().id) || "", at: B.now() }), t("el.created"))) {
       log("election", `+ ${p.title}`); go("derzhava/vybory/" + id);
     }
   };

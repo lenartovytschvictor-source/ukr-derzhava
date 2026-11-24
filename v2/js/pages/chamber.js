@@ -212,7 +212,7 @@ export function mount(root, parts) {
     // постанова про вибори: якщо ухвалено — одразу оголошуємо вибори на посаду
     if (ok && T.pass && b.kind === "call" && b.target) {
       const p = pos(b.target);
-      if (p) await run(() => B.set("ud_elections", B.newId("ud_elections"), { pos: p.id, title: p.title, scope: p.land || "", stage: "nomination", nomEnd: new Date(Date.now() + CH().nomHours * 3600e3), bill: b.id, by: S.user.email, at: B.now() }), t("el.created"));
+      if (p) await run(() => B.set("ud_elections", B.newId("ud_elections"), { pos: p.id, title: p.title, scope: p.land || "", stage: "nomination", nomEnd: new Date(Date.now() + CH().nomHours * 3600e3), bill: b.id, by: m ? m.id : "", at: B.now() }), t("el.created"));
     }
   });
   // підписаний закон одразу потрапляє в реєстр «Закони й укази» з номером і кодексом
