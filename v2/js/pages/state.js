@@ -1,5 +1,5 @@
 // 🏛 Держава: Влада · Палата Земель · Вибори · Карта · Дипломатія
-import { S, B, pos, player, lands, landsFromPlan, positionsOf, canAppoint, isAdmin, canLands, log } from "../store.js";
+import { ranks, meetsRank, S, B, pos, player, lands, landsFromPlan, positionsOf, canAppoint, isAdmin, canLands, log } from "../store.js";
 import { EDIT } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, confirmBox, toast } from "../ui.js";
@@ -30,9 +30,12 @@ export function render(parts) {
 
 // ---------- Влада ----------
 const citizens = () => S.players.filter(p => p.status === "cit").sort((a, b) => a.name.localeCompare(b.name, "uk"));
+// хто не має мінімального звання посади — у списку, але недоступний
 function holderSelect(p) {
-  return `<select data-hold="${esc(p.id)}" aria-label="${esc(t("pw.holder"))}: ${esc(p.title)}"><option value="">— ${esc(t("vacant"))} —</option>${citizens().map(c => `<option value="${esc(c.id)}"${c.id === p.holder ? " selected" : ""}>${esc(c.name)}</option>`).join("")}</select>`;
+  return `<select data-hold="${esc(p.id)}" aria-label="${esc(t("pw.holder"))}: ${esc(p.title)}"><option value="">— ${esc(t("vacant"))} —</option>${citizens().map(c => { const ok = meetsRank(c.id, p.minRank);
+    return `<option value="${esc(c.id)}"${c.id === p.holder ? " selected" : ""}${ok || c.id === p.holder ? "" : " disabled"}>${esc(c.name)}${ok ? "" : " — " + esc(t("pw.lowRank"))}</option>`; }).join("")}</select>`;
 }
+const minRankSel = p => `<label class="fl">${esc(t("pw.minRank"))} <select data-pmin="${esc(p.id)}"><option value="">—</option>${ranks().map(r => `<option value="${esc(r.id)}"${p.minRank === r.id ? " selected" : ""}>${esc(r.name)}</option>`).join("")}</select></label>`;
 function posCard(p, big) {
   const pl = player(p.holder);
   const edit = EDIT && canAppoint(p);
@@ -41,8 +44,10 @@ function posCard(p, big) {
     ${avatar(pl || { name: "?" }, big ? "av xl" : "av lg")}
     <div class="pct">
       ${adm ? `<input type="text" class="ttl" data-ptitle="${esc(p.id)}" value="${esc(p.title)}" maxlength="80" aria-label="${esc(t("pw.title"))}">` : `<small>${esc(p.title)}</small>`}
+      ${p.minRank ? `<small class="hint">🎖 ${esc(t("pw.minRankShort", { x: (ranks().find(r => r.id === p.minRank) || {}).name || "" }))}</small>` : ""}
       ${edit ? holderSelect(p) : `<b>${pl ? `<a href="#/narod/gravets/${esc(pl.id)}">${esc(pl.name)}</a>` : `<i class="vac">${esc(t("vacant"))}</i>`}</b>`}
       ${adm ? `<div class="row sm"><label class="fl">${esc(t("pw.by"))} <select data-pby="${esc(p.id)}">${[["hetman", "pw.by.hetman"], ["election", "pw.by.election"], ["admin", "pw.by.admin"]].map(([k, l]) => `<option value="${k}"${p.appointBy === k ? " selected" : ""}>${esc(t(l))}</option>`).join("")}</select></label>
+        ${minRankSel(p)}
         ${p.id === "hetman" ? "" : `<button type="button" class="ghost sm danger" data-pdel="${esc(p.id)}">${esc(t("delete"))}</button>`}</div>`
         : (EDIT && p.appointBy !== "hetman" && !isAdmin() ? `<p class="hint">${esc(t(p.appointBy === "election" ? "pw.byElection" : "pw.byAdmin"))}</p>` : "")}
     </div></div>`;
@@ -54,7 +59,7 @@ function power() {
     return h;
   }
   const het = pos("hetman");
-  const gov = S.positions.filter(p => p.id !== "hetman" && !p.chamber && !p.land && !p.court);
+  const gov = S.positions.filter(p => p.id !== "hetman" && !p.chamber && !p.land && !p.court && !p.church);
   if (het) h += `<section class="card hetman">${posCard(het, true)}</section>`;
   h += `<section class="card"><h2>${esc(t("pw.gov"))}</h2><div class="pgrid">${gov.map(p => posCard(p)).join("")}</div>
     ${EDIT && isAdmin() ? `<form class="row addpos" data-padd><input type="text" name="title" maxlength="80" placeholder="${esc(t("pw.newTitle"))}" required><button class="sm">+ ${esc(t("pw.add"))}</button></form>` : ""}</section>`;
@@ -76,6 +81,7 @@ export function mount(root, parts) {
     const v = i.value.trim(); if (!v) return;
     if (await run(() => B.update("ud_positions", i.dataset.ptitle, { title: v }), t("saved"))) log("position", `${t("pw.renamed")}: ${v}`);
   });
+  root.querySelectorAll("[data-pmin]").forEach(s => s.onchange = () => run(() => B.update("ud_positions", s.dataset.pmin, { minRank: s.value }), t("saved")));
   root.querySelectorAll("[data-pby]").forEach(s => s.onchange = () => run(() => B.update("ud_positions", s.dataset.pby, { appointBy: s.value }), t("saved")));
   root.querySelectorAll("[data-pdel]").forEach(b => b.onclick = async () => {
     const p = pos(b.dataset.pdel);

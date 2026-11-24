@@ -4,8 +4,12 @@ import { EDIT, render as rerender, go } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, profUrl, run, modal, closeModal, confirmBox, pickImage, today, normEmail, okEmail, profNum, toast } from "../ui.js";
 import { tabs, soon, txt, empty, statusLabel, statusIcon } from "./common.js";
+import * as army from "./army.js";
+import * as awards from "./awards.js";
+import * as church from "./church.js";
+import { soldier, serviceDays, rankOf, nextRank } from "../store.js";
 
-const TABS = [["gromadyany", "🪪", "pp.tab.citizens"], ["viysko", "🎖", "pp.tab.army"], ["tserkva", "⛪", "pp.tab.church"], ["istoriya", "📜", "pp.tab.history"]];
+const TABS = [["gromadyany", "🪪", "pp.tab.citizens"], ["viysko", "🎖", "pp.tab.army"], ["nagorody", "🏅", "pp.tab.awards"], ["tserkva", "⛪", "pp.tab.church"], ["istoriya", "📜", "pp.tab.history"]];
 let F = { st: "cit", land: "" };   // фільтри реєстру
 
 export function render(parts) {
@@ -14,8 +18,9 @@ export function render(parts) {
   let h = `<h1 class="ptitle">👥 ${esc(t("nav.people"))}</h1>${tabs("narod", TABS, cur)}`;
   if (cur === "gromadyany") h += registry();
   else if (cur === "istoriya") h += history();
-  else if (cur === "viysko") h += soon(5, t("soon.army"));
-  else h += soon(5, t("soon.church"));
+  else if (cur === "viysko") h += army.render(parts);
+  else if (cur === "nagorody") h += awards.render(parts);
+  else h += church.render(parts);
   return h;
 }
 
@@ -71,7 +76,21 @@ function playerPage(id) {
       ${EDIT && canPlayers() ? `<button type="button" class="sm" data-pedit="${esc(p.id)}">✏️ ${esc(t("edit"))}</button>` : ""}</p>
     ${mail ? `<p class="hint">✉️ ${esc(mail)} <span class="muted">(${esc(t("pl.mailPrivate"))})</span></p>` : ""}
   </div></section>
-  <section class="card muted small">${esc(t("pl.morelater"))}</section>`;
+  ${serviceBlock(p)}${awardsBlock(p)}`;
+}
+// військова служба на сторінці гравця
+function serviceBlock(p) {
+  const a = soldier(p.id); if (!a) return "";
+  const u = S.units.find(x => x.id === a.unit), r = rankOf(a), nx = nextRank(a);
+  const log = S.stars.filter(x => x.pid === p.id).slice(0, 20);
+  return `<section class="card"><h2>🎖 ${esc(t("ar.service"))}</h2>
+    <p class="tags">${army.rankBadge(a)}${u ? `<a class="tag" href="#/narod/viysko/u/${esc(u.id)}">🛡 ${esc(u.name)}</a>` : ""}<span class="tag">📅 ${esc(t("ar.daysN", { n: serviceDays(a) }))}</span><span class="tag">★ ${a.stars || 0}</span></p>
+    ${nx ? `<p class="hint">${esc(t("ar.toNext", { x: nx.name }))}: ${esc(t("ar.need", { d: Math.max(0, (nx.days || 0) - serviceDays(a)), s: Math.max(0, (nx.stars || 0) - (a.stars || 0)) }))}</p>` : r ? `<p class="hint">${esc(t("ar.maxRank"))}</p>` : ""}
+    ${log.length ? `<details><summary>${esc(t("ar.log"))} (${log.length})</summary>${army.starLog(log, false)}</details>` : ""}</section>`;
+}
+function awardsBlock(p) {
+  const ch = awards.awardChips(p.id);
+  return ch ? `<section class="card"><h2>🏅 ${esc(t("pp.tab.awards"))}</h2>${ch}</section>` : "";
 }
 
 // форма гравця (додати / змінити) — для Гетьмана, Секретаря внутрішніх справ і адмінів
@@ -220,6 +239,9 @@ function historyEditor(h) {
 }
 
 export function mount(root, parts) {
+  if (parts[0] === "viysko") return army.mount(root, parts);
+  if (parts[0] === "nagorody") return awards.mount(root, parts);
+  if (parts[0] === "tserkva") return church.mount(root, parts);
   // реєстр: фільтри й пошук (пошук ховає картки без перемальовування, щоб не губився курсор)
   root.querySelectorAll("[data-fst]").forEach(b => b.onclick = () => { F.st = b.dataset.fst; rerender(); });
   const fl = root.querySelector("[data-fland]"); if (fl) fl.onchange = () => { F.land = fl.value; rerender(); };

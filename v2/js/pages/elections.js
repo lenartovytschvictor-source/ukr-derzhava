@@ -1,6 +1,6 @@
 // 🗳 Вибори на будь-яку посаду: висування → голосування → підсумки.
 // Хто голосує, фіксується в момент старту голосування (переїзд після старту не дає другого голосу).
-import { bansOf, S, B, me, player, pos, land, isAdmin, isCitizen, canChamber, CH, ms, log, changed } from "../store.js";
+import { meetsRank, bansOf, S, B, me, player, pos, land, isAdmin, isCitizen, canChamber, CH, ms, log, changed } from "../store.js";
 import { EDIT, go } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, confirmBox, toast, fmtDate } from "../ui.js";
@@ -21,7 +21,7 @@ const scopeName = e => e.scope ? ((land(e.scope) || {}).name || e.scope) : t("el
 // хто може висуватися й голосувати: громадяни; на виборах у землі — лише прописані в ній
 const canVote = (p, e) => p && p.status === "cit" && (!e.scope || p.land === e.scope);
 // судова заборона обіймати посади (вирок суду, не помилуваний) — не можна висуватися
-const eligible = (p, e) => p && p.status === "cit" && (!e.scope || p.land === e.scope) && !bansOf(p.id).length;
+const eligible = (p, e) => p && p.status === "cit" && (!e.scope || p.land === e.scope) && !bansOf(p.id).length && meetsRank(p.id, (pos(e.pos) || {}).minRank);
 const STAGE = { nomination: "📝", voting: "🗳", done: "🏁", tie: "⚖️", cancelled: "✕" };
 
 export function render(parts) {
@@ -74,7 +74,7 @@ function page(id) {
   }).join("")}</div>` : empty(t("el.noCands"))}`;
   if (nomOpen && m && !iAmCand) {
     h += eligible(m, e) ? `<form class="form nomform" data-nom><label>${esc(t("el.program"))}<textarea name="program" rows="3" maxlength="2000" placeholder="${esc(t("el.programPh"))}"></textarea></label><button class="primary">${esc(t("el.nominate"))}</button></form>`
-      : `<p class="hint">${esc(t(bansOf(m.id).length ? "el.banned" : e.scope ? "el.notEligibleLand" : "el.notEligible"))}</p>`;
+      : `<p class="hint">${esc(t(bansOf(m.id).length ? "el.banned" : !meetsRank(m.id, (pos(e.pos) || {}).minRank) ? "el.lowRank" : e.scope ? "el.notEligibleLand" : "el.notEligible"))}</p>`;
   }
   if (voteOpen && m && !(e.voters || []).includes(m.id)) h += `<p class="hint">${esc(t("el.notVoter"))}</p>`;
   if (voteOpen && CUR.myVote) h += `<p class="hint">✓ ${esc(t("el.voted"))}</p>`;

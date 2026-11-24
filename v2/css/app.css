@@ -296,3 +296,43 @@ a.lcard { color: var(--ink); display: block; } a.lcard:hover { text-decoration: 
 .addcode input { flex: 1; min-width: 180px; }
 a.codecard { border-left-color: var(--blue); }
 @media (max-width: 720px) { .constwrap { grid-template-columns: 1fr; } .ctoc { position: static; max-height: 260px; } }
+
+/* ---------- етап 5: військо, нагороди, церква ---------- */
+.rank { display: inline-flex; align-items: center; gap: 2px; font-size: .78rem; padding: 2px 8px 2px 6px; border-radius: 99px; background: color-mix(in srgb, var(--gold) 18%, var(--surface)); border: 1px solid color-mix(in srgb, var(--gold) 50%, var(--line)); white-space: nowrap; vertical-align: middle; }
+.rank i { display: inline-block; width: 3px; height: 10px; border-radius: 1px; background: var(--gold); }
+.rank b { margin-left: 4px; font-weight: 700; color: var(--ink); }
+.rank.r7 { background: color-mix(in srgb, var(--red) 16%, var(--surface)); border-color: color-mix(in srgb, var(--red) 45%, var(--line)); } .rank.r7 i { background: var(--red); }
+.slist { display: grid; gap: 6px; }
+.srow { display: grid; grid-template-columns: minmax(190px, 1.6fr) minmax(120px, 1fr) 110px minmax(150px, 1.2fr) auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--surface2); }
+.srow .who { display: flex; gap: 10px; align-items: center; color: var(--ink); min-width: 0; } .srow .who:hover { text-decoration: none; }
+.srow .who b { display: block; overflow-wrap: anywhere; } .srow .who span { min-width: 0; }
+.udot { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); font-size: .9rem; } .udot::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--uc); flex: none; }
+.snums { display: flex; gap: 10px; font-size: .9rem; white-space: nowrap; }
+.sprog .meter.sm { height: 6px; margin: 0 0 3px; } .sprog small { font-size: .78rem; }
+.sact { display: flex; gap: 2px; justify-content: flex-end; }
+.utree { display: grid; gap: 4px; }
+.unode { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding: 8px 10px; margin-left: calc(var(--d) * 22px); border-radius: 10px; background: var(--surface2); border-left: 4px solid var(--uc); }
+.unode a { display: flex; gap: 8px; align-items: center; color: var(--ink); } .unode img, .ucol { width: 26px; height: 26px; border-radius: 6px; object-fit: cover; flex: none; } .ucol { display: inline-block; background: var(--uc); }
+.unithead { border-top: 8px solid var(--uc); } .unithead h1 { margin: 0; } .emb { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; }
+.slog { list-style: none; padding: 0; margin: 6px 0 0; display: grid; gap: 6px; } .slog li { padding: 6px 0; border-top: 1px solid var(--line); font-size: .92rem; }
+.slog .pos { color: var(--green); } .slog .neg { color: var(--red); }
+.rtable { width: 100%; border-collapse: collapse; margin-top: 6px; } .rtable th, .rtable td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.rtable input { width: 100%; min-width: 60px; }
+.awgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.awcard { display: grid; justify-items: center; text-align: center; gap: 4px; padding: 16px 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); box-shadow: var(--shadow, none); }
+.awcard:hover { text-decoration: none; border-color: var(--gold); }
+.awi { width: 48px; height: 48px; display: inline-grid; place-items: center; font-size: 2rem; object-fit: contain; flex: none; }
+.awhead { display: flex; gap: 16px; align-items: flex-start; } .awhead .awi { width: 72px; height: 72px; font-size: 3rem; } .awhead h1 { margin: 0 0 4px; }
+.awchips { display: flex; flex-wrap: wrap; gap: 6px; }
+.awchip { display: inline-flex; gap: 6px; align-items: center; padding: 4px 10px 4px 4px; border-radius: 99px; background: color-mix(in srgb, var(--gold) 14%, var(--surface)); border: 1px solid var(--line); color: var(--ink); font-size: .9rem; }
+.awchip .awi { width: 26px; height: 26px; font-size: 1.1rem; } .awchip:hover { text-decoration: none; border-color: var(--gold); }
+.glist { display: grid; gap: 6px; } .grow-row { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 12px; background: var(--surface2); } .grow-row p { margin: 4px 0 0; }
+.hlist { display: grid; gap: 6px; }
+.hday { display: flex; gap: 12px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--surface2); border-left: 4px solid var(--blue2); } .hday.k-church { border-left-color: var(--gold); }
+.hday .grow small { display: block; }
+.hdate { display: grid; justify-items: center; min-width: 46px; line-height: 1.1; } .hdate b { font-size: 1.35rem; } .hdate small { color: var(--muted); font-size: .75rem; text-transform: uppercase; }
+.addhol { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+@media (max-width: 860px) {
+  .srow { grid-template-columns: 1fr auto; } .srow .sunit, .srow .snums, .srow .sprog { grid-column: 1 / -1; } .srow .sact { grid-row: 1; grid-column: 2; }
+  .unode { margin-left: calc(var(--d) * 12px); }
+}

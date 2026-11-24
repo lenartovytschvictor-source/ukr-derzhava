@@ -1,6 +1,6 @@
 // 🗺 Карта: 9 земель і Київ, сторінка землі з Осавулом, представником у Палаті, уділами (джури) і містами (війти).
 // Уділ або місто = документ ud_places + посада pl_<id> у Сотенній лаві Палати, яку призначає Крайовий Осавул.
-import { S, B, me, pos, player, lands, land, landsFromPlan, canLands, canAppoint, canPlaces, isAdmin, isCitizen, log, changed } from "../store.js";
+import { meetsRank, S, B, me, pos, player, lands, land, landsFromPlan, canLands, canAppoint, canPlaces, isAdmin, isCitizen, log, changed } from "../store.js";
 import { EDIT } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, confirmBox, toast } from "../ui.js";
@@ -76,7 +76,7 @@ function personCard(p, label) {
 }
 function holderSelect(p, people) {
   people = people.slice().sort((a, b) => a.name.localeCompare(b.name, "uk"));
-  return `<select data-hold="${esc(p.id)}" aria-label="${esc(p.title)}"><option value="">— ${esc(t("vacant"))} —</option>${people.map(c => `<option value="${esc(c.id)}"${c.id === p.holder ? " selected" : ""}>${esc(c.name)}</option>`).join("")}</select>`;
+  return `<select data-hold="${esc(p.id)}" aria-label="${esc(p.title)}"><option value="">— ${esc(t("vacant"))} —</option>${people.map(c => { const ok = meetsRank(c.id, p.minRank); return `<option value="${esc(c.id)}"${c.id === p.holder ? " selected" : ""}${ok || c.id === p.holder ? "" : " disabled"}>${esc(c.name)}${ok ? "" : " — " + esc(t("pw.lowRank"))}</option>`; }).join("")}</select>`;
 }
 function placeList(l, kind) {
   const list = placesOf(l.id, kind), ed = EDIT && canPlaces(l.id);

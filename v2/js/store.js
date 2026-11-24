@@ -10,6 +10,7 @@ export const S = {
   admins: [], lands: null, texts: {}, history: null, site: {},
   bills: [], elections: [], states: [], treaties: [], chamber: {}, places: [],
   codes: [], laws: [], constitution: null, casesPub: [], casesPriv: [], caseCounter: null,
+  army: [], units: [], ranksCfg: null, stars: [], awards: [], grants: [], church: null, clergy: [], parishes: [], holidays: [],
   myLink: null, myApp: null, err: "",
 };
 let renderCb = () => {};
@@ -39,6 +40,17 @@ export async function initStore() {
   B.watch("ud_codes", r => { S.codes = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)); changed(); }, e => fail(e));
   B.watch("ud_laws", r => { S.laws = r; changed(); }, e => fail(e));
   B.watchDoc("ud_law", "constitution", d => { S.constitution = d; changed(); });
+  // етап 5: військо, нагороди, церква
+  B.watch("ud_army", r => { S.army = r; changed(); }, e => fail(e));
+  B.watch("ud_units", r => { S.units = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name, "uk")); changed(); }, e => fail(e));
+  B.watchDoc("ud_config", "ranks", d => { S.ranksCfg = d; changed(); });
+  B.watch("ud_stars", r => { S.stars = r.sort((a, b) => ms(b.at) - ms(a.at)); changed(); }, e => fail(e));
+  B.watch("ud_awards", r => { S.awards = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)); changed(); }, e => fail(e));
+  B.watch("ud_grants", r => { S.grants = r.sort((a, b) => ms(b.at) - ms(a.at)); changed(); }, e => fail(e));
+  B.watchDoc("ud_church", "main", d => { S.church = d; changed(); });
+  B.watch("ud_clergy", r => { S.clergy = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)); changed(); }, e => fail(e));
+  B.watch("ud_parishes", r => { S.parishes = r.sort((a, b) => a.name.localeCompare(b.name, "uk")); changed(); }, e => fail(e));
+  B.watch("ud_holidays", r => { S.holidays = r; changed(); }, e => fail(e));
   B.watchDoc("ud_counters", "cases", d => { S.caseCounter = d; changed(); });
   B.watchWhere("ud_cases", "closed", "==", false, r => { S.casesPub = r; changed(); }, e => fail(e));
   B.onAuth(u => { S.user = u; S.ready = true; userWatches(); changed(); });
@@ -91,6 +103,44 @@ export const canTexts = () => isAdmin();
 export const canHistory = () => isAdmin();
 export const canDiplo = () => isAdmin() || isHetman() || holds("foreign");
 export const isChair = () => holds("chair");
+// ---------- Військо ----------
+// звання: [днів служби, зірочок]; Полковник — лише призначенням
+export const RANKS_DEFAULT = [
+  { id: "kozak", name: "Козак", days: 0, stars: 0 }, { id: "dzhura", name: "Джура", days: 10, stars: 0 },
+  { id: "desiatnyk", name: "Десятник", days: 30, stars: 10 }, { id: "khorunzhyi", name: "Хорунжий", days: 60, stars: 25 },
+  { id: "bunchuzhnyi", name: "Бунчужний", days: 100, stars: 50 }, { id: "sotnyk", name: "Сотник", days: 150, stars: 80 },
+  { id: "osavul", name: "Осавул", days: 210, stars: 120 }, { id: "polkovnyk", name: "Полковник", appoint: true },
+];
+export const ranks = () => (S.ranksCfg && Array.isArray(S.ranksCfg.list) && S.ranksCfg.list.length ? S.ranksCfg.list : RANKS_DEFAULT);
+export const soldier = pid => S.army.find(a => a.id === pid) || null;
+export const serviceDays = a => { const d = Date.parse(String((a && a.since) || "") + "T00:00:00"); return isNaN(d) ? 0 : Math.max(0, Math.floor((Date.now() - d) / 864e5)); };
+// поточне звання: призначене (Полковник) або найвище, для якого виконано обидві умови
+export function rankOf(a) {
+  if (!a) return null;
+  const R = ranks();
+  if (a.appointed) { const r = R.find(x => x.id === a.appointed); if (r) return r; }
+  const d = serviceDays(a), st = a.stars || 0;
+  let cur = null; for (const r of R) if (!r.appoint && d >= (r.days || 0) && st >= (r.stars || 0)) cur = r;
+  return cur || R.find(r => !r.appoint) || null;
+}
+export function nextRank(a) {
+  const R = ranks().filter(r => !r.appoint), cur = rankOf(a);
+  if (!cur || cur.appoint) return null;
+  const i = R.findIndex(r => r.id === cur.id);
+  return R[i + 1] || null;
+}
+export const rankIdx = pid => { const a = soldier(pid); if (!a) return -1; const r = rankOf(a); return r ? ranks().findIndex(x => x.id === r.id) : -1; };
+export const meetsRank = (pid, minRank) => !minRank || rankIdx(pid) >= ranks().findIndex(r => r.id === minRank);
+export const canArmy = () => isAdmin() || holds("defense");                 // командування: Секретар оборони й адміни
+export const unit = id => S.units.find(u => u.id === id) || null;
+export const commands = uid => { const m = me(); const u = unit(uid); return !!(m && u && u.commander === m.id); };
+// Нагороди: створюють Гетьман і адміни; видають ще й посади, зазначені в нагороді
+export const canAwards = () => isAdmin() || isHetman();
+export const canIssue = aw => canAwards() || (!!aw && (aw.issuers || []).some(holds));
+// Церква: Патріарх і адміни; державні свята — Гетьман, Писар, адміни
+export const canChurch = () => isAdmin() || holds("patriarch");
+export const canHolidays = kind => kind === "church" ? canChurch() : (isAdmin() || isHetman() || holds("pysar"));
+
 // Закон
 export const JUDGES = ["judge_1", "judge_2", "judge_3"];
 export const isJudge = () => JUDGES.some(holds);

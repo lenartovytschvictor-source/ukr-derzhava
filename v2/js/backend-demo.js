@@ -1,6 +1,6 @@
 // Демо-режим (?demo=1): усе зберігається лише в цьому браузері, база не потрібна.
 // Потрібен, щоб подивитися сайт без входу і щоб перевіряти його під час розробки.
-const KEY = "ud2-demo-v4";
+const KEY = "ud2-demo-v5";
 const OWNER = "lenartovytsch.victor@gmail.com";
 export const isDemo = true;
 
@@ -30,7 +30,7 @@ function seed() {
     P("p6", "Зоряна", "530", "cit", "volyn", "03.10.2026"),
     P("p7", "Тарас", "618", "cit", "prychornomor", "10.10.2026"),
     P("p8", "Al-Ain", "2026", "tour", "", "18.11.2026"),
-    P("p9", "Bastian", "602", "tour", "", "02.11.2026"),
+    P("p9", "Bastian", "602", "cit", "kyiv", "02.11.2026"),
     P("p10", "Ярема", "990", "exiled", "podillia", "14.09.2026"),
   ]);
   const links = {
@@ -51,6 +51,7 @@ function seed() {
     pos("chair", "Голова Палати Земель", 100, "election", "p6", { chamber: "chair" }),
     ...LANDS.map(([id, n, h], i) => pos("seat_" + id, "Представник: " + n, 101 + i, "election", h || "", { chamber: "zemska", land: id })),
     ...LANDS.map(([id, n], i) => pos("osavul_" + id, "Крайовий Осавул: " + n, 50 + i, "election", id === "sloboda" ? "p4" : id === "halych" ? "p3" : "", { land: id })),
+    pos("patriarch", "Патріарх", 90, "admin", "p9", { church: true }),
     pos("judge_1", "Суддя 1", 30, "election", "p5", { court: true, since: Date.now() - 10 * 864e5 }),
     pos("judge_2", "Суддя 2", 31, "election", "p7", { court: true, since: Date.now() - 70 * 864e5 }),
     pos("judge_3", "Суддя 3", 32, "election", "", { court: true }),
@@ -58,6 +59,7 @@ function seed() {
     pos("pl_x2", "Джура уділу Сумський", 302, "osavul", "", { chamber: "sotenna", land: "sloboda", place: "x2" }),
   ]);
   const H = 3600e3, T0 = Date.now();
+  const day = n => new Date(T0 + n * 864e5).toISOString().slice(0, 10);
   const bills = {
     b1: { title: "Про державні свята", text: "Стаття 1. Державними святами є День Незалежності, День Державного прапора і День Гетьманату.\nСтаття 2. У дні свят у загальному чаті проводяться урочистості.", kind: "law", author: "p6", seat: "seat_volyn", status: "voting", at: T0 - 30 * H, voteStart: T0 - 2 * H, voteEnd: T0 + 22 * H },
     b2: { title: "Про охорону кордонів", text: "Стаття 1. Секретар оборони щотижня звітує Палаті про стан кордонів.", kind: "law", author: "p4", seat: "seat_sloboda", status: "discussion", at: T0 - 5 * H },
@@ -89,6 +91,29 @@ function seed() {
     ud_law: { constitution: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.\nСтаття 2. Державна мова — українська.\n\n# Розділ II. Гетьман\nСтаття 3. Гетьман є главою держави.\nСтаття 4. Нові вибори Гетьмана ініціює Палата Земель.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
     "ud_law/constitution/hist": { v1: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
     ud_counters: { cases: { n: 2 } },
+    ud_units: {
+      polk: { name: "1-й Слобідський полк", color: "#2e5aac", emblem: "", commander: "p6", parent: "", desc: "Основна частина війська на сході.", order: 0 },
+      sotnia1: { name: "Харківська сотня", color: "#c0392b", emblem: "", commander: "p4", parent: "polk", desc: "", order: 1 },
+      des1: { name: "Перший десяток", color: "#27ae60", emblem: "", commander: "", parent: "sotnia1", desc: "", order: 2 },
+    },
+    ud_army: {
+      p6: { unit: "polk", since: day(-300), stars: 130, appointed: "polkovnyk" },
+      p5: { unit: "sotnia1", since: day(-120), stars: 60, appointed: "" },
+      p4: { unit: "sotnia1", since: day(-40), stars: 12, appointed: "" },
+      p7: { unit: "des1", since: day(-5), stars: 0, appointed: "" },
+    },
+    ud_stars: { s1: { pid: "p4", n: 5, reason: "Оборона Харкова", by: "p6", unit: "sotnia1", at: T0 - 10 * H }, s2: { pid: "p5", n: 10, reason: "Розвідка", by: "p4", unit: "sotnia1", at: T0 - 5 * H } },
+    ud_awards: { a1: { name: "Хрест Захисника", emoji: "✠", img: "", desc: "За оборону державних кордонів.", issuers: ["defense"], order: 0 }, a2: { name: "Орден Гетьмана", emoji: "🎖", img: "", desc: "Найвища нагорода держави.", issuers: [], order: 1 } },
+    ud_grants: { g1: { award: "a1", pid: "p4", reason: "Оборона Харкова", by: "p2", at: T0 - 9 * H } },
+    ud_church: { main: { about: "Українська Церква — духовна опора держави.", statute: "Стаття 1. Церква відокремлена від держави.\nСтаття 2. Очолює Церкву Патріарх." } },
+    ud_clergy: { c1: { pid: "p9", title: "Митрополит", parish: "pr1", order: 0 } },
+    ud_parishes: { pr1: { name: "Собор Святої Софії", land: "kyiv", priest: "p9", desc: "" } },
+    ud_holidays: {
+      h1: { name: "Різдво Христове", date: "12-25", yearly: true, kind: "church", desc: "" },
+      h2: { name: "День Незалежності", date: "08-24", yearly: true, kind: "state", desc: "" },
+      h3: { name: "Хрещення Русі", date: "07-28", yearly: true, kind: "church", desc: "" },
+      h4: { name: "День Гетьманату", date: "12-01", yearly: true, kind: "state", desc: "" },
+    },
     ud_cases: {
       k1: { no: 1, title: "Невиплата внеску до казни", text: "Відповідач тричі не сплатив внесок.", plaintiff: "p4", defendant: "p7", forState: false, closed: false, status: "filed", judge: "", parties: ["p4", "p7"], at: T0 - 20 * H },
       k2: { no: 2, title: "Державна зрада", text: "Відповідач передав плани оборони іншій державі.", plaintiff: "p3", defendant: "p10", forState: true, closed: true, status: "verdict", judge: "p5", parties: ["p3", "p10", "p5"], at: T0 - 100 * H,
@@ -132,7 +157,8 @@ const resolve = v => {
   const o = clone(v);
   for (const k in o) {
     if (o[k] && o[k].__now) o[k] = Date.now();
-    if (o[k] && o[k].__del) delete o[k];
+    else if (o[k] && o[k].__del) delete o[k];
+    else if (o[k] && typeof o[k] === "object" && !Array.isArray(o[k])) for (const j in o[k]) if (o[k][j] && o[k][j].__now) o[k][j] = Date.now();   // вкладені мітки часу
   }
   return o;
 };
