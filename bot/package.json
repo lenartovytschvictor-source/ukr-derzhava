@@ -1,9 +1,8 @@
 {
-  "name": "derzhava-bot",
+  "name": "derzhava-bot-v2",
   "private": true,
   "type": "module",
   "dependencies": {
-    "firebase-admin": "12.7.0",
-    "playwright": "1.47.2"
+    "firebase-admin": "12.7.0"
   }
 }
