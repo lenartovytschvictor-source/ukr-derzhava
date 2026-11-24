@@ -13,7 +13,7 @@ export const S = {
   army: [], units: [], ranksCfg: null, stars: [], awards: [], grants: [], church: null, clergy: [], parishes: [], holidays: [],
   chat: {}, chatCfg: {}, mutes: [], dms: [], reads: {},
   news: [], plan: null, botCfg: {}, tgLink: null, symbols: [], dues: [],
-  eparchies: [], chdocs: [], protocols: [], lawyers: [], govvotes: [],
+  eparchies: [], chdocs: [], protocols: [], lawyers: [], govvotes: [], fame: {},
   myLink: null, myApp: null, err: "",
 };
 let renderCb = () => {};
@@ -39,6 +39,7 @@ export async function initStore() {
   B.watch("ud_states", r => { S.states = r; changed(); }, e => fail(e));
   B.watch("ud_treaties", r => { S.treaties = r; changed(); }, e => fail(e));
   B.watchDoc("ud_config", "chamber", d => { S.chamber = d || {}; changed(); });
+  B.watchDoc("ud_config", "fame", d => { S.fame = d || {}; changed(); });
   B.watch("ud_symbols", r => { S.symbols = r; changed(); }, e => fail(e));
   B.watch("ud_places", r => { S.places = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name, "uk")); changed(); }, e => fail(e));
   B.watch("ud_codes", r => { S.codes = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)); changed(); }, e => fail(e));

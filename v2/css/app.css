@@ -555,3 +555,7 @@ a.cev:hover { text-decoration: none; background: color-mix(in srgb, var(--blue2)
 .fmlist .grow { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .fmv { flex: none; }
 .pcard.cur { outline: 2px solid var(--gold); }
+.hfedit { margin-top: 14px; border-top: 1px dashed var(--line); padding-top: 10px; }
+.hfrow { display: grid; grid-template-columns: 1.3fr 1.2fr 1fr 1fr 1.4fr auto auto; gap: 6px; margin: 6px 0; align-items: center; }
+.hfrow input[hidden] + input { grid-column: auto; }
+@media (max-width: 760px) { .hfrow { grid-template-columns: 1fr 1fr; } .hfrow [data-f=note] { grid-column: 1 / -1; } }

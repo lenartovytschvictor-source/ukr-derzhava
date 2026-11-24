@@ -287,6 +287,7 @@ export function mount(root, parts) {
   if (parts[0] === "viysko") return army.mount(root, parts);
   if (parts[0] === "nagorody") return awards.mount(root, parts);
   if (parts[0] === "tserkva") return church.mount(root, parts);
+  if (parts[0] === "slava") return fame.mount(root, parts);
   // реєстр: фільтри й пошук (пошук ховає картки без перемальовування, щоб не губився курсор)
   root.querySelectorAll("[data-fst]").forEach(b => b.onclick = () => { F.st = b.dataset.fst; rerender(); });
   const fl = root.querySelector("[data-fland]"); if (fl) fl.onchange = () => { F.land = fl.value; rerender(); };
