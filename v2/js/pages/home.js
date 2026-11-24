@@ -1,11 +1,11 @@
 // 🏠 Головна: (для нового відвідувача — привітання) · Влада зараз · Новини · Що зараз відбувається · План розвитку · Найближчі свята.
-import { asset } from "../ui.js";
 import { S, B, pos, player, me, isAdmin, isHetman, holds, cases, ms, log } from "../store.js";
 import { EDIT } from "../app.js";
 import { t } from "../i18n.js";
-import { esc, avatar, run, fmtDate } from "../ui.js";
+import { esc, avatar, run, fmtDate, modal, pickImage, asset } from "../ui.js";
 import { txt, empty } from "./common.js";
 import { canNews, newsSorted, newsCard, newsForm } from "./news.js";
+import { dueBadge } from "./economy.js";
 import { upcoming } from "./church.js";
 
 const POWER = ["hetman", "chair", "patriarch", "defense"];
@@ -28,6 +28,8 @@ function events() {
     if (e.stage === "nomination") ev.push({ at: ms(e.nomEnd), html: `<a class="ev" href="#/derzhava/vybory/${esc(e.id)}"><span class="evi">🙋</span><span class="grow"><b>${esc(e.title)}</b><small class="hint">${esc(t("hm.evNom"))}</small></span>${timer(e.nomEnd)}</a>` });
     if (e.stage === "voting") ev.push({ at: ms(e.voteEnd), html: `<a class="ev" href="#/derzhava/vybory/${esc(e.id)}"><span class="evi">🗳</span><span class="grow"><b>${esc(e.title)}</b><small class="hint">${esc(t("hm.evVote"))}</small></span>${timer(e.voteEnd)}</a>` });
   }
+  const m = me();
+  if (m) for (const x of S.dues.filter(d => d.pid === m.id && d.status === "open")) ev.push({ at: x.due ? Date.parse(x.due + "T23:59:59") : Infinity, html: `<a class="ev" href="#/derzhava/ekonomika"><span class="evi">💰</span><span class="grow"><b>${esc(x.what)}</b><small class="hint">${esc(t("ec.myDue"))}</small></span>${dueBadge(x)}</a>` });
   for (const c of cases()) if (!c.closed && c.status === "hearing") ev.push({ at: Infinity - 1, html: `<a class="ev" href="#/zakon/sud/${esc(c.id)}"><span class="evi">⚖️</span><span class="grow"><b>${esc(t("lw.caseNo", { n: c.no }))}: ${esc(c.title)}</b><small class="hint">${esc(t("hm.evCourt"))}</small></span></a>` });
   return ev.sort((a, b) => a.at - b.at).map(x => x.html);
 }
@@ -46,16 +48,39 @@ function planBlock() {
 }
 const goalRow = (g, i) => `<div class="grow-row goalrow"><input name="gt${i}" maxlength="120" value="${esc(g.t)}" placeholder="${esc(t("hm.goal"))}" aria-label="${esc(t("hm.goal"))}"><input type="number" name="gp${i}" min="0" max="100" value="${g.p || 0}" aria-label="%"><input name="gn${i}" maxlength="160" value="${esc(g.note || "")}" placeholder="${esc(t("hm.goalNote"))}" aria-label="${esc(t("hm.goalNote"))}"></div>`;
 
+// Шапка держави: назва, девіз, герб, прапор, гімн. Змінює адмін на місці (режим «Редагувати»).
+const SITE = () => S.site || {};
+export const coatSrc = () => SITE().coat || asset("img/gerb.png");
+const flagSrc = () => SITE().flag || asset("img/flag-ua.svg");
+function stateHead(guest) {
+  const c = SITE(), name = c.stateName || t("home.title").replace(/ в DragPolit$/, "") || "Українська Держава";
+  const ed = EDIT && isAdmin();
+  let h = `<section class="card statehead"><div class="shflag" style="background-image:url('${esc(flagSrc())}')" aria-hidden="true"></div>
+    <div class="shin"><img class="shcoat" src="${esc(coatSrc())}" alt="${esc(t("sh.coat"))}"><div class="shtxt"><h1>${esc(name)}</h1>${c.motto ? `<p class="shmotto">${esc(c.motto)}</p>` : ""}
+      <div class="row"><img class="shflagmini" src="${esc(flagSrc())}" alt="${esc(t("sh.flag"))}">${c.anthemText || c.anthemUrl ? `<button type="button" class="sm" data-anthem>🎺 ${esc(c.anthemTitle || t("sh.anthem"))}</button>` : ""}</div></div></div>
+    ${guest ? `<div class="shguest">${txt("home", "intro", t("home.intro"))}<div class="row">${!S.user ? `<button type="button" class="primary" data-act="login">${esc(t("login"))}</button>` : `<a class="btn primary" href="#/profil">${esc(t("home.join"))}</a>`}
+      <a class="btn ghost" href="#/narod/istoriya">${esc(t("home.history"))}</a></div></div>` : ""}`;
+  if (ed) h += `<details class="planed"><summary>✏️ ${esc(t("sh.edit"))}</summary><form class="form" data-shform>
+    <div class="row2"><label>${esc(t("sh.name"))}<input name="stateName" maxlength="80" value="${esc(c.stateName || "")}" placeholder="Українська Держава"></label>
+    <label>${esc(t("sh.motto"))}<input name="motto" maxlength="120" value="${esc(c.motto || "")}"></label></div>
+    <div class="symedit"><div class="slot"><span class="pv"><img src="${esc(coatSrc())}" alt=""></span><span><b>${esc(t("sh.coat"))}</b><br><button type="button" class="ghost sm" data-shimg="coat">${esc(t("sy.change"))}</button>${c.coat ? `<button type="button" class="ghost sm danger" data-shimgx="coat">✕</button>` : ""}</span></div>
+      <div class="slot"><span class="pv"><img src="${esc(flagSrc())}" alt=""></span><span><b>${esc(t("sh.flag"))}</b><br><button type="button" class="ghost sm" data-shimg="flag">${esc(t("sy.change"))}</button>${c.flag ? `<button type="button" class="ghost sm danger" data-shimgx="flag">✕</button>` : ""}</span></div></div>
+    <label>${esc(t("sh.anthemTitle"))}<input name="anthemTitle" maxlength="80" value="${esc(c.anthemTitle || "")}" placeholder="${esc(t("sh.anthem"))}"></label>
+    <label>${esc(t("sh.anthemText"))}<textarea name="anthemText" rows="8" maxlength="6000">${esc(c.anthemText || "")}</textarea></label>
+    <label>${esc(t("sh.anthemUrl"))}<input name="anthemUrl" type="url" maxlength="500" value="${esc(c.anthemUrl || "")}" placeholder="https://…/anthem.mp3"></label>
+    <p class="hint">${esc(t("sh.anthemHint"))}</p>
+    <div class="row end"><button class="primary sm">${esc(t("save"))}</button></div></form></details>`;
+  return h + `</section>`;
+}
+function anthemModal() {
+  const c = SITE();
+  modal(c.anthemTitle || t("sh.anthem"), `<div class="anthem">${c.anthemUrl ? `<audio controls preload="none" src="${esc(c.anthemUrl)}"></audio>` : ""}${c.anthemText ? `<div class="antxt">${esc(c.anthemText).replace(/\n/g, "<br>")}</div>` : ""}</div>`);
+}
+
 export function render() {
   const u = S.user, m = me();
   let h = "";
-  if (!u || !m) {
-    h += `<section class="hero card">
-      <img src="${asset("img/gerb-192.png")}" alt="" width="88" height="88">
-      <div><h1>${esc(t("home.title"))}</h1>${txt("home", "intro", t("home.intro"))}
-      <div class="row">${!u ? `<button type="button" class="primary" data-act="login">${esc(t("login"))}</button>` : `<a class="btn primary" href="#/profil">${esc(t("home.join"))}</a>`}
-      <a class="btn ghost" href="#/narod/istoriya">${esc(t("home.history"))}</a></div></div></section>`;
-  }
+  h += stateHead(!u || !m);
   const people = POWER.map(pos).filter(Boolean);
   h += `<section class="card"><h2>${esc(t("home.power"))}</h2>${people.length ? `<div class="power">${people.map(p => {
       const pl = player(p.holder);
@@ -77,6 +102,15 @@ export function render() {
 
 let tick = 0;
 export function mount(root) {
+  const an = root.querySelector("[data-anthem]"); if (an) an.onclick = anthemModal;
+  const sf = root.querySelector("[data-shform]");
+  if (sf) {
+    sf.onsubmit = async e => { e.preventDefault(); const v = {}; ["stateName", "motto", "anthemTitle", "anthemText", "anthemUrl"].forEach(k => { v[k] = sf[k].value.trim(); });
+      if (v.anthemUrl && !/^https:\/\//.test(v.anthemUrl)) v.anthemUrl = "";
+      if (await run(() => B.set("ud_config", "site", v, true), t("saved"))) log("site", t("sh.edit")); };
+    sf.querySelectorAll("[data-shimg]").forEach(b => b.onclick = async () => { const k = b.dataset.shimg, v = await pickImage(k === "flag" ? 360 : 320); if (v && await run(() => B.set("ud_config", "site", { [k]: v }, true), t("saved"))) log("site", t(k === "flag" ? "sh.flag" : "sh.coat")); });
+    sf.querySelectorAll("[data-shimgx]").forEach(b => b.onclick = () => run(() => B.set("ud_config", "site", { [b.dataset.shimgx]: "" }, true), t("saved")));
+  }
   const hn = root.querySelector("[data-hnews]"); if (hn) hn.onclick = () => newsForm(null);
   clearInterval(tick);
   tick = setInterval(() => { document.querySelectorAll("[data-until]").forEach(el => { el.textContent = "⏳ " + left(Number(el.dataset.until)); }); }, 30000);

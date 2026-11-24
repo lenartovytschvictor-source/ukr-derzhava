@@ -12,7 +12,7 @@ export const S = {
   codes: [], laws: [], constitution: null, casesPub: [], casesPriv: [], caseCounter: null,
   army: [], units: [], ranksCfg: null, stars: [], awards: [], grants: [], church: null, clergy: [], parishes: [], holidays: [],
   chat: {}, chatCfg: {}, mutes: [], dms: [], reads: {},
-  news: [], plan: null, botCfg: {}, tgLink: null, symbols: [],
+  news: [], plan: null, botCfg: {}, tgLink: null, symbols: [], dues: [],
   myLink: null, myApp: null, err: "",
 };
 let renderCb = () => {};
@@ -107,7 +107,7 @@ export function channels() {
   return out;
 }
 export const chatHooks = new Set();   // сторінка чату оновлює стрічку напряму, без перемальовування всієї сторінки
-let chatSubs = new Map(), dmKey = "", dmUn = null, readKey = "", readUn = null, tgUn = null;
+let chatSubs = new Map(), dmKey = "", dmUn = null, readKey = "", readUn = null, tgUn = null, duesUn = null;
 function syncChat() {
   const want = new Map(channels().map(c => [c.key, c.path]));
   for (const [k, un] of chatSubs) if (!want.has(k)) { try { un(); } catch (_) {} chatSubs.delete(k); delete S.chat[k]; }
@@ -120,6 +120,9 @@ function syncChat() {
   if (pid !== readKey) {
     if (readUn) { try { readUn(); } catch (_) {} } readUn = null; S.reads = {}; readKey = pid;
     if (tgUn) { try { tgUn(); } catch (_) {} } tgUn = null; S.tgLink = null;
+    if (duesUn) { try { duesUn(); } catch (_) {} } duesUn = null; S.dues = [];
+    // внески бачать лише ті, хто увійшов
+    if (pid) duesUn = B.watch("ud_dues", r => { S.dues = r; changed(); }, () => {});
     if (pid) { readUn = B.watchDoc("ud_reads", pid, d => { S.reads = d || {}; changed(); }); tgUn = B.watchDoc("ud_tglinks", pid, d => { S.tgLink = d; changed(); }); }
   }
 }

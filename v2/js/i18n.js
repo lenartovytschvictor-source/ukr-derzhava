@@ -6,6 +6,7 @@ import { S4 } from "./i18n-s4.js";
 import { S5 } from "./i18n-s5.js";
 import { S6 } from "./i18n-s6.js";
 import { S7 } from "./i18n-s7.js";
+import { S8 } from "./i18n-s8.js";
 export const LANGS = [["uk", "Українська"], ["en", "English"], ["ru", "Русский"], ["es", "Español"], ["pl", "Polski"]];
 
 const uk = {
@@ -297,6 +298,7 @@ for (const l in S4) Object.assign(D[l], S4[l]);
 for (const l in S5) Object.assign(D[l], S5[l]);
 for (const l in S6) Object.assign(D[l], S6[l]);
 for (const l in S7) Object.assign(D[l], S7[l]);
+for (const l in S8) Object.assign(D[l], S8[l]);
 let L = (() => {
   try { const s = localStorage.getItem("ud2-lang"); if (D[s]) return s; } catch (_) {}
   return "uk";   // основна мова сайту — українська; іншу кожен обирає сам

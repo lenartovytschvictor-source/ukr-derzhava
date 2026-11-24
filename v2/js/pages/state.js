@@ -8,8 +8,9 @@ import * as chamber from "./chamber.js";
 import * as elections from "./elections.js";
 import * as diplo from "./diplo.js";
 import * as map from "./map.js";
+import * as economy from "./economy.js";
 
-const TABS = [["vlada", "👑", "st.tab.power"], ["palata", "🏛", "st.tab.chamber"], ["vybory", "🗳", "st.tab.elections"], ["karta", "🗺", "st.tab.map"], ["dyplomatiya", "🤝", "st.tab.diplo"]];
+const TABS = [["vlada", "👑", "st.tab.power"], ["palata", "🏛", "st.tab.chamber"], ["vybory", "🗳", "st.tab.elections"], ["ekonomika", "💰", "st.tab.economy"], ["karta", "🗺", "st.tab.map"], ["dyplomatiya", "🤝", "st.tab.diplo"]];
 
 export const DEFAULT_POSITIONS = [
   ["hetman", "Гетьман", "election"], ["pysar", "Генеральний писар", "hetman"], ["finance", "Секретар фінансів", "hetman"],
@@ -22,6 +23,7 @@ export function render(parts) {
   let h = `<h1 class="ptitle">🏛 ${esc(t("nav.state"))}</h1>${tabs("derzhava", TABS, cur)}`;
   if (cur === "vlada") h += power();
   else if (cur === "karta") h += map.render(parts);
+  else if (cur === "ekonomika") h += economy.render(parts);
   else if (cur === "palata") h += chamber.render(parts);
   else if (cur === "vybory") h += elections.render(parts);
   else h += diplo.render(parts);
@@ -72,6 +74,7 @@ export function mount(root, parts) {
   if (cur === "vybory") return elections.mount(root, parts);
   if (cur === "dyplomatiya") return diplo.mount(root, parts);
   if (cur === "karta") return map.mount(root, parts);
+  if (cur === "ekonomika") return economy.mount(root, parts);
   root.querySelectorAll("[data-hold]").forEach(s => s.onchange = async () => {
     const p = pos(s.dataset.hold); const pl = player(s.value);
     if (await run(() => B.update("ud_positions", p.id, { holder: s.value || "", since: B.now() }), t("saved")))

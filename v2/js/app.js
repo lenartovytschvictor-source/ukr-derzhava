@@ -1,5 +1,6 @@
 // Головний файл: запуск, шапка, меню, маршрути й режим редагування.
 import { asset } from "./ui.js";
+import { applySeason, seasonNow } from "./season.js";
 import { S, DEMO, B, initStore, onChange, loadDefaults, me, isAdmin, canEditAnything, unreadTotal } from "./store.js";
 import { t, LANGS, lang, setLang } from "./i18n.js";
 import { esc, avatar, run, toast } from "./ui.js";
@@ -38,7 +39,7 @@ function header() {
     ? `<a class="me" href="#/profil" title="${esc(t("nav.profile"))}">${avatar(m || { name: u.name || u.email }, "av sm")}</a>`
     : `<button type="button" class="primary sm" data-act="login">${esc(t("login.short"))}</button>`;
   return `<header class="top">
-    <a class="brand" href="#/"><img src="${asset("img/gerb-192.png")}" alt="" width="36" height="36"><span><b>${esc(t("site.name"))}</b><small>${esc(t("site.sub"))}</small></span></a>
+    <a class="brand" href="#/"><img src="${esc((S.site && S.site.coat) || asset("img/gerb-192.png"))}" alt="" width="36" height="36"><span><b>${esc(t("site.name"))}${{ hw: " 🎃", xm: " 🎄" }[seasonNow()] || ""}</b><small>${esc(t("site.sub"))}</small></span></a>
     <div class="tools">
       ${editBtn}
       <label class="langsel"><span class="sr">${esc(t("lang"))}</span><select data-act="lang" aria-label="${esc(t("lang"))}">${LANGS.map(([k, l]) => `<option value="${k}"${k === lang() ? " selected" : ""} title="${l}">${k.toUpperCase()}</option>`).join("")}</select></label>
@@ -76,6 +77,7 @@ export function render(force) {
   app.innerHTML = `${demoBar()}${header()}${nav()}<main id="main" tabindex="-1">${S.err && isAdmin() ? `<div class="card warn small">⚠️ ${esc(S.err)}</div>` : ""}${body}</main>
     <footer class="foot">${esc(t("site.name"))} · DragPolit</footer>`;
   if (P.mount) try { P.mount(document.getElementById("main"), R.parts); } catch (e) { console.error(e); }
+  try { applySeason(); } catch (e) { console.error(e); }
   window.scrollTo(0, y);
 }
 document.addEventListener("focusout", () => { if (pending) setTimeout(() => { if (!busyTyping() && pending) render(); }, 50); });

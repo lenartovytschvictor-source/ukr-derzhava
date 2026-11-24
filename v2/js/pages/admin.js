@@ -2,12 +2,13 @@
 import { asset } from "../ui.js";
 import { S, B, OWNERS, isAdmin, isOwner, me, player, land, positionsOf, emailOf, ms, log } from "../store.js";
 import { render as rerender } from "../app.js";
+import { SEASONS, SEASON_IC, seasonMode, seasonNow, rainStart, PIECES, musicAuto, musicOff, musicCustom } from "../season.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, toast, confirmBox, fmtDate, normEmail, okEmail, profNum, today } from "../ui.js";
 import { tabs, empty, statusLabel, statusIcon } from "./common.js";
 import { playerForm } from "./people.js";
 
-const TABS = [["gravtsi", "👥", "ad.tab.players"], ["admins", "🛡", "ad.tab.admins"], ["moderatsiya", "🔇", "ad.tab.mod"], ["bot", "🤖", "ad.tab.bot"], ["perenesennya", "📦", "ad.tab.migrate"], ["zhurnal", "📒", "ad.tab.log"], ["kopiya", "💾", "ad.tab.backup"]];
+const TABS = [["gravtsi", "👥", "ad.tab.players"], ["admins", "🛡", "ad.tab.admins"], ["moderatsiya", "🔇", "ad.tab.mod"], ["bot", "🤖", "ad.tab.bot"], ["oformlennia", "🎨", "ss.tab"], ["perenesennya", "📦", "ad.tab.migrate"], ["zhurnal", "📒", "ad.tab.log"], ["kopiya", "💾", "ad.tab.backup"]];
 
 export function render(parts) {
   if (!S.user) return `<section class="card center"><p>${esc(t("pf.needLogin"))}</p><button type="button" class="primary" data-act="login">${esc(t("login"))}</button></section>`;
@@ -18,6 +19,7 @@ export function render(parts) {
   else if (cur === "admins") h += adminsTab();
   else if (cur === "moderatsiya") h += modTab();
   else if (cur === "bot") h += botTab();
+  else if (cur === "oformlennia") h += seasonTab();
   else if (cur === "perenesennya") h += migrateTab();
   else if (cur === "zhurnal") h += `<section class="card"><h2>${esc(t("ad.tab.log"))}</h2><div data-log>${esc(t("loading"))}</div></section>`;
   else h += backupTab();
@@ -54,6 +56,24 @@ function modTab() {
     <form class="row" data-modadd><select name="pid" required><option value="">—</option>${S.players.filter(p => !mods.includes(p.id)).sort((a, b) => a.name.localeCompare(b.name, "uk")).map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("")}</select><button class="sm">+ ${esc(t("ad.addMod"))}</button></form></section>
   <section class="card"><h2>${esc(t("ad.mutes"))} <span class="badge">${act.length}</span></h2>${act.length ? `<ul class="list">${act.map(m => `<li><b>${esc((player(m.id) || {}).name || m.id)}</b> — ${esc(m.reason || "")} <small class="hint">${esc(t("ad.until", { x: fmtDate(m.until) }))} · ${esc((player(m.by) || {}).name || "")}</small> <button type="button" class="ghost sm" data-unmute="${esc(m.id)}">🔊 ${esc(t("cht.unmute"))}</button></li>`).join("")}</ul>` : empty(t("ad.noMutes"))}
     <p class="hint">${esc(t("ad.dmNote"))}</p></section>`;
+}
+
+// ---------- Сезонне оформлення ----------
+function seasonTab() {
+  const mode = seasonMode(), now = seasonNow(), mus = (S.site || {}).music || {};
+  const opts = [["auto", "⏱ " + t("ss.auto")], ...SEASONS.map(k => [k, SEASON_IC[k] + " " + t("ss." + k)]), ["off", "🚫 " + t("ss.off")]];
+  return `<section class="card"><h2>🎨 ${esc(t("ss.title"))}</h2>
+    <label class="fl">${esc(t("ss.show"))} <select data-ssmode>${opts.map(([v, l]) => `<option value="${v}"${mode === v ? " selected" : ""}>${esc(l)}</option>`).join("")}</select></label>
+    <p class="hint">${esc(t("ss.autoHint"))}</p><p>${esc(t("ss.nowIs"))}: <b>${now ? SEASON_IC[now] + " " + esc(t("ss." + now)) : esc(t("ss.none"))}</b></p>
+    ${now === "au" ? `<p class="hint">🌧 ${esc(t("ss.rainHint"))}</p><button type="button" class="sm" data-rain>🌧 ${esc(t("ss.rainNow"))}</button>` : ""}</section>
+  <section class="card"><h2>🎵 ${esc(t("ss.music"))}</h2>
+    <label class="chk"><input type="checkbox" data-musauto${musicAuto() ? " checked" : ""}> ${esc(t("ss.musAuto"))}</label>
+    ${["xm", "hw", "au", "sp", "df", "ind"].map(sn => { const off = musicOff(sn), cus = musicCustom(sn);
+      return `<div class="musg"><h3>${SEASON_IC[sn]} ${esc(t("ss." + sn))}</h3>
+      ${(PIECES[sn] || []).map(p => `<label class="chk"><input type="checkbox" data-muspiece="${sn}:${p.id}"${off.includes(p.id) ? "" : " checked"}> ${esc(p.name)} <span class="hint">· ${esc(t("ss.builtin"))}</span></label>`).join("")}
+      ${cus.map((x, i) => `<div class="musc"><span>🎧 ${esc(x.name || "♪")}</span><audio controls preload="none" src="${esc(x.url)}"></audio><button type="button" class="ghost sm danger" data-musdel="${sn}:${i}" aria-label="${esc(t("delete"))}">✕</button></div>`).join("")}
+      <form class="row" data-musadd="${sn}"><input name="name" maxlength="60" placeholder="${esc(t("ss.trackName"))}"><input name="url" type="url" required maxlength="500" placeholder="https://…/track.mp3"><button class="sm">+ ${esc(t("ss.addTrack"))}</button></form></div>`; }).join("")}
+    <p class="hint">${esc(t("ss.musHint"))}</p></section>`;
 }
 
 // ---------- Telegram-бот ----------
@@ -148,6 +168,15 @@ function backupTab() {
 export function mount(root, parts) {
   const pa = root.querySelector("[data-padd]"); if (pa) pa.onclick = () => playerForm(null);
   root.querySelectorAll("[data-pedit]").forEach(b => b.onclick = () => playerForm(player(b.dataset.pedit)));
+  // оформлення
+  const saveMusic = (fn, msg) => { const m = JSON.parse(JSON.stringify((S.site || {}).music || {})); fn(m); return run(() => B.set("ud_config", "site", { music: m }, true), msg || t("saved")); };
+  const sm = root.querySelector("[data-ssmode]"); if (sm) sm.onchange = async () => { if (await run(() => B.set("ud_config", "site", { season: sm.value }, true), t("saved"))) log("site", t("ss.title") + ": " + sm.value); };
+  const rn = root.querySelector("[data-rain]"); if (rn) rn.onclick = () => rainStart(60000);
+  const ma = root.querySelector("[data-musauto]"); if (ma) ma.onchange = () => saveMusic(m => { m.auto = ma.checked; });
+  root.querySelectorAll("[data-muspiece]").forEach(c => c.onchange = () => { const [sn, id] = c.dataset.muspiece.split(":"); saveMusic(m => { m.off = m.off || {}; const L = new Set(m.off[sn] || []); c.checked ? L.delete(id) : L.add(id); m.off[sn] = [...L]; }); });
+  root.querySelectorAll("[data-musdel]").forEach(b => b.onclick = () => { const [sn, i] = b.dataset.musdel.split(":"); saveMusic(m => { (m.custom = m.custom || {})[sn] = (m.custom[sn] || []).filter((_, k) => k !== +i); }); });
+  root.querySelectorAll("[data-musadd]").forEach(f => f.onsubmit = e => { e.preventDefault(); const sn = f.dataset.musadd, url = f.url.value.trim(); if (!/^https:\/\//.test(url)) return toast(t("ss.badUrl"), "err");
+    saveMusic(m => { (m.custom = m.custom || {})[sn] = [...(m.custom[sn] || []), { name: f.name.value.trim().slice(0, 60) || "♪", url: url.slice(0, 500) }]; }, t("ss.trackAdded")); });
   const bn = root.querySelector("[data-botname]");
   if (bn) bn.onsubmit = async e => { e.preventDefault(); const u = bn.u.value.trim().replace(/^@/, "").replace(/[^\w]/g, "").slice(0, 40); if (await run(() => B.set("ud_config", "bot", { username: u }, true), t("saved"))) log("bot", "@" + u); };
   // модератори чатів

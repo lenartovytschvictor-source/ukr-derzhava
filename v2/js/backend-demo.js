@@ -1,6 +1,6 @@
 // Демо-режим (?demo=1): усе зберігається лише в цьому браузері, база не потрібна.
 // Потрібен, щоб подивитися сайт без входу і щоб перевіряти його під час розробки.
-const KEY = "ud2-demo-v7";
+const KEY = "ud2-demo-v8";
 const OWNER = "lenartovytsch.victor@gmail.com";
 export const isDemo = true;
 
@@ -76,7 +76,8 @@ function seed() {
   ] };
   return {
     ud_players: players, ud_links: links, ud_positions: positions,
-    ud_config: { admins: { emails: [] }, chat: { mods: ["p3"] }, bot: { username: "UkrDerzhavaBot" } },
+    ud_config: { admins: { emails: [] }, chat: { mods: ["p3"] }, bot: { username: "UkrDerzhavaBot" },
+      site: { stateName: "Українська Держава", motto: "Воля, Злагода, Держава", anthemTitle: "Гімн Української Держави", anthemText: "Перший рядок гімну\nДругий рядок гімну", anthemUrl: "", season: "auto" } },
     ud_bills: bills, "ud_bills/b1/votes": { p6: { v: "for", seat: "seat_volyn", at: T0 - H }, p3: { v: "against", seat: "seat_halych", at: T0 - H }, p7: { v: "for", seat: "seat_prychornomor", at: T0 - H } },
     "ud_bills/b3/signs": { p4: { at: T0 - 40 * H }, p7: { at: T0 - 20 * H } },
     "ud_bills/b2/cmts": { c1: { by: "p3", text: "Підтримую, але звіт раз на два тижні.", at: T0 - 3 * H } },
@@ -91,6 +92,12 @@ function seed() {
     ud_law: { constitution: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.\nСтаття 2. Державна мова — українська.\n\n# Розділ II. Гетьман\nСтаття 3. Гетьман є главою держави.\nСтаття 4. Нові вибори Гетьмана ініціює Палата Земель.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
     "ud_law/constitution/hist": { v1: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
     ud_counters: { cases: { n: 2 } },
+    ud_dues: {
+      du1: { pid: "p4", what: "100 000 срібла", due: day(1), note: "тиждень 48, на фабрики", status: "open", by: "p2", at: T0 - 5 * H },
+      du2: { pid: "p3", what: "50 нафти", due: day(-2), note: "", status: "open", by: "p2", at: T0 - 50 * H },
+      du3: { pid: "p6", what: "200 000 срібла", due: day(-5), note: "", status: "paid", paidNote: "повністю", paidBy: "p2", paidAt: T0 - 30 * H, by: "p2", at: T0 - 90 * H },
+      du4: { pid: "p1", what: "20 руди", due: day(3), note: "", status: "open", by: "p2", at: T0 - 2 * H },
+    },
     ud_news: {
       nw1: { title: "Промисловість повернулася до України", text: "Після довгого часу анархії в Україні стабілізувалася влада. Сьогодні промисловість повернулася до держави.\n\nУряд оновлюється, а Палата Земель відновлює роботу з оновленим складом земель.", img: "", pinned: true, by: "p2", at: T0 - 26 * H },
       nw2: { title: "Підписано угоди з Польщею та Reich of Alandia", text: "Встановлено дипломатичні відносини й ненапад на шість місяців.", img: "", pinned: false, by: "p2", at: T0 - 5 * H },

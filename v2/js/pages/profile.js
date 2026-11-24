@@ -1,8 +1,10 @@
 // 👤 Профіль: мій профіль, прописка, заявка на громадянство, налаштування, вихід.
 import { S, B, me, lands, land, positionsOf, isAdmin, cases, log } from "../store.js";
+import { dueBadge } from "./economy.js";
+import { passportBlob } from "../passport.js";
 import { t, LANGS, lang, setLang } from "../i18n.js";
 import { render as rerender } from "../app.js";
-import { esc, avatar, profUrl, run, profNum, toast } from "../ui.js";
+import { esc, avatar, profUrl, run, profNum, toast, modal } from "../ui.js";
 import { statusLabel, statusIcon } from "./common.js";
 
 export function render() {
@@ -24,7 +26,7 @@ export function render() {
   h += `<section class="card"><h2>⚙️ ${esc(t("pf.settings"))}</h2>
     <label class="fl">${esc(t("lang"))} <select data-mylang>${LANGS.map(([k, l]) => `<option value="${k}"${k === lang() ? " selected" : ""}>${l}</option>`).join("")}</select></label>
     <p class="hint">${esc(t("pf.signedAs"))} <b>${esc(u.email)}</b></p>
-    <div class="row">${isAdmin() ? `<a class="btn sm" href="#/admin">🛠 ${esc(t("nav.admin"))}</a>` : ""}<button type="button" class="ghost sm" data-act="logout">${esc(t("logout"))}</button></div></section>`;
+    <div class="row">${m ? `<button type="button" class="sm" data-passport>🪪 ${esc(t("pp.my"))}</button>` : ""}${isAdmin() ? `<a class="btn sm" href="#/admin">🛠 ${esc(t("nav.admin"))}</a>` : ""}<button type="button" class="ghost sm" data-act="logout">${esc(t("logout"))}</button></div></section>`;
   return h;
 }
 
@@ -34,7 +36,9 @@ function affairs(m) {
   const bills = S.bills.filter(b => b.author === m.id && ["signatures", "discussion", "voting", "passed"].includes(b.status));
   const act = S.elections.filter(e => ["nomination", "voting"].includes(e.stage));
   const role = c => c.judge === m.id ? t("lw.judge") : c.defendant === m.id ? t("lw.defendant") : t("lw.plaintiff");
+  const dues = S.dues.filter(x => x.pid === m.id && x.status === "open");
   const rows = [
+    ...dues.map(x => `<a class="ev" href="#/derzhava/ekonomika"><span class="evi">💰</span><span class="grow"><b>${esc(x.what)}</b><small class="hint">${esc(t("ec.myDue"))}${x.note ? " · " + esc(x.note) : ""}</small></span>${dueBadge(x)}</a>`),
     ...my.map(c => `<a class="ev" href="#/zakon/sud/${esc(c.id)}"><span class="evi">⚖️</span><span class="grow"><b>${esc(t("lw.caseNo", { n: c.no }))}: ${esc(c.title)}</b><small class="hint">${esc(role(c))} · ${esc(t("lw.cst." + c.status))}</small></span></a>`),
     ...bills.map(b => `<a class="ev" href="#/derzhava/palata/${esc(b.id)}"><span class="evi">📜</span><span class="grow"><b>${esc(b.title)}</b><small class="hint">${esc(t("ch.st." + b.status))}</small></span></a>`),
   ];
@@ -77,6 +81,13 @@ export function mount(root) {
       if (out.length && mc.isConnected) { mc.innerHTML = `<div class="evs">${out.join("")}</div>`; const ne = root.querySelector("[data-noaff]"); if (ne) ne.remove(); }
     })();
   }
+  const pb = root.querySelector("[data-passport]");
+  if (pb && m) pb.onclick = async () => {
+    const w = modal(t("pp.my"), `<div class="ppbox"><p class="hint">${esc(t("loading"))}</p></div>`, { wide: true });
+    const blob = await passportBlob(m); if (!blob) return;
+    const url = URL.createObjectURL(blob), box = w.querySelector(".ppbox");
+    box.innerHTML = `<img class="ppimg" src="${url}" alt="${esc(t("pp.my"))}"><div class="row end"><a class="btn primary" href="${url}" download="pasport-${esc(String(m.name).replace(/[^\wа-яіїєґ-]+/gi, "_"))}.png">⬇️ ${esc(t("pp.download"))}</a></div><p class="hint">${esc(t("pp.hint"))}</p>`;
+  };
   const tc = root.querySelector("[data-tgcode]");
   if (tc) tc.onclick = async () => {
     const code = Array.from(crypto.getRandomValues(new Uint8Array(6)), b => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[b % 32]).join("");

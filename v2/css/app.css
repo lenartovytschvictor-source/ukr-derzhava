@@ -413,3 +413,64 @@ a.codecard { border-left-color: var(--blue); }
 .symedit .slot { display: flex; gap: 8px; align-items: center; padding: 6px 8px; border-radius: 10px; background: var(--surface2); }
 .symedit .slot .pv { width: 56px; height: 44px; display: grid; place-items: center; font-size: 1.4rem; } .symedit .slot .pv img { max-width: 56px; max-height: 44px; object-fit: contain; }
 .lcard h3 .sym { margin-right: 6px; }
+
+/* ---------- сезонне оформлення ---------- */
+.sfx { position: fixed; inset: 0; pointer-events: none; z-index: 60; overflow: hidden; }
+.sfx i { position: absolute; top: -70px; display: block; animation-name: sfall, ssway; animation-timing-function: linear, ease-in-out; animation-iteration-count: infinite, infinite; animation-direction: normal, alternate; opacity: .85; }
+.sfx svg { width: 100%; height: 100%; display: block; }
+@keyframes sfall { to { transform: translateY(calc(100vh + 140px)) rotate(540deg); } }
+@keyframes ssway { from { margin-left: -28px; } to { margin-left: 28px; } }
+.sfx-au .lf { fill: var(--c, #d35400); } .sfx-au .lv { fill: none; stroke: rgba(0,0,0,.25); stroke-width: 2.4; stroke-linecap: round; }
+.sfx-hw i { animation-name: sfly, ssway; opacity: .7; } .sfx-hw .bt { fill: #2b1d33; }
+@keyframes sfly { 0% { transform: translate(-10vw, 30vh) scale(.8); } 50% { transform: translate(55vw, 8vh) scale(1); } 100% { transform: translate(115vw, 40vh) scale(.9); } }
+.sfx-xm .fl path { stroke: #fff; stroke-width: 2.4; stroke-linecap: round; fill: none; } .sfx-xm .fl { filter: drop-shadow(0 0 2px rgba(80,120,180,.6)); }
+.sfx-sp .pt { fill: #f7b6c8; stroke: #e98aa6; stroke-width: 1.2; }
+.sfx-df .st { fill: #f2c200; stroke: #0b3d91; stroke-width: 1.5; }
+.sfx-ind .rb { fill: var(--c, #0057b7); }
+.srain { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 59; }
+html.raining body { filter: saturate(.85); }
+/* відтінки шапки */
+html.ss-au .top { background: linear-gradient(100deg, #6b2d0f, #a8461a 55%, #c77d1e); }
+html.ss-hw .top { background: linear-gradient(100deg, #1b0f24, #3b1a46 55%, #c2560c); }
+html.ss-xm .top { background: linear-gradient(100deg, #0b2f6b, #1c5fae 55%, #6fa8dc); }
+html.ss-xm .top::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 8px; background: radial-gradient(circle at 6px 0, #fff 5px, transparent 5.5px) 0 0 / 14px 8px repeat-x; pointer-events: none; }
+html.ss-sp .top { background: linear-gradient(100deg, #1f6f4a, #2e8b57 55%, #d97ea0); }
+html.ss-df .top { background: linear-gradient(100deg, #0b3d91, #2f4f2f 60%, #6b8e23); }
+html.ss-ind .top { background: linear-gradient(180deg, #0057b7 0 60%, #ffd700 60% 100%); }
+html.ss-ind .top .brand small { color: #0b3d91; }
+#musbtn { position: fixed; left: 14px; bottom: 16px; z-index: 70; border-radius: 99px; padding: 8px 14px; min-height: 0; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(0,0,0,.15); font-size: .95rem; color: var(--ink); }
+@media (max-width: 720px) { #musbtn { bottom: 84px; left: 10px; padding: 6px 10px; } }
+.musg { padding: 10px 0; border-top: 1px solid var(--line); } .musg h3 { margin: 0 0 6px; }
+.musc { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 4px 0; } .musc audio { height: 32px; max-width: 260px; }
+.musg form input[name=url] { flex: 1; min-width: 200px; }
+/* шапка держави */
+.statehead { position: relative; overflow: hidden; padding: 0; }
+.shflag { position: absolute; inset: 0 0 auto 0; height: 10px; background-size: cover; background-position: center; }
+.shin { display: flex; gap: 18px; align-items: center; padding: 26px 18px 16px; }
+.shcoat { width: 96px; height: 96px; object-fit: contain; flex: none; filter: drop-shadow(0 2px 6px rgba(0,0,0,.2)); }
+.shtxt h1 { margin: 0 0 4px; font-size: clamp(1.4rem, 3.4vw, 2rem); } .shmotto { margin: 0 0 8px; font-style: italic; color: var(--muted); }
+.shflagmini { height: 26px; border-radius: 3px; border: 1px solid var(--line); }
+.statehead .planed { padding: 0 18px 14px; }
+.anthem audio { width: 100%; margin-bottom: 10px; } .antxt { line-height: 1.7; white-space: normal; }
+@media (max-width: 600px) { .shin { gap: 12px; padding: 22px 14px 12px; } .shcoat { width: 68px; height: 68px; } }
+/* історія: вікно картки */
+.srow2 { align-items: center; } .srow2 .flagbtn img { max-height: 28px; }
+.endpick { border: 1px solid var(--line); border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+.endpick legend { color: var(--muted); font-size: .9rem; padding: 0 4px; }
+.ebtn { display: inline-flex !important; gap: 6px; align-items: center; padding: 6px 12px; border-radius: 99px; border: 1px solid var(--line); cursor: pointer; color: var(--ink) !important; font-size: .9rem !important; }
+.ebtn input { width: auto !important; margin: 0; } .ebtn.on { border-color: var(--blue2); background: color-mix(in srgb, var(--blue2) 12%, var(--surface)); }
+.lrow { display: grid; grid-template-columns: 1fr 1.3fr .8fr .8fr auto; gap: 6px; margin-bottom: 6px; }
+@media (max-width: 600px) { .lrow { grid-template-columns: 1fr 1fr; } .lrow button { grid-column: 2; justify-self: end; } }
+.hnode { cursor: pointer; } .hinfo .hiflag { max-width: 160px; border-radius: 6px; border: 1px solid var(--line); margin-bottom: 8px; }
+@media (prefers-reduced-motion: reduce) { .sfx { display: none; } }
+/* економіка */
+.duelist { display: grid; gap: 6px; }
+.duerow { display: grid; grid-template-columns: minmax(160px, 1fr) 2fr auto auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--surface2); border-left: 4px solid var(--gold); }
+.duerow.late { border-left-color: var(--red); } .duerow.paid { border-left-color: var(--green); opacity: .85; }
+.duerow .who { display: flex; gap: 8px; align-items: center; color: var(--ink); min-width: 0; } .duerow .who b { overflow-wrap: anywhere; }
+.duerow .grow small { display: block; } .dueinfo { display: grid; justify-items: end; gap: 2px; text-align: right; }
+.tag.ok { background: color-mix(in srgb, var(--green) 16%, var(--surface)); } .tag.bad { background: color-mix(in srgb, var(--red) 16%, var(--surface)); color: var(--red); } .tag.warn { background: color-mix(in srgb, var(--gold) 26%, var(--surface)); }
+@media (max-width: 720px) { .duerow { grid-template-columns: 1fr auto; } .duerow .grow { grid-column: 1 / -1; grid-row: 2; } .duerow .dueinfo { justify-items: end; } .duerow .sact { grid-column: 1 / -1; justify-content: flex-start; } }
+/* паспорт */
+.ppimg { width: 100%; height: auto; border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,.18); margin-bottom: 10px; }
+.shguest { padding: 0 18px 18px; } .shguest p { margin-top: 0; }
