@@ -1,5 +1,5 @@
 // Головний файл: запуск, шапка, меню, маршрути й режим редагування.
-import { S, DEMO, B, initStore, onChange, loadDefaults, me, isAdmin, canEditAnything } from "./store.js";
+import { S, DEMO, B, initStore, onChange, loadDefaults, me, isAdmin, canEditAnything, unreadTotal } from "./store.js";
 import { t, LANGS, lang, setLang } from "./i18n.js";
 import { esc, avatar, run, toast } from "./ui.js";
 import * as home from "./pages/home.js";
@@ -46,7 +46,7 @@ function header() {
 }
 function nav() {
   return `<nav class="menu" aria-label="${esc(t("nav.main"))}">${NAV.map(([k, ic, l]) =>
-    `<a href="#/${k}" class="${R.page === k ? "act" : ""}"${R.page === k ? ' aria-current="page"' : ""}><span class="ic" aria-hidden="true">${ic}</span><span>${esc(t(l))}</span></a>`).join("")}</nav>`;
+    `<a href="#/${k}" class="${R.page === k ? "act" : ""}"${R.page === k ? ' aria-current="page"' : ""}><span class="ic" aria-hidden="true">${ic}</span><span>${esc(t(l))}</span>${k === "chat" && unreadTotal() ? `<span class="nbadge" aria-label="${esc(t("cht.unread"))}">${unreadTotal() > 99 ? "99+" : unreadTotal()}</span>` : ""}</a>`).join("")}</nav>`;
 }
 function demoBar() {
   if (!DEMO) return "";
@@ -60,8 +60,8 @@ function busyTyping() {
   const a = document.activeElement;
   return a && a.closest && a.closest("#main") && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && !a.dataset.live && a.type !== "checkbox";
 }
-export function render() {
-  if (busyTyping()) { pending = true; return; }
+export function render(force) {
+  if (!force && busyTyping()) { pending = true; return; }
   pending = false;
   const app = document.getElementById("app");
   document.documentElement.lang = lang();
@@ -95,7 +95,8 @@ document.addEventListener("change", e => {
   else if (s.dataset.act === "demo-user") B.demoSwitch(s.value);
 });
 
-window.addEventListener("hashchange", () => { const prev = R.page + "/" + R.parts.join("/"); parseRoute(); render(); if (prev.split("/")[0] !== R.page) window.scrollTo(0, 0); });
+// перехід на іншу сторінку малюємо завжди, навіть якщо курсор стоїть у полі вводу
+window.addEventListener("hashchange", () => { const prev = R.page + "/" + R.parts.join("/"); parseRoute(); render(true); if (prev.split("/")[0] !== R.page) window.scrollTo(0, 0); });
 
 (async function boot() {
   parseRoute();

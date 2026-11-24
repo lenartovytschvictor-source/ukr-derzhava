@@ -1,12 +1,12 @@
 // 🛠 Адмінпанель: гравці, адміни, перенесення зі старого сайту, журнал, резервна копія.
-import { S, B, OWNERS, isAdmin, isOwner, player, land, positionsOf, emailOf, log } from "../store.js";
+import { S, B, OWNERS, isAdmin, isOwner, player, land, positionsOf, emailOf, ms, log } from "../store.js";
 import { render as rerender } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, toast, confirmBox, fmtDate, normEmail, okEmail, profNum, today } from "../ui.js";
 import { tabs, empty, statusLabel, statusIcon } from "./common.js";
 import { playerForm } from "./people.js";
 
-const TABS = [["gravtsi", "👥", "ad.tab.players"], ["admins", "🛡", "ad.tab.admins"], ["perenesennya", "📦", "ad.tab.migrate"], ["zhurnal", "📒", "ad.tab.log"], ["kopiya", "💾", "ad.tab.backup"]];
+const TABS = [["gravtsi", "👥", "ad.tab.players"], ["admins", "🛡", "ad.tab.admins"], ["moderatsiya", "🔇", "ad.tab.mod"], ["perenesennya", "📦", "ad.tab.migrate"], ["zhurnal", "📒", "ad.tab.log"], ["kopiya", "💾", "ad.tab.backup"]];
 
 export function render(parts) {
   if (!S.user) return `<section class="card center"><p>${esc(t("pf.needLogin"))}</p><button type="button" class="primary" data-act="login">${esc(t("login"))}</button></section>`;
@@ -15,6 +15,7 @@ export function render(parts) {
   let h = `<h1 class="ptitle">🛠 ${esc(t("nav.admin"))}</h1>${tabs("admin", TABS, cur)}`;
   if (cur === "gravtsi") h += playersTab();
   else if (cur === "admins") h += adminsTab();
+  else if (cur === "moderatsiya") h += modTab();
   else if (cur === "perenesennya") h += migrateTab();
   else if (cur === "zhurnal") h += `<section class="card"><h2>${esc(t("ad.tab.log"))}</h2><div data-log>${esc(t("loading"))}</div></section>`;
   else h += backupTab();
@@ -40,6 +41,17 @@ function adminsTab() {
     <ul class="list">${OWNERS.map(e => `<li>🔒 ${esc(e)} <span class="tag">${esc(t("ad.owner"))}</span></li>`).join("")}
     ${S.admins.map(e => `<li>🛡 ${esc(e)} <button type="button" class="ghost sm danger" data-adrm="${esc(e)}">${esc(t("delete"))}</button></li>`).join("")}</ul>
     <form class="row" data-adadd><input type="email" name="email" required placeholder="name@gmail.com" aria-label="${esc(t("pl.email"))}"><button class="sm">+ ${esc(t("ad.addAdmin"))}</button></form></section>`;
+}
+
+// ---------- Модерація чатів ----------
+function modTab() {
+  const mods = S.chatCfg.mods || [];
+  const act = S.mutes.filter(m => ms(m.until) > Date.now());
+  return `<section class="card"><h2>🔇 ${esc(t("ad.mods"))}</h2><p class="hint">${esc(t("ad.modsHint"))}</p>
+    <ul class="list">${mods.map(id => `<li>${esc((player(id) || {}).name || id)} <button type="button" class="ghost sm danger" data-modrm="${esc(id)}">${esc(t("delete"))}</button></li>`).join("") || `<li class="hint">—</li>`}</ul>
+    <form class="row" data-modadd><select name="pid" required><option value="">—</option>${S.players.filter(p => !mods.includes(p.id)).sort((a, b) => a.name.localeCompare(b.name, "uk")).map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("")}</select><button class="sm">+ ${esc(t("ad.addMod"))}</button></form></section>
+  <section class="card"><h2>${esc(t("ad.mutes"))} <span class="badge">${act.length}</span></h2>${act.length ? `<ul class="list">${act.map(m => `<li><b>${esc((player(m.id) || {}).name || m.id)}</b> — ${esc(m.reason || "")} <small class="hint">${esc(t("ad.until", { x: fmtDate(m.until) }))} · ${esc((player(m.by) || {}).name || "")}</small> <button type="button" class="ghost sm" data-unmute="${esc(m.id)}">🔊 ${esc(t("cht.unmute"))}</button></li>`).join("")}</ul>` : empty(t("ad.noMutes"))}
+    <p class="hint">${esc(t("ad.dmNote"))}</p></section>`;
 }
 
 // ---------- Перенесення зі старого сайту ----------
@@ -113,7 +125,10 @@ async function migrateHistory() {
 }
 
 // ---------- Резервна копія ----------
-const COLS = ["ud_players", "ud_links", "ud_positions", "ud_config", "ud_texts", "ud_history", "ud_apps", "ud_log"];
+// особисті повідомлення в копію не потрапляють — адміни їх не читають
+const COLS = ["ud_players", "ud_links", "ud_positions", "ud_config", "ud_texts", "ud_history", "ud_apps", "ud_log",
+  "ud_bills", "ud_elections", "ud_states", "ud_treaties", "ud_places", "ud_codes", "ud_laws", "ud_law", "ud_cases", "ud_counters",
+  "ud_army", "ud_units", "ud_stars", "ud_awards", "ud_grants", "ud_church", "ud_clergy", "ud_parishes", "ud_holidays", "ud_mutes"];
 function backupTab() {
   return `<section class="card"><h2>💾 ${esc(t("ad.tab.backup"))}</h2><p>${esc(t("ad.backupHint"))}</p><button type="button" class="primary" data-backup>${esc(t("ad.backupRun"))}</button></section>`;
 }
@@ -121,6 +136,11 @@ function backupTab() {
 export function mount(root, parts) {
   const pa = root.querySelector("[data-padd]"); if (pa) pa.onclick = () => playerForm(null);
   root.querySelectorAll("[data-pedit]").forEach(b => b.onclick = () => playerForm(player(b.dataset.pedit)));
+  // модератори чатів
+  const mf = root.querySelector("[data-modadd]");
+  if (mf) mf.onsubmit = async e => { e.preventDefault(); const id = mf.pid.value; if (!id) return; if (await run(() => B.set("ud_config", "chat", { mods: [...(S.chatCfg.mods || []), id] }, true), t("saved"))) log("chat", `+ mod ${player(id).name}`); };
+  root.querySelectorAll("[data-modrm]").forEach(b => b.onclick = async () => { if (await run(() => B.set("ud_config", "chat", { mods: (S.chatCfg.mods || []).filter(x => x !== b.dataset.modrm) }, true), t("saved"))) log("chat", `− mod ${(player(b.dataset.modrm) || {}).name}`); });
+  root.querySelectorAll("[data-unmute]").forEach(b => b.onclick = async () => { if (await run(() => B.del("ud_mutes", b.dataset.unmute), t("saved"))) log("chat", `🔊 ${(player(b.dataset.unmute) || {}).name}`); });
   // адміни
   const af = root.querySelector("[data-adadd]");
   if (af) af.onsubmit = async e => {

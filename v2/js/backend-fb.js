@@ -33,7 +33,8 @@ export async function init() {
 }
 
 const ref = (c, id) => F.doc(db, c, id);
-const plain = s => s.exists() ? { id: s.id, ...s.data() } : null;
+// очікувані мітки часу (ще не підтверджені сервером) — оцінкою, щоб нове повідомлення одразу стало на місце
+const plain = s => s.exists() ? { id: s.id, ...s.data({ serverTimestamps: "estimate" }) } : null;
 
 export const get = async (c, id) => plain(await F.getDoc(ref(c, id)));
 export const list = async c => (await F.getDocs(F.collection(db, c))).docs.map(plain);
@@ -61,6 +62,10 @@ export function watch(c, cb, onErr) {
 }
 export function watchWhere(c, field, op, value, cb, onErr) {
   return F.onSnapshot(F.query(F.collection(db, c), F.where(field, op, value)), s => cb(s.docs.map(plain)), e => onErr && onErr(e));
+}
+// останні n документів за полем at (для чатів)
+export function watchLast(c, n, cb, onErr) {
+  return F.onSnapshot(F.query(F.collection(db, c), F.orderBy("at", "desc"), F.limit(n)), s => cb(s.docs.map(plain)), e => onErr && onErr(e));
 }
 export function watchDoc(c, id, cb, onErr) {
   return F.onSnapshot(ref(c, id), s => cb(plain(s)), e => onErr && onErr(e));

@@ -11,12 +11,13 @@ export const S = {
   bills: [], elections: [], states: [], treaties: [], chamber: {}, places: [],
   codes: [], laws: [], constitution: null, casesPub: [], casesPriv: [], caseCounter: null,
   army: [], units: [], ranksCfg: null, stars: [], awards: [], grants: [], church: null, clergy: [], parishes: [], holidays: [],
+  chat: {}, chatCfg: {}, mutes: [], dms: [], reads: {},
   myLink: null, myApp: null, err: "",
 };
 let renderCb = () => {};
 let raf = 0;
 export function onChange(cb) { renderCb = cb; }
-export function changed() { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; syncCaseWatch(); renderCb(); }); }
+export function changed() { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; syncCaseWatch(); syncChat(); renderCb(); }); }
 
 const unsub = [];
 function stopUserWatches() { while (unsub.length) { try { unsub.pop()(); } catch (_) {} } }
@@ -51,6 +52,9 @@ export async function initStore() {
   B.watch("ud_clergy", r => { S.clergy = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)); changed(); }, e => fail(e));
   B.watch("ud_parishes", r => { S.parishes = r.sort((a, b) => a.name.localeCompare(b.name, "uk")); changed(); }, e => fail(e));
   B.watch("ud_holidays", r => { S.holidays = r; changed(); }, e => fail(e));
+  // етап 6: чат
+  B.watchDoc("ud_config", "chat", d => { S.chatCfg = d || {}; changed(); });
+  B.watch("ud_mutes", r => { S.mutes = r; changed(); }, () => {});
   B.watchDoc("ud_counters", "cases", d => { S.caseCounter = d; changed(); });
   B.watchWhere("ud_cases", "closed", "==", false, r => { S.casesPub = r; changed(); }, e => fail(e));
   B.onAuth(u => { S.user = u; S.ready = true; userWatches(); changed(); });
@@ -81,6 +85,45 @@ function syncCaseWatch() {
   if (key === "all") caseUn = B.watch("ud_cases", r => { S.casesPriv = r; changed(); }, () => {});
   else if (key) caseUn = B.watchWhere("ud_cases", "parties", "array-contains", m.id, r => { S.casesPriv = r; changed(); }, () => {});
 }
+// ---------- Чат ----------
+// чат уряду: ці посади (новим посадам доступ треба дописати і тут, і в правилах бази)
+export const GOV = ["hetman", "pysar", "finance", "interior", "foreign", "defense", "press", "prosecutor"];
+export const isGov = () => isAdmin() || GOV.some(holds);
+export const isMod = () => isAdmin() || (!!me() && (S.chatCfg.mods || []).includes(me().id));
+export const muteOf = pid => S.mutes.find(m => m.id === pid && ms(m.until) > Date.now()) || null;
+// доступні канали: ключ → шлях до повідомлень
+export function channels() {
+  const m = me(), out = [];
+  if (!S.user) return out;
+  out.push({ key: "general", path: "ud_chat/general/msgs" });
+  if (m && m.land) out.push({ key: "land_" + m.land, path: `ud_chat/land_${m.land}/msgs`, land: m.land });
+  if (isGov()) out.push({ key: "gov", path: "ud_chat/gov/msgs" });
+  return out;
+}
+export const chatHooks = new Set();   // сторінка чату оновлює стрічку напряму, без перемальовування всієї сторінки
+let chatSubs = new Map(), dmKey = "", dmUn = null, readKey = "", readUn = null;
+function syncChat() {
+  const want = new Map(channels().map(c => [c.key, c.path]));
+  for (const [k, un] of chatSubs) if (!want.has(k)) { try { un(); } catch (_) {} chatSubs.delete(k); delete S.chat[k]; }
+  for (const [k, path] of want) if (!chatSubs.has(k)) chatSubs.set(k, B.watchLast(path, 150, r => { S.chat[k] = r.reverse(); chatHooks.forEach(f => f(k)); changed(); }, e => fail(e)));
+  const m = me(), pid = S.user && m ? m.id : "";
+  if (pid !== dmKey) {
+    if (dmUn) { try { dmUn(); } catch (_) {} } dmUn = null; S.dms = []; dmKey = pid;
+    if (pid) dmUn = B.watchWhere("ud_dms", "members", "array-contains", pid, r => { S.dms = r.sort((a, b) => ms(b.at) - ms(a.at)); chatHooks.forEach(f => f("dms")); changed(); }, () => {});
+  }
+  if (pid !== readKey) {
+    if (readUn) { try { readUn(); } catch (_) {} } readUn = null; S.reads = {}; readKey = pid;
+    if (pid) readUn = B.watchDoc("ud_reads", pid, d => { S.reads = d || {}; changed(); });
+  }
+}
+// непрочитані: повідомлення інших людей, новіші за мою позначку
+export function unread(key) {
+  const m = me(), seen = ms(S.reads[key]) || 0;
+  if (key.startsWith("dm_")) { const c = S.dms.find(x => "dm_" + x.id === key); return c && c.last && c.last.by !== (m && m.id) && ms(c.last.at) > seen ? 1 : 0; }
+  return (S.chat[key] || []).filter(x => x.by !== (m && m.id) && ms(x.at) > seen).length;
+}
+export const unreadTotal = () => channels().reduce((n, c) => n + unread(c.key), 0) + S.dms.reduce((n, c) => n + unread("dm_" + c.id), 0);
+
 export const cases = () => { const M = new Map(); [...S.casesPub, ...S.casesPriv].forEach(c => M.set(c.id, c)); return [...M.values()]; };
 
 // ---------- хто є хто ----------

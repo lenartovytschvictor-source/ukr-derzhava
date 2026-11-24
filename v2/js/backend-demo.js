@@ -1,6 +1,6 @@
 // Демо-режим (?demo=1): усе зберігається лише в цьому браузері, база не потрібна.
 // Потрібен, щоб подивитися сайт без входу і щоб перевіряти його під час розробки.
-const KEY = "ud2-demo-v5";
+const KEY = "ud2-demo-v6";
 const OWNER = "lenartovytsch.victor@gmail.com";
 export const isDemo = true;
 
@@ -76,7 +76,7 @@ function seed() {
   ] };
   return {
     ud_players: players, ud_links: links, ud_positions: positions,
-    ud_config: { admins: { emails: [] } },
+    ud_config: { admins: { emails: [] }, chat: { mods: ["p3"] } },
     ud_bills: bills, "ud_bills/b1/votes": { p6: { v: "for", seat: "seat_volyn", at: T0 - H }, p3: { v: "against", seat: "seat_halych", at: T0 - H }, p7: { v: "for", seat: "seat_prychornomor", at: T0 - H } },
     "ud_bills/b3/signs": { p4: { at: T0 - 40 * H }, p7: { at: T0 - 20 * H } },
     "ud_bills/b2/cmts": { c1: { by: "p3", text: "Підтримую, але звіт раз на два тижні.", at: T0 - 3 * H } },
@@ -91,6 +91,18 @@ function seed() {
     ud_law: { constitution: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.\nСтаття 2. Державна мова — українська.\n\n# Розділ II. Гетьман\nСтаття 3. Гетьман є главою держави.\nСтаття 4. Нові вибори Гетьмана ініціює Палата Земель.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
     "ud_law/constitution/hist": { v1: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
     ud_counters: { cases: { n: 2 } },
+    "ud_chat/general/msgs": {
+      m1: { by: "p2", text: "Слава Україні! Вітаю всіх у новому чаті.", at: T0 - 3 * H },
+      m2: { by: "p8", text: "Hello everyone, greetings from Europe!", at: T0 - 2 * H },
+      m3: { by: "p4", text: "@Олександр дякуємо! Посилання на карту: https://dragpolit.com", at: T0 - 2 * H + 60e3 },
+      m4: { by: "p4", text: "Хто сьогодні на оборону Харкова?", at: T0 - 2 * H + 120e3 },
+      m5: { by: "p7", text: "@Віктор глянь, будь ласка, заявку.", at: T0 - 20 * 60e3 },
+    },
+    "ud_chat/land_sloboda/msgs": { s1: { by: "p4", text: "Слобожани, збір о 20:00.", at: T0 - H } },
+    "ud_chat/land_kyiv/msgs": { k1: { by: "p9", text: "Служба в Софійському соборі в неділю.", at: T0 - 5 * H } },
+    "ud_chat/gov/msgs": { g1: { by: "p2", text: "Засідання уряду завтра о 19:00.", at: T0 - 4 * H } },
+    ud_dms: { "p1__p4": { members: ["p1", "p4"], at: T0 - 30 * 60e3, last: { by: "p4", text: "Привіт! Можна питання щодо прописки?", at: T0 - 30 * 60e3 } } },
+    "ud_dms/p1__p4/msgs": { d1: { by: "p4", text: "Привіт! Можна питання щодо прописки?", at: T0 - 30 * 60e3 } },
     ud_units: {
       polk: { name: "1-й Слобідський полк", color: "#2e5aac", emblem: "", commander: "p6", parent: "", desc: "Основна частина війська на сході.", order: 0 },
       sotnia1: { name: "Харківська сотня", color: "#c0392b", emblem: "", commander: "p4", parent: "polk", desc: "", order: 1 },
@@ -135,7 +147,7 @@ function emit(c, id) {
   for (const s of subs) {
     if (s.c !== c) continue;
     if (s.id) { if (s.id === id) s.cb(col(c)[id] ? { id, ...clone(col(c)[id]) } : null); }
-    else s.cb(s.f ? rows(c).filter(s.f) : rows(c));
+    else s.cb(s.tf ? s.tf(rows(c)) : s.f ? rows(c).filter(s.f) : rows(c));
   }
 }
 // вибірка за умовою (як where у Firestore): op — "==" або "array-contains"
@@ -192,6 +204,7 @@ export async function batch(ops) {
 }
 export function watch(c, cb) { const s = { c, cb }; subs.push(s); setTimeout(() => cb(rows(c)), 0); return () => subs.splice(subs.indexOf(s), 1); }
 export function watchWhere(c, field, op, value, cb) { const s = { c, cb, f: cond(field, op, value) }; subs.push(s); setTimeout(() => cb(rows(c).filter(s.f)), 0); return () => subs.splice(subs.indexOf(s), 1); }
+export function watchLast(c, n, cb) { const s = { c, cb, tf: r => r.sort((a, b) => (b.at || 0) - (a.at || 0)).slice(0, n) }; subs.push(s); setTimeout(() => cb(s.tf(rows(c))), 0); return () => subs.splice(subs.indexOf(s), 1); }
 export function watchDoc(c, id, cb) { const s = { c, id, cb }; subs.push(s); setTimeout(() => cb(col(c)[id] ? { id, ...clone(col(c)[id]) } : null), 0); return () => subs.splice(subs.indexOf(s), 1); }
 
 export function onAuth(cb) { authSubs.push(cb); setTimeout(() => cb(USER), 0); }
