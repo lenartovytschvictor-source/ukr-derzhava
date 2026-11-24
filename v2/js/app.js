@@ -30,6 +30,17 @@ function parseRoute() {
 }
 export function go(path) { location.hash = "#/" + path; }
 
+// герб держави: свій (з налаштувань сайту) — у шапці, на екрані завантаження й на вкладці браузера.
+// Запам'ятовуємо його в браузері, щоб уже під час завантаження був новий герб, а не стандартний.
+const cachedCoat = () => { try { return localStorage.getItem("ud2-coat") || ""; } catch (_) { return ""; } };
+const bootCoat = () => (S.site && S.site.coat) || cachedCoat() || asset("img/gerb-192.png");
+function syncCoat() {
+  const c = S.site && S.site.coat; if (!S.siteLoaded) return;
+  try { if (c && localStorage.getItem("ud2-coat") !== c) localStorage.setItem("ud2-coat", c); else if (!c) localStorage.removeItem("ud2-coat"); } catch (_) {}
+  const ic = document.querySelector("link[rel=icon]"), want = c || asset("img/gerb-192.png");
+  if (ic && ic.getAttribute("href") !== want) ic.setAttribute("href", want);
+}
+
 // ---------- шапка й меню ----------
 function header() {
   const u = S.user, m = me();
@@ -39,7 +50,7 @@ function header() {
     ? `<a class="me" href="#/profil" title="${esc(t("nav.profile"))}">${avatar(m || { name: u.name || u.email }, "av sm")}</a>`
     : `<button type="button" class="primary sm" data-act="login">${esc(t("login.short"))}</button>`;
   return `<header class="top">
-    <a class="brand" href="#/"><img src="${esc((S.site && S.site.coat) || asset("img/gerb-192.png"))}" alt="" width="36" height="36"><span><b>${esc(t("site.name"))}${{ hw: " 🎃", xm: " 🎄" }[seasonNow()] || ""}</b><small>${esc(t("site.sub"))}</small></span></a>
+    <a class="brand" href="#/"><img src="${esc(bootCoat())}" alt="" width="36" height="36"><span><b>${esc(t("site.name"))}${{ hw: " 🎃", xm: " 🎄" }[seasonNow()] || ""}</b><small>${esc(t("site.sub"))}</small></span></a>
     <div class="tools">
       ${editBtn}
       <label class="langsel"><span class="sr">${esc(t("lang"))}</span><select data-act="lang" aria-label="${esc(t("lang"))}">${LANGS.map(([k, l]) => `<option value="${k}"${k === lang() ? " selected" : ""} title="${l}">${k.toUpperCase()}</option>`).join("")}</select></label>
@@ -69,7 +80,7 @@ export function render(force) {
   const app = document.getElementById("app");
   document.documentElement.lang = lang();
   document.body.classList.toggle("editing", EDIT);
-  if (!S.ready) { app.innerHTML = `<div class="boot"><img src="${asset("img/gerb-192.png")}" alt="" width="96" height="96"><p>${esc(t("loading"))}</p></div>`; return; }
+  if (!S.ready) { app.innerHTML = `<div class="boot"><img src="${esc(bootCoat())}" alt="" width="96" height="96"><p>${esc(t("loading"))}</p></div>`; return; }
   const P = PAGES[R.page] || home;
   let body;
   try { body = P.render(R.parts); } catch (e) { console.error(e); body = `<div class="card err">${esc(t("err.render"))} ${esc(e.message)}</div>`; }
@@ -80,6 +91,7 @@ export function render(force) {
     <footer class="foot">${esc(t("site.name"))} · DragPolit</footer>`;
   if (P.mount) try { P.mount(document.getElementById("main"), R.parts); } catch (e) { console.error(e); }
   try { applySeason(); } catch (e) { console.error(e); }
+  syncCoat();
   window.scrollTo(0, y);
 }
 document.addEventListener("focusout", () => { if (pending) setTimeout(() => { if (!busyTyping() && pending) render(); }, 50); });
@@ -113,6 +125,6 @@ window.addEventListener("hashchange", () => { const prev = R.page + "/" + R.part
     await initStore();
   } catch (e) {
     console.error(e);
-    document.getElementById("app").innerHTML = `<div class="boot"><img src="${asset("img/gerb-192.png")}" alt="" width="96" height="96"><p>${esc(t("err.boot"))}</p><p class="hint">${esc(String(e.message || e))}</p></div>`;
+    document.getElementById("app").innerHTML = `<div class="boot"><img src="${esc(bootCoat())}" alt="" width="96" height="96"><p>${esc(t("err.boot"))}</p><p class="hint">${esc(String(e.message || e))}</p></div>`;
   }
 })();

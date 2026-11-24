@@ -8,9 +8,10 @@ import { tabs, soon, txt, empty, statusLabel, statusIcon } from "./common.js";
 import * as army from "./army.js";
 import * as awards from "./awards.js";
 import * as church from "./church.js";
+import * as fame from "./fame.js";
 import { soldier, serviceDays, rankOf, nextRank } from "../store.js";
 
-const TABS = [["gromadyany", "🪪", "pp.tab.citizens"], ["viysko", "🎖", "pp.tab.army"], ["nagorody", "🏅", "pp.tab.awards"], ["tserkva", "⛪", "pp.tab.church"], ["istoriya", "📜", "pp.tab.history"]];
+const TABS = [["gromadyany", "🪪", "pp.tab.citizens"], ["viysko", "🎖", "pp.tab.army"], ["nagorody", "🏅", "pp.tab.awards"], ["tserkva", "⛪", "pp.tab.church"], ["slava", "🏛", "hf.tab"], ["istoriya", "📜", "pp.tab.history"]];
 let F = { st: "cit", land: "" };   // фільтри реєстру
 
 export function render(parts) {
@@ -21,6 +22,7 @@ export function render(parts) {
   else if (cur === "istoriya") h += history();
   else if (cur === "viysko") h += army.render(parts);
   else if (cur === "nagorody") h += awards.render(parts);
+  else if (cur === "slava") h += fame.render(parts);
   else h += church.render(parts);
   return h;
 }

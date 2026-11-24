@@ -10,6 +10,7 @@ import * as diplo from "./diplo.js";
 import * as map from "./map.js";
 import * as economy from "./economy.js";
 import * as calendar from "./calendar.js";
+import { govBlock, mountGov } from "./govvote.js";
 
 const TABS = [["vlada", "👑", "st.tab.power"], ["palata", "🏛", "st.tab.chamber"], ["vybory", "🗳", "st.tab.elections"], ["ekonomika", "💰", "st.tab.economy"], ["kalendar", "🗓", "cal.tab"], ["karta", "🗺", "st.tab.map"], ["dyplomatiya", "🤝", "st.tab.diplo"]];
 
@@ -66,6 +67,7 @@ function power() {
   const gov = S.positions.filter(p => p.id !== "hetman" && !p.chamber && !p.land && !p.court && !p.church);
   if (het) h += `<section class="card hetman">${posCard(het, true)}</section>`;
   h += emergencyCard();
+  h += govBlock();
   h += `<section class="card"><h2>${esc(t("pw.gov"))}</h2><div class="pgrid">${gov.map(p => posCard(p)).join("")}</div>
     ${EDIT && isAdmin() ? `<form class="row addpos" data-padd><input type="text" name="title" maxlength="80" placeholder="${esc(t("pw.newTitle"))}" required><button class="sm">+ ${esc(t("pw.add"))}</button></form>` : ""}</section>`;
   return h;
@@ -114,6 +116,7 @@ export function mount(root, parts) {
     const order = Math.max(0, ...S.positions.map(p => p.order || 0)) + 1;
     if (await run(() => B.set("ud_positions", B.newId("ud_positions"), { title, order, appointBy: "hetman", holder: "" }), t("saved"))) log("position", `+ ${title}`);
   };
+  mountGov(root);
   const eo = root.querySelector("[data-emon]");
   if (eo) eo.onsubmit = async e => {
     e.preventDefault(); const days = Math.max(1, Math.min(30, parseInt(eo.days.value, 10) || 7)), m = me();

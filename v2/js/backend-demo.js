@@ -1,6 +1,6 @@
 // Демо-режим (?demo=1): усе зберігається лише в цьому браузері, база не потрібна.
 // Потрібен, щоб подивитися сайт без входу і щоб перевіряти його під час розробки.
-const KEY = "ud2-demo-v9";
+const KEY = "ud2-demo-v10";
 const OWNER = "lenartovytsch.victor@gmail.com";
 export const isDemo = true;
 
@@ -96,6 +96,10 @@ function seed() {
     ud_law: { constitution: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.\nСтаття 2. Державна мова — українська.\n\n# Розділ II. Гетьман\nСтаття 3. Гетьман є главою держави.\nСтаття 4. Нові вибори Гетьмана ініціює Палата Земель.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
     "ud_law/constitution/hist": { v1: { text: "# Розділ I. Загальні засади\nСтаття 1. Українська Держава є суверенною державою гравців DragPolit.", basis: "", ver: 1, by: "p1", at: T0 - 90 * H } },
     ud_counters: { cases: { n: 2 }, protocols: { n: 1 } },
+    ud_govvotes: { gv1: { title: "Виділити 100 000 срібла на флот", text: "Кошти з казни на 5 кораблів.", by: "p2", at: T0 - 3 * H, end: T0 + 20 * H, closed: false },
+      gv2: { title: "Перенести засідання уряду на суботу", text: "", by: "p6", at: T0 - 50 * H, end: T0 - 26 * H, closed: false } },
+    "ud_govvotes/gv1/votes": { p2: { v: "for", at: T0 - 2 * H }, p5: { v: "against", at: T0 - H } },
+    "ud_govvotes/gv2/votes": { p2: { v: "for", at: T0 - 40 * H }, p6: { v: "for", at: T0 - 40 * H }, p3: { v: "against", at: T0 - 40 * H } },
     ud_eparchies: { e1: { name: "Київська єпархія", img: "", bishop: "p9", lands: ["kyiv", "kyivska"], order: 0 } },
     ud_chdocs: { m1: { kind: "msg", no: 0, title: "Послання до Дня Святого Миколая", text: "Дорогі браття й сестри! Вітаю вас із наближенням свята.\n\nБережіть одне одного.", by: "p9", at: T0 - 6 * H },
       d1: { kind: "dec", no: 1, title: "Про церковний календар", text: "Затвердити церковний календар на 2026–2027 роки.", by: "p9", at: T0 - 30 * H } },

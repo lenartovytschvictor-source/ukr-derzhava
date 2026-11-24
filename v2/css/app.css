@@ -542,3 +542,16 @@ a.cev:hover { text-decoration: none; background: color-mix(in srgb, var(--blue2)
 
 /* листя, сніг і дощ — лише на тлі: картки, шапка й меню над ними */
 #main > *, .foot { position: relative; z-index: 2; }
+/* голосування Уряду, Зала слави */
+.gvcard { padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface2); margin: 10px 0; }
+.gvcard.done { opacity: .9; } .gvcard .billtext { margin: 6px 0; }
+.famegrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.famegrid > .card { margin: 0; }
+.fmlist { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.fmlist li { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 10px; background: var(--surface2); }
+.fmlist li.podium { background: color-mix(in srgb, var(--gold) 14%, var(--surface2)); }
+.fmlist .fmn { width: 28px; text-align: center; font-weight: 700; flex: none; }
+.fmlist .who { display: flex; align-items: center; gap: 8px; color: inherit; min-width: 0; } .fmlist .who b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fmlist .grow { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fmv { flex: none; }
+.pcard.cur { outline: 2px solid var(--gold); }

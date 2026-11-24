@@ -13,7 +13,7 @@ export const S = {
   army: [], units: [], ranksCfg: null, stars: [], awards: [], grants: [], church: null, clergy: [], parishes: [], holidays: [],
   chat: {}, chatCfg: {}, mutes: [], dms: [], reads: {},
   news: [], plan: null, botCfg: {}, tgLink: null, symbols: [], dues: [],
-  eparchies: [], chdocs: [], protocols: [], lawyers: [],
+  eparchies: [], chdocs: [], protocols: [], lawyers: [], govvotes: [],
   myLink: null, myApp: null, err: "",
 };
 let renderCb = () => {};
@@ -32,7 +32,7 @@ export async function initStore() {
   B.watch("ud_positions", r => { S.positions = r.sort((a, b) => (a.order ?? 99) - (b.order ?? 99)); changed(); }, e => fail(e));
   B.watch("ud_texts", r => { S.texts = Object.fromEntries(r.map(x => [x.id, x])); changed(); }, e => fail(e));
   B.watchDoc("ud_config", "lands", d => { S.lands = d && Array.isArray(d.list) ? d.list : null; changed(); });
-  B.watchDoc("ud_config", "site", d => { S.site = d || {}; changed(); });
+  B.watchDoc("ud_config", "site", d => { S.site = d || {}; S.siteLoaded = true; changed(); });
   B.watchDoc("ud_history", "main", d => { S.history = d; changed(); });
   B.watch("ud_bills", r => { S.bills = r; changed(); }, e => fail(e));
   B.watch("ud_elections", r => { S.elections = r; changed(); }, e => fail(e));
@@ -75,7 +75,7 @@ function fail(e) { console.warn(e); S.err = String(e && e.message || e); changed
 // дані, які залежать від того, хто увійшов
 function userWatches() {
   stopUserWatches();
-  S.myLink = null; S.myApp = null; S.links = []; S.apps = []; S.admins = [];
+  S.myLink = null; S.myApp = null; S.links = []; S.apps = []; S.admins = []; S.govvotes = [];
   const u = S.user;
   if (!u) return;
   unsub.push(B.watchDoc("ud_links", u.email, d => { S.myLink = d; changed(); }, () => {}));
@@ -84,6 +84,8 @@ function userWatches() {
   // реєстр пошт і заявки бачать лише ті, хто веде реєстр (правила не віддадуть іншим)
   unsub.push(B.watch("ud_links", r => { S.links = r; changed(); }, () => { S.links = []; }));
   unsub.push(B.watch("ud_apps", r => { S.apps = r; changed(); }, () => { S.apps = []; }));
+  // голосування Уряду бачать лише члени Уряду й адміни (іншим база відмовить — тоді список порожній)
+  unsub.push(B.watch("ud_govvotes", r => { S.govvotes = r; changed(); }, () => { S.govvotes = []; }));
 }
 
 // Суд: відкриті справи бачать усі; закриті — лише учасники й судові посадовці (так само в правилах бази)
