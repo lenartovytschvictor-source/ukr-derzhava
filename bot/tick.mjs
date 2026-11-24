@@ -216,6 +216,11 @@ async function personal(D) {
       for (const m of msgs) for (const p of linked) if (p.id !== m.by && String(m.text || "").includes("@" + p.name))
         out.push({ pid: p.id, key: `mn:${ch}:${m.id}:${p.id}`, text: `💬 ${H(name(D, m.by))} згадав вас у чаті «${H(title)}»:\n«${H(short(m.text, 200))}»` });
     }
+    // нове голосування Уряду — усім членам Уряду, крім автора
+    const GOV = ["hetman", "pysar", "finance", "interior", "foreign", "defense", "press", "prosecutor"];
+    const govIds = [...new Set(D.positions.filter(p => GOV.includes(p.id) && p.holder).map(p => p.holder))];
+    for (const v of D.govvotes || []) if (ms(v.at) > since && !v.closed)
+      for (const pid of govIds) if (pid !== v.by) out.push({ pid, key: `gv:${v.id}:${pid}`, text: `🗳 <b>Голосування Уряду</b>: «${H(v.title)}»\nДо ${H(kyiv(v.end))}\n\n${link("derzhava/vlada", "Проголосувати")}` });
     // внески: нове нагадування і «термін завтра/сьогодні» (один раз)
     for (const x of D.dues || []) {
       if (x.status !== "open") continue;
@@ -279,7 +284,7 @@ async function scrub() {
 const D = {};
 for (const c of ["players", "positions", "bills", "elections", "news", "laws", "codes", "awards", "grants", "stars", "states", "treaties", "holidays"]) D[c] = await all("ud_" + c);
 D.cases = await all("ud_cases"); D.dms = await all("ud_dms"); D.dues = await all("ud_dues");
-D.chdocs = await all("ud_chdocs");
+D.chdocs = await all("ud_chdocs"); D.govvotes = await all("ud_govvotes");
 for (const [label, fn] of [["Таймери", () => timers(D)], ["Дії законів", () => effects(D)], ["Стан", async () => { D.site = (await one("ud_config", "site")) || {}; }], ["Прибирання", scrub], ["Telegram", () => telegram(D)], ["Особисті", () => personal(D)], ["Копія", backup]]) {
   try { await fn(); } catch (err) { say(`${label}: помилка — ${err.message}`); }
 }
