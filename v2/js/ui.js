@@ -99,3 +99,6 @@ export const today = () => { const d = new Date(); return `${String(d.getDate())
 export const normEmail = s => String(s || "").trim().toLowerCase();
 export const okEmail = s => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normEmail(s));
 export const profNum = s => { const m = String(s || "").match(/(\d{1,7})\s*\/?\s*$/); return m ? m[1] : ""; };
+
+// шлях до файлу сайту (картинки, дані) — працює і з /v2/, і з кореня домену
+export const asset = p => new URL("../" + p, import.meta.url).href;

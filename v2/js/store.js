@@ -210,7 +210,7 @@ export const emailOf = pid => { const l = S.links.find(x => x.pid === pid); retu
 // землі: з бази, а поки їх не збережено — з плану (data/lands-default.json)
 let LANDS_DEFAULT = [];
 export async function loadDefaults() {
-  try { LANDS_DEFAULT = await (await fetch("data/lands-default.json")).json(); } catch (_) {}
+  try { LANDS_DEFAULT = await (await fetch(new URL("../data/lands-default.json", import.meta.url))).json(); } catch (_) {}
 }
 export const lands = () => S.lands || LANDS_DEFAULT;
 export const landsFromPlan = () => LANDS_DEFAULT;

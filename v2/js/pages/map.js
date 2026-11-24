@@ -1,5 +1,6 @@
 // 🗺 Карта: 9 земель і Київ, сторінка землі з Осавулом, представником у Палаті, уділами (джури) і містами (війти).
 // Уділ або місто = документ ud_places + посада pl_<id> у Сотенній лаві Палати, яку призначає Крайовий Осавул.
+import { asset } from "../ui.js";
 import { meetsRank, S, B, me, pos, player, lands, land, landsFromPlan, canLands, canAppoint, canPlaces, isAdmin, isCitizen, log, changed } from "../store.js";
 import { EDIT } from "../app.js";
 import { t } from "../i18n.js";
@@ -10,7 +11,7 @@ let GEO = null, geoLoading = false;
 function geo() {
   if (!GEO && !geoLoading) {
     geoLoading = true;
-    fetch("data/map-lands.json").then(r => r.json()).then(d => { GEO = d; changed(); }).catch(() => { geoLoading = false; });
+    fetch(asset("data/map-lands.json")).then(r => r.json()).then(d => { GEO = d; changed(); }).catch(() => { geoLoading = false; });
   }
   return GEO;
 }

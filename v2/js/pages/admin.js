@@ -1,4 +1,5 @@
 // 🛠 Адмінпанель: гравці, адміни, перенесення зі старого сайту, журнал, резервна копія.
+import { asset } from "../ui.js";
 import { S, B, OWNERS, isAdmin, isOwner, me, player, land, positionsOf, emailOf, ms, log } from "../store.js";
 import { render as rerender } from "../app.js";
 import { t } from "../i18n.js";
@@ -127,7 +128,7 @@ async function migrateHistory() {
   let h = null;
   const s = await B.get("site", "state");
   if (s && s.json) { try { h = (JSON.parse(s.json).sections || []).find(x => x.kind === "history") || null; } catch (_) {} }
-  if (!h || !(h.tree || []).length) h = await (await fetch("data/history-default.json")).json();
+  if (!h || !(h.tree || []).length) h = await (await fetch(asset("data/history-default.json"))).json();
   const tree = await Promise.all((h.tree || []).map(async n => ({ ...n, img: await resolveImg(n.img || "") })));
   const doc = { tree, events: h.events || [], at: B.now(), by: (me() && me().id) || "admin" };
   if (Array.isArray(h.arrows)) doc.arrows = h.arrows;

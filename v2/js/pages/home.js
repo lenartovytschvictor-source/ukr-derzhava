@@ -1,4 +1,5 @@
 // 🏠 Головна: (для нового відвідувача — привітання) · Влада зараз · Новини · Що зараз відбувається · План розвитку · Найближчі свята.
+import { asset } from "../ui.js";
 import { S, B, pos, player, me, isAdmin, isHetman, holds, cases, ms, log } from "../store.js";
 import { EDIT } from "../app.js";
 import { t } from "../i18n.js";
@@ -50,7 +51,7 @@ export function render() {
   let h = "";
   if (!u || !m) {
     h += `<section class="hero card">
-      <img src="img/gerb-192.png" alt="" width="88" height="88">
+      <img src="${asset("img/gerb-192.png")}" alt="" width="88" height="88">
       <div><h1>${esc(t("home.title"))}</h1>${txt("home", "intro", t("home.intro"))}
       <div class="row">${!u ? `<button type="button" class="primary" data-act="login">${esc(t("login"))}</button>` : `<a class="btn primary" href="#/profil">${esc(t("home.join"))}</a>`}
       <a class="btn ghost" href="#/narod/istoriya">${esc(t("home.history"))}</a></div></div></section>`;

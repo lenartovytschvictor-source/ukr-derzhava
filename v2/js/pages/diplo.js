@@ -1,4 +1,5 @@
 // 🤝 Дипломатія: держави, з якими є відносини, і угоди зі строками дії.
+import { asset } from "../ui.js";
 import { S, B, canDiplo, ms, log } from "../store.js";
 import { EDIT } from "../app.js";
 import { t } from "../i18n.js";
@@ -85,7 +86,7 @@ export function mount(root) {
   root.querySelectorAll("[data-tedit]").forEach(b => b.onclick = () => treatyForm(S.treaties.find(x => x.id === b.dataset.tedit)));
   const sd = root.querySelector("[data-dseed]");
   if (sd) sd.onclick = async () => {
-    const d = await (await fetch("data/diplo-seed.json")).json();
+    const d = await (await fetch(asset("data/diplo-seed.json"))).json();
     const ops = [...d.states.map(({ id, ...v }) => ({ op: "set", c: "ud_states", id, v: { flag: "", ...v } })), ...d.treaties.map(({ id, ...v }) => ({ op: "set", c: "ud_treaties", id, v }))];
     if (await run(() => B.batch(ops), t("saved"))) log("diplo", t("dp.seed"));
   };

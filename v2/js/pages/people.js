@@ -1,4 +1,5 @@
 // 👥 Народ: Громадяни · Військо · Церква · Історія УД (+ сторінка гравця)
+import { asset } from "../ui.js";
 import { S, B, player, me, lands, land, positionsOf, canPlayers, canHistory, canAppoint, emailOf, log } from "../store.js";
 import { EDIT, render as rerender, go } from "../app.js";
 import { t } from "../i18n.js";
@@ -147,7 +148,7 @@ function hist() {
 }
 function ensureDefault() {
   if (HD || S.history) return;
-  fetch("data/history-default.json").then(r => r.json()).then(d => { HD = d; rerender(); }).catch(() => {});
+  fetch(asset("data/history-default.json")).then(r => r.json()).then(d => { HD = d; rerender(); }).catch(() => {});
 }
 function placeNodes(tree) {
   let y = 0;

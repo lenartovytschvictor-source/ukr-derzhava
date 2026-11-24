@@ -1,4 +1,5 @@
 // Головний файл: запуск, шапка, меню, маршрути й режим редагування.
+import { asset } from "./ui.js";
 import { S, DEMO, B, initStore, onChange, loadDefaults, me, isAdmin, canEditAnything, unreadTotal } from "./store.js";
 import { t, LANGS, lang, setLang } from "./i18n.js";
 import { esc, avatar, run, toast } from "./ui.js";
@@ -37,7 +38,7 @@ function header() {
     ? `<a class="me" href="#/profil" title="${esc(t("nav.profile"))}">${avatar(m || { name: u.name || u.email }, "av sm")}</a>`
     : `<button type="button" class="primary sm" data-act="login">${esc(t("login.short"))}</button>`;
   return `<header class="top">
-    <a class="brand" href="#/"><img src="img/gerb-192.png" alt="" width="36" height="36"><span><b>${esc(t("site.name"))}</b><small>${esc(t("site.sub"))}</small></span></a>
+    <a class="brand" href="#/"><img src="${asset("img/gerb-192.png")}" alt="" width="36" height="36"><span><b>${esc(t("site.name"))}</b><small>${esc(t("site.sub"))}</small></span></a>
     <div class="tools">
       ${editBtn}
       <label class="langsel"><span class="sr">${esc(t("lang"))}</span><select data-act="lang" aria-label="${esc(t("lang"))}">${LANGS.map(([k, l]) => `<option value="${k}"${k === lang() ? " selected" : ""} title="${l}">${k.toUpperCase()}</option>`).join("")}</select></label>
@@ -67,7 +68,7 @@ export function render(force) {
   const app = document.getElementById("app");
   document.documentElement.lang = lang();
   document.body.classList.toggle("editing", EDIT);
-  if (!S.ready) { app.innerHTML = `<div class="boot"><img src="img/gerb-192.png" alt="" width="96" height="96"><p>${esc(t("loading"))}</p></div>`; return; }
+  if (!S.ready) { app.innerHTML = `<div class="boot"><img src="${asset("img/gerb-192.png")}" alt="" width="96" height="96"><p>${esc(t("loading"))}</p></div>`; return; }
   const P = PAGES[R.page] || home;
   let body;
   try { body = P.render(R.parts); } catch (e) { console.error(e); body = `<div class="card err">${esc(t("err.render"))} ${esc(e.message)}</div>`; }
@@ -108,6 +109,6 @@ window.addEventListener("hashchange", () => { const prev = R.page + "/" + R.part
     await initStore();
   } catch (e) {
     console.error(e);
-    document.getElementById("app").innerHTML = `<div class="boot"><img src="img/gerb-192.png" alt="" width="96" height="96"><p>${esc(t("err.boot"))}</p><p class="hint">${esc(String(e.message || e))}</p></div>`;
+    document.getElementById("app").innerHTML = `<div class="boot"><img src="${asset("img/gerb-192.png")}" alt="" width="96" height="96"><p>${esc(t("err.boot"))}</p><p class="hint">${esc(String(e.message || e))}</p></div>`;
   }
 })();
