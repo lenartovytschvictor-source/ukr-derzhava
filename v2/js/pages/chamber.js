@@ -4,7 +4,7 @@ import { S, B, me, player, pos, lands, seats, mySeat, isAdmin, isHetman, isCitiz
 import { EDIT, go } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, confirmBox, toast, fmtDate } from "../ui.js";
-import { txt, empty, paras, holderSel, bindHolders } from "./common.js";
+import { txt, empty, paras, holderSel, bindHolders, symHtml } from "./common.js";
 
 // законопроєкт: signatures (петиція збирає підписи) → discussion → voting → passed / rejected → signed / vetoed
 const ST = { signatures: "✍️", discussion: "💬", voting: "🗳", passed: "✅", rejected: "❌", signed: "📜", vetoed: "⛔", withdrawn: "↩️" };
@@ -43,7 +43,8 @@ export function render(parts) {
 // ---------- Палата: склад + списки ----------
 function seatRow(p) {
   const pl = player(p.holder);
-  return `<div class="seat">${avatar(pl || { name: "?" }, "av md")}<span><small>${esc(p.title)}</small>${EDIT && isAdmin() ? holderSel(p, p.land) : `<b>${pl ? `<a href="#/narod/gravets/${esc(pl.id)}">${esc(pl.name)}</a>` : `<i class="vac">${esc(t("vacant"))}</i>`}</b>`}</span>
+  const sy = p.place ? symHtml("place_" + p.place, "sm") : p.land ? symHtml("land_" + p.land, "sm") : "";
+  return `<div class="seat">${avatar(pl || { name: "?" }, "av md")}<span><small>${sy}${esc(p.title)}</small>${EDIT && isAdmin() ? holderSel(p, p.land) : `<b>${pl ? `<a href="#/narod/gravets/${esc(pl.id)}">${esc(pl.name)}</a>` : `<i class="vac">${esc(t("vacant"))}</i>`}</b>`}</span>
     ${EDIT && isAdmin() ? `<button type="button" class="ghost sm danger" data-sdel="${esc(p.id)}" aria-label="${esc(t("delete"))}">✕</button>` : ""}</div>`;
 }
 function overview() {

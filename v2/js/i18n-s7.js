@@ -1,6 +1,7 @@
 // Переклади етапу 7: головна, новини, план розвитку, профіль (справи, Telegram), бот.
 export const S7 = {
 uk: {
+  "sy.coat": "Герб", "sy.flag": "Прапор", "sy.upload": "Завантажити", "sy.change": "Змінити", "sy.both": "Герб і прапор", "sy.done": "Готово",
   "pw.residents": "Прописані в землі", "pw.others": "Інші громадяни", "ch.appointHint": "Людей на місця призначають вибори (Держава → Вибори) або адмін тут, у режимі «Редагувати».",
   "nw.title": "Новини", "nw.all": "Усі новини", "nw.new": "Новина", "nw.none": "Новин ще немає.", "nw.notFound": "Новину не знайдено.",
   "nw.head": "Заголовок", "nw.text": "Текст", "nw.img": "Зображення", "nw.imgRemove": "Прибрати зображення", "nw.pin": "Закріпити вгорі",
@@ -19,6 +20,7 @@ uk: {
   "ad.botState": "Останній запуск", "ad.botLast": "Бот працював {x}.", "ad.botNever": "Бот ще не запускався.",
 },
 en: {
+  "sy.coat": "Coat of arms", "sy.flag": "Flag", "sy.upload": "Upload", "sy.change": "Change", "sy.both": "Coat of arms and flag", "sy.done": "Done",
   "pw.residents": "Residents of the land", "pw.others": "Other citizens", "ch.appointHint": "Seats are filled by elections (State → Elections) or by an admin right here in Edit mode.",
   "nw.title": "News", "nw.all": "All news", "nw.new": "News post", "nw.none": "No news yet.", "nw.notFound": "News not found.",
   "nw.head": "Headline", "nw.text": "Text", "nw.img": "Image", "nw.imgRemove": "Remove image", "nw.pin": "Pin to top",
@@ -37,6 +39,7 @@ en: {
   "ad.botState": "Last run", "ad.botLast": "The bot last ran {x}.", "ad.botNever": "The bot hasn't run yet.",
 },
 ru: {
+  "sy.coat": "Герб", "sy.flag": "Флаг", "sy.upload": "Загрузить", "sy.change": "Изменить", "sy.both": "Герб и флаг", "sy.done": "Готово",
   "pw.residents": "Прописанные в земле", "pw.others": "Другие граждане", "ch.appointHint": "Людей на места назначают выборы (Государство → Выборы) или админ здесь, в режиме «Редактировать».",
   "nw.title": "Новости", "nw.all": "Все новости", "nw.new": "Новость", "nw.none": "Новостей пока нет.", "nw.notFound": "Новость не найдена.",
   "nw.head": "Заголовок", "nw.text": "Текст", "nw.img": "Изображение", "nw.imgRemove": "Убрать изображение", "nw.pin": "Закрепить вверху",
@@ -55,6 +58,7 @@ ru: {
   "ad.botState": "Последний запуск", "ad.botLast": "Бот работал {x}.", "ad.botNever": "Бот ещё не запускался.",
 },
 es: {
+  "sy.coat": "Escudo", "sy.flag": "Bandera", "sy.upload": "Subir", "sy.change": "Cambiar", "sy.both": "Escudo y bandera", "sy.done": "Listo",
   "pw.residents": "Empadronados en la tierra", "pw.others": "Otros ciudadanos", "ch.appointHint": "Los escaños se cubren por elecciones (Estado → Elecciones) o por un admin aquí, en modo Editar.",
   "nw.title": "Noticias", "nw.all": "Todas las noticias", "nw.new": "Noticia", "nw.none": "Aún no hay noticias.", "nw.notFound": "Noticia no encontrada.",
   "nw.head": "Titular", "nw.text": "Texto", "nw.img": "Imagen", "nw.imgRemove": "Quitar imagen", "nw.pin": "Fijar arriba",
@@ -73,6 +77,7 @@ es: {
   "ad.botState": "Última ejecución", "ad.botLast": "El bot funcionó por última vez {x}.", "ad.botNever": "El bot aún no se ha ejecutado.",
 },
 pl: {
+  "sy.coat": "Herb", "sy.flag": "Flaga", "sy.upload": "Wgraj", "sy.change": "Zmień", "sy.both": "Herb i flaga", "sy.done": "Gotowe",
   "pw.residents": "Zameldowani w ziemi", "pw.others": "Pozostali obywatele", "ch.appointHint": "Miejsca obsadzają wybory (Państwo → Wybory) albo admin tutaj, w trybie edycji.",
   "nw.title": "Aktualności", "nw.all": "Wszystkie aktualności", "nw.new": "Wiadomość", "nw.none": "Brak aktualności.", "nw.notFound": "Nie znaleziono wiadomości.",
   "nw.head": "Nagłówek", "nw.text": "Treść", "nw.img": "Obraz", "nw.imgRemove": "Usuń obraz", "nw.pin": "Przypnij na górze",

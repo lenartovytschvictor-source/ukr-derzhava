@@ -1,8 +1,8 @@
 // Спільне для сторінок: вкладки, заглушки майбутніх етапів, тексти, які можна правити на місці.
-import { S, B, canTexts, player, meetsRank, log } from "../store.js";
+import { S, B, canTexts, player, meetsRank, sym, log } from "../store.js";
 import { EDIT } from "../app.js";
 import { t } from "../i18n.js";
-import { esc, run, toast } from "../ui.js";
+import { esc, run, toast, pickImage } from "../ui.js";
 
 export function tabs(base, list, cur) {
   return `<div class="tabs" role="tablist">${list.map(([k, ic, label]) =>
@@ -60,5 +60,29 @@ export function bindHolders(root) {
     const pl = player(s.value);
     if (await run(() => B.update("ud_positions", p.id, { holder: s.value || "", since: B.now() }), t("saved")))
       log("appoint", `${p.title}: ${pl ? pl.name : t("vacant")}`);
+  });
+}
+
+// Герб і прапор (землі "land_<id>", уділу чи міста "place_<id>")
+export function symHtml(key, size = "") {
+  const x = sym(key); if (!x || (!x.coat && !x.flag)) return "";
+  return `<span class="sym ${size}">${x.coat ? `<img src="${esc(x.coat)}" alt="${esc(t("sy.coat"))}">` : ""}${x.flag ? `<img class="flag" src="${esc(x.flag)}" alt="${esc(t("sy.flag"))}">` : ""}</span>`;
+}
+// блок редагування: два місця — герб і прапор
+export function symEditor(key, land) {
+  const x = sym(key) || {};
+  const slot = (f, l, ic) => `<div class="slot"><span class="pv">${x[f] ? `<img src="${esc(x[f])}" alt="">` : ic}</span><span><b>${esc(t(l))}</b><br>
+    <button type="button" class="ghost sm" data-symset="${esc(key)}|${f}|${esc(land)}">${esc(t(x[f] ? "sy.change" : "sy.upload"))}</button>${x[f] ? `<button type="button" class="ghost sm danger" data-symdel="${esc(key)}|${f}|${esc(land)}">✕</button>` : ""}</span></div>`;
+  return `<div class="symedit">${slot("coat", "sy.coat", "🛡")}${slot("flag", "sy.flag", "🏳")}</div>`;
+}
+export function bindSym(root) {
+  root.querySelectorAll("[data-symset]").forEach(b => b.onclick = async () => {
+    const [key, f, land] = b.dataset.symset.split("|");
+    const v = await pickImage(f === "flag" ? 240 : 200); if (!v) return;
+    if (await run(() => B.set("ud_symbols", key, { land, [f]: v }, true), t("saved"))) log("symbol", `${key}: ${t(f === "flag" ? "sy.flag" : "sy.coat")}`);
+  });
+  root.querySelectorAll("[data-symdel]").forEach(b => b.onclick = async () => {
+    const [key, f, land] = b.dataset.symdel.split("|");
+    if (await run(() => B.set("ud_symbols", key, { land, [f]: "" }, true), t("saved"))) log("symbol", `${key}: − ${t(f === "flag" ? "sy.flag" : "sy.coat")}`);
   });
 }

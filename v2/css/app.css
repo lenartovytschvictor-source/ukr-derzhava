@@ -197,7 +197,7 @@ main { width: 100%; max-width: 1080px; margin: 0 auto; padding: 18px 16px 40px; 
 .seats { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-bottom: 8px; }
 .seat { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--surface2); min-width: 0; }
 .seat small { display: block; color: var(--muted); font-size: .8rem; } .seat b { display: block; overflow-wrap: anywhere; }
-.seat > span { min-width: 0; flex: 1; }
+.seat > span:not(.av) { min-width: 0; flex: 1; }
 .chairrow .seat { background: color-mix(in srgb, var(--gold) 18%, var(--surface)); border: 1px solid color-mix(in srgb, var(--gold) 45%, var(--line)); }
 .bills { display: grid; gap: 6px; }
 .bill { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; background: var(--surface2); color: var(--ink); border: 1px solid transparent; }
@@ -399,3 +399,17 @@ a.codecard { border-left-color: var(--blue); }
   .goalrow { grid-template-columns: 1fr 70px; } .goalrow input:last-child { grid-column: 1 / -1; }
 }
 @media (max-width: 600px) { .ev { flex-wrap: wrap; } .ev .grow { flex: 1 1 calc(100% - 40px); } .ev .timer { margin-left: 38px; } }
+
+/* аватарка ніколи не розтягується в овал, хай що каже батьківський блок */
+.av { flex: none !important; }
+/* герби й прапори земель, уділів і міст */
+.sym { display: inline-flex; gap: 4px; align-items: center; flex: none; vertical-align: middle; }
+.sym img { height: 28px; width: auto; max-width: 42px; object-fit: contain; }
+.sym img.flag { border: 1px solid var(--line); border-radius: 2px; height: 20px; }
+.sym.lg img { height: 72px; max-width: 96px; } .sym.lg img.flag { height: 48px; }
+.sym.sm img { height: 20px; max-width: 30px; } .sym.sm img.flag { height: 14px; }
+.landhead .lhrow { display: flex; gap: 14px; align-items: center; }
+.symedit { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; margin: 8px 0; }
+.symedit .slot { display: flex; gap: 8px; align-items: center; padding: 6px 8px; border-radius: 10px; background: var(--surface2); }
+.symedit .slot .pv { width: 56px; height: 44px; display: grid; place-items: center; font-size: 1.4rem; } .symedit .slot .pv img { max-width: 56px; max-height: 44px; object-fit: contain; }
+.lcard h3 .sym { margin-right: 6px; }

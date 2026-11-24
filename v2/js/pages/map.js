@@ -5,7 +5,8 @@ import { meetsRank, S, B, me, pos, player, lands, land, landsFromPlan, canLands,
 import { EDIT } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, confirmBox, toast } from "../ui.js";
-import { txt, empty, holderSel } from "./common.js";
+import { txt, empty, holderSel, symHtml, symEditor, bindSym } from "./common.js";
+import { modal } from "../ui.js";
 
 let GEO = null, geoLoading = false;
 function geo() {
@@ -59,7 +60,7 @@ function overview() {
   h += `<section class="card mapcard">${svgMap("")}</section>`;
   h += `<div class="lgrid">${L.map(l => {
     const o = pos("osavul_" + l.id), op = o && player(o.holder);
-    return `<a class="lcard" href="#/derzhava/karta/${esc(l.id)}" style="--lc:${esc(l.color || "#ccc")}"><h3>${esc(l.name)}</h3>
+    return `<a class="lcard" href="#/derzhava/karta/${esc(l.id)}" style="--lc:${esc(l.color || "#ccc")}"><h3>${symHtml("land_" + l.id, "sm")}${esc(l.name)}</h3>
       <p class="hint">${esc(t("map.osavul"))}: ${op ? `<b>${esc(op.name)}</b>` : `<i>${esc(t("vacant"))}</i>`}</p>
       <p class="hint">👥 ${residents(l.id).length} · ${esc(t("map.udilsN", { n: placesOf(l.id, "udil").length }))} · ${esc(t("map.citiesN", { n: placesOf(l.id, "city").length }))}</p></a>`;
   }).join("")}</div>`;
@@ -83,11 +84,11 @@ function placeList(l, kind) {
     const p = pos("pl_" + pl.id), who = p && player(p.holder);
     const can = EDIT && p && canAppoint(p);
     return `<div class="place">
-      <div class="grow">${ed ? `<input class="ttl" data-pname="${esc(pl.id)}" value="${esc(pl.name)}" maxlength="60" aria-label="${esc(t("map.placeName"))}">` : `<b>${esc(pl.name)}</b>`}
+      ${symHtml("place_" + pl.id, "sm")}<div class="grow">${ed ? `<input class="ttl" data-pname="${esc(pl.id)}" value="${esc(pl.name)}" maxlength="60" aria-label="${esc(t("map.placeName"))}">` : `<b>${esc(pl.name)}</b>`}
         ${pl.note && !ed ? `<small class="hint">${esc(pl.note)}</small>` : ""}</div>
       <div class="who">${who ? avatar(who, "av sm") : ""}<span><small>${esc(t(kind === "city" ? "map.viit" : "map.dzhura"))}</small>
         ${can ? holderSelect(p, people.length ? people : S.players.filter(x => x.status === "cit")) : who ? `<a href="#/narod/gravets/${esc(who.id)}">${esc(who.name)}</a>` : `<i class="vac">${esc(t("vacant"))}</i>`}</span></div>
-      ${ed ? `<button type="button" class="ghost sm danger" data-pdel="${esc(pl.id)}" aria-label="${esc(t("delete"))}">✕</button>` : ""}</div>`;
+      ${ed ? `<button type="button" class="ghost sm" data-psym="${esc(pl.id)}" title="${esc(t("sy.both"))}" aria-label="${esc(t("sy.both"))}">🛡</button><button type="button" class="ghost sm danger" data-pdel="${esc(pl.id)}" aria-label="${esc(t("delete"))}">✕</button>` : ""}</div>`;
   }).join("");
   return `<section class="card"><h2>${kind === "city" ? "🏙" : "🏘"} ${esc(t(kind === "city" ? "map.cities" : "map.udils"))} <span class="badge">${list.length}</span></h2>
     <p class="hint">${esc(t(kind === "city" ? "map.citiesHint" : "map.udilsHint"))}</p>
@@ -105,7 +106,8 @@ function landPage(id) {
     ${edL ? `<form class="setgrid" data-ledit><label>${esc(t("map.name"))}<input name="name" required maxlength="60" value="${esc(l.name)}"></label>
       <label>${esc(t("map.short"))}<input name="short" maxlength="30" value="${esc(l.short || "")}"></label>
       <label>${esc(t("map.color"))}<input type="color" name="color" value="${esc(l.color || "#cccccc")}"></label><button class="primary sm">${esc(t("save"))}</button></form>`
-      : `<h1>${esc(l.name)}</h1>`}
+      : `<div class="lhrow">${symHtml("land_" + id, "lg")}<h1>${esc(l.name)}</h1></div>`}
+    ${EDIT && canPlaces(id) ? symEditor("land_" + id, id) : ""}
     <p class="hint">👥 ${esc(t("map.residents", { n: res.length }))}</p>
     ${m && m.status === "cit" ? (m.land === id ? `<p class="tag">🏠 ${esc(t("map.youLive"))}</p>` : `<button type="button" class="sm" data-live>🏠 ${esc(t("map.liveHere"))}</button>`) : ""}</section>`;
   h += `<section class="card"><h2>${esc(t("map.leaders"))}</h2><div class="pgrid">
@@ -142,6 +144,15 @@ export function mount(root, parts) {
   const l = land(id); if (!l) return;
   const lv = root.querySelector("[data-live]");
   if (lv) lv.onclick = async () => { const m = me(); if (await run(() => B.update("ud_players", m.id, { land: id }), t("saved"))) log("land", `${m.name} → ${l.name}`); };
+  bindSym(root);
+  root.querySelectorAll("[data-psym]").forEach(b => b.onclick = () => {
+    const pl = S.places.find(x => x.id === b.dataset.psym); if (!pl) return;
+    const draw = () => `<p class="hint">${esc(pl.name)}</p>${symEditor("place_" + pl.id, pl.land)}`;
+    const w = modal(t("sy.both"), `<div data-symbox>${draw()}</div><div class="row end"><button type="button" class="primary" data-close>${esc(t("sy.done"))}</button></div>`);
+    const box = w.querySelector("[data-symbox]"); bindSym(box);
+    // після збереження оновлюємо вікно, щоб було видно нову картинку
+    const iv = setInterval(() => { if (!box.isConnected) return clearInterval(iv); const h = draw(); if (box.dataset.h !== h) { box.dataset.h = h; box.innerHTML = h; bindSym(box); } }, 500);
+  });
   const le = root.querySelector("[data-ledit]");
   if (le) le.onsubmit = async e => {
     e.preventDefault();

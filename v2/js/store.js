@@ -12,7 +12,7 @@ export const S = {
   codes: [], laws: [], constitution: null, casesPub: [], casesPriv: [], caseCounter: null,
   army: [], units: [], ranksCfg: null, stars: [], awards: [], grants: [], church: null, clergy: [], parishes: [], holidays: [],
   chat: {}, chatCfg: {}, mutes: [], dms: [], reads: {},
-  news: [], plan: null, botCfg: {}, tgLink: null,
+  news: [], plan: null, botCfg: {}, tgLink: null, symbols: [],
   myLink: null, myApp: null, err: "",
 };
 let renderCb = () => {};
@@ -38,6 +38,7 @@ export async function initStore() {
   B.watch("ud_states", r => { S.states = r; changed(); }, e => fail(e));
   B.watch("ud_treaties", r => { S.treaties = r; changed(); }, e => fail(e));
   B.watchDoc("ud_config", "chamber", d => { S.chamber = d || {}; changed(); });
+  B.watch("ud_symbols", r => { S.symbols = r; changed(); }, e => fail(e));
   B.watch("ud_places", r => { S.places = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name, "uk")); changed(); }, e => fail(e));
   B.watch("ud_codes", r => { S.codes = r.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)); changed(); }, e => fail(e));
   B.watch("ud_laws", r => { S.laws = r; changed(); }, e => fail(e));
@@ -145,6 +146,8 @@ export const canPlayers = () => isAdmin() || isHetman() || holds("interior");
 export const canAppoint = p => isAdmin() || (isHetman() && p && p.appointBy === "hetman")
   || (!!p && p.appointBy === "osavul" && !!p.land && holds("osavul_" + p.land));   // Осавул призначає джур і війтів своєї землі
 // Крайовий Осавул землі — посада osavul_<land>; уділи й міста землі ведуть адмін, Писар і Осавул цієї землі
+// герб і прапор: ключ "land_<id>" для землі, "place_<id>" для уділу чи міста
+export const sym = key => S.symbols.find(x => x.id === key) || null;
 export const isOsavul = landId => holds("osavul_" + landId);
 export const canPlaces = landId => isAdmin() || holds("pysar") || isOsavul(landId);
 export const canLands = () => isAdmin() || holds("pysar");
