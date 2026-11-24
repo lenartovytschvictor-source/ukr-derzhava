@@ -148,6 +148,14 @@ async function personal(D) {
       for (const m of msgs) for (const p of linked) if (p.id !== m.by && String(m.text || "").includes("@" + p.name))
         out.push({ pid: p.id, key: `mn:${ch}:${m.id}:${p.id}`, text: `💬 ${H(name(D, m.by))} згадав вас у чаті «${H(title)}»:\n«${H(short(m.text, 200))}»` });
     }
+    // внески: нове нагадування і «термін завтра/сьогодні» (один раз)
+    for (const x of D.dues || []) {
+      if (x.status !== "open") continue;
+      const due = x.due ? ` до ${H(kyiv(Date.parse(x.due + "T12:00:00"), false))}` : "";
+      if (ms(x.at) > since) out.push({ pid: x.pid, key: "du:" + x.id, text: `💰 Нагадування про внесок: <b>${H(x.what)}</b>${due}.${x.note ? "\n" + H(x.note) : ""}\n${link("derzhava/ekonomika", "Економіка")}` });
+      if (x.due) { const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Kiev" }).format(new Date(NOW)); const left = Math.round((Date.parse(x.due + "T12:00:00Z") - Date.parse(today + "T12:00:00Z")) / 864e5);
+        if (left >= 0 && left <= 1) out.push({ pid: x.pid, key: `dd:${x.id}:${x.due}`, text: `⏰ ${left ? "Завтра" : "Сьогодні"} термін внеску: <b>${H(x.what)}</b>.` }); }
+    }
     for (const c of D.dms) if (ms(c.at) > since && c.last) for (const pid of c.members || []) if (pid !== c.last.by)
       out.push({ pid, key: `dm:${c.id}:${ms(c.at)}`, text: `✉️ Нове особисте повідомлення від ${H(name(D, c.last.by))}.\n${link("chat/osobysti/" + c.id, "Відкрити")}` });
   }
@@ -202,7 +210,7 @@ async function scrub() {
 // ---------- запуск ----------
 const D = {};
 for (const c of ["players", "positions", "bills", "elections", "news", "laws", "codes", "awards", "grants", "stars", "states", "treaties", "holidays"]) D[c] = await all("ud_" + c);
-D.cases = await all("ud_cases"); D.dms = await all("ud_dms");
+D.cases = await all("ud_cases"); D.dms = await all("ud_dms"); D.dues = await all("ud_dues");
 for (const [label, fn] of [["Таймери", () => timers(D)], ["Прибирання", scrub], ["Telegram", () => telegram(D)], ["Особисті", () => personal(D)], ["Копія", backup]]) {
   try { await fn(); } catch (err) { say(`${label}: помилка — ${err.message}`); }
 }
