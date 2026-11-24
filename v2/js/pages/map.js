@@ -5,7 +5,7 @@ import { meetsRank, S, B, me, pos, player, lands, land, landsFromPlan, canLands,
 import { EDIT } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, confirmBox, toast } from "../ui.js";
-import { txt, empty } from "./common.js";
+import { txt, empty, holderSel } from "./common.js";
 
 let GEO = null, geoLoading = false;
 function geo() {
@@ -75,10 +75,7 @@ function personCard(p, label) {
     ${can ? holderSelect(p, S.players.filter(x => x.status === "cit")) : `<b>${pl ? `<a href="#/narod/gravets/${esc(pl.id)}">${esc(pl.name)}</a>` : `<i class="vac">${esc(t("vacant"))}</i>`}</b>`}
     ${!pl && p.appointBy === "election" ? `<a class="hint" href="#/derzhava/vybory">${esc(t("map.byElection"))}</a>` : ""}</div></div>`;
 }
-function holderSelect(p, people) {
-  people = people.slice().sort((a, b) => a.name.localeCompare(b.name, "uk"));
-  return `<select data-hold="${esc(p.id)}" aria-label="${esc(p.title)}"><option value="">— ${esc(t("vacant"))} —</option>${people.map(c => { const ok = meetsRank(c.id, p.minRank); return `<option value="${esc(c.id)}"${c.id === p.holder ? " selected" : ""}${ok || c.id === p.holder ? "" : " disabled"}>${esc(c.name)}${ok ? "" : " — " + esc(t("pw.lowRank"))}</option>`; }).join("")}</select>`;
-}
+const holderSelect = (p, _people) => holderSel(p, p.land);   // спершу прописані в землі, далі всі громадяни
 function placeList(l, kind) {
   const list = placesOf(l.id, kind), ed = EDIT && canPlaces(l.id);
   const people = residents(l.id);

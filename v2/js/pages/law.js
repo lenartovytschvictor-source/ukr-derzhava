@@ -3,7 +3,7 @@ import { S, B, me, pos, player, isAdmin, isHetman, holds, canCodes, canDecree, i
 import { EDIT, go } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, modal, closeModal, confirmBox, toast, fmtDate } from "../ui.js";
-import { tabs, txt, empty, paras } from "./common.js";
+import { tabs, txt, empty, paras, holderSel, bindHolders } from "./common.js";
 
 const TABS = [["konstytutsiya", "📜", "lw.tab.const"], ["kodeksy", "📚", "lw.tab.codes"], ["zakony", "📑", "lw.tab.laws"], ["sud", "⚖️", "lw.tab.court"]];
 export const DEFAULT_CODES = [["admin", "Адміністративний кодекс"], ["criminal", "Кримінальний кодекс"], ["military", "Військовий кодекс"]];
@@ -190,7 +190,7 @@ function courtTab() {
   if (!jp.length) h += empty(t("lw.noJudgePos")) + (isAdmin() ? `<button type="button" class="sm" data-jseed>${esc(t("lw.seedJudges"))}</button>` : "");
   else h += `<div class="pgrid">${jp.map(p => {
     const pl = player(p.holder), until = pl && ms(p.since) ? ms(p.since) + TERM : 0;
-    return `<div class="pcard">${avatar(pl || { name: "?" }, "av lg")}<div class="pct"><small>${esc(p.title)}</small><b>${pl ? `<a href="#/narod/gravets/${esc(pl.id)}">${esc(pl.name)}</a>` : `<i class="vac">${esc(t("vacant"))}</i>`}</b>
+    return `<div class="pcard">${avatar(pl || { name: "?" }, "av lg")}<div class="pct"><small>${esc(p.title)}</small>${EDIT && isAdmin() ? holderSel(p) : `<b>${pl ? `<a href="#/narod/gravets/${esc(pl.id)}">${esc(pl.name)}</a>` : `<i class="vac">${esc(t("vacant"))}</i>`}</b>`}
       ${until ? `<small class="${until < Date.now() ? "warn" : "hint"}">${esc(t(until < Date.now() ? "lw.termOver" : "lw.termUntil", { x: fmtDate(until) }))}</small>` : !pl ? `<a class="hint" href="#/derzhava/vybory">${esc(t("map.byElection"))}</a>` : ""}</div></div>`;
   }).join("")}</div>`;
   h += `</section>`;
@@ -343,6 +343,7 @@ function mountLaws(root, parts) {
   if (ld && l) ld.onclick = async () => { if (await confirmBox(t("lw.delLawQ"), t("delete")) && await run(() => B.del("ud_laws", l.id), t("deleted"))) { log("law", `${t("deleted")}: ${lawNo(l)}`); go("zakon/zakony"); } };
 }
 function mountCourt(root, parts) {
+  bindHolders(root);
   const js = root.querySelector("[data-jseed]");
   if (js) js.onclick = async () => { if (await run(() => B.batch(JUDGES.map((id, i) => ({ op: "set", c: "ud_positions", id, v: { title: `Суддя ${i + 1}`, order: 30 + i, appointBy: "election", holder: "", court: true } }))), t("saved"))) log("position", t("lw.seedJudges")); };
   const fc = root.querySelector("[data-fcase]");

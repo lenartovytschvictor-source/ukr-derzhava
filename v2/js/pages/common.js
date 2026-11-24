@@ -1,8 +1,8 @@
 // Спільне для сторінок: вкладки, заглушки майбутніх етапів, тексти, які можна правити на місці.
-import { S, B, canTexts, log } from "../store.js";
+import { S, B, canTexts, player, meetsRank, log } from "../store.js";
 import { EDIT } from "../app.js";
 import { t } from "../i18n.js";
-import { esc, run } from "../ui.js";
+import { esc, run, toast } from "../ui.js";
 
 export function tabs(base, list, cur) {
   return `<div class="tabs" role="tablist">${list.map(([k, ic, label]) =>
@@ -40,3 +40,25 @@ document.addEventListener("click", async e => {
 export function empty(msg) { return `<p class="empty">${esc(msg)}</p>`; }
 export const statusLabel = s => t(s === "cit" ? "st.cit" : s === "tour" ? "st.tour" : s === "exiled" ? "st.exiled" : "st.none");
 export const statusIcon = s => s === "cit" ? "🪪" : s === "tour" ? "🧳" : s === "exiled" ? "⛔" : "❔";
+
+// Вибір людини на посаду (адмін, Гетьман, Осавул — у режимі «Редагувати»).
+// Якщо посада належить землі — спершу прописані в ній, далі всі інші громадяни.
+// Хто не має мінімального звання посади — у списку, але недоступний.
+export function holderSel(p, landId) {
+  const cit = S.players.filter(c => c.status === "cit").sort((a, b) => a.name.localeCompare(b.name, "uk"));
+  const opt = c => { const ok = meetsRank(c.id, p.minRank);
+    return `<option value="${esc(c.id)}"${c.id === p.holder ? " selected" : ""}${ok || c.id === p.holder ? "" : " disabled"}>${esc(c.name)}${ok ? "" : " — " + esc(t("pw.lowRank"))}</option>`; };
+  const here = landId ? cit.filter(c => c.land === landId) : [];
+  const rest = landId ? cit.filter(c => c.land !== landId) : cit;
+  return `<select data-hold="${esc(p.id)}" aria-label="${esc(p.title)}"><option value="">— ${esc(t("vacant"))} —</option>${here.length
+    ? `<optgroup label="${esc(t("pw.residents"))}">${here.map(opt).join("")}</optgroup><optgroup label="${esc(t("pw.others"))}">${rest.map(opt).join("")}</optgroup>`
+    : rest.map(opt).join("")}</select>`;
+}
+export function bindHolders(root) {
+  root.querySelectorAll("[data-hold]").forEach(s => s.onchange = async () => {
+    const p = S.positions.find(x => x.id === s.dataset.hold); if (!p) return;
+    const pl = player(s.value);
+    if (await run(() => B.update("ud_positions", p.id, { holder: s.value || "", since: B.now() }), t("saved")))
+      log("appoint", `${p.title}: ${pl ? pl.name : t("vacant")}`);
+  });
+}

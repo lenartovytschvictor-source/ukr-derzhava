@@ -1,6 +1,7 @@
 // Переклади етапу 7: головна, новини, план розвитку, профіль (справи, Telegram), бот.
 export const S7 = {
 uk: {
+  "pw.residents": "Прописані в землі", "pw.others": "Інші громадяни", "ch.appointHint": "Людей на місця призначають вибори (Держава → Вибори) або адмін тут, у режимі «Редагувати».",
   "nw.title": "Новини", "nw.all": "Усі новини", "nw.new": "Новина", "nw.none": "Новин ще немає.", "nw.notFound": "Новину не знайдено.",
   "nw.head": "Заголовок", "nw.text": "Текст", "nw.img": "Зображення", "nw.imgRemove": "Прибрати зображення", "nw.pin": "Закріпити вгорі",
   "nw.publish": "Опублікувати", "nw.delQ": "Видалити новину?", "nw.tgHint": "Новина автоматично з'явиться в Telegram-гілці держави.",
@@ -18,6 +19,7 @@ uk: {
   "ad.botState": "Останній запуск", "ad.botLast": "Бот працював {x}.", "ad.botNever": "Бот ще не запускався.",
 },
 en: {
+  "pw.residents": "Residents of the land", "pw.others": "Other citizens", "ch.appointHint": "Seats are filled by elections (State → Elections) or by an admin right here in Edit mode.",
   "nw.title": "News", "nw.all": "All news", "nw.new": "News post", "nw.none": "No news yet.", "nw.notFound": "News not found.",
   "nw.head": "Headline", "nw.text": "Text", "nw.img": "Image", "nw.imgRemove": "Remove image", "nw.pin": "Pin to top",
   "nw.publish": "Publish", "nw.delQ": "Delete this news post?", "nw.tgHint": "The post will appear in the state's Telegram thread automatically.",
@@ -35,6 +37,7 @@ en: {
   "ad.botState": "Last run", "ad.botLast": "The bot last ran {x}.", "ad.botNever": "The bot hasn't run yet.",
 },
 ru: {
+  "pw.residents": "Прописанные в земле", "pw.others": "Другие граждане", "ch.appointHint": "Людей на места назначают выборы (Государство → Выборы) или админ здесь, в режиме «Редактировать».",
   "nw.title": "Новости", "nw.all": "Все новости", "nw.new": "Новость", "nw.none": "Новостей пока нет.", "nw.notFound": "Новость не найдена.",
   "nw.head": "Заголовок", "nw.text": "Текст", "nw.img": "Изображение", "nw.imgRemove": "Убрать изображение", "nw.pin": "Закрепить вверху",
   "nw.publish": "Опубликовать", "nw.delQ": "Удалить новость?", "nw.tgHint": "Новость автоматически появится в Telegram-ветке государства.",
@@ -52,6 +55,7 @@ ru: {
   "ad.botState": "Последний запуск", "ad.botLast": "Бот работал {x}.", "ad.botNever": "Бот ещё не запускался.",
 },
 es: {
+  "pw.residents": "Empadronados en la tierra", "pw.others": "Otros ciudadanos", "ch.appointHint": "Los escaños se cubren por elecciones (Estado → Elecciones) o por un admin aquí, en modo Editar.",
   "nw.title": "Noticias", "nw.all": "Todas las noticias", "nw.new": "Noticia", "nw.none": "Aún no hay noticias.", "nw.notFound": "Noticia no encontrada.",
   "nw.head": "Titular", "nw.text": "Texto", "nw.img": "Imagen", "nw.imgRemove": "Quitar imagen", "nw.pin": "Fijar arriba",
   "nw.publish": "Publicar", "nw.delQ": "¿Eliminar la noticia?", "nw.tgHint": "La noticia aparecerá automáticamente en el hilo de Telegram del Estado.",
@@ -69,6 +73,7 @@ es: {
   "ad.botState": "Última ejecución", "ad.botLast": "El bot funcionó por última vez {x}.", "ad.botNever": "El bot aún no se ha ejecutado.",
 },
 pl: {
+  "pw.residents": "Zameldowani w ziemi", "pw.others": "Pozostali obywatele", "ch.appointHint": "Miejsca obsadzają wybory (Państwo → Wybory) albo admin tutaj, w trybie edycji.",
   "nw.title": "Aktualności", "nw.all": "Wszystkie aktualności", "nw.new": "Wiadomość", "nw.none": "Brak aktualności.", "nw.notFound": "Nie znaleziono wiadomości.",
   "nw.head": "Nagłówek", "nw.text": "Treść", "nw.img": "Obraz", "nw.imgRemove": "Usuń obraz", "nw.pin": "Przypnij na górze",
   "nw.publish": "Opublikuj", "nw.delQ": "Usunąć wiadomość?", "nw.tgHint": "Wiadomość automatycznie pojawi się w wątku państwa na Telegramie.",
