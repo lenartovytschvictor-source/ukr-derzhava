@@ -198,6 +198,41 @@ main { width: 100%; max-width: 1080px; margin: 0 auto; padding: 18px 16px 40px; 
 .seat { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--surface2); min-width: 0; }
 .seat small { display: block; color: var(--muted); font-size: .8rem; } .seat b { display: block; overflow-wrap: anywhere; }
 .seat > span:not(.av) { min-width: 0; flex: 1; }
+.seat.hsym { position: relative; overflow: hidden; padding: 10px 10px 10px 12px; border-left: 4px solid var(--lc, var(--line)); min-height: 76px; }
+.seat.hsym .stx { min-width: 0; flex: 1; position: relative; z-index: 1; }
+.seat.hsym .stx small { font-size: .78rem; line-height: 1.25; }
+.seat.hsym > .av { position: relative; z-index: 1; align-self: center; }
+.seat > span.sbadge { flex: none; min-width: 0; }
+.sbadge { position: relative; z-index: 1; flex: none; width: 56px; height: 56px; display: grid; place-items: center; }
+.sbadge > img:not(.mini) { max-width: 56px; max-height: 56px; width: auto; height: auto; object-fit: contain; filter: drop-shadow(0 1px 2px rgb(0 0 0 / .25)); }
+.sbadge.fl > img:not(.mini) { max-height: 38px; border: 1px solid var(--line); border-radius: 3px; }
+.sbadge.none { width: 48px; height: 48px; margin: 4px; border-radius: 12px; background: color-mix(in srgb, var(--lc, var(--blue2)) 22%, var(--surface)); border: 1px dashed color-mix(in srgb, var(--lc, var(--blue2)) 55%, var(--line)); color: var(--muted); font-weight: 800; font-size: .95rem; letter-spacing: .02em; }
+.sbadge .mini { position: absolute; right: -6px; bottom: -4px; height: 22px; width: auto; max-width: 26px; object-fit: contain; background: var(--surface); border-radius: 6px; padding: 1px; box-shadow: 0 0 0 1px var(--line); }
+.sflag { position: absolute; right: 0; top: 0; height: 100%; width: 55%; object-fit: cover; opacity: .16; pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 70%); mask-image: linear-gradient(90deg, transparent, #000 70%); }
+.seat .sshort { display: none; }
+/* телефон: компактна сітка гербів — 3 плитки в рядку */
+@media (max-width: 640px) {
+  .seats:has(> .seat.tile) { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .seat.tile { flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; gap: 4px; padding: 8px 4px 6px; min-height: 0;
+    border-left: 0; border-top: 4px solid var(--lc, var(--line)); }
+  .seat.tile .sbadge { width: 48px; height: 48px; }
+  .seat.tile .sbadge > img:not(.mini) { max-width: 48px; max-height: 48px; }
+  .seat.tile .sbadge.none { width: 44px; height: 44px; margin: 2px; }
+  .seat.tile > .av { display: none; }
+  .seat.tile .stx { flex: none; width: 100%; position: static; }
+  .seat.tile .sfull { display: none; }
+  .seat.tile .sshort { display: block; font-weight: 700; color: var(--text); font-size: .76rem; line-height: 1.2; overflow-wrap: anywhere; }
+  .seat.tile .sshort.long { font-size: .66rem; letter-spacing: -.01em; overflow-wrap: normal; }
+  .seat.tile b { font-size: .8rem; line-height: 1.2; font-weight: 600; overflow-wrap: anywhere; }
+  .seat.tile b a::after { content: ""; position: absolute; inset: 0; }
+  .seat.tile .vac { font-size: .74rem; }
+  .seat.tile .sflag { width: 100%; opacity: .12; -webkit-mask-image: linear-gradient(180deg, transparent, #000 80%); mask-image: linear-gradient(180deg, transparent, #000 80%); }
+  .sotgrp h4 { margin: 8px 0 4px; }
+}
+.sotgrp { margin: 4px 0 10px; }
+.sotgrp h4 { display: flex; align-items: center; gap: 8px; margin: 10px 0 6px; font-size: .92rem; padding-left: 8px; border-left: 3px solid var(--lc, var(--line)); }
+.sotgrp h4 .sym { margin: 0; }
 .chairrow .seat { background: color-mix(in srgb, var(--gold) 18%, var(--surface)); border: 1px solid color-mix(in srgb, var(--gold) 45%, var(--line)); }
 .bills { display: grid; gap: 6px; }
 .bill { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; background: var(--surface2); color: var(--ink); border: 1px solid transparent; }

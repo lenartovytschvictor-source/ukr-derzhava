@@ -1,6 +1,6 @@
 // 🏛 Палата Земель: Голова, Земська й Сотенна лави, законопроєкти, петиції, голосування.
 import { pickCode, nextNo, lawNo } from "./law.js";
-import { S, B, me, player, pos, lands, seats, mySeat, isAdmin, isHetman, isCitizen, isChair, canChamber, CH, ms, log, changed } from "../store.js";
+import { S, B, me, player, pos, lands, land, sym, seats, mySeat, isAdmin, isHetman, isCitizen, isChair, canChamber, CH, ms, log, changed } from "../store.js";
 import { EDIT, go } from "../app.js";
 import { t } from "../i18n.js";
 import { esc, avatar, run, confirmBox, toast, fmtDate } from "../ui.js";
@@ -48,11 +48,30 @@ export function render(parts) {
 }
 
 // ---------- Палата: склад + списки ----------
+// місце в Палаті: великий герб землі / уділу / міста зліва, прапор — тлом справа, колір землі — смужкою
 function seatRow(p) {
-  const pl = player(p.holder);
-  const sy = p.place ? symHtml("place_" + p.place, "sm") : p.land ? symHtml("land_" + p.land, "sm") : "";
-  return `<div class="seat">${avatar(pl || { name: "?" }, "av md")}<span><small>${sy}${esc(p.title)}</small>${EDIT && isAdmin() ? holderSel(p, p.land) : `<b>${pl ? `<a href="#/narod/gravets/${esc(pl.id)}">${esc(pl.name)}</a>` : `<i class="vac">${esc(t("vacant"))}</i>`}</b>`}</span>
-    ${EDIT && isAdmin() ? `<button type="button" class="ghost sm danger" data-sdel="${esc(p.id)}" aria-label="${esc(t("delete"))}">✕</button>` : ""}</div>`;
+  const pl = player(p.holder), L = p.land ? land(p.land) : null;
+  const own = p.place ? sym("place_" + p.place) : p.land ? sym("land_" + p.land) : null, ls = p.land ? sym("land_" + p.land) : null;
+  const img = (own && (own.coat || own.flag)) || (p.place && ls && ls.coat) || "";
+  const ini = esc(((L && (L.short || L.name)) || p.title || "?").replace(/[^\p{L}]/gu, "").slice(0, 2).toUpperCase());
+  const badge = p.id === "chair" ? "" : `<span class="sbadge${img ? "" : " none"}${own && !own.coat && own.flag ? " fl" : ""}">${img ? `<img src="${esc(img)}" alt="">` : ini}${p.place && ls && ls.coat && own && (own.coat || own.flag) ? `<img class="mini" src="${esc(ls.coat)}" alt="" title="${esc((L && L.name) || "")}">` : ""}</span>`;
+  const flag = own && own.flag && own.coat ? `<img class="sflag" src="${esc(own.flag)}" alt="" aria-hidden="true">` : "";
+  const style = L && L.color ? ` style="--lc:${esc(L.color)}"` : "";
+  // коротка підпис для плитки на телефоні: назва землі / уділу / міста
+  const PL = p.place && S.places.find(x => x.id === p.place);
+  const short = PL ? PL.name : L ? (L.short || L.name) : p.title;
+  const tile = badge && !(EDIT && isAdmin());
+  return `<div class="seat${badge ? " hsym" : ""}${tile ? " tile" : ""}"${style} title="${esc(p.title)}">${flag}${badge}<span class="stx"><small class="sfull">${esc(p.title)}</small><small class="sshort${short.length > 11 ? " long" : ""}">${esc(short)}</small>${EDIT && isAdmin() ? holderSel(p, p.land) : `<b>${pl ? `<a href="#/narod/gravets/${esc(pl.id)}">${esc(pl.name)}</a>` : `<i class="vac">${esc(t("vacant"))}</i>`}</b>`}</span>
+    ${avatar(pl || { name: "?" }, badge ? "av sm" : "av md")}${EDIT && isAdmin() ? `<button type="button" class="ghost sm danger" data-sdel="${esc(p.id)}" aria-label="${esc(t("delete"))}">✕</button>` : ""}</div>`;
+}
+// Сотенна лава — згрупована за землями, з гербом землі в заголовку групи
+function sotGroups(sot) {
+  const order = lands().map(l => l.id), groups = {};
+  sot.forEach(p => { (groups[p.land || ""] = groups[p.land || ""] || []).push(p); });
+  return [...order.filter(id => groups[id]), ...(groups[""] ? [""] : []), ...Object.keys(groups).filter(k => k && !order.includes(k))].map(id => {
+    const L = land(id);
+    return `<div class="sotgrp"${L && L.color ? ` style="--lc:${esc(L.color)}"` : ""}><h4>${id ? symHtml("land_" + id, "sm") : ""}${esc(L ? L.name : "—")} <span class="badge">${groups[id].length}</span></h4><div class="seats">${groups[id].map(seatRow).join("")}</div></div>`;
+  }).join("");
 }
 function overview() {
   const chair = pos("chair");
@@ -62,7 +81,7 @@ function overview() {
   h += `<section class="card"><div class="row between"><h2>${esc(t("ch.compo"))}</h2><span class="hint">${esc(t("ch.quorum", { n: quorumNeed(), of: occupied().length }))}</span></div>
     ${chair ? `<div class="seats chairrow">${seatRow(chair)}</div>` : ""}
     <h3>${esc(t("ch.zemska"))} <small class="hint">${esc(t("ch.zemskaHint"))}</small></h3><div class="seats">${zem.map(seatRow).join("") || empty(t("ch.noZem"))}</div>
-    <h3>${esc(t("ch.sotenna"))} <small class="hint">${esc(t("ch.sotennaHint"))}</small></h3><div class="seats">${sot.map(seatRow).join("") || empty(t("ch.noSot"))}</div>
+    <h3>${esc(t("ch.sotenna"))} <small class="hint">${esc(t("ch.sotennaHint"))}</small></h3>${sot.length ? sotGroups(sot) : empty(t("ch.noSot"))}
     ${EDIT && isAdmin() ? `<form class="row" data-sadd><input name="title" required maxlength="80" placeholder="${esc(t("ch.sotTitle"))}"><select name="land"><option value="">—</option>${lands().map(l => `<option value="${esc(l.id)}">${esc(l.short || l.name)}</option>`).join("")}</select><button class="sm">+ ${esc(t("ch.addSot"))}</button></form>
       <p class="hint">${esc(t("ch.appointHint"))}</p>` : ""}
   </section>`;
